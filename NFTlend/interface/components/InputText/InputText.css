@@ -1,0 +1,20 @@
+.input-text {
+  align-items: flex-start;
+  background-color: var(--pattens-blue);
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 17px;
+  min-width: 113px;
+  padding: 0 2px;
+}
+
+.phone {
+  color: #00000036;
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  height: 28px;
+  letter-spacing: 0;
+  text-align: right;
+  width: 84px;
+}
+

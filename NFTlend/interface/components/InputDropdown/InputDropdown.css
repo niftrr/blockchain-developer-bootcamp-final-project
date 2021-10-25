@@ -1,0 +1,20 @@
+.input-dropdown {
+  align-items: center;
+  background-color: var(--pattens-blue);
+  display: flex;
+  height: 28px;
+  justify-content: flex-end;
+  margin-left: 34px;
+  min-width: 113px;
+  padding: 0 3px;
+}
+
+.polygon-1 {
+  height: 11px;
+  width: 14px;
+}
+
+.input-dropdown.input-dropdown-1 {
+  margin-left: 12px;
+}
+

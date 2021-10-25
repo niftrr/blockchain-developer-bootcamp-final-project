@@ -1,0 +1,43 @@
+.button-repay-1 {
+  align-items: flex-start;
+  border-radius: 5px;
+  display: flex;
+  height: 47px;
+  left: 1093px;
+  min-width: 87px;
+  position: absolute;
+  top: 11px;
+}
+
+.repay {
+  height: 47px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 87px;
+}
+
+.button-repay-1.button-withdraw,
+.button-repay-1.button-withdraw-2,
+.button-repay-1.button-withdraw-3,
+.button-repay-1.button-withdraw-1,
+.button-repay-1.button-withdraw-1-1,
+.button-repay-1.button-withdraw-1-2 {
+  align-self: center;
+  height: unset;
+  left: unset;
+  margin-left: 17px;
+  min-width: 89px;
+  position: unset;
+  top: unset;
+}
+
+.button-repay-1.button-withdraw-2 .repay,
+.button-repay-1.button-withdraw-1-1 .repay,
+.button-repay-1.button-withdraw-3 .repay,
+.button-repay-1.button-withdraw .repay,
+.button-repay-1.button-withdraw-1-2 .repay,
+.button-repay-1.button-withdraw-1 .repay {
+  height: 37px;
+  width: 89px;
+}
+

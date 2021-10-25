@@ -1,0 +1,44 @@
+.item-project {
+  align-items: center;
+  background-color: var(--tropical-blue);
+  border-radius: 5px;
+  display: flex;
+  height: 39px;
+  justify-content: flex-end;
+  left: 7px;
+  min-width: 216px;
+  position: absolute;
+  top: 55px;
+}
+
+.rectangle-31 {
+  background-color: var(--tropical-blue);
+  box-shadow: 0px 4px 4px #00000040;
+  height: 22px;
+  margin-bottom: 1.0px;
+  width: 22px;
+}
+
+.rectangle-18-3 {
+  height: 39px;
+  margin-left: 6px;
+  object-fit: cover;
+  width: 42px;
+}
+
+.place-10 {
+  align-self: flex-end;
+  height: 38px;
+  letter-spacing: 0;
+  margin-left: 11px;
+  width: 127px;
+}
+
+.item-project.item-project-1 {
+  top: 100px;
+}
+
+.item-project.item-project-2 {
+  top: 10px;
+}
+

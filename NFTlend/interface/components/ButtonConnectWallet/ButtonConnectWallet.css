@@ -1,0 +1,20 @@
+.button-connect-wallet {
+  align-items: center;
+  background-color: var(--geebung);
+  border-radius: 10px;
+  display: flex;
+  height: 74px;
+  min-width: 314px;
+  padding: 0 52px;
+}
+
+.connect-wallet-6 {
+  color: var(--white);
+  font-family: var(--font-family-oxanium);
+  font-size: 30px;
+  height: 38px;
+  letter-spacing: 0;
+  min-width: 210px;
+  text-align: center;
+}
+

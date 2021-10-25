@@ -1,0 +1,111 @@
+.asset {
+  align-items: flex-end;
+  background-color: var(--blue-zodiac);
+  display: flex;
+  flex-direction: column;
+  height: 1024px;
+  overflow: hidden;
+  position: relative;
+  width: 1440px;
+}
+
+.overlap-group2 {
+  height: 879px;
+  margin-right: 12px;
+  margin-top: 61px;
+  position: relative;
+  width: 1349px;
+}
+
+.overlap-group1 {
+  height: 153px;
+  left: 28px;
+  position: absolute;
+  top: 595px;
+  width: 1260px;
+}
+
+.borrows-container {
+  background-color: var(--mist-gray);
+  border-radius: 10px;
+  height: 153px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1238px;
+}
+
+.previous-borrows-header {
+  align-items: flex-end;
+  display: flex;
+  height: 26px;
+  left: 34px;
+  min-width: 1226px;
+  position: absolute;
+  top: 18px;
+}
+
+.prev-borrows {
+  height: 25px;
+  letter-spacing: 0;
+  min-width: 129px;
+}
+
+.borrowed {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 24px;
+  width: 91px;
+}
+
+.repayment {
+  align-self: flex-start;
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 29px;
+  width: 107px;
+}
+
+.apr {
+  align-self: flex-start;
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 29px;
+  width: 38px;
+}
+
+.collateral {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 37px;
+  width: 141px;
+}
+
+.coll-ratio {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 23px;
+  min-width: 93px;
+}
+
+.maturity {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 45px;
+  width: 123px;
+}
+
+.borrower {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 34px;
+  width: 123px;
+}
+
+.status {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 19px;
+  width: 123px;
+}
+

@@ -1,0 +1,33 @@
+.lends-header,
+.lends-header-1 {
+  align-items: flex-start;
+  align-self: flex-start;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 14px;
+  min-width: 380px;
+}
+
+.your-lends,
+.your-lends-1 {
+  height: 25px;
+  letter-spacing: 0;
+  width: 124px;
+}
+
+.current-balance,
+.current-balance-1 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 33px;
+  min-width: 148px;
+}
+
+.apy,
+.apy-1 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 46px;
+  width: 38px;
+}
+

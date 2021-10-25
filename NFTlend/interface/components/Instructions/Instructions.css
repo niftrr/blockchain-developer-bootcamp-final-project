@@ -1,0 +1,22 @@
+.instructions,
+.instructions-1,
+.instructions-2,
+.instructions-3 {
+  align-items: center;
+  display: flex;
+  height: 70px;
+  left: 32px;
+  min-width: 1011px;
+  position: absolute;
+  top: 21px;
+}
+
+.text-3,
+.text-17,
+.text-21,
+.text-28 {
+  height: 60px;
+  letter-spacing: 0;
+  min-width: 1011px;
+}
+

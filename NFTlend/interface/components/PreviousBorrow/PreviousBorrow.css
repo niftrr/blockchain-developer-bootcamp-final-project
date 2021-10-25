@@ -1,0 +1,114 @@
+.previous-borrow {
+  align-items: flex-start;
+  display: flex;
+  height: 69px;
+  left: 14px;
+  min-width: 1206px;
+  position: absolute;
+  top: 62px;
+}
+
+.overlap-group-11 {
+  height: 69px;
+  position: relative;
+  width: 1206px;
+}
+
+.rectangle-17 {
+  background-color: var(--tropical-blue);
+  border-radius: 10px;
+  height: 67px;
+  left: 0;
+  position: absolute;
+  top: 1px;
+  width: 1206px;
+}
+
+.number {
+  height: 66px;
+  left: 173px;
+  letter-spacing: 0;
+  position: absolute;
+  text-align: right;
+  top: 2px;
+  width: 91px;
+}
+
+.text-1 {
+  height: 66px;
+  left: 293px;
+  letter-spacing: 0;
+  position: absolute;
+  text-align: right;
+  top: 1px;
+  width: 106px;
+}
+
+.percent {
+  height: 66px;
+  left: 429px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 3px;
+  width: 51px;
+}
+
+.group-1 {
+  align-items: center;
+  display: flex;
+  height: 66px;
+  left: 19px;
+  min-width: 115px;
+  position: absolute;
+  top: 1px;
+}
+
+.rectangle-19 {
+  height: 41px;
+  margin-bottom: 7.0px;
+  width: 50px;
+}
+
+.place-6 {
+  height: 66px;
+  letter-spacing: 0;
+  margin-left: 11px;
+  width: 52px;
+}
+
+.x0x123456 {
+  height: 25px;
+  left: 963px;
+  letter-spacing: 0;
+  position: absolute;
+  text-decoration: underline;
+  top: 22px;
+}
+
+.repaid {
+  height: 47px;
+  left: 1105px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 11px;
+  width: 87px;
+}
+
+.x175-min-150 {
+  height: 67px;
+  left: 672px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 0;
+  width: 123px;
+}
+
+.text-2 {
+  height: 67px;
+  left: 806px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 1px;
+  width: 123px;
+}
+

@@ -1,0 +1,42 @@
+.liquidate-header {
+  align-items: flex-start;
+  align-self: flex-start;
+  display: flex;
+  margin-left: 14px;
+  min-width: 877px;
+}
+
+.borrow-defaults {
+  height: 25px;
+  letter-spacing: 0;
+  width: 153px;
+}
+
+.liquidation-reward {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 41px;
+  width: 183px;
+}
+
+.collateral-2 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 49px;
+  width: 141px;
+}
+
+.coll-ratio-2 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 30px;
+  min-width: 93px;
+}
+
+.maturity-3 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 54px;
+  width: 123px;
+}
+

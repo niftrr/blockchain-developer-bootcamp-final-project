@@ -1,0 +1,130 @@
+:root { 
+  --black: #000000;
+  --blue-zodiac: #122c4a;
+  --blue-zodiac-2: #122c4a2b;
+  --geebung: #d68d00;
+  --mist-gray: #c4c4c426;
+  --pattens-blue: #e0eeff;
+  --pickled-bluewood: #2e435c;
+  --red: #ff0000;
+  --tropical-blue: #c7defa;
+  --web-orange: #ffa800;
+  --white: #ffffff;
+ 
+  --font-size-l: 22px;
+  --font-size-m: 20px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 25px;
+  --font-size-xxxl: 28px;
+  --font-size-xxxxl: 36px;
+  --font-size-xxxxxl: 48px;
+ 
+  --font-family-oxanium: "Oxanium", Helvetica;
+}
+.oxanium-normal-black-20px {
+  color: var(--black);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.oxanium-normal-white-20px {
+  color: var(--white);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.oxanium-normal-black-24px {
+  color: var(--black);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xl);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.oxanium-normal-white-22px {
+  color: var(--white);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-l);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.oxanium-bold-black-20px {
+  color: var(--black);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.oxanium-normal-black-25px {
+  color: var(--black);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xxl);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.oxanium-semi-bold-black-20px {
+  color: var(--black);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.oxanium-bold-web-orange-24px {
+  color: var(--web-orange);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xl);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.oxanium-semi-bold-web-orange-36px {
+  color: var(--web-orange);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xxxxl);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.oxanium-bold-white-22px {
+  color: var(--white);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-l);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.oxanium-bold-red-20px {
+  color: var(--red);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.oxanium-extra-light-web-orange-24px {
+  color: var(--web-orange);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xl);
+  font-style: normal;
+  font-weight: 200;
+}
+
+.oxanium-normal-red-20px {
+  color: var(--red);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-m);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.border-1px-pickled-bluewood {
+  border: 1px solid var(--pickled-bluewood);
+}

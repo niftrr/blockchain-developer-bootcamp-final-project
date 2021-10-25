@@ -1,0 +1,93 @@
+.header {
+  align-items: center;
+  display: flex;
+  height: 120px;
+  padding: 0 67px;
+  width: 1440px;
+}
+
+.logo {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  margin-left: 8px;
+  min-width: 287px;
+}
+
+.nf-tlend-logo-light-1 {
+  height: 50px;
+  width: 50px;
+}
+
+.nf-tlendxyz {
+  height: 45px;
+  letter-spacing: 0;
+  margin-left: 17px;
+  margin-top: 2.0px;
+  width: 218px;
+}
+
+.navigation {
+  align-items: center;
+  display: flex;
+  margin-left: 350px;
+  min-width: 661px;
+}
+
+.dashboard {
+  cursor: pointer;
+  height: 28px;
+  letter-spacing: 0;
+  width: 130px;
+}
+
+.borrow {
+  cursor: pointer;
+  height: 28px;
+  letter-spacing: 0;
+  margin-left: 20px;
+  width: 94px;
+}
+
+.place {
+  cursor: pointer;
+  height: 28px;
+  letter-spacing: 0;
+  margin-left: 20px;
+  width: 56px;
+}
+
+.liquidate {
+  cursor: pointer;
+  height: 28px;
+  letter-spacing: 0;
+  margin-left: 20px;
+  width: 108px;
+}
+
+.overlap-group {
+  align-items: flex-start;
+  background-color: var(--geebung);
+  border-radius: 10px;
+  display: flex;
+  margin-left: 20px;
+  min-width: 185px;
+}
+
+.connect-wallet {
+  height: 46px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 185px;
+}
+
+.header.header-1 {
+  margin-right: -1px;
+}
+
+.header.header-2 {
+  left: 1px;
+  position: absolute;
+  top: 0;
+}
+

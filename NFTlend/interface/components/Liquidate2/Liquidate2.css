@@ -1,0 +1,69 @@
+.liquidate-7 {
+  align-items: flex-start;
+  display: flex;
+  margin-top: 11px;
+  min-width: 1082px;
+}
+
+.overlap-group-16 {
+  height: 68px;
+  position: relative;
+  width: 1082px;
+}
+
+.rectangle-20 {
+  background-color: var(--tropical-blue);
+  border-radius: 10px;
+  height: 67px;
+  left: 0;
+  position: absolute;
+  top: 1px;
+  width: 1082px;
+}
+
+.overlap-group-17 {
+  align-items: flex-start;
+  background-color: var(--blue-zodiac);
+  display: flex;
+  height: 47px;
+  left: 948px;
+  min-width: 113px;
+  position: absolute;
+  top: 11px;
+}
+
+.liquidate-8 {
+  height: 47px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 113px;
+}
+
+.text-2-1 {
+  height: 67px;
+  left: 746px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 1px;
+  width: 123px;
+}
+
+.x130-min-150 {
+  height: 67px;
+  left: 597px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 0;
+  width: 123px;
+}
+
+.text-2-2 {
+  height: 66px;
+  left: 188px;
+  letter-spacing: 0;
+  position: absolute;
+  text-align: right;
+  top: 2px;
+  width: 183px;
+}
+

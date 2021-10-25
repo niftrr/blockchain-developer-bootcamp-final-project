@@ -1,0 +1,57 @@
+.borrows-header {
+  align-items: flex-start;
+  align-self: flex-start;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 14px;
+  min-width: 909px;
+}
+
+.your-borrows {
+  height: 25px;
+  letter-spacing: 0;
+  width: 124px;
+}
+
+.borrowed-1 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 37px;
+  width: 91px;
+}
+
+.repayment-1 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 27px;
+  width: 107px;
+}
+
+.apr-3 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 31px;
+  width: 38px;
+}
+
+.collateral-1 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 36px;
+  width: 141px;
+}
+
+.coll-ratio-1 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 26px;
+  min-width: 93px;
+}
+
+.maturity-2 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 43px;
+  width: 123px;
+}
+

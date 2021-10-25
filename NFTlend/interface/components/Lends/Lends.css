@@ -1,0 +1,19 @@
+.lends {
+  align-items: center;
+  background-color: var(--mist-gray);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  left: 28px;
+  min-height: 255px;
+  padding: 17px 0;
+  position: absolute;
+  top: 30px;
+  width: 719px;
+}
+
+.lends.lends-1 {
+  left: 23px;
+  top: 168px;
+}
+

@@ -1,0 +1,27 @@
+.borrow-header {
+  align-items: flex-start;
+  display: flex;
+  margin-left: 8px;
+  min-width: 610px;
+}
+
+.project {
+  height: 25px;
+  letter-spacing: 0;
+  width: 124px;
+}
+
+.nft {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 125px;
+  min-width: 38px;
+}
+
+.borrow-11 {
+  height: 25px;
+  letter-spacing: 0;
+  margin-left: 218px;
+  width: 99px;
+}
+

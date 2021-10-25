@@ -1,0 +1,31 @@
+.lend,
+.lend-1 {
+  align-items: flex-end;
+  background-color: var(--tropical-blue);
+  border-radius: 10px;
+  display: flex;
+  height: 53px;
+  justify-content: flex-end;
+  margin-top: 12px;
+  min-width: 691px;
+  padding: 0 16px;
+  position: relative;
+}
+
+.text-1-1,
+.text-5 {
+  height: 51px;
+  letter-spacing: 0;
+  margin-left: 61px;
+  text-align: right;
+  width: 138px;
+}
+
+.percent-4,
+.percent-5 {
+  height: 51px;
+  letter-spacing: 0;
+  margin-left: 44px;
+  width: 51px;
+}
+

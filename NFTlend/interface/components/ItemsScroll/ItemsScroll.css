@@ -1,0 +1,18 @@
+.items-scroll {
+  align-items: flex-end;
+  background-color: var(--mist-gray);
+  border-radius: 5px;
+  display: flex;
+  height: 225px;
+  left: 0;
+  min-width: 233px;
+  padding: 5.5px 78px;
+  position: absolute;
+  top: 0;
+}
+
+.polygon-4 {
+  height: 9px;
+  width: 75px;
+}
+

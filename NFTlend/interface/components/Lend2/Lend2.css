@@ -1,0 +1,19 @@
+.lend-2 {
+  align-items: flex-end;
+  background-color: var(--blue-zodiac);
+  display: flex;
+  flex-direction: column;
+  height: 1024px;
+  overflow: hidden;
+  position: relative;
+  width: 1440px;
+}
+
+.overlap-group1-4 {
+  height: 879px;
+  margin-right: 12px;
+  margin-top: 61px;
+  position: relative;
+  width: 1349px;
+}
+

@@ -1,0 +1,35 @@
+.item-nft {
+  align-items: flex-start;
+  background-color: var(--tropical-blue);
+  border-radius: 5px;
+  display: flex;
+  height: 84px;
+  left: 8px;
+  min-width: 218px;
+  padding: 0 6px;
+  position: absolute;
+  top: 9px;
+}
+
+.rectangle-33 {
+  background-color: var(--tropical-blue);
+  box-shadow: 0px 4px 4px #00000040;
+  height: 22px;
+  margin-top: 15px;
+  width: 22px;
+}
+
+.rectangle-32 {
+  height: 84px;
+  margin-left: 3px;
+  object-fit: cover;
+  width: 87px;
+}
+
+.fidenza-157-4 {
+  height: 50px;
+  letter-spacing: 0;
+  margin-left: 11px;
+  margin-top: 8px;
+}
+
