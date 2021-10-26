@@ -240,6 +240,14 @@ html {
   min-width: 185px;
 }
 
+.overlap-group:hover {
+  background-color: var(--web-orange);
+}
+
+.overlap-group:active {
+  background-color: var(--geebung);
+}
+
 .connect-wallet {
   height: 46px;
   letter-spacing: 0;
@@ -1226,6 +1234,14 @@ html {
   height: 74px;
   min-width: 314px;
   padding: 0 52px;
+}
+
+.button-connect-wallet:hover {
+  background-color: var(--web-orange);
+}
+
+.button-connect-wallet:active {
+  background-color: var(--geebung);
 }
 
 .connect-wallet-6 {

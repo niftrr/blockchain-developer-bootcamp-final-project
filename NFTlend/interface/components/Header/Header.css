@@ -74,6 +74,14 @@
   min-width: 185px;
 }
 
+.overlap-group:hover {
+  background-color: var(--web-orange);
+}
+
+.overlap-group:active {
+  background-color: var(--geebung);
+}
+
 .connect-wallet {
   height: 46px;
   letter-spacing: 0;

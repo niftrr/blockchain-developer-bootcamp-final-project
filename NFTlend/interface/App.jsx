@@ -8,46 +8,57 @@ import Borrow2 from "./components/Borrow2";
 import Lend2 from "./components/Lend2";
 import Liquidate from "./components/Liquidate";
 
+import { Web3ReactProvider } from "@web3-react/core"
+import Web3 from 'web3'
+
+
+
+function getLibrary(provider) {
+    return new Web3(provider)
+  }
+
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/asset">
-          <Asset {...assetData} />
-        </Route>
-        <Route path="/dashboard">
-          <Dashboard
-            headerProps={dashboardData.headerProps}
-            borrowProps={dashboardData.borrowProps}
-            borrow2Props={dashboardData.borrow2Props}
-            borrow3Props={dashboardData.borrow3Props}
-            lendsProps={dashboardData.lendsProps}
-          />
-        </Route>
-        <Route path="/:path(|landing-page)">
-          <LandingPage
-            text13="The NFT Liquidity Protocol"
-            text14="NFTlend.xyz is an open-source, non-custodial liquidity protocol for borrowing assets using NFTs as collateral and earning interest on deposits."
-            backgroundProps={landingPageData.backgroundProps}
-            buttonConnectWalletProps={landingPageData.buttonConnectWalletProps}
-            headerProps={landingPageData.headerProps}
-          />
-        </Route>
-        <Route path="/borrow">
-          <Borrow2 {...borrow22Data} />
-        </Route>
-        <Route path="/lend">
-          <Lend2 lendsProps={lend22Data.lendsProps} />
-        </Route>
-        <Route path="/liquidate">
-          <Liquidate
-            liquidate2Props={liquidateData.liquidate2Props}
-            liquidate22Props={liquidateData.liquidate22Props}
-            liquidate23Props={liquidateData.liquidate23Props}
-          />
-        </Route>
-      </Switch>
-    </Router>
+    <Web3ReactProvider getLibrary={getLibrary}>
+        <Router>
+        <Switch>
+            <Route path="/asset">
+            <Asset {...assetData} />
+            </Route>
+            <Route path="/dashboard">
+            <Dashboard
+                headerProps={dashboardData.headerProps}
+                borrowProps={dashboardData.borrowProps}
+                borrow2Props={dashboardData.borrow2Props}
+                borrow3Props={dashboardData.borrow3Props}
+                lendsProps={dashboardData.lendsProps}
+            />
+            </Route>
+            <Route path="/:path(|landing-page)">
+            <LandingPage
+                text13="The NFT Liquidity Protocol"
+                text14="NFTlend.xyz is an open-source, non-custodial liquidity protocol for borrowing assets using NFTs as collateral and earning interest on deposits."
+                backgroundProps={landingPageData.backgroundProps}
+                buttonConnectWalletProps={landingPageData.buttonConnectWalletProps}
+                headerProps={landingPageData.headerProps}
+            />
+            </Route>
+            <Route path="/borrow">
+            <Borrow2 {...borrow22Data} />
+            </Route>
+            <Route path="/lend">
+            <Lend2 lendsProps={lend22Data.lendsProps} />
+            </Route>
+            <Route path="/liquidate">
+            <Liquidate
+                liquidate2Props={liquidateData.liquidate2Props}
+                liquidate22Props={liquidateData.liquidate22Props}
+                liquidate23Props={liquidateData.liquidate23Props}
+            />
+            </Route>
+        </Switch>
+        </Router>
+    </Web3ReactProvider>
   );
 }
 

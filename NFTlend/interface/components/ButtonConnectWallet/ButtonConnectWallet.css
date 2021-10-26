@@ -8,6 +8,14 @@
   padding: 0 52px;
 }
 
+.button-connect-wallet:hover {
+  background-color: var(--web-orange);
+}
+
+.button-connect-wallet:active {
+  background-color: var(--geebung);
+}
+
 .connect-wallet-6 {
   color: var(--white);
   font-family: var(--font-family-oxanium);

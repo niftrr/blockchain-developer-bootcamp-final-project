@@ -1,9 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useWeb3React } from "@web3-react/core"
+import { injected } from "../wallet/connectors"
+import 'regenerator-runtime/runtime'
 import "./Header.css";
 
 function Header(props) {
   const { className } = props;
+  const { active, account, library, connector, activate, deactivate } = useWeb3React()
+
+  console.log(active, account)
+
+  async function connect() {
+    try {
+      await activate(injected)
+    } catch (ex) {
+      console.log(ex)
+    }
+  }
+
+  async function disconnect() {
+    try {
+      await deactivate(injected)
+    } catch (ex) {
+      console.log(ex)
+    }
+  }
 
   return (
     <div className={`header ${className || ""}`}>
@@ -26,9 +48,15 @@ function Header(props) {
         <Link to="/liquidate">
           <div className="liquidate valign-text-middle oxanium-normal-white-22px">LIQUIDATE</div>
         </Link>
-        <div className="overlap-group">
-          <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">Connect Wallet</div>
-        </div>
+        { active ? 
+          <button onClick={disconnect} className="overlap-group">
+            <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">
+              {account.substring(0,6)}...{account.slice(-4)}
+            </div>
+          </button>: 
+          <button onClick={connect} className="overlap-group">
+            <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">Connect Wallet</div>
+          </button>}
       </div>
     </div>
   );
