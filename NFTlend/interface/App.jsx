@@ -7,6 +7,7 @@ import LandingPage from "./components/LandingPage";
 import Borrow2 from "./components/Borrow2";
 import Lend2 from "./components/Lend2";
 import Liquidate from "./components/Liquidate";
+import PopUpTokens from "./components/PopUpTokens";
 
 import { Web3ReactProvider } from "@web3-react/core"
 import Web3 from 'web3'
@@ -55,6 +56,9 @@ function App() {
                 liquidate22Props={liquidateData.liquidate22Props}
                 liquidate23Props={liquidateData.liquidate23Props}
             />
+            </Route>
+            <Route path="/popuptokens">
+            <PopUpTokens popUpProps={popUpTokensData.popUpProps} />
             </Route>
         </Switch>
         </Router>
@@ -431,3 +435,17 @@ const liquidateData = {
     liquidate23Props: liquidate23Data,
 };
 
+const popUpData = {
+    x: "X",
+    spanText: <>How much would you like to deposit?<br /></>,
+    spanText2: <><br />Please enter an amount you would like to deposit.</>,
+    rectangle19: "/img/rectangle-19@2x.png",
+    inputType: "text",
+    inputPlaceholder: "1.9111",
+    name: "MAX",
+    place: "Deposit",
+};
+
+const popUpTokensData = {
+    popUpProps: popUpData,
+};

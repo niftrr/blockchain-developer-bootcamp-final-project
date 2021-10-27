@@ -16,8 +16,8 @@
   --font-size-xl: 24px;
   --font-size-xxl: 25px;
   --font-size-xxxl: 28px;
-  --font-size-xxxxl: 36px;
-  --font-size-xxxxxl: 48px;
+  --font-size-xxxxl: 32px;
+  --font-size-xxxxxl: 36px;
  
   --font-family-oxanium: "Oxanium", Helvetica;
 }
@@ -88,7 +88,7 @@
 .oxanium-semi-bold-web-orange-36px {
   color: var(--web-orange);
   font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-xxxxl);
+  font-size: var(--font-size-xxxxxl);
   font-style: normal;
   font-weight: 600;
 }
@@ -123,6 +123,14 @@
   font-size: var(--font-size-m);
   font-style: normal;
   font-weight: 400;
+}
+
+.oxanium-bold-web-orange-32px {
+  color: var(--web-orange);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xxxxl);
+  font-style: normal;
+  font-weight: 700;
 }
 
 .border-1px-pickled-bluewood {
