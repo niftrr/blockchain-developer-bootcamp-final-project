@@ -5,16 +5,16 @@
   left: 8px;
   min-width: 440px;
   position: absolute;
-  top: 82px;
+  top: 81px;
 }
 
-.collateral-ratio {
+.apr-1 {
   height: 20px;
   letter-spacing: 0;
   width: 255px;
 }
 
-.percent-1 {
+.percent-3 {
   height: 20px;
   letter-spacing: 0;
   margin-left: 120px;
@@ -23,14 +23,14 @@
 }
 
 .borrow-data-coll-ratio-2.borrow-data-coll-ratio-3 {
-  top: 57px;
+  top: 56px;
 }
 
 .borrow-data-coll-ratio-2.borrow-data-coll-ratio-4 {
-  top: 81px;
+  top: 82px;
 }
 
 .borrow-data-coll-ratio-2.borrow-data-coll-ratio-5 {
-  top: 56px;
+  top: 57px;
 }
 

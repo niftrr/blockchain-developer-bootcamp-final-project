@@ -2,28 +2,28 @@
   align-items: flex-start;
   display: flex;
   margin-top: 10px;
-  min-width: 1196px;
+  min-width: 1107px;
 }
 
 .overlap-group-13 {
   height: 69px;
   position: relative;
-  width: 1196px;
+  width: 1107px;
 }
 
-.rectangle-17-1 {
+.rectangle-17 {
   background-color: var(--tropical-blue);
   border-radius: 10px;
   height: 67px;
   left: 0;
   position: absolute;
   top: 1px;
-  width: 1196px;
+  width: 1107px;
 }
 
-.number-1 {
+.number {
   height: 66px;
-  left: 184px;
+  left: 185px;
   letter-spacing: 0;
   position: absolute;
   text-align: right;
@@ -33,7 +33,7 @@
 
 .text {
   height: 66px;
-  left: 291px;
+  left: 292px;
   letter-spacing: 0;
   position: absolute;
   text-align: right;
@@ -41,27 +41,27 @@
   width: 106px;
 }
 
-.percent-3 {
+.percent {
   height: 66px;
-  left: 429px;
+  left: 430px;
   letter-spacing: 0;
   position: absolute;
   top: 3px;
   width: 51px;
 }
 
-.x175-min-150-1 {
+.x175-min-150 {
   height: 67px;
-  left: 668px;
+  left: 669px;
   letter-spacing: 0;
   position: absolute;
   top: 0;
   width: 123px;
 }
 
-.text-4 {
+.text-1 {
   height: 67px;
-  left: 806px;
+  left: 807px;
   letter-spacing: 0;
   position: absolute;
   top: 1px;

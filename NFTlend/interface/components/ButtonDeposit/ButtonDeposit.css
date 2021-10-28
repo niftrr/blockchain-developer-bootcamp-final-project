@@ -1,0 +1,44 @@
+.button-deposit-3 {
+  align-items: flex-start;
+  align-self: center;
+  background-color: var(--blue-zodiac);
+  border-radius: 5px;
+  display: flex;
+  margin-left: 44px;
+  margin-top: 0.47px;
+  min-width: 113px;
+}
+
+.button-deposit-3:hover {
+  background-color: #1b3f68;
+}
+
+.button-deposit-3:active {
+  background-color: var(--blue-zodiac);
+}
+
+.place-9 {
+  height: 38px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 113px;
+}
+
+.button-deposit-3.button-deposit-1,
+.button-deposit-3.button-deposit-2 .place-9 {
+  cursor: pointer;
+}
+
+.button-deposit-3.button-borrow {
+  align-items: flex-start;
+  background-color: var(--blue-zodiac);
+  border-radius: 5px;
+  display: flex;
+  margin-left: 135px;
+  min-width: 113px;
+}
+
+.button-deposit-3.button-borrow .place-9 {
+  height: 47px;
+}
+

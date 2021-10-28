@@ -5,7 +5,7 @@
   min-width: 1082px;
 }
 
-.overlap-group-16 {
+.overlap-group-18 {
   height: 68px;
   position: relative;
   width: 1082px;
@@ -21,7 +21,7 @@
   width: 1082px;
 }
 
-.overlap-group-17 {
+.overlap-group-19 {
   align-items: flex-start;
   background-color: var(--blue-zodiac);
   display: flex;
@@ -33,13 +33,21 @@
 }
 
 .liquidate-8 {
-  height: 47px;
+  height: 44px;
   letter-spacing: 0;
   text-align: center;
-  width: 113px;
+  width: 100px;
 }
 
-.text-2-1 {
+.overlap-group-19:hover {
+  background-color: #1b3f68;
+}
+
+.overlap-group-19:active {
+  background-color: var(--blue-zodiac);
+}
+
+.text-3 {
   height: 67px;
   left: 746px;
   letter-spacing: 0;
@@ -57,7 +65,7 @@
   width: 123px;
 }
 
-.text-2-2 {
+.text-2-1 {
   height: 66px;
   left: 188px;
   letter-spacing: 0;

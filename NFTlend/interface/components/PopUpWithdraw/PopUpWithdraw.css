@@ -1,0 +1,121 @@
+.pop-up {
+  align-items: center;
+  background-color: var(--blue-zodiac-2);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+  min-height: 535px;
+  padding: 24px 26px;
+  width: 478px;
+}
+
+.x {
+  align-self: flex-end;
+  color: var(--web-orange);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-s);
+  font-weight: 600;
+  height: 20px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 24px;
+}
+
+.pop-up-text-1 {
+  height: 201px;
+  letter-spacing: 0;
+  margin-right: 1.0px;
+  margin-top: 5px;
+  width: 339px;
+}
+
+.overlap-group1-1 {
+  align-items: center;
+  background-color: var(--white);
+  border-radius: 10px;
+  display: flex;
+  height: 83px;
+  margin-right: 1.0px;
+  margin-top: 46px;
+  min-width: 349px;
+  padding: 0 12px;
+}
+
+.rectangle-19-4 {
+  height: 41px;
+  width: 50px;
+}
+
+.x19111-1 {
+  background-color: transparent;
+  border: 0;
+  height: 41px;
+  letter-spacing: 0;
+  margin-left: 20px;
+  padding: 0;
+  width: 118px;
+}
+
+.x19111-1::placeholder {
+  color: #00000099;
+}
+
+.overlap-group-15 {
+  align-items: flex-start;
+  background-color: var(--white);
+  display: flex;
+  margin-bottom: 1.0px;
+  margin-left: 67px;
+  min-width: 54px;
+}
+
+.popup-withdraw-name {
+  height: 30px;
+  letter-spacing: 0;
+  min-width: 54px;
+  text-align: center;
+}
+
+.popup-withdraw-name:hover {
+  color: var(--geebung);
+}
+
+.popup-withdraw-name:active {
+  color: var(--web-orange);
+}
+
+.overlap-group-16 {
+  height: 64px;
+  margin-right: 16.0px;
+  margin-top: 47px;
+  position: relative;
+  width: 256px;
+}
+
+.rectangle-47-1 {
+  background-color: var(--web-orange);
+  height: 63px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 256px;
+}
+
+.place-11 {
+  height: 64px;
+  left: 0;
+  letter-spacing: 0;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 256px;
+}
+
+.place-11:hover {
+  background-color: var(--geebung);
+}
+
+.place-11:active {
+  background-color: var(--web-orange);
+}

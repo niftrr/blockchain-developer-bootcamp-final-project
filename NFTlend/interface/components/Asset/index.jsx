@@ -17,6 +17,7 @@ function Asset(props) {
     maturity,
     borrower,
     status,
+    headerProps,
     previousBorrowProps,
     asset2Props,
   } = props;
@@ -24,20 +25,20 @@ function Asset(props) {
   return (
     <div className="container-center-horizontal">
       <div className="asset screen">
-        <Header />
-        <div className="overlap-group2">
+        <Header className={headerProps.className} />
+        <div className="overlap-group2-1">
           <Background />
-          <div className="overlap-group1">
+          <div className="overlap-group1-5">
             <div className="borrows-container"></div>
             <PreviousBorrow {...previousBorrowProps} />
             <div className="previous-borrows-header oxanium-normal-white-20px">
               <div className="prev-borrows valign-text-middle">{prevBorrows}</div>
-              <div className="borrowed valign-text-middle">{borrowed}</div>
-              <div className="repayment valign-text-middle">{repayment}</div>
-              <div className="apr valign-text-middle">{apr}</div>
-              <div className="collateral valign-text-middle">{collateral}</div>
-              <div className="coll-ratio valign-text-middle">{collRatio}</div>
-              <div className="maturity valign-text-middle">{maturity}</div>
+              <div className="borrowed-1 valign-text-middle">{borrowed}</div>
+              <div className="repayment-1 valign-text-middle">{repayment}</div>
+              <div className="apr-3 valign-text-middle">{apr}</div>
+              <div className="collateral-2 valign-text-middle">{collateral}</div>
+              <div className="coll-ratio-2 valign-text-middle">{collRatio}</div>
+              <div className="maturity-3 valign-text-middle">{maturity}</div>
               <div className="borrower valign-text-middle">{borrower}</div>
               <div className="status valign-text-middle">{status}</div>
             </div>

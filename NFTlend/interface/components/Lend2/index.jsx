@@ -6,13 +6,13 @@ import Instructions from "../Instructions";
 import "./Lend2.css";
 
 function Lend2(props) {
-  const { lendsProps } = props;
+  const { headerProps, lendsProps } = props;
 
   return (
     <div className="container-center-horizontal">
       <div className="lend-2 screen">
-        <Header />
-        <div className="overlap-group1-4">
+        <Header className={headerProps.className} />
+        <div className="overlap-group1-2">
           <Background />
           <Lends
             className={lendsProps.className}

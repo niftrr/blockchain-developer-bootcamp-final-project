@@ -9,7 +9,7 @@
   width: 1440px;
 }
 
-.overlap-group2 {
+.overlap-group2-1 {
   height: 879px;
   margin-right: 12px;
   margin-top: 61px;
@@ -17,7 +17,7 @@
   width: 1349px;
 }
 
-.overlap-group1 {
+.overlap-group1-5 {
   height: 153px;
   left: 28px;
   position: absolute;
@@ -51,14 +51,14 @@
   min-width: 129px;
 }
 
-.borrowed {
+.borrowed-1 {
   height: 25px;
   letter-spacing: 0;
   margin-left: 24px;
   width: 91px;
 }
 
-.repayment {
+.repayment-1 {
   align-self: flex-start;
   height: 25px;
   letter-spacing: 0;
@@ -66,7 +66,7 @@
   width: 107px;
 }
 
-.apr {
+.apr-3 {
   align-self: flex-start;
   height: 25px;
   letter-spacing: 0;
@@ -74,21 +74,21 @@
   width: 38px;
 }
 
-.collateral {
+.collateral-2 {
   height: 25px;
   letter-spacing: 0;
   margin-left: 37px;
   width: 141px;
 }
 
-.coll-ratio {
+.coll-ratio-2 {
   height: 25px;
   letter-spacing: 0;
   margin-left: 23px;
   min-width: 93px;
 }
 
-.maturity {
+.maturity-3 {
   height: 25px;
   letter-spacing: 0;
   margin-left: 45px;

@@ -7,15 +7,15 @@ function AssetItem(props) {
 
   return (
     <Link to="/asset">
-      <div className={`asset-item-2 ${className || ""}`}>
-        <img className="rectangle-18-2" src="/img/rectangle-18@2x.png" />
-        <div className="fidenza-157-2 valign-text-middle oxanium-semi-bold-black-20px">
+      <div className={`asset-item-3 ${className || ""}`}>
+        <img className="rectangle-18" src="/img/rectangle-18@2x.png" />
+        <div className="fidenza-157 valign-text-middle oxanium-semi-bold-black-20px">
           <span>
-            <span className="span-1 oxanium-semi-bold-black-20px">
+            <span className="span-2 oxanium-semi-bold-black-20px">
               Fidenza
               <br />
             </span>
-            <span className="span-1 oxanium-normal-black-20px">#157</span>
+            <span className="span-2 oxanium-normal-black-20px">#157</span>
           </span>
         </div>
       </div>

@@ -4,7 +4,7 @@ import "./Instructions.css";
 function Instructions() {
   return (
     <div className="instructions">
-      <div className="text-3 valign-text-middle oxanium-bold-web-orange-24px">
+      <div className="text-13 valign-text-middle oxanium-bold-web-orange-24px">
         <span>
           <span className="oxanium-bold-web-orange-24px">
             Deposit your NFTs to instantly access permission-less loans.

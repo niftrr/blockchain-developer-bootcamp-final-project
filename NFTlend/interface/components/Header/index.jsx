@@ -37,26 +37,27 @@ function Header(props) {
       </Link>
       <div className="navigation">
         <Link to="/dashboard">
-          <div className="dashboard valign-text-middle oxanium-normal-white-22px">DASHBOARD</div>
+          <div className="nav-title dashboard-1 valign-text-middle oxanium-normal-white-22px">DASHBOARD</div>
         </Link>
         <Link to="/borrow">
-          <div className="borrow valign-text-middle oxanium-normal-white-22px">BORROW</div>
+          <div className="nav-title borrow valign-text-middle oxanium-normal-white-22px">BORROW</div>
         </Link>
         <Link to="/lend">
-          <div className="place valign-text-middle oxanium-normal-white-22px">LEND</div>
+          <div className="nav-title place valign-text-middle oxanium-normal-white-22px">LEND</div>
         </Link>
         <Link to="/liquidate">
-          <div className="liquidate valign-text-middle oxanium-normal-white-22px">LIQUIDATE</div>
+          <div className="nav-title liquidate valign-text-middle oxanium-normal-white-22px">LIQUIDATE</div>
         </Link>
         { active ? 
-          <button onClick={disconnect} className="overlap-group">
-            <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">
-              {account.substring(0,6)}...{account.slice(-4)}
-            </div>
-          </button>: 
-          <button onClick={connect} className="overlap-group">
-            <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">Connect Wallet</div>
-          </button>}
+        <button onClick={disconnect} className="overlap-group-1">
+          <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">
+            {account.substring(0,6)}...{account.slice(-4)}
+          </div>
+        </button>:
+        <button onClick={connect} className="overlap-group-1">
+          <div className="connect-wallet valign-text-middle oxanium-bold-white-22px">Connect Wallet</div>
+        </button>
+        }
       </div>
     </div>
   );

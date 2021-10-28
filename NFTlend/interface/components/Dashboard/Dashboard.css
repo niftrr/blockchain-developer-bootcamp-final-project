@@ -1,4 +1,4 @@
-.dashboard-6 {
+.dashboard {
   align-items: flex-end;
   background-color: var(--blue-zodiac);
   display: flex;
@@ -9,7 +9,7 @@
   width: 1440px;
 }
 
-.overlap-group3 {
+.overlap-group4 {
   height: 879px;
   margin-right: 12px;
   margin-top: 61px;
@@ -18,16 +18,16 @@
 }
 
 .borrows {
-  align-items: center;
+  align-items: flex-start;
   background-color: var(--mist-gray);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   left: 28px;
   min-height: 298px;
-  padding: 18px 0;
+  padding: 18px 14px;
   position: absolute;
   top: 377px;
-  width: 1224px;
+  width: 1137px;
 }
 

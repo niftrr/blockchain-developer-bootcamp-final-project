@@ -1,52 +1,52 @@
-.button-borrow-2 {
+.borrow-button-deposit-3 {
   align-items: flex-start;
+  align-self: center;
   background-color: var(--blue-zodiac);
   border-radius: 5px;
   display: flex;
-  height: 47px;
-  left: 965px;
-  min-width: 113px;
-  position: absolute;
-  top: 11px;
-}
-
-.borrow-7 {
-  height: 47px;
-  letter-spacing: 0;
-  text-align: center;
-  width: 113px;
-}
-
-.button-borrow-2.button-deposit,
-.button-borrow-2.button-deposit-2,
-.button-borrow-2.button-deposit-3,
-.button-borrow-2.button-deposit-1,
-.button-borrow-2.button-deposit-1-1,
-.button-borrow-2.button-deposit-1-2 {
-  align-self: center;
-  height: unset;
-  left: unset;
   margin-left: 44px;
   margin-top: 0.47px;
-  position: unset;
-  top: unset;
+  min-width: 113px;
 }
 
-.button-borrow-2.button-deposit-2 .borrow-7,
-.button-borrow-2.button-deposit-1-1 .borrow-7,
-.button-borrow-2.button-deposit-3 .borrow-7,
-.button-borrow-2.button-deposit .borrow-7,
-.button-borrow-2.button-deposit-1-2 .borrow-7,
-.button-borrow-2.button-deposit-1 .borrow-7 {
-  height: 38px;
+.borrow-place-9 {
+  height: 44px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 100%;
 }
 
-.button-borrow-2.button-borrow-1 {
+.borrow-button-deposit-3:hover {
+  background-color: #1b3f68;
+}
+
+.borrow-button-deposit-3:active {
+  background-color: var(--blue-zodiac);
+}
+
+.borrow-place-9:hover {
+  background-color: #1b3f68;
+}
+
+.borrow-place-9:active {
+  background-color: var(--blue-zodiac);
+}
+
+.borrow-button-deposit-3.button-deposit-1,
+.borrow-button-deposit-3.button-deposit-2 .place-9 {
+  cursor: pointer;
+}
+
+.borrow-button-deposit-3.button-borrow {
   align-items: flex-start;
   background-color: var(--blue-zodiac);
   border-radius: 5px;
   display: flex;
   margin-left: 135px;
   min-width: 113px;
+}
+
+.borrow-button-deposit-3.button-borrow .place-9 {
+  height: 47px;
 }
 

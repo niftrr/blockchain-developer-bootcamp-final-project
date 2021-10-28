@@ -1,5 +1,32 @@
-.token-borrow-2,
-.token-borrow-2.token-borrow {
+.token-borrow-3 {
+  align-items: center;
+  display: flex;
+  height: 66px;
+  left: 20px;
+  min-width: 113px;
+  position: absolute;
+  top: 2px;
+}
+
+.rectangle-19-1 {
+  height: 41px;
+  margin-bottom: 7.0px;
+  width: 50px;
+}
+
+.place-6 {
+  height: 66px;
+  letter-spacing: 0;
+  margin-left: 11px;
+  width: 52px;
+}
+
+.token-borrow-3.token-borrow-1 {
+  left: 19px;
+  top: 1px;
+}
+
+.token-borrow-3.token-borrow-2 {
   align-items: center;
   display: flex;
   height: 66px;
@@ -7,22 +34,5 @@
   min-width: 113px;
   position: absolute;
   top: 1px;
-}
-
-.rectangle-19-3 {
-  height: 41px;
-  margin-bottom: 7.0px;
-  width: 50px;
-}
-
-.place-9 {
-  height: 66px;
-  letter-spacing: 0;
-  margin-left: 11px;
-  width: 52px;
-}
-
-.token-borrow-2.token-borrow-1 {
-  top: 2px;
 }
 

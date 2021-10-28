@@ -20,10 +20,39 @@
   pointer-events: auto;
 }
 
+.overlay {
+  display: none;
+  height: 100%;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.overlay.animate-appear {
+  animation: reveal 0.3s ease-in-out 1 normal forwards;
+  display: block;
+  opacity: 0;
+}
+
+.overlay.animate-disappear {
+  animation: reveal 0.3s ease-in-out 1 reverse forwards;
+  display: block;
+  opacity: 1;
+}
+
+.align-self-flex-center {
+  align-self: flex-center;
+}
+
 .valign-text-middle {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+input:focus {
+  outline: none;
 }
 
 * {

@@ -25,12 +25,12 @@ function ButtonConnectWallet(props) {
 
   return (
     <div>
-      {active ? 
+      { active ?
         <button onClick={disconnect} className="button-connect-wallet">
           <div className="connect-wallet-6 valign-text-middle">Connected</div>
         </button>:
         <button onClick={connect} className="button-connect-wallet">
-            <div className="connect-wallet-6 valign-text-middle">Connect Wallet</div>
+          <div className="connect-wallet-6 valign-text-middle">{children}</div>
         </button>}
     </div>
   );

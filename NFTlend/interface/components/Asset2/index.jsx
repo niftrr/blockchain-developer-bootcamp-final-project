@@ -15,10 +15,10 @@ function Asset2(props) {
   return (
     <div className="asset-1">
       <div className="asset-2 valign-text-middle oxanium-normal-white-20px">Asset</div>
-      <div className="overlap-group1-1">
-        <img className="nft-avatar" src="/img/nft-avatar@2x.png" />
-        <div className="flex-col-10 oxanium-normal-black-20px">
-          <div className="fidenza-157-3 valign-text-middle">Fidenza #157</div>
+      <div className="overlap-group1-6">
+        <img className="nft-avatar-2" src="/img/nft-avatar@2x.png" />
+        <div className="flex-col-14 oxanium-normal-black-20px">
+          <div className="fidenza-157-4 valign-text-middle">Fidenza #157</div>
           <div className="flex-col-item valign-text-middle">Status: ESCROW</div>
           <div className="flex-col-item valign-text-middle">
             <span>
@@ -34,11 +34,16 @@ function Asset2(props) {
               <span className="oxanium-normal-black-20px"></span>
             </span>
           </div>
-          <div className="overlap-group-12">
-            <BorrowDataCollRatio maturity={borrowDataCollRatioProps.maturity} d={borrowDataCollRatioProps.d} />
+          <div className="overlap-group-21">
+            <BorrowDataCollRatio
+              maturity={borrowDataCollRatioProps.maturity}
+              d={borrowDataCollRatioProps.d}
+              className={borrowDataCollRatioProps.className}
+            />
             <BorrowDataCollRatio2
               collateralRatio={borrowDataCollRatio2Props.collateralRatio}
               percent={borrowDataCollRatio2Props.percent}
+              className={borrowDataCollRatio2Props.className}
             />
             <BorrowDataCollRatio2
               collateralRatio={borrowDataCollRatio22Props.collateralRatio}
@@ -55,7 +60,7 @@ function Asset2(props) {
               d={borrowDataCollRatio3Props.d}
               className={borrowDataCollRatio3Props.className}
             />
-            <div className="borrow-data-container"></div>
+            <div className="borrow-data-container-1"></div>
           </div>
         </div>
       </div>

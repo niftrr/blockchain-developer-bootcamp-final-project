@@ -11,7 +11,8 @@
 .phone {
   color: #00000036;
   font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-m);
+  font-size: var(--font-size-xs);
+  font-weight: 400;
   height: 28px;
   letter-spacing: 0;
   text-align: right;

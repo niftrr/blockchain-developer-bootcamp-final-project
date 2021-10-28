@@ -12,7 +12,7 @@ function Background(props) {
       </div>
       <div className="flex-col-1">
         <img className="punk-pipe-outli-ovebg-preview-1" src="/img/punk-pipe-outline-removebg-preview-1@2x.png" />
-        <div className="overlap-group-6">
+        <div className="overlap-group-7">
           <img className="coolcat-outline-ovebg-preview-1" src="/img/coolcat-outline-removebg-preview-1@2x.png" />
           <img className="punk-ape-outlin-ovebg-preview-1" src="/img/punk-ape-outline-removebg-preview-1@2x.png" />
           <img className="bbape-removebg-convert-image-2" src="/img/bb-ape-removebg-preview-convertimage-2@2x.png" />

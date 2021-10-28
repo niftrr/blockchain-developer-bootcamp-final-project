@@ -1,0 +1,18 @@
+.popuptokens {
+  align-items: flex-start;
+  background-color: #000000bf;
+  display: flex;
+  height: 1024px;
+  padding: 0 481px;
+  position: relative;
+  width: 1440px;
+}
+
+.overlay .popuptokens {
+  background-color: #00000000;
+}
+
+#overlay-popuptokens {
+  background-color: #000000bf;
+}
+

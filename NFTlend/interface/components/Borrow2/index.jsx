@@ -17,8 +17,9 @@ function Borrow2(props) {
   const {
     nftAvatar,
     amount,
-    text16,
+    text15,
     address,
+    headerProps,
     itemProjectProps,
     itemProject2Props,
     itemNFTProps,
@@ -34,11 +35,11 @@ function Borrow2(props) {
 
   return (
     <div className="container-center-horizontal">
-      <div className="borrow-9 screen">
-        <Header />
-        <div className="overlap-group3-1">
+      <div className="borrow-7 screen">
+        <Header className={headerProps.className} />
+        <div className="overlap-group3">
           <Background />
-          <div className="borrow-10">
+          <div className="borrow-8">
             <BorrowHeader />
             <div className="flex-row">
               <div className="overlap-group1-3">
@@ -47,15 +48,15 @@ function Borrow2(props) {
                 <ItemProject className={itemProjectProps.className} />
                 <ItemProject className={itemProject2Props.className} />
               </div>
-              <div className="overlap-group2-1">
+              <div className="overlap-group2">
                 <ItemsScroll />
                 <ItemNFT rectangle32={itemNFTProps.rectangle32} fidenza157={itemNFTProps.fidenza157} />
               </div>
               <div className="borrow-body">
                 <img className="nft-avatar-1" src={nftAvatar} />
-                <div className="flex-col-11">
+                <div className="flex-col-12">
                   <div className="flex-row-1">
-                    <div className="flex-col-12">
+                    <div className="flex-col-13">
                       <BorrowToken
                         token={borrowTokenProps.token}
                         inputDropdownProps={borrowTokenProps.inputDropdownProps}
@@ -72,24 +73,19 @@ function Borrow2(props) {
                     </div>
                     <ButtonBorrow className={buttonBorrowProps.className}>{buttonBorrowProps.children}</ButtonBorrow>
                   </div>
-                  <div className="overlap-group-14">
-                    <BorrowDataCollRatio
-                      maturity={borrowDataCollRatioProps.maturity}
-                      d={borrowDataCollRatioProps.d}
-                      className={borrowDataCollRatioProps.className}
-                    />
+                  <div className="overlap-group-17">
+                    <BorrowDataCollRatio maturity={borrowDataCollRatioProps.maturity} d={borrowDataCollRatioProps.d} />
                     <BorrowDataCollRatio2
                       collateralRatio={borrowDataCollRatio2Props.collateralRatio}
                       percent={borrowDataCollRatio2Props.percent}
-                      className={borrowDataCollRatio2Props.className}
                     />
                     <BorrowDataCollRatio2
                       collateralRatio={borrowDataCollRatio22Props.collateralRatio}
                       percent={borrowDataCollRatio22Props.percent}
                       className={borrowDataCollRatio22Props.className}
                     />
-                    <div className="borrow-data-floor-price-1 oxanium-normal-black-20px">
-                      <div className="text-16 valign-text-middle">{text16}</div>
+                    <div className="borrow-data-floor-price oxanium-normal-black-20px">
+                      <div className="text-15 valign-text-middle">{text15}</div>
                       <div className="address valign-text-middle">{address}</div>
                     </div>
                     <BorrowDataCollRatio
@@ -97,7 +93,7 @@ function Borrow2(props) {
                       d={borrowDataCollRatio2Props2.d}
                       className={borrowDataCollRatio2Props2.className}
                     />
-                    <div className="borrow-data-container-1"></div>
+                    <div className="borrow-data-container"></div>
                   </div>
                 </div>
               </div>

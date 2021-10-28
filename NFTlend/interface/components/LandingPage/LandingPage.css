@@ -7,7 +7,7 @@
   width: 1440px;
 }
 
-.overlap-group1-2 {
+.overlap-group1-4 {
   height: 1060px;
   position: relative;
   width: 1441px;
@@ -25,10 +25,10 @@
   width: 1440px;
 }
 
-.text-13 {
+.text-17 {
   color: var(--white);
   font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-xxxxxl);
+  font-size: 48px;
   font-weight: 400;
   height: 60px;
   letter-spacing: 0;
@@ -36,10 +36,11 @@
   min-width: 585px;
 }
 
-.text-14 {
+.text-18 {
   color: var(--white);
   font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-xxxl);
+  font-size: var(--font-size-xl);
+  font-weight: 400;
   height: 70px;
   letter-spacing: 0;
   margin-top: 74px;

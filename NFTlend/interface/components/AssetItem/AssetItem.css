@@ -1,5 +1,33 @@
-.asset-item-2,
-.asset-item-2.asset-item {
+.asset-item-3 {
+  align-items: flex-start;
+  cursor: pointer;
+  display: flex;
+  height: 48px;
+  left: 505px;
+  min-width: 136px;
+  position: absolute;
+  top: 12px;
+}
+
+.rectangle-18 {
+  height: 48px;
+  object-fit: cover;
+  width: 44px;
+}
+
+.fidenza-157 {
+  height: 50px;
+  letter-spacing: 0;
+  margin-left: 20px;
+  margin-top: -2px;
+}
+
+.asset-item-3.asset-item-1 {
+  left: 428px;
+  top: 10px;
+}
+
+.asset-item-3.asset-item-2 {
   align-items: flex-start;
   cursor: pointer;
   display: flex;
@@ -8,23 +36,5 @@
   min-width: 136px;
   position: absolute;
   top: 12px;
-}
-
-.rectangle-18-2 {
-  height: 48px;
-  object-fit: cover;
-  width: 44px;
-}
-
-.fidenza-157-2 {
-  height: 50px;
-  letter-spacing: 0;
-  margin-left: 20px;
-  margin-top: -2px;
-}
-
-.asset-item-2.asset-item-1 {
-  left: 428px;
-  top: 10px;
 }
 

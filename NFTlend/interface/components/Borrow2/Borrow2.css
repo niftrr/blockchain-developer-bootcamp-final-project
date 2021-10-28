@@ -1,4 +1,4 @@
-.borrow-9 {
+.borrow-7 {
   align-items: flex-end;
   background-color: var(--blue-zodiac);
   display: flex;
@@ -9,7 +9,7 @@
   width: 1440px;
 }
 
-.overlap-group3-1 {
+.overlap-group3 {
   height: 879px;
   margin-right: 12px;
   margin-top: 61px;
@@ -17,7 +17,7 @@
   width: 1349px;
 }
 
-.borrow-10 {
+.borrow-8 {
   align-items: flex-start;
   background-image: url(/static/img/borrow-div@1x.svg);
   background-size: 100% 100%;
@@ -46,7 +46,7 @@
   width: 233px;
 }
 
-.overlap-group2-1 {
+.overlap-group2 {
   border-radius: 5px;
   height: 225px;
   margin-left: 23px;
@@ -71,7 +71,7 @@
   width: 175px;
 }
 
-.flex-col-11 {
+.flex-col-12 {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
@@ -89,7 +89,7 @@
   position: relative;
 }
 
-.flex-col-12 {
+.flex-col-13 {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
@@ -114,7 +114,7 @@
   min-width: 79px;
 }
 
-.overlap-group-14 {
+.overlap-group-17 {
   border-radius: 10px;
   height: 139px;
   margin-top: 20px;
@@ -122,7 +122,7 @@
   width: 459px;
 }
 
-.borrow-data-floor-price-1 {
+.borrow-data-floor-price {
   align-items: flex-start;
   display: flex;
   height: 20px;
@@ -132,7 +132,7 @@
   top: 31px;
 }
 
-.text-16 {
+.text-15 {
   height: 20px;
   letter-spacing: 0;
   width: 217px;
@@ -146,8 +146,8 @@
   width: 91px;
 }
 
-.borrow-data-container-1 {
-  background-color: var(--blue-zodiac-2);
+.borrow-data-container {
+  background-color: var(--blue-zodiac-3);
   border-radius: 10px;
   height: 139px;
   left: 0;

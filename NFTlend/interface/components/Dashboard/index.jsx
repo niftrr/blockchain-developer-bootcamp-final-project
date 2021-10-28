@@ -7,31 +7,19 @@ import Lends from "../Lends";
 import "./Dashboard.css";
 
 function Dashboard(props) {
-  const { headerProps, borrowProps, borrow2Props, borrow3Props, lendsProps } = props;
+  const { lendsProps } = props;
 
   return (
     <div className="container-center-horizontal">
-      <div className="dashboard-6 screen">
-        <Header className={headerProps.className} />
-        <div className="overlap-group3">
+      <div className="dashboard screen">
+        <Header />
+        <div className="overlap-group4">
           <Background />
           <div className="borrows">
             <BorrowsHeader />
-            <Borrow
-              buttonBorrowProps={borrowProps.buttonBorrowProps}
-              buttonRepayProps={borrowProps.buttonRepayProps}
-              tokenBorrowProps={borrowProps.tokenBorrowProps}
-            />
-            <Borrow
-              buttonBorrowProps={borrow2Props.buttonBorrowProps}
-              buttonRepayProps={borrow2Props.buttonRepayProps}
-              tokenBorrowProps={borrow2Props.tokenBorrowProps}
-            />
-            <Borrow
-              buttonBorrowProps={borrow3Props.buttonBorrowProps}
-              buttonRepayProps={borrow3Props.buttonRepayProps}
-              tokenBorrowProps={borrow3Props.tokenBorrowProps}
-            />
+            <Borrow />
+            <Borrow />
+            <Borrow />
           </div>
           <Lends
             lendProps={lendsProps.lendProps}

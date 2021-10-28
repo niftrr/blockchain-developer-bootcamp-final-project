@@ -4,16 +4,16 @@ import TokenBorrow from "../TokenBorrow";
 import "./Liquidate2.css";
 
 function Liquidate2(props) {
-  const { assetItemProps } = props;
+  const { assetItemProps, tokenBorrowProps } = props;
 
   return (
     <div className="liquidate-7">
-      <div className="overlap-group-16">
+      <div className="overlap-group-18">
         <div className="rectangle-20"></div>
-        <div className="overlap-group-17">
+        <button className="overlap-group-19">
           <div className="liquidate-8 valign-text-middle oxanium-normal-white-20px">Liquidate</div>
-        </div>
-        <div className="text-2-1 valign-text-middle oxanium-bold-black-20px">
+        </button>
+        <div className="text-3 valign-text-middle oxanium-bold-black-20px">
           <span>
             <span className="oxanium-bold-black-20px">
               19-DEC-2022
@@ -32,8 +32,8 @@ function Liquidate2(props) {
           </span>
         </div>
         <AssetItem className={assetItemProps.className} />
-        <div className="text-2-2 valign-text-middle oxanium-normal-black-24px">210,342.3414</div>
-        <TokenBorrow />
+        <div className="text-2-1 valign-text-middle oxanium-normal-black-24px">210,342.3414</div>
+        <TokenBorrow className={tokenBorrowProps.className} />
       </div>
     </div>
   );
