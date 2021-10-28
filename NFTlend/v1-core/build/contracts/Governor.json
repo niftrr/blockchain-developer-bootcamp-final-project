@@ -20369,7 +20369,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-10-26T16:11:21.872Z",
+  "updatedAt": "2021-10-28T12:05:05.951Z",
   "devdoc": {
     "details": "Core of the governance system, designed to be extended though various modules. This contract is abstract and requires several function to be implemented in various modules: - A counting module must implement {quorum}, {_quorumReached}, {_voteSucceeded} and {_countVote} - A voting module must implement {getVotes} - Additionanly, the {votingPeriod} must also be implemented _Available since v4.3._",
     "kind": "dev",

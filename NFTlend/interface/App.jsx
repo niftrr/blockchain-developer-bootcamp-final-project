@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import PopUpNFTs from "./components/PopUpNFTs";
 import Dashboard from "./components/Dashboard";
@@ -12,12 +12,147 @@ import Liquidate from "./components/Liquidate";
 import Asset from "./components/Asset";
 import { Web3ReactProvider } from "@web3-react/core"
 import Web3 from 'web3'
+import NFTlendV1LendingPool from '../v1-core/build/contracts/NFTlendV1LendingPool.json'
+import getWeb3 from "./utils/getWeb3";
 
 function getLibrary(provider) {
     return new Web3(provider)
   }
 
-function App() {
+function App(props) {
+
+    const [count, setCount] = useState(0);
+    if (count<5) {
+        setCount(count+1);
+    }
+    console.log(count);
+
+// state  
+  const [web3, setWeb3] = useState(null);
+  const [accounts, setAccounts] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [walletAddress, setWalletAddress] = useState(null);
+  const [ethBalance, setEthBalance] = useState(null);
+  const [daiBalance, setDaiBalance] = useState(null);
+  
+  useEffect(async () => {
+    try {
+      // Get network provider and web3 instance.
+      const web3 = await getWeb3();
+      
+      // Use web3 to get the user's accounts.
+      let accounts = await web3.eth.getAccounts();
+
+      // Get the contract instance.
+      const networkId = await web3.eth.net.getId();
+      const deployedNetwork = NFTlendV1LendingPool.networks[networkId];
+      const instance = new web3.eth.Contract(
+        NFTlendV1LendingPool.abi,
+        deployedNetwork && deployedNetwork.address,
+      );
+
+      // Define fetch functions
+      async function fetchEthBalance() {
+        let walletAddress = web3.currentProvider.selectedAddress;
+        let balance = await web3.eth.getBalance(walletAddress);
+        return balance / 10**18;
+      }
+
+      let ethBalance = await fetchEthBalance();
+
+      async function fetchTokenBalance(tokenAddress) {
+        let walletAddress = web3.currentProvider.selectedAddress;
+        const erc20ABI = [
+            {
+              "constant": true,
+              "inputs": [],
+              "name": "name",
+              "outputs": [
+                {
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "payable": false,
+              "type": "function"
+            },
+            {
+              "constant": true,
+              "inputs": [],
+              "name": "decimals",
+              "outputs": [
+                {
+                  "name": "",
+                  "type": "uint8"
+                }
+              ],
+              "payable": false,
+              "type": "function"
+            },
+            {
+              "constant": true,
+              "inputs": [
+                {
+                  "name": "_owner",
+                  "type": "address"
+                }
+              ],
+              "name": "balanceOf",
+              "outputs": [
+                {
+                  "name": "balance",
+                  "type": "uint256"
+                }
+              ],
+              "payable": false,
+              "type": "function"
+            },
+            {
+              "constant": true,
+              "inputs": [],
+              "name": "symbol",
+              "outputs": [
+                {
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "payable": false,
+              "type": "function"
+            }
+        ];
+        let contract = new web3.eth.Contract(erc20ABI,tokenAddress);
+        let tokenBalance = await contract.methods.balanceOf(walletAddress).call();
+        let tokenDecimals = await contract.methods.decimals().call();
+        //let tokenSymbol = await contract.methods.symbol().call();
+        tokenBalance = tokenBalance / 10 ** tokenDecimals;
+        return tokenBalance
+      }
+
+      async function fetchDaiBalance() {
+        const tokenAddress = "0xA9410bC038259287104091a6dafc39A6F21F6e4f"
+        let dai = await fetchTokenBalance(tokenAddress);
+        return dai
+      }
+
+      let daiBalance = await fetchDaiBalance();
+
+      // Set web3, accounts, and contract to the state
+      setWeb3(web3);
+      setAccounts(accounts);
+      setContract(instance);
+      setEthBalance(ethBalance);
+      setDaiBalance(daiBalance);
+
+    } catch (error) {
+      // Catch any errors for any of the above operations.
+      alert(
+        `Failed to load web3, accounts, or contract. Check console for details.`,
+      );
+      console.error(error);
+    }
+  }, []);
+
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
         <Router>
@@ -35,7 +170,7 @@ function App() {
             <PopUpTokensWithdraw popUpProps={popUpTokensWithdrawData.popUpProps} />
             </Route>
             <Route path="/lend">
-            <Lend2 headerProps={lend22Data.headerProps} lendsProps={lend22Data.lendsProps} />
+            <Lend2 headerProps={lend22Data.headerProps} lendsProps={lend22Data.lendsProps} ethBalance={ethBalance} daiBalance={daiBalance}/>
             </Route>
             <Route path="/borrow">
             <Borrow2 {...borrow22Data} />

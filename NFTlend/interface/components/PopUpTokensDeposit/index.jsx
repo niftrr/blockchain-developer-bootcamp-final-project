@@ -3,11 +3,11 @@ import PopUpDeposit from "../PopUpDeposit";
 import "./PopUpTokensDeposit.css";
 
 function PopUpTokensDeposit(props) {
-  const { popUpProps } = props;
+  const { popUpProps, ethBalance, daiBalance } = props;
 
   return (
     <div className="container-center-horizontal">
-      <PopUpDeposit {...popUpProps} />
+      <PopUpDeposit {...popUpProps} ethBalance={ethBalance} daiBalance={daiBalance} />
     </div>
   );
 }

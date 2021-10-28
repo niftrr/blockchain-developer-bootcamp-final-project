@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./PopUpDeposit.css";
 
 function PopUp(props) {
-  const { x, spanText, spanText2, rectangle19, inputType, inputPlaceholder, name, place } = props;
+  const { x, spanText, spanText2, rectangle19, inputType, inputPlaceholder, name, place, ethBalance, daiBalance } = props;
+
+  const [inputValue, setInputValue] = useState(0.0);
+
+  function onTodoChange(value) {
+    setInputValue(value);
+    return inputValue;
+  }
+
+  
 
   return (
     <div className="pop-up">
@@ -17,11 +26,11 @@ function PopUp(props) {
         <input
           className="x19111-1 oxanium-normal-black-24px"
           name="19111"
-          placeholder="0.0000"
+          placeholder={inputValue}
           type="text"
         />
         <div className="overlap-group-15">
-          <button className="popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px">MAX</button>
+          <button onClick={() => setInputValue(ethBalance)} className="popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px">MAX</button>
         </div>
       </div>
       <div className="overlap-group-16">

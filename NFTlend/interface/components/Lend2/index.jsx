@@ -6,7 +6,7 @@ import Instructions from "../Instructions";
 import "./Lend2.css";
 
 function Lend2(props) {
-  const { headerProps, lendsProps } = props;
+  const { headerProps, lendsProps, ethBalance, daiBalance} = props;
 
   return (
     <div className="container-center-horizontal">
@@ -19,6 +19,8 @@ function Lend2(props) {
             lendProps={lendsProps.lendProps}
             lend2Props={lendsProps.lend2Props}
             lend3Props={lendsProps.lend3Props}
+            daiBalance={daiBalance}
+            ethBalance={ethBalance}
           />
           <Instructions />
         </div>

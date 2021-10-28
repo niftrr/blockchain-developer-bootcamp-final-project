@@ -4515,7 +4515,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-10-26T16:11:21.948Z",
+  "updatedAt": "2021-10-28T12:05:06.027Z",
   "devdoc": {
     "details": "Interface extension that adds missing functions to the {Governor} core to provide `GovernorBravo` compatibility. _Available since v4.3._",
     "kind": "dev",
