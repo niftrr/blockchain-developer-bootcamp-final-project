@@ -21,12 +21,6 @@ function getLibrary(provider) {
 
 function App(props) {
 
-    const [count, setCount] = useState(0);
-    if (count<5) {
-        setCount(count+1);
-    }
-    console.log(count);
-
 // state  
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState(null);
@@ -42,6 +36,9 @@ function App(props) {
       
       // Use web3 to get the user's accounts.
       let accounts = await web3.eth.getAccounts();
+
+      // Use web3 to get the user's selected address
+      let walletAddress = web3.currentProvider.selectedAddress
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
@@ -143,6 +140,11 @@ function App(props) {
       setContract(instance);
       setEthBalance(ethBalance);
       setDaiBalance(daiBalance);
+
+      console.log('accounts:', accounts);
+      console.log('walletAddress', walletAddress);
+      console.log('ethBalance:', ethBalance);
+      console.log('daiBalance:', daiBalance);
 
     } catch (error) {
       // Catch any errors for any of the above operations.
