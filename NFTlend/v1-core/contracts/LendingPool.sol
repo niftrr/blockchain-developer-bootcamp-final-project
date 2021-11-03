@@ -21,7 +21,8 @@ contract LendingPool is LendingPoolStorage {
     mapping(address => Reserve) reserves;
 
     event InitReserve(address asset, address nTokenAddress, address debtTokenAddress);
-    event Deposit(address asset);
+    event Deposit(address asset, uint256 amount, address from);
+    event Withdraw(address asset, uint256 amount, address from);
     
     constructor() {
         console.log('LendingPool deployed by owner:', msg.sender);
@@ -42,7 +43,6 @@ contract LendingPool is LendingPoolStorage {
     }
 
     function deposit(address asset, uint256 amount) public {
-        console.log('deposit called asset:', asset);
         Reserve memory reserve = reserves[asset];       
 
         address nToken = reserve.nTokenAddress;
@@ -50,14 +50,20 @@ contract LendingPool is LendingPoolStorage {
         IERC20(asset).transferFrom(msg.sender, nToken, amount);
         INToken(nToken).mint(msg.sender, amount);
         
-        // Dev Logging -- start
-        uint256 assetBalance = IERC20(asset).balanceOf(nToken);
-        console.log('nToken assetBalance:', assetBalance);
+        emit Deposit(asset, amount, msg.sender);
+    }
+
+    function withdraw(address asset, uint256 amount) public {
+        Reserve memory reserve = reserves[asset];       
+
+        address nToken = reserve.nTokenAddress;
 
         uint256 nTokenBalance = INToken(nToken).balanceOf(msg.sender);
-        console.log('msg.sender nTokenBalance:', nTokenBalance);
-        // Dev Logging -- end
+        require(nTokenBalance >= amount, "Insufficient nToken balance");
 
-        emit Deposit(asset);
+        INToken(nToken).burnFrom(msg.sender, amount);
+        INToken(nToken).transfer(msg.sender, asset, amount);
+        
+        emit Withdraw(asset, amount, msg.sender);
     }
 }

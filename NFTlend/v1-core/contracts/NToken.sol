@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { INToken } from './INToken.sol';
 
+import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+
 /**
  * @dev {ERC20} token, including:
  *
@@ -25,6 +27,8 @@ contract NToken is Context, AccessControlEnumerable, ERC20Pausable, INToken {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+
+    event TransferSent(address from, address to, uint256 amount);
 
     /**
      * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE` and `PAUSER_ROLE` to the
@@ -129,5 +133,15 @@ contract NToken is Context, AccessControlEnumerable, ERC20Pausable, INToken {
     function unpause() public virtual override {
         require(hasRole(PAUSER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have pauser role to unpause");
         _unpause();
+    }
+
+    function transfer(address to, address asset, uint256 amount) public virtual override {
+        require(hasRole(BURNER_ROLE, _msgSender()), "NToken: must have burner role to transfer tokens");
+        require(IERC20(asset).balanceOf(address(this)) >= amount);
+
+        IERC20(asset).approve(to, amount);
+        IERC20(asset).transfer(to, amount);
+
+        emit TransferSent(address(this), to, amount);
     }
 }

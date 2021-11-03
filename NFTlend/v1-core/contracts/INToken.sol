@@ -20,4 +20,6 @@ interface INToken is IERC20 {
     function setBurner(address to) external;
 
     function setPauser(address to) external;
+
+    function transfer(address asset, address to, uint256 amount) external;
 }
