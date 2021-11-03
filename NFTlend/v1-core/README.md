@@ -1,26 +1,42 @@
-# NFTlend V1 Core
+# Advanced Sample Hardhat Project
 
-This repository contains the core smart contracts for the NFTlend V1 Protocol. 
+This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
 
-## Licensing
+The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
 
-The primary license for NFTlend V1 Core is the Business Source License 1.1 (`BUSL-1.1`), see [`LICENSE`](./LICENSE).
+Try running some of the following tasks:
 
-## Dev Notes
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+npx hardhat help
+REPORT_GAS=true npx hardhat test
+npx hardhat coverage
+npx hardhat run scripts/deploy.js
+node scripts/deploy.js
+npx eslint '**/*.js'
+npx eslint '**/*.js' --fix
+npx prettier '**/*.{json,sol,md}' --check
+npx prettier '**/*.{json,sol,md}' --write
+npx solhint 'contracts/**/*.sol'
+npx solhint 'contracts/**/*.sol' --fix
+```
 
-### Creating Tokens
+# Etherscan verification
 
-1. `token = await ERC20PresetMinterPauser.new("Faux DAI", "DAI")`
-2. `await token.address`
-3. `await token.mint('{addresses[0]}', '1000000000000000000000')` 
-4. `(await token.balanceOf('{addresses[0]}')).toString()`
+To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
 
-[Resource](https://forum.openzeppelin.com/t/create-an-erc20-using-truffle-without-writing-solidity/2713)
-### Creating NFTs
+In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
 
-1. `nft = await ERC721PresetMinterPauserAutoId.deployed()`
-2. `await nft.mint({addresses[0]})`
-3. `await nft.ownerOf(0)`
-4. `await nft.tokenURI(0)`
+```shell
+hardhat run --network ropsten scripts/deploy.js
+```
 
-[Resource](https://forum.openzeppelin.com/t/create-an-nft-and-deploy-to-a-public-testnet-using-truffle/2961)
+Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+
+```shell
+npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
+```
