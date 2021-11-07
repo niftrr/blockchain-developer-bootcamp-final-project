@@ -135,13 +135,22 @@ contract NToken is Context, AccessControlEnumerable, ERC20Pausable, INToken {
         _unpause();
     }
 
-    function transfer(address to, address asset, uint256 amount) public virtual override {
+    function reserveTransfer(address to, address asset, uint256 amount) public virtual override {
         require(hasRole(BURNER_ROLE, _msgSender()), "NToken: must have burner role to transfer tokens");
-        require(IERC20(asset).balanceOf(address(this)) >= amount);
+        require(IERC20(asset).balanceOf(address(this)) >= amount, "Insuffiecient supply of asset token in reserve.");
 
         IERC20(asset).approve(to, amount);
         IERC20(asset).transfer(to, amount);
 
         emit TransferSent(address(this), to, amount);
+    }
+
+    function reserveTransferFrom(address from, address asset, uint256 amount) public virtual override {
+        require(hasRole(BURNER_ROLE, _msgSender()), "NToken: must have burner role to transfer tokens");
+        require(IERC20(asset).balanceOf(address(this)) >= amount);
+
+        IERC20(asset).transferFrom(from, address(this), amount);
+
+        emit TransferSent(from, address(this), amount);
     }
 }

@@ -16,7 +16,7 @@ interface ICollateralManager {
         uint256 tokenId, 
         uint256 id
     );
-
+   
     function deposit(
         address borrower,
         address erc20Token,
@@ -25,11 +25,12 @@ interface ICollateralManager {
         uint256 repaymentAmount,
         uint256 liquidationPrice,
         uint256 maturity) external payable;
-   
 
     function withdraw (uint256 _id) external;
 
     function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external;
 
     function getLiquidationThreshold(address _erc721Token) external view;
+
+    function getUserBorrows(address user) external view;
 }

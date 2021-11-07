@@ -21,5 +21,7 @@ interface INToken is IERC20 {
 
     function setPauser(address to) external;
 
-    function transfer(address asset, address to, uint256 amount) external;
+    function reserveTransfer(address asset, address to, uint256 amount) external;
+
+    function reserveTransferFrom(address asset, address from, uint256 amount) external;
 }

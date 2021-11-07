@@ -4,9 +4,15 @@ pragma solidity ^0.8.0;
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import { INToken } from "./INToken.sol";
+import { IDebtToken } from "./IDebtToken.sol";
+import { ICollateralManager } from "./ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
+
+
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol"; // remove
+
 
 import "hardhat/console.sol";
 
@@ -27,8 +33,9 @@ contract LendingPool is LendingPoolStorage {
     event InitReserve(address asset, address nTokenAddress, address debtTokenAddress);
     event Deposit(address asset, uint256 amount, address lender);
     event Withdraw(address asset, uint256 amount, address lender);
-    event Borrow(address asset, uint256 amount, address collateral, uint256 tokenId, address borrower);
-    
+    event Borrow(address asset, uint256 amount, uint256 repaymentAmount, address collateral, uint256 tokenId, address borrower);
+    event Repay(uint256, address asset, uint256 tokenId, address borrower);
+
     constructor() {
         console.log('LendingPool deployed by owner:', msg.sender);
         owner = msg.sender;
@@ -72,35 +79,30 @@ contract LendingPool is LendingPoolStorage {
         require(nTokenBalance >= amount, "Insufficient nToken balance");
 
         INToken(nToken).burnFrom(msg.sender, amount);
-        INToken(nToken).transfer(msg.sender, asset, amount);
+        INToken(nToken).reserveTransfer(msg.sender, asset, amount);
         
         emit Withdraw(asset, amount, msg.sender);
     }
 
-    function mockOracle() public pure returns (uint256) {
+    function _mockOracle() public pure returns (uint256) {
         return 60.0;
     }
     
-    function getLiquidationThreshold(address collateral) internal returns (bool, uint256) {
+    function getLiquidationThreshold(address collateral) public returns (bool, uint256) {
         (bool success, bytes memory data) = collateralManagerAddress.call(
-            abi.encodeWithSignature("getLiquidationThreshold(address)", collateral)
+            abi.encodeWithSignature("getLiquidationThreshold(address)", "call getLiquidationThreshold", collateral)
         );
         return (success, abi.decode(data, (uint256)));
     }
 
-    function depositCollateral(
-        address borrower, 
+    function _withdrawCollateral(
+        uint256 borrowId, 
         address asset, 
-        address collateral, 
-        uint256 tokenId, 
-        uint256 repaymentAmount, 
-        uint256 liquidationPrice, 
-        uint256 maturity) internal returns (bool) 
+        uint256 repaymentAmount) internal returns (bool) 
     {
-        (bool success, bytes memory data) = collateralManagerAddress.delegatecall(
-            abi.encodeWithSignature("deposit(address,address,address,uint256,uint256,uint256,uint256)", 
-            borrower, asset, collateral, tokenId, repaymentAmount, liquidationPrice, maturity)
-        ); 
+        (bool success, ) = collateralManagerAddress.delegatecall(
+            abi.encodeWithSignature("withdraw(uint256,address,repaymentAmount)", 
+            borrowId, asset, repaymentAmount)); 
         return (success); 
     }
 
@@ -110,12 +112,13 @@ contract LendingPool is LendingPoolStorage {
         address collateral, 
         uint256 tokenId,
         uint256 interestRate,
-        uint256 maturity) public 
+        uint256 numWeeks) public 
     {
-        uint256 repaymentAmount = amount.mul(interestRate.add(1));
-        uint256 collateralIndexPrice = mockOracle();
+        uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
+        uint256 collateralIndexPrice = _mockOracle();
+        uint maturity = block.timestamp + numWeeks * 1 weeks;
 
-        bool success = depositCollateral(
+        ICollateralManager(collateralManagerAddress).deposit(
             msg.sender, 
             asset, 
             collateral, 
@@ -124,12 +127,45 @@ contract LendingPool is LendingPoolStorage {
             collateralIndexPrice, 
             maturity);
 
-        require(success, 'DEPOSIT_UNSUCCESSFUL');
+        // require(success, 'DEPOSIT_UNSUCCESSFUL');
 
         Reserve memory reserve = reserves[asset]; 
-        address nToken = reserve.nTokenAddress;
-        INToken(nToken).transfer(msg.sender, asset, amount);
+        IDebtToken(reserve.debtTokenAddress).mint(msg.sender, repaymentAmount);
+        INToken(reserve.nTokenAddress).reserveTransfer(msg.sender, asset, amount);
 
-        emit Borrow(asset, amount, collateral, tokenId, msg.sender);
+        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, msg.sender);
+    }
+
+    function repay(
+        address asset,
+        uint256 amount, 
+        uint256 borrowId
+    ) public {
+        Reserve memory reserve = reserves[asset]; 
+        INToken(reserve.nTokenAddress).reserveTransferFrom(msg.sender, asset, amount);
+
+        _withdrawCollateral(
+            borrowId, 
+            asset, 
+            amount);
+
+        emit Repay(borrowId, asset, amount, msg.sender);
+    }
+
+    function _getUserBorrows(address user) public returns (uint256[] memory) {
+        console.log(11);
+        (bool success , bytes memory data) = collateralManagerAddress.delegatecall(
+            abi.encodeWithSignature("getUserBorrows(address)", user)); 
+        
+        console.log(12, success);
+        return abi.decode(data, (uint256[])); 
+    }
+
+    function setCollateralManagerAddress(address _collateralManagerAddress) public onlyOwner {
+        collateralManagerAddress = _collateralManagerAddress;
+    }
+
+    function getCollateralManagerAddress() public view returns (address) {
+        return collateralManagerAddress;
     }
 }
