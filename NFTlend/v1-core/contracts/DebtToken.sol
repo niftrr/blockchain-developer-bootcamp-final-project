@@ -43,22 +43,22 @@ contract DebtToken is Context, AccessControlEnumerable, ERC20Pausable, IDebtToke
     }
 
     function setAdmin(address to) public virtual override {
-        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "NToken: must have admin role to change admin role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "DebtToken: must have admin role to change admin role");
         _setupRole(DEFAULT_ADMIN_ROLE, to);
     }
 
     function setMinter(address to) public virtual override {
-        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "NToken: must have admin role to change minter role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "DebtToken: must have admin role to change minter role");
         _setupRole(MINTER_ROLE, to);
     }
 
     function setBurner(address to) public virtual override {
-        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "NToken: must have admin role to change burner role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "DebtToken: must have admin role to change burner role");
         _setupRole(BURNER_ROLE, to);
     }
 
     function setPauser(address to) public virtual override {
-        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "NToken: must have admin role to change pauser role");
+        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "DebtToken: must have admin role to change pauser role");
         _setupRole(PAUSER_ROLE, to);
     }
 
@@ -72,7 +72,7 @@ contract DebtToken is Context, AccessControlEnumerable, ERC20Pausable, IDebtToke
      * - the caller must have the `MINTER_ROLE`.
      */
     function mint(address to, uint256 amount) public virtual override {
-        require(hasRole(MINTER_ROLE, _msgSender()), "NToken: must have minter role to mint");
+        require(hasRole(MINTER_ROLE, _msgSender()), "DebtToken: must have minter role to mint");
         _mint(to, amount);
     }
 
@@ -82,7 +82,7 @@ contract DebtToken is Context, AccessControlEnumerable, ERC20Pausable, IDebtToke
      * See {ERC20-_burn}.
      */
     function burn(uint256 amount) public virtual override {
-        require(hasRole(BURNER_ROLE, _msgSender()), "NToken: must have burner role to burn");
+        require(hasRole(BURNER_ROLE, _msgSender()), "DebtToken: must have burner role to burn");
         _burn(_msgSender(), amount);
     }
 
@@ -98,11 +98,8 @@ contract DebtToken is Context, AccessControlEnumerable, ERC20Pausable, IDebtToke
      * `amount`.
      */
     function burnFrom(address account, uint256 amount) public virtual override {
-        uint256 currentAllowance = allowance(account, _msgSender());
-        require(currentAllowance >= amount, "ERC20: burn amount exceeds allowance");
-        unchecked {
-            _approve(account, _msgSender(), currentAllowance - amount);
-        }
+        require(hasRole(BURNER_ROLE, _msgSender()), "DebtToken: must have burner role to burn");
+
         _burn(account, amount);
     }
 

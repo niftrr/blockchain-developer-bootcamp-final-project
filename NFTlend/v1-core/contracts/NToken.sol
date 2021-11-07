@@ -147,7 +147,7 @@ contract NToken is Context, AccessControlEnumerable, ERC20Pausable, INToken {
 
     function reserveTransferFrom(address from, address asset, uint256 amount) public virtual override {
         require(hasRole(BURNER_ROLE, _msgSender()), "NToken: must have burner role to transfer tokens");
-        require(IERC20(asset).balanceOf(address(this)) >= amount);
+        require(IERC20(asset).balanceOf(from) >= amount, "Insufficient user asset token balance.");
 
         IERC20(asset).transferFrom(from, address(this), amount);
 

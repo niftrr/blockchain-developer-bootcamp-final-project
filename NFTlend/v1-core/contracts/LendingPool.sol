@@ -34,7 +34,7 @@ contract LendingPool is LendingPoolStorage {
     event Deposit(address asset, uint256 amount, address lender);
     event Withdraw(address asset, uint256 amount, address lender);
     event Borrow(address asset, uint256 amount, uint256 repaymentAmount, address collateral, uint256 tokenId, address borrower);
-    event Repay(uint256, address asset, uint256 tokenId, address borrower);
+    event Repay(uint256 borrowId, address asset, uint256 repaymentAmount, address borrower);
 
     constructor() {
         console.log('LendingPool deployed by owner:', msg.sender);
@@ -137,6 +137,25 @@ contract LendingPool is LendingPoolStorage {
     }
 
     function repay(
+        address asset,
+        uint256 repaymentAmount,
+        uint256 borrowId
+    ) public 
+    {
+        Reserve memory reserve = reserves[asset]; 
+        INToken(reserve.nTokenAddress).reserveTransferFrom(msg.sender, asset, repaymentAmount);  
+
+        ICollateralManager(collateralManagerAddress).withdraw(
+            borrowId, 
+            asset, 
+            repaymentAmount);
+
+        IDebtToken(reserve.debtTokenAddress).burnFrom(msg.sender, repaymentAmount);
+
+        emit Repay(borrowId, asset, repaymentAmount, msg.sender);
+    }
+    
+    function repayOld(
         address asset,
         uint256 amount, 
         uint256 borrowId

@@ -26,7 +26,7 @@ interface ICollateralManager {
         uint256 liquidationPrice,
         uint256 maturity) external payable;
 
-    function withdraw (uint256 _id) external;
+    function withdraw (uint256 _id, address asset, uint256 repaymentAmount) external;
 
     function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external;
 

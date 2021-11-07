@@ -333,27 +333,22 @@ describe('LendingPool >> Borrow', function() {
 });
 
 describe('LendingPool >> Repay', function() {
-    // TODO: 
-    // - should repay borrow to retreive NFT
-    // - ... 
+
     it('should create and repay a borrow (depositing and returning an NFT)', async function () {
         const tokenAmount = 1*10**numDecimals;
-        const tokenId = 1; // tokenId of NFT owned by bob
+        const tokenId = bob_tokenId; // tokenId of NFT owned by bob
         const interestRate = 20;
         const numWeeks = 1;
 
-        // BORROW ---- START ----
-        // Owner: Initialize reserve
-        await expect(
-            hhLendingPool.initReserve(
-                hhAssetToken.address, 
-                hhNToken.address,
-                hhDebtToken.address))
-            .to.emit(hhLendingPool, 'InitReserve')
-            .withArgs(
-                hhAssetToken.address, 
-                hhNToken.address,
-                hhDebtToken.address);
+        //derived variables to check
+        const repaymentAmount = Math.round(tokenAmount*(1 + 1*interestRate/100*numWeeks/52));
+
+        // BORROW -- START --------------------------------------------
+        // Initialize reserve
+        hhLendingPool.initReserve(
+            hhAssetToken.address, 
+            hhNToken.address,
+            hhDebtToken.address)
 
         // Alice: Approve assetToken transferFrom lendingPool 
         await hhAssetToken.connect(alice).approve(hhLendingPoolAddress, tokenAmount);
@@ -367,41 +362,56 @@ describe('LendingPool >> Repay', function() {
                 tokenAmount,
                 alice.address);
 
+        // Bob: Approve NFT transfer
+        await hhNFT.connect(bob).approve(hhCollateralManagerAddress, bob_tokenId);
+
         // Bob: Borrow nTokens using NFT as collateral
-        // await expect(
-        //     hhLendingPool.connect(bob).borrow(
-        //         hhAssetToken.address,
-        //         tokenAmount,
-        //         hhNFT.address,
-        //         tokenId, 
-        //         interestRate,
-        //         numWeeks))
-        //     .to.emit(hhLendingPool, 'Borrow')
-        //     .withArgs(
-        //         hhAssetToken.address,
-        //         tokenAmount,
-        //         hhNFT.address,
-        //         tokenId,
-        //         bob.address);
+        await expect(
+            hhLendingPool.connect(bob).borrow(
+                hhAssetToken.address,
+                tokenAmount,
+                hhNFT.address,
+                bob_tokenId, 
+                interestRate,
+                numWeeks))
+            .to.emit(hhLendingPool, 'Borrow')
+            .withArgs(
+                hhAssetToken.address,
+                tokenAmount,
+                repaymentAmount,
+                hhNFT.address,
+                tokenId,
+                bob.address);
 
-        // Bob: Should have debtToken balance
-        // await expect(
-        //     (await hhDebtToken.balanceOf(bob.address)))
-        //     .to.equal(tokenAmount);
-
-        // Bob: Should have assetToken balance increased by tokenAmount
-        // await expect(
-        //     (await hhAssetToken.balanceOf(bob.address)))
-        //     .to.equal((hhAssetTokenInitialBalance+tokenAmount));
-        // BORROW ---- END ----
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(hhCollateralManagerAddress);
+        // BORROW -- END --------------------------------------------
         
-        // REPAY ---- START ----
-        // Get Borrow id
-        // await expect(
-        //     (await hhLendingPool._getUserBorrows(bob.address)))
-        //     .to.equal((0));        
-        // Repay borrow
-        // REPAY ---- END ----
+        // Get bob's borrows
+        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowId = borrowIds[0];
+
+        // Bob: approve repaymentAmount of asset token to nToken reserve
+        await hhAssetToken.connect(bob).approve(hhNToken.address, repaymentAmount);
+
+        // Bob: Repay borrow to retreive NFT
+        await expect(
+            hhLendingPool.connect(bob).repay(
+                hhAssetToken.address,
+                repaymentAmount,
+                borrowId))
+            .to.emit(hhLendingPool, 'Repay')
+            .withArgs(
+                borrowId,
+                hhAssetToken.address,
+                repaymentAmount,
+                bob.address);  
+
+        // Bob: expect relating debtTokens to have been burned
+        await expect(
+            (await hhDebtToken.balanceOf(bob.address)))
+            .to.equal(0);
     });
 
 });
