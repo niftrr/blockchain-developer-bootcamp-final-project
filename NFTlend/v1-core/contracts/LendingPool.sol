@@ -95,17 +95,6 @@ contract LendingPool is LendingPoolStorage {
         return (success, abi.decode(data, (uint256)));
     }
 
-    function _withdrawCollateral(
-        uint256 borrowId, 
-        address asset, 
-        uint256 repaymentAmount) internal returns (bool) 
-    {
-        (bool success, ) = collateralManagerAddress.delegatecall(
-            abi.encodeWithSignature("withdraw(uint256,address,repaymentAmount)", 
-            borrowId, asset, repaymentAmount)); 
-        return (success); 
-    }
-
     function borrow(
         address asset, 
         uint256 amount, 
@@ -153,22 +142,6 @@ contract LendingPool is LendingPoolStorage {
         IDebtToken(reserve.debtTokenAddress).burnFrom(msg.sender, repaymentAmount);
 
         emit Repay(borrowId, asset, repaymentAmount, msg.sender);
-    }
-    
-    function repayOld(
-        address asset,
-        uint256 amount, 
-        uint256 borrowId
-    ) public {
-        Reserve memory reserve = reserves[asset]; 
-        INToken(reserve.nTokenAddress).reserveTransferFrom(msg.sender, asset, amount);
-
-        _withdrawCollateral(
-            borrowId, 
-            asset, 
-            amount);
-
-        emit Repay(borrowId, asset, amount, msg.sender);
     }
 
     function _getUserBorrows(address user) public returns (uint256[] memory) {
