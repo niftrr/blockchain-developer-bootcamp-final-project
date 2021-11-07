@@ -33,14 +33,14 @@ beforeEach(async function() {
     hhLendingPool = await LendingPool.deploy();
     await hhLendingPool.deployed();
     hhLendingPoolAddress = await hhLendingPool.resolvedAddress;
-    console.log('LendingPoolAddress deployed:', hhLendingPoolAddress);
+    // console.log('LendingPoolAddress deployed:', hhLendingPoolAddress);
 
     // Get and deploy CollateralManager
     CollateralManager = await ethers.getContractFactory('CollateralManager');
     hhCollateralManager = await CollateralManager.deploy();
     await hhCollateralManager.deployed();
     hhCollateralManagerAddress = await hhCollateralManager.resolvedAddress;
-    console.log('CollateralManager deployed:', hhCollateralManagerAddress);
+    // console.log('CollateralManager deployed:', hhCollateralManagerAddress);
 
     // Link CollateralManager to LendingPool
     await hhLendingPool.setCollateralManagerAddress(hhCollateralManagerAddress);
@@ -82,8 +82,9 @@ beforeEach(async function() {
 
     // Get Signers
     [owner, alice, bob] = await ethers.getSigners();
-    console.log('alice:', alice.address);
-    console.log('bob:', bob.address);
+    // console.log('alice:', alice.address);
+    // console.log('bob:', bob.address);
+
     // Transfer funds to alice and bob
     await hhAssetToken.transfer(alice.address, hhAssetTokenInitialBalance);
     await hhAssetToken.transfer(bob.address, hhAssetTokenInitialBalance);
