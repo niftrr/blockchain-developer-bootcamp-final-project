@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core"
-import { injected } from "../wallet/connectors"
+import { injected } from "../../connectors"
 import 'regenerator-runtime/runtime'
 import "./Header.css";
 
 function Header(props) {
   const { className } = props;
-  const { active, account, library, connector, activate, deactivate } = useWeb3React()
+  const { active, account, activate, deactivate } = useWeb3React()
 
   console.log(active, account)
 

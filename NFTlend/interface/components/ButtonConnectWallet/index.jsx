@@ -1,6 +1,6 @@
 import React from "react";
 import { useWeb3React } from "@web3-react/core"
-import { injected } from "../wallet/connectors"
+import { injected } from "../../connectors"
 import "./ButtonConnectWallet.css";
 
 function ButtonConnectWallet(props) {
