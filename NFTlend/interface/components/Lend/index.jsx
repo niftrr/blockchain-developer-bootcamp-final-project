@@ -8,21 +8,38 @@ import useNToken from "../../hooks/useNToken";
 
 function Lend(props) {
   const { account } = useWeb3React();
-  const { nTokenBalanceDAI, nTokenYieldDAI, fetchNTokenBalance, fetchNTokenYield } = useNToken();
-  const { buttonDepositProps, buttonRepayProps } = props;
+  const {fetchNTokenBalance, nTokenBalanceDAI, nTokenBalanceETH, nTokenBalanceUSDC, 
+    fetchNTokenYield, nTokenYieldDAI, nTokenYieldETH, nTokenYieldUSDC } = useNToken();
+  const { buttonDepositProps, buttonRepayProps, token } = props;
+  
+  const nTokenBalance = {
+    "DAI": nTokenBalanceDAI,
+    "ETH": nTokenBalanceETH,
+    "USDC": nTokenBalanceUSDC
+  }
+  
+  const nTokenYield = {
+    "DAI": nTokenYieldDAI,
+    "ETH": nTokenYieldETH,
+    "USDC": nTokenYieldUSDC
+  }
 
   useEffect(() => {
     if (account) {
       fetchNTokenBalance('DAI');
+      fetchNTokenBalance('ETH');
+      fetchNTokenBalance('USDC');
       fetchNTokenYield('DAI');
+      fetchNTokenYield('ETH');
+      fetchNTokenYield('USDC');
     }    
   }, [account]);
 
   return (
     <div className="lend">
-      <TokenLend />
-      <div className="text-2 valign-text-middle oxanium-normal-black-24px">{nTokenBalanceDAI}</div>
-      <div className="percent-1 valign-text-middle oxanium-normal-black-25px">{nTokenYieldDAI}</div>
+      <TokenLend token={token} />
+      <div className="text-2 valign-text-middle oxanium-normal-black-24px">{nTokenBalance[token]}</div>
+      <div className="percent-1 valign-text-middle oxanium-normal-black-25px">{nTokenYield[token]}</div>
       <ButtonDeposit ethBalance={0} daiBalance={1}>Deposit</ButtonDeposit>
       <ButtonWithdraw>Withdraw</ButtonWithdraw>
     </div>

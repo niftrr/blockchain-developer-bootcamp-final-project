@@ -105,7 +105,7 @@ export const AppContextProvider = ({ children }) => {
             case "DAI":
               dispatch({ type: "SET_NTOKEN_YIELD_DAI", payload: _yield});
             case "ETH":
-              dispatch({ type: "SET_NTOKEN_YILED_ETH", payload: _yield});
+              dispatch({ type: "SET_NTOKEN_YIELD_ETH", payload: _yield});
             case "USDC":
               dispatch({ type: "SET_NTOKEN_YIELD_USDC", payload: _yield});
           };

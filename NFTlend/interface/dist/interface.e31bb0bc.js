@@ -39177,15 +39177,21 @@ require("./TokenLend.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function TokenLend() {
+function TokenLend(props) {
+  var token = props.token;
+  var tokenImage = {
+    "DAI": "/img/rectangle-25@2x.png",
+    "ETH": "/img/rectangle-27@2x.png",
+    "USDC": "/img/rectangle-22@2x.png"
+  };
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "token-lend"
   }, /*#__PURE__*/_react.default.createElement("img", {
     className: "rectangle-25",
-    src: "/img/rectangle-25@2x.png"
+    src: tokenImage[token]
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "dai valign-text-middle oxanium-normal-black-24px"
-  }, "DAI"));
+  }, token));
 }
 
 var _default = TokenLend;
@@ -59530,7 +59536,7 @@ var AppContextProvider = function AppContextProvider(_ref2) {
 
         case "ETH":
           dispatch({
-            type: "SET_NTOKEN_YILED_ETH",
+            type: "SET_NTOKEN_YIELD_ETH",
             payload: _yield
           });
 
@@ -59717,8 +59723,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var useNToken = function useNToken() {
-  console.log('useNToken');
-
   var _useWeb3React = (0, _core.useWeb3React)(),
       account = _useWeb3React.account;
 
@@ -59787,9 +59791,10 @@ var useNToken = function useNToken() {
             case 0:
               // const nTokenYield = await nTokenContract[ccy].balanceOf(account);
               // setNTokenYield(ccy, formatUnits(nTokenYield, 18));
+              console.log('fetchNTokenYield', ccy);
               setNTokenYield(ccy, 20);
 
-            case 1:
+            case 2:
             case "end":
               return _context2.stop();
           }
@@ -59850,26 +59855,47 @@ function Lend(props) {
       account = _useWeb3React.account;
 
   var _useNToken = (0, _useNToken2.default)(),
-      nTokenBalanceDAI = _useNToken.nTokenBalanceDAI,
-      nTokenYieldDAI = _useNToken.nTokenYieldDAI,
       fetchNTokenBalance = _useNToken.fetchNTokenBalance,
-      fetchNTokenYield = _useNToken.fetchNTokenYield;
+      nTokenBalanceDAI = _useNToken.nTokenBalanceDAI,
+      nTokenBalanceETH = _useNToken.nTokenBalanceETH,
+      nTokenBalanceUSDC = _useNToken.nTokenBalanceUSDC,
+      fetchNTokenYield = _useNToken.fetchNTokenYield,
+      nTokenYieldDAI = _useNToken.nTokenYieldDAI,
+      nTokenYieldETH = _useNToken.nTokenYieldETH,
+      nTokenYieldUSDC = _useNToken.nTokenYieldUSDC;
 
   var buttonDepositProps = props.buttonDepositProps,
-      buttonRepayProps = props.buttonRepayProps;
+      buttonRepayProps = props.buttonRepayProps,
+      token = props.token;
+  var nTokenBalance = {
+    "DAI": nTokenBalanceDAI,
+    "ETH": nTokenBalanceETH,
+    "USDC": nTokenBalanceUSDC
+  };
+  var nTokenYield = {
+    "DAI": nTokenYieldDAI,
+    "ETH": nTokenYieldETH,
+    "USDC": nTokenYieldUSDC
+  };
   (0, _react.useEffect)(function () {
     if (account) {
       fetchNTokenBalance('DAI');
+      fetchNTokenBalance('ETH');
+      fetchNTokenBalance('USDC');
       fetchNTokenYield('DAI');
+      fetchNTokenYield('ETH');
+      fetchNTokenYield('USDC');
     }
   }, [account]);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "lend"
-  }, /*#__PURE__*/_react.default.createElement(_TokenLend.default, null), /*#__PURE__*/_react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement(_TokenLend.default, {
+    token: token
+  }), /*#__PURE__*/_react.default.createElement("div", {
     className: "text-2 valign-text-middle oxanium-normal-black-24px"
-  }, nTokenBalanceDAI), /*#__PURE__*/_react.default.createElement("div", {
+  }, nTokenBalance[token]), /*#__PURE__*/_react.default.createElement("div", {
     className: "percent-1 valign-text-middle oxanium-normal-black-25px"
-  }, nTokenYieldDAI), /*#__PURE__*/_react.default.createElement(_ButtonDeposit.default, {
+  }, nTokenYield[token]), /*#__PURE__*/_react.default.createElement(_ButtonDeposit.default, {
     ethBalance: 0,
     daiBalance: 1
   }, "Deposit"), /*#__PURE__*/_react.default.createElement(_ButtonWithdraw.default, null, "Withdraw"));
@@ -59902,28 +59928,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function Lends(props) {
   var className = props.className,
-      lendProps = props.lendProps,
-      lend2Props = props.lend2Props,
-      lend3Props = props.lend3Props,
-      ethBalance = props.ethBalance,
-      daiBalance = props.daiBalance;
+      lendProps = props.lendProps;
+  var tokenList = ["DAI", "ETH", "USDC"];
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "lends ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement(_LendsHeader.default, null), /*#__PURE__*/_react.default.createElement(_Lend.default, {
-    buttonBorrowProps: lendProps.buttonBorrowProps,
-    buttonRepayProps: lendProps.buttonRepayProps,
-    ethBalance: ethBalance,
-    daiBalance: daiBalance
-  }), /*#__PURE__*/_react.default.createElement(_Lend.default, {
-    buttonBorrowProps: lend2Props.buttonBorrowProps,
-    buttonRepayProps: lend2Props.buttonRepayProps,
-    ethBalance: ethBalance,
-    daiBalance: daiBalance
-  }), /*#__PURE__*/_react.default.createElement(_Lend.default, {
-    buttonBorrowProps: lend3Props.buttonBorrowProps,
-    buttonRepayProps: lend3Props.buttonRepayProps,
-    ethBalance: ethBalance,
-    daiBalance: daiBalance
+  }, /*#__PURE__*/_react.default.createElement(_LendsHeader.default, null), tokenList.map(function (token) {
+    return /*#__PURE__*/_react.default.createElement(_Lend.default, {
+      buttonBorrowProps: lendProps.buttonBorrowProps,
+      buttonRepayProps: lendProps.buttonRepayProps,
+      token: token,
+      key: token
+    });
   }));
 }
 
@@ -76873,7 +76888,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59480" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51647" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -7,7 +7,6 @@ import { formatUnits } from '@ethersproject/units';
 import { useEffect } from "react";
 
 export const useNToken = () => {
-    console.log('useNToken');
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
     const nTokenContractAddressDAI = '0x809d550fca64d94Bd9F66E60752A544199cfAC3D' // hardhat
@@ -34,6 +33,7 @@ export const useNToken = () => {
     const fetchNTokenYield = async (ccy) => {
         // const nTokenYield = await nTokenContract[ccy].balanceOf(account);
         // setNTokenYield(ccy, formatUnits(nTokenYield, 18));
+        console.log('fetchNTokenYield', ccy);
         setNTokenYield(ccy, 20);
     };
 
