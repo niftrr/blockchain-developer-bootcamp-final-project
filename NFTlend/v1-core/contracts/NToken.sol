@@ -28,6 +28,8 @@ contract NToken is Context, AccessControlEnumerable, ERC20Pausable, INToken {
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
+    uint256 currentAPY; 
+
     event TransferSent(address from, address to, uint256 amount);
 
     /**
@@ -152,5 +154,17 @@ contract NToken is Context, AccessControlEnumerable, ERC20Pausable, INToken {
         IERC20(asset).transferFrom(from, address(this), amount);
 
         emit TransferSent(from, address(this), amount);
+    }
+
+    /**
+     * @dev Retreives current APY for a given nToken contract address.
+     *
+     * Yield logic yet to be implmented. 
+     *
+     * Scaffolding for front-end
+     *
+     */
+    function getCurrentAPY() public view returns (uint256) {
+        return currentAPY;
     }
 }

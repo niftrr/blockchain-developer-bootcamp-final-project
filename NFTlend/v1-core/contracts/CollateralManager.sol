@@ -33,6 +33,9 @@ contract CollateralManager is IERC721Receiver {
     mapping(uint256 => Borrow) public borrows;
     mapping(address => uint256[]) public userBorrows;
     mapping(address => uint256) public liquidationThresholds;
+    
+    mapping(address => bool) public whitelisted;
+    address[] public whitelist;
 
     event DepositCollateral(
         address borrower,
@@ -57,6 +60,24 @@ contract CollateralManager is IERC721Receiver {
         _;
     }
 
+    function updateWhitelist(address erc721Token, bool isWhitelisted) public onlyOwner {
+        whitelisted[erc721Token] = isWhitelisted;
+        if (isWhitelisted) {
+            whitelist.push(erc721Token);
+        } else {
+            for (uint i = 0; i < whitelist.length-1; i++){
+                if (whitelist[i] == erc721Token) {
+                    whitelist[i] = whitelist[whitelist.length-1];
+                    whitelist.pop();
+                }
+            }
+        }
+    }
+
+    function getWhitelist() public view returns (address[] memory) {
+        return whitelist;
+    }
+
     /**
      * Always returns `IERC721Receiver.onERC721Received.selector`.
      */
@@ -73,6 +94,7 @@ contract CollateralManager is IERC721Receiver {
         uint256 collateralIndexPrice,
         uint256 maturity) public payable returns (bool)
     {
+        require(whitelisted[erc721Token], "NFT not whitelisted");
         IERC721(erc721Token).transferFrom(borrower, address(this), tokenId);
 
         uint256 id = counter.current();

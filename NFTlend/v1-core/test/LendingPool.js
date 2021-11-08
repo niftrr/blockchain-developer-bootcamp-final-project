@@ -74,6 +74,9 @@ beforeEach(async function() {
     hhNFT = await NFT.deploy('Punk NFT', 'PUNK');
     await hhNFT.deployed();
 
+    // Whitelist NFT
+    hhCollateralManager.updateWhitelist(hhNFT.address, true);
+
     // Set NFT liquidation threshold
     hhCollateralManager.setLiquidationThreshold(hhNFT.address, 150); // in percent
 
