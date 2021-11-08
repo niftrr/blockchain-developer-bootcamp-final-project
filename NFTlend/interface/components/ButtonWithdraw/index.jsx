@@ -6,14 +6,14 @@ import Popup from 'reactjs-popup';
 
 
 function ButtonBorrow(props) {
-  const { children, className } = props;
+  const { children, className, token } = props;
 
   return (
     <Popup modal trigger={
     <button className={`button-withdraw-2 ${className || ""}`}>
       <div className="withdraw valign-text-middle oxanium-normal-black-20px">{children}</div>
     </button>} modal nested>
-      <PopUpTokensWithdraw />
+      <PopUpTokensWithdraw token={token} />
     </Popup>
   );
 }

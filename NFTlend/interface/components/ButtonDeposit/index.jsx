@@ -5,17 +5,17 @@ import PopUpTokensDeposit from '../PopUpTokensDeposit';
 import Popup from 'reactjs-popup';
 
 
-function ButtonBorrow(props) {
-  const { children, className, ethBalance, daiBalance } = props;
+function ButtonDeposit(props) {
+  const { children, className, token } = props;
 
   return (
     <Popup modal trigger={
     <div className={`button-deposit-3 ${className || ""}`}>
       <div className="place-9 valign-text-middle oxanium-normal-white-20px">{children}</div>
     </div>} modal nested>
-      <PopUpTokensDeposit ethBalance={ethBalance} daiBalance={daiBalance} />
+      <PopUpTokensDeposit token={token} />
     </Popup>
   );
 }
 
-export default ButtonBorrow;
+export default ButtonDeposit;

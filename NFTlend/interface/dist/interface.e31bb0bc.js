@@ -39243,13 +39243,18 @@ function PopUp(props) {
       inputPlaceholder = props.inputPlaceholder,
       name = props.name,
       place = props.place,
-      ethBalance = props.ethBalance,
-      daiBalance = props.daiBalance;
+      token = props.token;
 
   var _useState = (0, _react.useState)(0.0),
       _useState2 = _slicedToArray(_useState, 2),
       inputValue = _useState2[0],
       setInputValue = _useState2[1];
+
+  var tokenImage = {
+    "DAI": "/img/rectangle-16@2x.png",
+    "ETH": "/img/rectangle-19@2x.png",
+    "USDC": "/img/rectangle-22@2x.png"
+  };
 
   function onTodoChange(value) {
     setInputValue(value);
@@ -39264,11 +39269,11 @@ function PopUp(props) {
     className: "oxanium-bold-web-orange-32px"
   }, "How much would you like to deposit?", /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
     className: "oxanium-extra-light-web-orange-24px"
-  }, "Please enter an amount you would like to deposit."))), /*#__PURE__*/_react.default.createElement("div", {
+  }, "Please enter an amount you would like to deposit in ", token, "."))), /*#__PURE__*/_react.default.createElement("div", {
     className: "overlap-group1-1 border-1px-black"
   }, /*#__PURE__*/_react.default.createElement("img", {
     className: "rectangle-19-4",
-    src: "/img/rectangle-19@2x.png"
+    src: tokenImage[token]
   }), /*#__PURE__*/_react.default.createElement("input", {
     className: "x19111-1 oxanium-normal-black-24px",
     name: "19111",
@@ -39277,9 +39282,7 @@ function PopUp(props) {
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "overlap-group-15"
   }, /*#__PURE__*/_react.default.createElement("button", {
-    onClick: function onClick() {
-      return setInputValue(ethBalance);
-    },
+    onClick: function onClick() {},
     className: "popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px"
   }, "MAX"))), /*#__PURE__*/_react.default.createElement("div", {
     className: "overlap-group-16"
@@ -39317,13 +39320,11 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 function PopUpTokensDeposit(props) {
   var popUpProps = props.popUpProps,
-      ethBalance = props.ethBalance,
-      daiBalance = props.daiBalance;
+      token = props.token;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container-center-horizontal"
   }, /*#__PURE__*/_react.default.createElement(_PopUpDeposit.default, _extends({}, popUpProps, {
-    ethBalance: ethBalance,
-    daiBalance: daiBalance
+    token: token
   })));
 }
 
@@ -39351,13 +39352,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function ButtonBorrow(props) {
+function ButtonDeposit(props) {
   var _React$createElement;
 
   var children = props.children,
       className = props.className,
-      ethBalance = props.ethBalance,
-      daiBalance = props.daiBalance;
+      token = props.token;
   return /*#__PURE__*/_react.default.createElement(_reactjsPopup.default, (_React$createElement = {
     modal: true,
     trigger: /*#__PURE__*/_react.default.createElement("div", {
@@ -39366,12 +39366,11 @@ function ButtonBorrow(props) {
       className: "place-9 valign-text-middle oxanium-normal-white-20px"
     }, children))
   }, _defineProperty(_React$createElement, "modal", true), _defineProperty(_React$createElement, "nested", true), _React$createElement), /*#__PURE__*/_react.default.createElement(_PopUpTokensDeposit.default, {
-    ethBalance: ethBalance,
-    daiBalance: daiBalance
+    token: token
   }));
 }
 
-var _default = ButtonBorrow;
+var _default = ButtonDeposit;
 exports.default = _default;
 },{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./ButtonDeposit.css":"components/ButtonDeposit/ButtonDeposit.css","../PopUpTokensDeposit":"components/PopUpTokensDeposit/index.jsx","reactjs-popup":"node_modules/reactjs-popup/dist/reactjs-popup.esm.js"}],"components/ButtonWithdraw/ButtonWithdraw.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
@@ -39405,7 +39404,13 @@ function PopUp(props) {
       inputType = props.inputType,
       inputPlaceholder = props.inputPlaceholder,
       name = props.name,
-      place = props.place;
+      place = props.place,
+      token = props.token;
+  var tokenImage = {
+    "DAI": "/img/rectangle-16@2x.png",
+    "ETH": "/img/rectangle-19@2x.png",
+    "USDC": "/img/rectangle-22@2x.png"
+  };
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "pop-up"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -39414,11 +39419,11 @@ function PopUp(props) {
     className: "oxanium-bold-web-orange-32px"
   }, "How much would you like to withdraw?", /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
     className: "oxanium-extra-light-web-orange-24px"
-  }, "Please enter an amount you would like to withdraw."))), /*#__PURE__*/_react.default.createElement("div", {
+  }, "Please enter an amount you would like to withdraw in ", token, "."))), /*#__PURE__*/_react.default.createElement("div", {
     className: "overlap-group1-1 border-1px-black"
   }, /*#__PURE__*/_react.default.createElement("img", {
     className: "rectangle-19-4",
-    src: "/img/rectangle-19@2x.png"
+    src: tokenImage[token]
   }), /*#__PURE__*/_react.default.createElement("input", {
     className: "x19111-1 oxanium-normal-black-24px",
     name: "19111",
@@ -39460,11 +39465,16 @@ require("./PopUpTokensWithdraw.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function PopUpTokensWithdraw(props) {
-  var popUpProps = props.popUpProps;
+  var popUpProps = props.popUpProps,
+      token = props.token;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container-center-horizontal"
-  }, /*#__PURE__*/_react.default.createElement(_PopUpWithdraw.default, popUpProps));
+  }, /*#__PURE__*/_react.default.createElement(_PopUpWithdraw.default, _extends({}, popUpProps, {
+    token: token
+  })));
 }
 
 var _default = PopUpTokensWithdraw;
@@ -39495,7 +39505,8 @@ function ButtonBorrow(props) {
   var _React$createElement;
 
   var children = props.children,
-      className = props.className;
+      className = props.className,
+      token = props.token;
   return /*#__PURE__*/_react.default.createElement(_reactjsPopup.default, (_React$createElement = {
     modal: true,
     trigger: /*#__PURE__*/_react.default.createElement("button", {
@@ -39503,7 +39514,9 @@ function ButtonBorrow(props) {
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "withdraw valign-text-middle oxanium-normal-black-20px"
     }, children))
-  }, _defineProperty(_React$createElement, "modal", true), _defineProperty(_React$createElement, "nested", true), _React$createElement), /*#__PURE__*/_react.default.createElement(_PopUpTokensWithdraw.default, null));
+  }, _defineProperty(_React$createElement, "modal", true), _defineProperty(_React$createElement, "nested", true), _React$createElement), /*#__PURE__*/_react.default.createElement(_PopUpTokensWithdraw.default, {
+    token: token
+  }));
 }
 
 var _default = ButtonBorrow;
@@ -59896,9 +59909,10 @@ function Lend(props) {
   }, nTokenBalance[token]), /*#__PURE__*/_react.default.createElement("div", {
     className: "percent-1 valign-text-middle oxanium-normal-black-25px"
   }, nTokenYield[token]), /*#__PURE__*/_react.default.createElement(_ButtonDeposit.default, {
-    ethBalance: 0,
-    daiBalance: 1
-  }, "Deposit"), /*#__PURE__*/_react.default.createElement(_ButtonWithdraw.default, null, "Withdraw"));
+    token: token
+  }, "Deposit"), /*#__PURE__*/_react.default.createElement(_ButtonWithdraw.default, {
+    token: token
+  }, "Withdraw"));
 }
 
 var _default = Lend;

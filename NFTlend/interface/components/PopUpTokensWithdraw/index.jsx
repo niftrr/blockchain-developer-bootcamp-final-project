@@ -3,11 +3,11 @@ import PopUpWithdraw from "../PopUpWithdraw";
 import "./PopUpTokensWithdraw.css";
 
 function PopUpTokensWithdraw(props) {
-  const { popUpProps } = props;
+  const { popUpProps, token } = props;
 
   return (
     <div className="container-center-horizontal">
-      <PopUpWithdraw {...popUpProps} />
+      <PopUpWithdraw {...popUpProps} token={token} />
     </div>
   );
 }

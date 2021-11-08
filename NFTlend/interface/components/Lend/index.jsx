@@ -40,8 +40,8 @@ function Lend(props) {
       <TokenLend token={token} />
       <div className="text-2 valign-text-middle oxanium-normal-black-24px">{nTokenBalance[token]}</div>
       <div className="percent-1 valign-text-middle oxanium-normal-black-25px">{nTokenYield[token]}</div>
-      <ButtonDeposit ethBalance={0} daiBalance={1}>Deposit</ButtonDeposit>
-      <ButtonWithdraw>Withdraw</ButtonWithdraw>
+      <ButtonDeposit token={token}>Deposit</ButtonDeposit>
+      <ButtonWithdraw token={token}>Withdraw</ButtonWithdraw>
     </div>
   );
 }
