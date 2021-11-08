@@ -97,14 +97,20 @@ async function main() {
   await debtTokenUSDC.setMinter(lendingPool.address);
   await debtTokenUSDC.setBurner(lendingPool.address);
 
-  // Get and deploy NFT contract
+  // Get and deploy NFT contracts
   NFT = await hre.ethers.getContractFactory('NFT');
-  nFT = await NFT.deploy('Punk NFT', 'PUNK');
-  await nFT.deployed();
-  console.log("NFT deployed to:", nFT.address);
+  // PUNK:
+  nftPUNK = await NFT.deploy('Cryptopunks', 'PUNK');
+  await nftPUNK.deployed();
+  console.log("NFT PUNK deployed to:", nftPUNK.address);
+  // BAYC:
+  nftBAYC = await NFT.deploy('Bored Ape Yacht Club', 'BAYC');
+  await nftBAYC.deployed();
+  console.log("NFT BAYC deployed to:", nftBAYC.address);
 
-  // Set NFT liquidation threshold
-  collateralManager.setLiquidationThreshold(nFT.address, 150); // in percent
+  // Set NFT liquidation thresholds
+  collateralManager.setLiquidationThreshold(nftPUNK.address, 150); // in percent
+  collateralManager.setLiquidationThreshold(nftBAYC.address, 150); // in percent
 
   // Get Signers
   [acc0, acc1, acc2] = await hre.ethers.getSigners();
@@ -114,10 +120,25 @@ async function main() {
   await assetToken.transfer(acc2.address, assetTokenInitialBalance);
 
   // Mint NFTs to acc1 and acc2
-  const acc1TokenId = 0;
-  const acc2TokenId = 1;
-  await nFT.mint(acc1.address, acc1TokenId);
-  await nFT.mint(acc2.address, acc2TokenId);  
+  const accDict = {1: acc1, 2: acc2}
+  const nftDict = {"PUNK": nftPUNK, "BAYC": nftBAYC}
+  async function mint(nftName, accNum) {
+    const nft = nftDict[nftName];
+    const tokenId = Math.floor(Math.random() * 10000);
+    acc = accDict[accNum];
+    await nft.mint(acc.address, tokenId);
+    console.log(`${nftName} #${tokenId} minted to acc${accNum}`)
+  }
+  // PUNK:
+  await mint("PUNK", 1);
+  await mint("PUNK", 1);
+  await mint("PUNK", 2);
+  await mint("PUNK", 2);
+  // BAYC: 
+  await mint("BAYC", 1);
+  await mint("BAYC", 1);
+  await mint("BAYC", 2);
+  await mint("BAYC", 2); 
 }
 
 // We recommend this pattern to be able to use async/await everywhere
