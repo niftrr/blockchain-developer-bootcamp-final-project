@@ -59972,11 +59972,11 @@ var useNToken = function useNToken() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var nTokenContractAddressDAI = "0xCa57C1d3c2c35E667745448Fef8407dd25487ff8"; // hardhat
+  var nTokenContractAddressDAI = "0x47c05BCCA7d57c87083EB4e586007530eE4539e9"; // hardhat
 
-  var nTokenContractAddressETH = "0xc3023a2c9f7B92d1dd19F488AF6Ee107a78Df9DB"; // hardhat
+  var nTokenContractAddressETH = "0x408F924BAEC71cC3968614Cb2c58E155A35e6890"; // hardhat
 
-  var nTokenContractAddressUSDC = "0x124dDf9BdD2DdaD012ef1D5bBd77c00F05C610DA"; // hardhat
+  var nTokenContractAddressUSDC = "0x773330693cb7d5D233348E25809770A32483A940"; // hardhat
 
   var nTokenContractAddress = {
     "DAI": nTokenContractAddressDAI,
@@ -60779,8 +60779,8 @@ var useNFT = function useNFT() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var nftContractAddressPUNK = "0x09120eAED8e4cD86D85a616680151DAA653880F2";
-  var nftContractAddressBAYC = "0x3E661784267F128e5f706De17Fac1Fc1c9d56f30";
+  var nftContractAddressPUNK = "0x25A1DF485cFBb93117f12fc673D87D1cddEb845a";
+  var nftContractAddressBAYC = "0xD855cE0C298537ad5b5b96060Cf90e663696bbf6";
   var nftContractABI = _NFT.default["abi"];
   var nftContractPUNK = (0, _useContract.useContract)(nftContractAddressPUNK, nftContractABI);
   var nftContractBAYC = (0, _useContract.useContract)(nftContractAddressBAYC, nftContractABI);
@@ -61828,12 +61828,12 @@ var useCollateralManager = function useCollateralManager() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var collateralManagerContractAddress = "0xB7ca895F81F20e05A5eb11B05Cbaab3DAe5e23cd";
+  var collateralManagerContractAddress = "0x0b27a79cb9C0B38eE06Ca3d94DAA68e0Ed17F953";
   var collateralManagerABI = _CollateralManager.default["abi"];
   var collateralManagerContract = (0, _useContract.useContract)(collateralManagerContractAddress, collateralManagerABI); // NFT contract data (c&p from hooks/useNFT.js)
 
-  var nftContractAddressPUNK = "0x09120eAED8e4cD86D85a616680151DAA653880F2";
-  var nftContractAddressBAYC = "0x3E661784267F128e5f706De17Fac1Fc1c9d56f30";
+  var nftContractAddressPUNK = "0x25A1DF485cFBb93117f12fc673D87D1cddEb845a";
+  var nftContractAddressBAYC = "0xD855cE0C298537ad5b5b96060Cf90e663696bbf6";
   var nftContractAddress = {
     "PUNK": nftContractAddressPUNK,
     "BAYC": nftContractAddressBAYC
@@ -62075,7 +62075,7 @@ function BorrowDataCollRatio(props) {
     className: "repayment-amount valign-text-middle"
   }, maturity), /*#__PURE__*/_react.default.createElement("div", {
     className: "phone-1 valign-text-middle"
-  }, String(borrowAmount * (1 + borrowAPR / 100 * borrowMaturity / 52))));
+  }, String(Number(borrowAmount * (1 + borrowAPR / 100 * borrowMaturity / 52)).toFixed(4))));
 }
 
 var _default = BorrowDataCollRatio;
@@ -62465,7 +62465,7 @@ var useLendingPool = function useLendingPool() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var lendingPoolContractAddress = "0x2BB8B93F585B43b06F3d523bf30C203d3B6d4BD4";
+  var lendingPoolContractAddress = "0xF85895D097B2C25946BB95C4d11E2F3c035F8f0C";
   var lendingPoolABI = _LendingPool.default["abi"];
   var lendingPoolContract = (0, _useContract.useContract)(lendingPoolContractAddress, lendingPoolABI);
 

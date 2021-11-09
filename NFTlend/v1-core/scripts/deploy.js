@@ -116,6 +116,10 @@ async function main() {
   collateralManager.updateWhitelist(nftPUNK.address, true);
   collateralManager.updateWhitelist(nftBAYC.address, true);
 
+  // Set NFT-specific APRs
+  collateralManager.setInterestRate(nftPUNK.address, 18);
+  collateralManager.setInterestRate(nftBAYC.address, 20);
+
   // Get Signers
   [acc0, acc1, acc2] = await hre.ethers.getSigners();
 

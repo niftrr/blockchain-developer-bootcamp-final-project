@@ -8,7 +8,7 @@ import { formatUnits } from "@ethersproject/units";
 export const useLendingPool = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const lendingPoolContractAddress = "0x2BB8B93F585B43b06F3d523bf30C203d3B6d4BD4";
+    const lendingPoolContractAddress = "0xF85895D097B2C25946BB95C4d11E2F3c035F8f0C";
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
