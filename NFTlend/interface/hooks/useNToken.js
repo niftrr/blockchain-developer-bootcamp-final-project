@@ -9,9 +9,9 @@ import { useEffect } from "react";
 export const useNToken = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const nTokenContractAddressDAI = "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc"; // hardhat
-    const nTokenContractAddressETH = "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f"; // hardhat
-    const nTokenContractAddressUSDC = "0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07"; // hardhat
+    const nTokenContractAddressDAI = "0xCa57C1d3c2c35E667745448Fef8407dd25487ff8"; // hardhat
+    const nTokenContractAddressETH = "0xc3023a2c9f7B92d1dd19F488AF6Ee107a78Df9DB"; // hardhat
+    const nTokenContractAddressUSDC = "0x124dDf9BdD2DdaD012ef1D5bBd77c00F05C610DA"; // hardhat
 
     const nTokenContractAddress = {
         "DAI": nTokenContractAddressDAI,

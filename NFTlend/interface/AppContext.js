@@ -38,6 +38,10 @@ const initialContext = {
     setBorrowAmount: () => {},
     borrowRepaymentAmount: "--",
     setBorrowRepaymentAmount: () => {},
+    aprPUNK: "--",
+    setAprPUNK: () => {},
+    aprBAYC: "--",
+    setAprBAYC: () => {},
     txnStatus: "NOT_SUMBITTED",
     setTxnStatus: () => {}
 }
@@ -170,6 +174,18 @@ const appReducer = (state, { type, payload }) => {
         borrowRepaymentAmount: payload,
       }; 
 
+      case "SET_APR_PUNK":
+      return {
+        ...state,
+        aprPUNK: payload,
+      }; 
+
+      case "SET_APR_BAYC":
+      return {
+        ...state,
+        aprBAYC: payload,
+      }; 
+
       case "SET_TXN_STATUS":
         return {
           ...state,
@@ -268,6 +284,14 @@ export const AppContextProvider = ({ children }) => {
         borrowRepaymentAmount: store.borrowRepaymentAmount,
         setBorrowRepaymentAmount: (amount) => {
           dispatch({ type: "SET_BORROW_REPAYMENT_AMOUNT", payload: amount});
+        },
+        aprPUNK: store.aprPUNK,
+        setAprPUNK: (apr) => {
+          dispatch({ type: "SET_APR_PUNK", payload: apr});
+        },
+        aprBAYC: store.aprBAYC,
+        setAprBAYC: (apr) => {
+          dispatch({ type: "SET_APR_BAYC", payload: apr});
         },
         txnStatus: store.txnStatus,
         setTxnStatus: (status) => {
