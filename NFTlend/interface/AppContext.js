@@ -14,6 +14,11 @@ const initialContext = {
     setBorrows: () => {},
     borrowDefaults: [],
     setBorrowDefaults: () => {},
+    imageDictPUNK: {},
+    imageDictBAYC: {},
+    setImageDict: () => {},
+    whitelistNFT: [],
+    setWhitelistNFT: () => {},
     txnStatus: "NOT_SUMBITTED",
     setTxnStatus: () => {}
 }
@@ -68,6 +73,24 @@ const appReducer = (state, { type, payload }) => {
               setBorrowDefaults: payload,
             };  
 
+      case "SET_IMAGE_DICT_PUNK":
+        return {
+          ...state,
+          imageDictPUNK: payload,
+        };  
+
+      case "SET_IMAGE_DICT_BAYC":
+        return {
+          ...state,
+          imageDictBAYC: payload,
+        };  
+
+      case "SET_WHITELIST_NFT":
+        return {
+          ...state,
+          whitelistNFT: payload,
+        };  
+
       case "SET_TXN_STATUS":
         return {
           ...state,
@@ -117,6 +140,20 @@ export const AppContextProvider = ({ children }) => {
         borrowDefaults: store.borrowDefaults,
         setBorrowDefaults: (defaults) => {
           dispatch({ type: "SET_BORROW_DEFAULTS", payload: defaults});
+        },
+        imageDictPUNK: store.imageDictPUNK,
+        imageDictBAYC: store.imageDictBAYC,
+        setImageDict: (symbol, imageDict) => {
+          switch(symbol) {
+            case "PUNK":
+              dispatch({ type: "SET_IMAGE_DICT_PUNK", payload: imageDict});
+            case "BAYC":
+              dispatch({ type: "SET_IMAGE_DICT_BAYC", payload: imageDict});
+          };
+        },
+        whitelistNFT: store.whitelistNFT,
+        setWhitelistNFT: (whitelist) => {
+          dispatch({ type: "SET_WHITELIST_NFT", payload: whitelist});
         },
         txnStatus: store.txnStatus,
         setTxnStatus: (status) => {

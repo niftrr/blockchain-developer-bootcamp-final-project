@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useWeb3React } from "@web3-react/core";
 import Header from "../Header";
 import Background from "../Background";
 import BorrowHeader from "../BorrowHeader";
@@ -12,6 +13,7 @@ import BorrowDataCollRatio from "../BorrowDataCollRatio";
 import BorrowDataCollRatio2 from "../BorrowDataCollRatio2";
 import Instructions from "../Instructions";
 import "./Borrow2.css";
+import useImage from "../../hooks/useImage";
 
 function Borrow2(props) {
   const {
@@ -32,6 +34,15 @@ function Borrow2(props) {
     borrowDataCollRatio22Props,
     borrowDataCollRatio2Props2,
   } = props;
+  const { account } = useWeb3React();
+  const {fetchImagesPUNK, fetchImagesBAYC, imageDictPUNK, imageDictBAYC} = useImage();
+
+  useEffect(() => {
+    if (account) {
+      fetchImagesPUNK();
+      fetchImagesBAYC();
+    }  
+  }, [account]);
 
   return (
     <div className="container-center-horizontal">
