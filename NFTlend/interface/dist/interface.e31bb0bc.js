@@ -59468,6 +59468,8 @@ var initialContext = {
   setBorrowAmount: function setBorrowAmount() {},
   borrowRepaymentAmount: "--",
   setBorrowRepaymentAmount: function setBorrowRepaymentAmount() {},
+  borrowMaturity: 1,
+  setBorrowMaturity: function setBorrowMaturity() {},
   aprPUNK: "--",
   setAprPUNK: function setAprPUNK() {},
   aprBAYC: "--",
@@ -59584,6 +59586,11 @@ var appReducer = function appReducer(state, _ref) {
     case "SET_BORROW_REPAYMENT_AMOUNT":
       return _objectSpread(_objectSpread({}, state), {}, {
         borrowRepaymentAmount: payload
+      });
+
+    case "SET_BORROW_MATURITY":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowMaturity: payload
       });
 
     case "SET_APR_PUNK":
@@ -59776,6 +59783,13 @@ var AppContextProvider = function AppContextProvider(_ref2) {
       dispatch({
         type: "SET_BORROW_REPAYMENT_AMOUNT",
         payload: amount
+      });
+    },
+    borrowMaturity: store.borrowMaturity,
+    setBorrowMaturity: function setBorrowMaturity(numWeeks) {
+      dispatch({
+        type: "SET_BORROW_MATURITY",
+        payload: numWeeks
       });
     },
     aprPUNK: store.aprPUNK,
@@ -61080,28 +61094,43 @@ var _react = _interopRequireDefault(require("react"));
 
 require("./InputDropdown.css");
 
+var _AppContext = require("../../AppContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function InputDropdown(props) {
   var className = props.className;
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      setBorrowMaturity = _useAppContext.setBorrowMaturity;
+
+  var handleBorrowMaturityInput = function handleBorrowMaturityInput(value) {
+    setBorrowMaturity(value);
+    console.log('handleBorrowMaturityInput', value);
+  };
+
   return /*#__PURE__*/_react.default.createElement("select", {
+    onChange: function onChange(e) {
+      return handleBorrowMaturityInput(e.target.value);
+    },
     className: "input-dropdown ".concat(className || ""),
     id: "maturity",
     name: "maturity"
   }, /*#__PURE__*/_react.default.createElement("option", {
-    value: "1wk"
+    value: "1",
+    defaultChecked: true
   }, "1 Week"), /*#__PURE__*/_react.default.createElement("option", {
-    value: "2wk"
+    value: "4"
   }, "4 Weeks"), /*#__PURE__*/_react.default.createElement("option", {
-    value: "13wk"
+    value: "13"
   }, "3 Months"), /*#__PURE__*/_react.default.createElement("option", {
-    value: "26wk"
+    value: "26"
   }, "6 Months"));
 }
 
 var _default = InputDropdown;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./InputDropdown.css":"components/InputDropdownMaturity/InputDropdown.css"}],"components/BorrowMaturity/BorrowMaturity.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./InputDropdown.css":"components/InputDropdownMaturity/InputDropdown.css","../../AppContext":"AppContext.js"}],"components/BorrowMaturity/BorrowMaturity.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -62035,7 +62064,10 @@ function BorrowDataCollRatio(props) {
       className = props.className;
 
   var _useAppContext = (0, _AppContext.useAppContext)(),
-      borrowRepaymentAmount = _useAppContext.borrowRepaymentAmount;
+      borrowRepaymentAmount = _useAppContext.borrowRepaymentAmount,
+      borrowMaturity = _useAppContext.borrowMaturity,
+      borrowAPR = _useAppContext.borrowAPR,
+      borrowAmount = _useAppContext.borrowAmount;
 
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "borrow-data-coll-ratio oxanium-normal-black-20px ".concat(className || "")
@@ -62043,7 +62075,7 @@ function BorrowDataCollRatio(props) {
     className: "repayment-amount valign-text-middle"
   }, maturity), /*#__PURE__*/_react.default.createElement("div", {
     className: "phone-1 valign-text-middle"
-  }, borrowRepaymentAmount));
+  }, String(borrowAmount * (1 + borrowAPR / 100 * borrowMaturity / 52))));
 }
 
 var _default = BorrowDataCollRatio;
