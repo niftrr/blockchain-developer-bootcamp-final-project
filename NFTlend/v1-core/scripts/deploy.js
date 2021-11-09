@@ -120,25 +120,28 @@ async function main() {
   await assetToken.transfer(acc2.address, assetTokenInitialBalance);
 
   // Mint NFTs to acc1 and acc2
-  const accDict = {1: acc1, 2: acc2}
+  const accDict = {0: acc0, 1: acc1, 2: acc2}
   const nftDict = {"PUNK": nftPUNK, "BAYC": nftBAYC}
-  async function mint(nftName, accNum) {
+  async function mint(nftName, accNum, tokenId) {
     const nft = nftDict[nftName];
-    const tokenId = Math.floor(Math.random() * 10000);
-    acc = accDict[accNum];
+    const acc = accDict[accNum];
     await nft.mint(acc.address, tokenId);
-    console.log(`${nftName} #${tokenId} minted to acc${accNum}`)
+    console.log(`${nftName} #${tokenId} minted to acc${accNum} (address: ${acc.address})`)
   }
   // PUNK:
-  await mint("PUNK", 1);
-  await mint("PUNK", 1);
-  await mint("PUNK", 2);
-  await mint("PUNK", 2);
+  await mint("PUNK", 0, 0);
+  await mint("PUNK", 0, 1);
+  await mint("PUNK", 1, 2);
+  await mint("PUNK", 1, 3);
+  await mint("PUNK", 2, 4);
+  await mint("PUNK", 2, 5);
   // BAYC: 
-  await mint("BAYC", 1);
-  await mint("BAYC", 1);
-  await mint("BAYC", 2);
-  await mint("BAYC", 2); 
+  await mint("BAYC", 0, 0);
+  await mint("BAYC", 0, 1);
+  await mint("BAYC", 1, 2);
+  await mint("BAYC", 1, 3);
+  await mint("BAYC", 2, 4);
+  await mint("BAYC", 2, 5); 
 }
 
 // We recommend this pattern to be able to use async/await everywhere
