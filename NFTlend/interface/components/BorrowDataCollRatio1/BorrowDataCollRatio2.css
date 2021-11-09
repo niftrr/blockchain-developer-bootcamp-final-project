@@ -1,0 +1,36 @@
+.borrow-data-coll-ratio-2 {
+  align-items: flex-start;
+  display: flex;
+  height: 20px;
+  left: 8px;
+  min-width: 440px;
+  position: absolute;
+  top: 81px;
+}
+
+.apr-1 {
+  height: 20px;
+  letter-spacing: 0;
+  width: 255px;
+}
+
+.percent-3 {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 80px;
+  text-align: right;
+  width: 101px;
+}
+
+.borrow-data-coll-ratio-2.borrow-data-coll-ratio-3 {
+  top: 56px;
+}
+
+.borrow-data-coll-ratio-2.borrow-data-coll-ratio-4 {
+  top: 82px;
+}
+
+.borrow-data-coll-ratio-2.borrow-data-coll-ratio-5 {
+  top: 57px;
+}
+

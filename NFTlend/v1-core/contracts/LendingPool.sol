@@ -28,7 +28,8 @@ contract LendingPool is LendingPoolStorage {
         uint128 currentInterestRate;
     }
 
-    mapping(address => Reserve) reserves;
+    mapping(address => Reserve) public reserves;
+    mapping(address => uint256) public interestRates;
 
     event InitReserve(address asset, address nTokenAddress, address debtTokenAddress);
     event Deposit(address asset, uint256 amount, address lender);

@@ -1429,7 +1429,7 @@ html {
 }
 
 
-.item-nft {
+.item-nft-0 {
   align-items: flex-start;
   background-color: var(--tropical-blue);
   border-radius: 5px;
@@ -1440,6 +1440,23 @@ html {
   padding: 0 6px;
   position: absolute;
   top: 9px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.item-nft-1 {
+  align-items: flex-start;
+  background-color: var(--tropical-blue);
+  border-radius: 5px;
+  display: flex;
+  height: 84px;
+  left: 8px;
+  min-width: 218px;
+  padding: 0 6px;
+  position: absolute;
+  top: 100px;
 }
 
 .rectangle-33 {
@@ -1455,6 +1472,7 @@ html {
   margin-left: 3px;
   object-fit: cover;
   width: 87px;
+  background-color: #638596;
 }
 
 .fidenza-157-3 {
@@ -1462,6 +1480,51 @@ html {
   letter-spacing: 0;
   margin-left: 11px;
   margin-top: 8px;
+}
+
+
+.input-dropdown {
+  align-items: center;
+  background-color: var(--pattens-blue);
+  display: flex;
+  height: 28px;
+  justify-content: flex-end;
+  margin-left: 34px;
+  min-width: 113px;
+  padding: 0 3px;
+}
+
+.polygon-1 {
+  height: 11px;
+  width: 14px;
+}
+
+.input-dropdown.input-dropdown-1 {
+  margin-left: 12px;
+}
+
+
+.borrow-token {
+  align-items: center;
+  display: flex;
+  height: 28px;
+  min-width: 211px;
+  position: relative;
+}
+
+.token {
+  height: 25px;
+  letter-spacing: 0;
+  margin-top: 1.0px;
+  min-width: 62px;
+}
+
+.borrow-token.borrow-maturity {
+  margin-top: 4px;
+}
+
+.borrow-token.borrow-maturity .token {
+  min-width: 84px;
 }
 
 
@@ -1521,14 +1584,14 @@ html {
 }
 
 .phone {
-  color: #00000036;
+  color: black;
   font-family: var(--font-family-oxanium);
   font-size: var(--font-size-xs);
   font-weight: 400;
   height: 28px;
   letter-spacing: 0;
   text-align: right;
-  width: 84px;
+  width: 100%;
 }
 
 
@@ -1667,6 +1730,43 @@ html {
 .percent-3 {
   height: 20px;
   letter-spacing: 0;
+  margin-left: 80px;
+  text-align: right;
+  width: 101px;
+}
+
+.borrow-data-coll-ratio-2.borrow-data-coll-ratio-3 {
+  top: 56px;
+}
+
+.borrow-data-coll-ratio-2.borrow-data-coll-ratio-4 {
+  top: 82px;
+}
+
+.borrow-data-coll-ratio-2.borrow-data-coll-ratio-5 {
+  top: 57px;
+}
+
+
+.borrow-data-coll-ratio-2 {
+  align-items: flex-start;
+  display: flex;
+  height: 20px;
+  left: 8px;
+  min-width: 440px;
+  position: absolute;
+  top: 81px;
+}
+
+.apr-1 {
+  height: 20px;
+  letter-spacing: 0;
+  width: 255px;
+}
+
+.percent-3 {
+  height: 20px;
+  letter-spacing: 0;
   margin-left: 120px;
   text-align: right;
   width: 61px;
@@ -1682,6 +1782,132 @@ html {
 
 .borrow-data-coll-ratio-2.borrow-data-coll-ratio-5 {
   top: 57px;
+}
+
+
+.borrow-data-coll-ratio {
+  align-items: flex-start;
+  display: flex;
+  height: 20px;
+  left: 8px;
+  min-width: 440px;
+  position: absolute;
+  top: 106px;
+}
+
+.repayment-amount {
+  height: 20px;
+  letter-spacing: 0;
+  width: 255px;
+}
+
+.phone-1 {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 37px;
+  text-align: right;
+  width: 144px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral {
+  min-width: 441px;
+  top: 6px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral .repayment-amount,
+.borrow-data-coll-ratio.borrow-data-collateral-1 .repayment-amount {
+  width: 115px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral .phone-1,
+.borrow-data-coll-ratio.borrow-data-collateral-1 .phone-1 {
+  margin-left: 176px;
+  width: 146px;
+}
+
+.borrow-data-coll-ratio.borrow-data-coll-ratio-1 {
+  top: 107px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 {
+  top: 32px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 .repayment-amount {
+  align-self: flex-end;
+  width: 217px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 .phone-1 {
+  margin-left: 75px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral-1 {
+  min-width: 441px;
+  top: 7px;
+}
+
+
+.borrow-data-coll-ratio {
+  align-items: flex-start;
+  display: flex;
+  height: 20px;
+  left: 8px;
+  min-width: 440px;
+  position: absolute;
+  top: 106px;
+}
+
+.repayment-amount {
+  height: 20px;
+  letter-spacing: 0;
+  width: 255px;
+}
+
+.phone-1 {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 37px;
+  text-align: right;
+  width: 144px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral {
+  min-width: 441px;
+  top: 6px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral .repayment-amount,
+.borrow-data-coll-ratio.borrow-data-collateral-1 .repayment-amount {
+  width: 115px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral .phone-1,
+.borrow-data-coll-ratio.borrow-data-collateral-1 .phone-1 {
+  margin-left: 176px;
+  width: 146px;
+}
+
+.borrow-data-coll-ratio.borrow-data-coll-ratio-1 {
+  top: 107px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 {
+  top: 32px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 .repayment-amount {
+  align-self: flex-end;
+  width: 217px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 .phone-1 {
+  margin-left: 75px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral-1 {
+  min-width: 441px;
+  top: 7px;
 }
 
 
@@ -1752,10 +1978,33 @@ html {
   min-width: 674px;
 }
 
-.nft-avatar-1 {
+.nft-avatar-container {
   height: 276px;
   object-fit: cover;
   width: 175px;
+  position: relative;
+}
+
+.nft-avatar-1 {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background-color: #638596;
+}
+
+.nft-avatar-1-hidden {
+  visibility: hidden;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index:10;
 }
 
 .flex-col-12 {

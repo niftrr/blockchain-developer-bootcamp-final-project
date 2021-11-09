@@ -2,7 +2,7 @@ import React from "react";
 import "./BorrowDataCollRatio.css";
 import { useAppContext } from "../../AppContext";
 
-function BorrowDataRepaymentAmount(props) {
+function BorrowDataCollRatio(props) {
   const { maturity, className } = props;
   const { borrowRepaymentAmount } = useAppContext();
 
@@ -14,4 +14,4 @@ function BorrowDataRepaymentAmount(props) {
   );
 }
 
-export default BorrowDataRepaymentAmount;
+export default BorrowDataCollRatio;

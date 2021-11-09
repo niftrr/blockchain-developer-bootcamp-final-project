@@ -1,12 +1,22 @@
 import React from "react";
 import "./InputText.css";
+import { useAppContext } from "../../AppContext";
 
 function InputText(props) {
   const { children } = props;
+  const { setBorrowAmount, setBorrowCollRatio, borrowCollRatio, borrowFloorPrice } = useAppContext();
+
+  const handleBorrowAmountInput = (value) => {
+    setBorrowAmount(value);
+    const collRatio = 100* borrowFloorPrice / value;
+    setBorrowCollRatio(collRatio);
+    console.log('setBorrowCollRatio:', collRatio);
+    console.log('borrowCollRatio', borrowCollRatio);
+  }
 
   return (
     <div className="input-text">
-      <div className="phone valign-text-middle">{children}</div>
+      <input type="text" name="borrowAmount" onChange={(e) => handleBorrowAmountInput(e.target.value)} placeholder="0.0000" className="phone valign-text-middle"></input>
     </div>
   );
 }

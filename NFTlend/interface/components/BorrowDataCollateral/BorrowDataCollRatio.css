@@ -1,0 +1,62 @@
+.borrow-data-coll-ratio {
+  align-items: flex-start;
+  display: flex;
+  height: 20px;
+  left: 8px;
+  min-width: 440px;
+  position: absolute;
+  top: 106px;
+}
+
+.repayment-amount {
+  height: 20px;
+  letter-spacing: 0;
+  width: 255px;
+}
+
+.phone-1 {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 37px;
+  text-align: right;
+  width: 144px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral {
+  min-width: 441px;
+  top: 6px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral .repayment-amount,
+.borrow-data-coll-ratio.borrow-data-collateral-1 .repayment-amount {
+  width: 115px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral .phone-1,
+.borrow-data-coll-ratio.borrow-data-collateral-1 .phone-1 {
+  margin-left: 176px;
+  width: 146px;
+}
+
+.borrow-data-coll-ratio.borrow-data-coll-ratio-1 {
+  top: 107px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 {
+  top: 32px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 .repayment-amount {
+  align-self: flex-end;
+  width: 217px;
+}
+
+.borrow-data-coll-ratio.borrow-data-floor-price-1 .phone-1 {
+  margin-left: 75px;
+}
+
+.borrow-data-coll-ratio.borrow-data-collateral-1 {
+  min-width: 441px;
+  top: 7px;
+}
+

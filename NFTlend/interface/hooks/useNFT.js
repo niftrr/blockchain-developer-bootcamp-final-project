@@ -1,14 +1,14 @@
 import { useContract } from "./useContract";
 import NFTData from "../../v1-core/artifacts/contracts/NFT.sol/NFT.json";
 import { useWeb3React } from "@web3-react/core";
-import useIsValidNetwork from "../hooks/useIsValidNetwork";
+import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
 
-export const useImage = () => {
+export const useNFT = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const nftContractAddressPUNK = "0x9849832a1d8274aaeDb1112ad9686413461e7101";
-    const nftContractAddressBAYC = "0xa4E00CB342B36eC9fDc4B50b3d527c3643D4C49e";
+    const nftContractAddressPUNK = "0x103A3b128991781EE2c8db0454cA99d67b257923";
+    const nftContractAddressBAYC = "0xBbc18b580256A82dC0F9A86152b8B22E7C1C8005";
     const nftContractABI = NFTData["abi"];
     const nftContractPUNK = useContract(nftContractAddressPUNK, nftContractABI);
     const nftContractBAYC = useContract(nftContractAddressBAYC, nftContractABI);
@@ -16,7 +16,12 @@ export const useImage = () => {
         "PUNK": nftContractPUNK,
         "BAYC": nftContractBAYC
     }
-    const { setImageDict, imageDictPUNK, imageDictBAYC } = useAppContext();
+    const { setImageDict, imageDictPUNK, imageDictBAYC,
+        borrowProject } = useAppContext();
+
+    const nftAddressSymbolDict = {}
+    nftAddressSymbolDict[nftContractAddressPUNK] = "PUNK";
+    nftAddressSymbolDict[nftContractAddressBAYC] = "BAYC";
 
     const fetchImagesPUNK = async () => {
         const imageDict = {};
@@ -46,12 +51,28 @@ export const useImage = () => {
         setImageDict("BAYC", imageDict);
     }
 
+    const fetchImagesBorrow = async () => {
+        console.log('fetchImagesBorrow borrowProject', borrowProject);
+        const imageDict = {}
+        if (borrowProject == "PUNK") {
+            imageDict = imageDictPUNK;
+            console.log("PUNK-");
+        } 
+        // else if (borrowProject == "BAYC") {
+        //     imageDict = imageDictBAYC;
+        //     console.log("BAYC-");
+        // }
+        setImageDict("BORROW", imageDict);
+    }
+
     return {
         fetchImagesPUNK,
         fetchImagesBAYC,
+        fetchImagesBorrow,
         imageDictPUNK,
-        imageDictBAYC
+        imageDictBAYC,
+        nftAddressSymbolDict
     }
 };
 
-export default useImage;
+export default useNFT;

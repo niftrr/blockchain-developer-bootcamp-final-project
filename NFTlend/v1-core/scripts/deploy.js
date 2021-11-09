@@ -112,6 +112,10 @@ async function main() {
   collateralManager.setLiquidationThreshold(nftPUNK.address, 150); // in percent
   collateralManager.setLiquidationThreshold(nftBAYC.address, 150); // in percent
 
+  // Whitelist NFT
+  collateralManager.updateWhitelist(nftPUNK.address, true);
+  collateralManager.updateWhitelist(nftBAYC.address, true);
+
   // Get Signers
   [acc0, acc1, acc2] = await hre.ethers.getSigners();
 

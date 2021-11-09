@@ -16,9 +16,28 @@ const initialContext = {
     setBorrowDefaults: () => {},
     imageDictPUNK: {},
     imageDictBAYC: {},
+    imageDictBorrow: {},
     setImageDict: () => {},
     whitelistNFT: [],
     setWhitelistNFT: () => {},
+    borrowProject: "--",
+    setBorrowProject: () => {},
+    borrowNFT: "",
+    setBorrowNFT: () => {},
+    borrowForm: "--",
+    setBorrowForm: () => {},
+    borrowFloorPrice: "--",
+    setBorrowFloorPrice: () => {},
+    borrowCollRatio: "--",
+    setBorrowCollRatio: () => {},
+    borrowAPR: "--",
+    setBorrowAPR: () => {},
+    borrowToken: "--",
+    setBorrowToken: () => {},
+    borrowAmount: "--",
+    setBorrowAmount: () => {},
+    borrowRepaymentAmount: "--",
+    setBorrowRepaymentAmount: () => {},
     txnStatus: "NOT_SUMBITTED",
     setTxnStatus: () => {}
 }
@@ -85,11 +104,71 @@ const appReducer = (state, { type, payload }) => {
           imageDictBAYC: payload,
         };  
 
+      case "SET_IMAGE_DICT_BORROW":
+        return {
+          ...state,
+          imageDictBorrow: payload,
+        };  
+
       case "SET_WHITELIST_NFT":
         return {
           ...state,
           whitelistNFT: payload,
         };  
+
+      case "SET_BORROW_PROJECT":
+        return {
+          ...state,
+          borrowProject: payload,
+        }; 
+
+      case "SET_BORROW_NFT":
+        return {
+          ...state,
+          borrowNFT: payload,
+        }; 
+
+      case "SET_BORROW_FORM":
+        return {
+          ...state,
+          borrowForm: payload,
+        }; 
+
+      case "SET_BORROW_FLOOR_PRICE":
+        return {
+          ...state,
+          borrowFloorPrice: payload,
+        }; 
+
+      case "SET_BORROW_COLL_RATIO":
+        return {
+          ...state,
+          borrowCollRatio: payload,
+        }; 
+
+      case "SET_BORROW_APR":
+        return {
+          ...state,
+          borrowAPR: payload,
+        }; 
+
+      case "SET_BORROW_TOKEN":
+        return {
+          ...state,
+          borrowToken: payload,
+        }; 
+        
+      case "SET_BORROW_AMOUNT":
+        return {
+          ...state,
+          borrowAmount: payload,
+        }; 
+
+      case "SET_BORROW_REPAYMENT_AMOUNT":
+      return {
+        ...state,
+        borrowRepaymentAmount: payload,
+      }; 
 
       case "SET_TXN_STATUS":
         return {
@@ -143,17 +222,52 @@ export const AppContextProvider = ({ children }) => {
         },
         imageDictPUNK: store.imageDictPUNK,
         imageDictBAYC: store.imageDictBAYC,
+        imageDictBorrow: store.imageDictBorrow,
         setImageDict: (symbol, imageDict) => {
           switch(symbol) {
             case "PUNK":
               dispatch({ type: "SET_IMAGE_DICT_PUNK", payload: imageDict});
             case "BAYC":
               dispatch({ type: "SET_IMAGE_DICT_BAYC", payload: imageDict});
+            case "BORROW":
+              dispatch({ type: "SET_IMAGE_DICT_BORROW", payload: imageDict});
           };
         },
         whitelistNFT: store.whitelistNFT,
         setWhitelistNFT: (whitelist) => {
           dispatch({ type: "SET_WHITELIST_NFT", payload: whitelist});
+        },
+        borrowProject: store.borrowProject,
+        setBorrowProject: (projectSymbol) => {
+          dispatch({ type: "SET_BORROW_PROJECT", payload: projectSymbol});
+        },
+        borrowNFT: store.borrowNFT,
+        setBorrowNFT: (tokenId) => {
+          dispatch({ type: "SET_BORROW_NFT", payload: tokenId});
+        },
+        borrowFloorPrice: store.borrowFloorPrice,
+        setBorrowFloorPrice: (price) => {
+          dispatch({ type: "SET_BORROW_FLOOR_PRICE", payload: price});
+        },
+        borrowCollRatio: store.borrowCollRatio,
+        setBorrowCollRatio: (collRatio) => {
+          dispatch({ type: "SET_BORROW_COLL_RATIO", payload: collRatio});
+        },
+        borrowAPR: store.borrowAPR,
+        setBorrowAPR: (apr) => {
+          dispatch({ type: "SET_BORROW_APR", payload: apr});
+        },
+        borrowToken: store.borrowToken,
+        setBorrowToken: (token) => {
+          dispatch({ type: "SET_BORROW_TOKEN", payload: token});
+        },
+        borrowAmount: store.borrowAmount,
+        setBorrowAmount: (amount) => {
+          dispatch({ type: "SET_BORROW_AMOUNT", payload: amount});
+        },
+        borrowRepaymentAmount: store.borrowRepaymentAmount,
+        setBorrowRepaymentAmount: (amount) => {
+          dispatch({ type: "SET_BORROW_REPAYMENT_AMOUNT", payload: amount});
         },
         txnStatus: store.txnStatus,
         setTxnStatus: (status) => {

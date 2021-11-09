@@ -65,10 +65,33 @@
   min-width: 674px;
 }
 
-.nft-avatar-1 {
+.nft-avatar-container {
   height: 276px;
   object-fit: cover;
   width: 175px;
+  position: relative;
+}
+
+.nft-avatar-1 {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background-color: #638596;
+}
+
+.nft-avatar-1-hidden {
+  visibility: hidden;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index:10;
 }
 
 .flex-col-12 {

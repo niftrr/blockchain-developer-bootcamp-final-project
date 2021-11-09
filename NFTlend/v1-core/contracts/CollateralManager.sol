@@ -33,7 +33,7 @@ contract CollateralManager is IERC721Receiver {
     mapping(uint256 => Borrow) public borrows;
     mapping(address => uint256[]) public userBorrows;
     mapping(address => uint256) public liquidationThresholds;
-    
+    mapping(address => uint256) public interestRates;
     mapping(address => bool) public whitelisted;
     address[] public whitelist;
 
@@ -58,6 +58,14 @@ contract CollateralManager is IERC721Receiver {
     modifier onlyOwner() {
         require(msg.sender == owner, 'ONLY_OWNER');
         _;
+    }
+
+    function setInterestRate(address erc721Token, uint256 interestRate) public onlyOwner {
+        interestRates[erc721Token] = interestRate;
+    }
+
+    function getInterestRate(address erc721Token) public view returns (uint256) {
+        return interestRates[erc721Token];
     }
 
     function updateWhitelist(address erc721Token, bool isWhitelisted) public onlyOwner {
