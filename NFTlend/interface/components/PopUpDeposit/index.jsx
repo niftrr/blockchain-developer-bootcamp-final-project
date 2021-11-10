@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./PopUpDeposit.css";
 import { useAppContext } from "../../AppContext";
 import useLendingPool from "../../hooks/useLendingPool";
+import TransactionStatus from "../TransactionStatus";
+import useTransaction from "../../hooks/useTransaction";
+import { useWeb3React } from "@web3-react/core";
+
 
 function PopUp(props) {
   const { token } = props;
+  const { account } = useWeb3React();
   const { borrowNFT, borrowProject, imageDictBorrow } = useAppContext();
   const { deposit } = useLendingPool();
+  const { xnStatus } = useTransaction();
   const [depositAmount, setDepositAmount] = useState("");
+
+  useEffect(() => {
+    if (account) {
+      txnStatus
+    }    
+  }, [account]);
 
   const tokenImage = {
     "DAI": "/img/rectangle-16@2x.png",
@@ -27,6 +39,7 @@ function PopUp(props) {
           <span className="oxanium-extra-light-web-orange-24px">Please enter an amount you would like to deposit in {token}.</span>
         </span>
       </div>
+      <TransactionStatus />
       <div className="overlap-group1-1 border-1px-black">
         <img className="rectangle-19-4" src={tokenImage[token]} />
         <input

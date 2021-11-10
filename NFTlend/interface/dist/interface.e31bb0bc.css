@@ -1017,6 +1017,16 @@ html {
   background-color: var(--web-orange);
 }
 
+.transaction-status {
+    color: var(--white);
+    font-family: var(--font-family-oxanium);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 200;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
 .popuptokens {
   align-items: flex-start;
   background-color: #000000bf;

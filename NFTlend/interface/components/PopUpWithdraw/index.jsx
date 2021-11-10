@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./PopUpWithdraw.css";
 import { useAppContext } from "../../AppContext";
 import useLendingPool from "../../hooks/useLendingPool";
+import useTransaction from "../../hooks/useTransaction";
+import TransactionStatus from "../TransactionStatus";
+import { useWeb3React } from "@web3-react/core";
 
 function PopUp(props) {
   const { token } = props;
+  const { account } = useWeb3React();
   const { withdraw } = useLendingPool();
+  const {txnStatus} = useTransaction();
   const [withdrawAmount, setWithdrawAmount] = useState("");
 
   const tokenImage = {
@@ -13,6 +18,12 @@ function PopUp(props) {
     "ETH": "/img/rectangle-19@2x.png",
     "USDC": "/img/rectangle-22@2x.png"
   }
+
+  useEffect(() => {
+    if (account) {
+      txnStatus
+    }    
+  }, [account]);
 
   const handleWithdrawSubmit = () => {
     console.log('handleWithdrawSubmit called');
@@ -27,6 +38,7 @@ function PopUp(props) {
           <span className="oxanium-extra-light-web-orange-24px">Please enter an amount you would like to withdraw in {token}.</span>
         </span>
       </div>
+      <TransactionStatus />
       <div className="overlap-group1-1 border-1px-black">
         <img className="rectangle-19-4" src={tokenImage[token]} />
         <input

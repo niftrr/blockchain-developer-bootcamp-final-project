@@ -28,18 +28,15 @@ export const useLendingPool = () => {
         console.log('deposit called');
         if (account && isValidNetwork) {
             try {
-                setTxnStatus("APPROVING");
-                console.log('APPROVING');
+                setTxnStatus("LOADING");
                 const tokenContract = assetTokenContract[tokenSymbol];
                 await tokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
                 setTxnStatus("LOADING");
-                console.log('LOADING');
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
                 const txn = await lendingPoolContract.deposit(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
                 await txn.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                console.log('COMPLETE');
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
@@ -51,7 +48,7 @@ export const useLendingPool = () => {
         console.log('withdraw called');
         if (account && isValidNetwork) {
             try {
-                setTxnStatus("APPROVING");
+                setTxnStatus("LOADING");
                 console.log('APPROVING');
                 const _nTokenContract = nTokenContract[tokenSymbol];
                 await _nTokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
