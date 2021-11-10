@@ -33,13 +33,24 @@ function Lend(props) {
       fetchNTokenYield('ETH');
       fetchNTokenYield('USDC');
     }    
-  }, [account]);
+  }, [account, nTokenBalanceDAI]);
+
+  const formatNumber = (value) => {
+    console.log('formatNumber', typeof(value));
+    let res;
+    if (value=="--") {
+      res = value;
+    } else {
+      res = Number(value).toFixed(1);
+    }
+    return res;
+  }
 
   return (
     <div className="lend">
       <TokenLend token={token} />
-      <div className="text-2 valign-text-middle oxanium-normal-black-24px">{nTokenBalance[token]}</div>
-      <div className="percent-1 valign-text-middle oxanium-normal-black-25px">{nTokenYield[token]}</div>
+      <div className="text-2 valign-text-middle oxanium-normal-black-24px">{formatNumber(nTokenBalance[token])}</div>
+      <div className="percent-1 valign-text-middle oxanium-normal-black-25px">{formatNumber(nTokenYield[token])}</div>
       <ButtonDeposit token={token}>Deposit</ButtonDeposit>
       <ButtonWithdraw token={token}>Withdraw</ButtonWithdraw>
     </div>

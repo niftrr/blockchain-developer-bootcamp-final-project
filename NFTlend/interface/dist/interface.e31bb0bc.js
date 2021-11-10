@@ -60921,6 +60921,8 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function Lend(props) {
   var _useWeb3React = (0, _core.useWeb3React)(),
       account = _useWeb3React.account;
@@ -60957,16 +60959,30 @@ function Lend(props) {
       fetchNTokenYield('ETH');
       fetchNTokenYield('USDC');
     }
-  }, [account]);
+  }, [account, nTokenBalanceDAI]);
+
+  var formatNumber = function formatNumber(value) {
+    console.log('formatNumber', _typeof(value));
+    var res;
+
+    if (value == "--") {
+      res = value;
+    } else {
+      res = Number(value).toFixed(1);
+    }
+
+    return res;
+  };
+
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "lend"
   }, /*#__PURE__*/_react.default.createElement(_TokenLend.default, {
     token: token
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "text-2 valign-text-middle oxanium-normal-black-24px"
-  }, nTokenBalance[token]), /*#__PURE__*/_react.default.createElement("div", {
+  }, formatNumber(nTokenBalance[token])), /*#__PURE__*/_react.default.createElement("div", {
     className: "percent-1 valign-text-middle oxanium-normal-black-25px"
-  }, nTokenYield[token]), /*#__PURE__*/_react.default.createElement(_ButtonDeposit.default, {
+  }, formatNumber(nTokenYield[token])), /*#__PURE__*/_react.default.createElement(_ButtonDeposit.default, {
     token: token
   }, "Deposit"), /*#__PURE__*/_react.default.createElement(_ButtonWithdraw.default, {
     token: token
