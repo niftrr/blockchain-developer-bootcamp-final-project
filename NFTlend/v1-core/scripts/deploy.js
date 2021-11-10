@@ -35,15 +35,25 @@ async function main() {
 
   // Link CollateralManager to LendingPool
   await lendingPool.setCollateralManagerAddress(collateralManager.address);
+  let res = await lendingPool.getCollateralManagerAddress();
+  console.log("Linked LendingPool to CollateralManager address:", res);
 
-  // Get and deploy AssetToken contract
-  const assetTokenNumDecimals = 10;
-  const assetTokenSupply = 3*10**assetTokenNumDecimals;
-  const assetTokenInitialBalance = 1*10**assetTokenNumDecimals;
+  // Get and deploy AssetToken contracts
+  const assetTokenSupply = hre.ethers.utils.parseEther("3000.0");
+  const assetTokenInitialBalance = hre.ethers.utils.parseEther("100.0");
   const AssetToken = await hre.ethers.getContractFactory('AssetToken');
-  assetToken = await AssetToken.deploy('Dai Token', 'DAI', assetTokenSupply);
-  await assetToken.deployed();
-  console.log("AssetToken deployed to:", assetToken.address);
+  // DAI:
+  assetTokenDAI = await AssetToken.deploy('DAI Token', 'DAI', assetTokenSupply);
+  await assetTokenDAI.deployed();
+  console.log("assetTokenDAI deployed to:", assetTokenDAI.address);
+  // ETH:
+  assetTokenETH = await AssetToken.deploy('ETH Token', 'ETH', assetTokenSupply);
+  await assetTokenETH.deployed();
+  console.log("assetTokenETH deployed to:", assetTokenETH.address);
+  // USDC:
+  assetTokenUSDC = await AssetToken.deploy('USDC Token', 'USDC', assetTokenSupply);
+  await assetTokenUSDC.deployed();
+  console.log("assetTokenUSDC deployed to:", assetTokenUSDC.address);
 
   // Get and deploy nToken contracts
   NToken = await hre.ethers.getContractFactory('NToken');
@@ -97,6 +107,15 @@ async function main() {
   await debtTokenUSDC.setMinter(lendingPool.address);
   await debtTokenUSDC.setBurner(lendingPool.address);
 
+  // Initialize Reserves
+  // DAI:
+  lendingPool.initReserve(assetTokenDAI.address, nTokenDAI.address, debtTokenDAI.address);
+  // ETH:
+  lendingPool.initReserve(assetTokenETH.address, nTokenETH.address, debtTokenETH.address);
+  // USDC:
+  lendingPool.initReserve(assetTokenUSDC.address, nTokenUSDC.address, debtTokenUSDC.address);
+  console.log('Initialized Reserves');
+
   // Get and deploy NFT contracts
   NFT = await hre.ethers.getContractFactory('NFT');
   // PUNK:
@@ -124,8 +143,12 @@ async function main() {
   [acc0, acc1, acc2] = await hre.ethers.getSigners();
 
   // Transfer funds to acc1 and acc2
-  await assetToken.transfer(acc1.address, assetTokenInitialBalance);
-  await assetToken.transfer(acc2.address, assetTokenInitialBalance);
+  await assetTokenDAI.transfer(acc1.address, assetTokenInitialBalance);
+  await assetTokenDAI.transfer(acc2.address, assetTokenInitialBalance);
+  await assetTokenETH.transfer(acc1.address, assetTokenInitialBalance);
+  await assetTokenETH.transfer(acc2.address, assetTokenInitialBalance);
+  await assetTokenUSDC.transfer(acc1.address, assetTokenInitialBalance);
+  await assetTokenUSDC.transfer(acc2.address, assetTokenInitialBalance);
 
   // Mint NFTs to acc1 and acc2
   const accDict = {0: acc0, 1: acc1, 2: acc2}

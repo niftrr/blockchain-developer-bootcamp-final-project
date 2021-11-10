@@ -61,9 +61,11 @@ contract LendingPool is LendingPoolStorage {
     }
 
     function deposit(address asset, uint256 amount) public {
-        Reserve memory reserve = reserves[asset];       
+        Reserve memory reserve = reserves[asset];  
+        console.log('deposit asset', asset);     
 
         address nToken = reserve.nTokenAddress;
+        console.log('deposit nToken', nToken);   
         
         IERC20(asset).transferFrom(msg.sender, nToken, amount);
         INToken(nToken).mint(msg.sender, amount);

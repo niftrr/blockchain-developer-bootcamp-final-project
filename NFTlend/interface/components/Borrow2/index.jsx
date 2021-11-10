@@ -22,6 +22,8 @@ import useCollateralManager from "../../hooks/useCollateralManager";
 import useLendingPool from "../../hooks/useLendingPool";
 import { useAppContext } from "../../AppContext";
 
+
+
 function Borrow2(props) {
   const {
     nftAvatar,

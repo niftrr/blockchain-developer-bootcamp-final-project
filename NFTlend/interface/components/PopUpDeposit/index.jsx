@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./PopUpDeposit.css";
+import { useAppContext } from "../../AppContext";
+import useLendingPool from "../../hooks/useLendingPool";
 
 function PopUp(props) {
   const { x, spanText, spanText2, rectangle19, inputType, inputPlaceholder, name, place, token } = props;
-
-  const [inputValue, setInputValue] = useState(0.0);
+  const { borrowNFT, borrowProject, imageDictBorrow } = useAppContext();
+  const { deposit } = useLendingPool();
+  const [depositAmount, setDepositAmount] = useState("");
 
   const tokenImage = {
     "DAI": "/img/rectangle-16@2x.png",
@@ -12,9 +15,8 @@ function PopUp(props) {
     "USDC": "/img/rectangle-22@2x.png"
   }
 
-  function onTodoChange(value) {
-    setInputValue(value);
-    return inputValue;
+  const handleDepositSubmit = () => {
+    deposit(token, depositAmount);
   }
 
   return (
@@ -30,15 +32,19 @@ function PopUp(props) {
         <input
           className="x19111-1 oxanium-normal-black-24px"
           name="19111"
-          placeholder={inputValue}
+          placeholder="0.00"
           type="text"
+          value={depositAmount} 
+          onChange={(e) => {
+            setDepositAmount(e.target.value);
+            }}
         />
         <div className="overlap-group-15">
-          <button onClick={() => {}} className="popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px">MAX</button>
+          <button onClick={() => foo()} className="popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px">MAX</button>
         </div>
       </div>
-      <div className="overlap-group-16">
-        <button className="rectangle-47-1"></button>
+      <div onClick={handleDepositSubmit}  className="overlap-group-16">
+        <button onClick={handleDepositSubmit} className="rectangle-47-1"></button>
         <div className="place-11 valign-text-middle oxanium-normal-white-24px">Deposit</div>
       </div>
     </div>
