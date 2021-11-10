@@ -4,7 +4,7 @@ import { useAppContext } from "../../AppContext";
 import useLendingPool from "../../hooks/useLendingPool";
 
 function PopUp(props) {
-  const { x, spanText, spanText2, rectangle19, inputType, inputPlaceholder, name, place, token } = props;
+  const { token } = props;
   const { borrowNFT, borrowProject, imageDictBorrow } = useAppContext();
   const { deposit } = useLendingPool();
   const [depositAmount, setDepositAmount] = useState("");
@@ -40,7 +40,7 @@ function PopUp(props) {
             }}
         />
         <div className="overlap-group-15">
-          <button onClick={() => foo()} className="popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px">MAX</button>
+          <button onClick={() => {}} className="popup-deposit-name valign-text-middle oxanium-bold-web-orange-24px">MAX</button>
         </div>
       </div>
       <div onClick={handleDepositSubmit}  className="overlap-group-16">

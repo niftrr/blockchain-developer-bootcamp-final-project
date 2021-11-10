@@ -7,8 +7,8 @@ import { useAppContext } from "../AppContext";
 export const useNFT = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const nftContractAddressPUNK = "0xcB0f2a13098f8e841e6Adfa5B17Ec00508b27665";
-    const nftContractAddressBAYC = "0x37D31345F164Ab170B19bc35225Abc98Ce30b46A";
+    const nftContractAddressPUNK = "0x4c04377f90Eb1E42D845AB21De874803B8773669";
+    const nftContractAddressBAYC = "0xf93b0549cD50c849D792f0eAE94A598fA77C7718";
     const nftContractABI = NFTData["abi"];
     const nftContractPUNK = useContract(nftContractAddressPUNK, nftContractABI);
     const nftContractBAYC = useContract(nftContractAddressBAYC, nftContractABI);

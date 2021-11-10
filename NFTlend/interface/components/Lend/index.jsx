@@ -36,7 +36,6 @@ function Lend(props) {
   }, [account, nTokenBalanceDAI]);
 
   const formatNumber = (value) => {
-    console.log('formatNumber', typeof(value));
     let res;
     if (value=="--") {
       res = value;

@@ -10,12 +10,12 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useLendingPool = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const lendingPoolContractAddress = "0x89ec9355b1Bcc964e576211c8B011BD709083f8d";
+    const lendingPoolContractAddress = "0x15F2ea83eB97ede71d84Bd04fFF29444f6b7cd52";
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
     const { setBorrowFloorPrice, borrowFloorPrice, setTxnStatus } = useAppContext();
-    const { fetchNTokenBalance } = useNToken();
+    const { nTokenContract, fetchNTokenBalance } = useNToken();
     const { assetTokenContract, assetTokenContractAddress } = useAssetToken();
 
     const fetchBorrowFloorPrice = async () => {
@@ -47,10 +47,34 @@ export const useLendingPool = () => {
         }
     };
 
+    const withdraw = async (tokenSymbol, amount) => {
+        console.log('withdraw called');
+        if (account && isValidNetwork) {
+            try {
+                setTxnStatus("APPROVING");
+                console.log('APPROVING');
+                const _nTokenContract = nTokenContract[tokenSymbol];
+                await _nTokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                setTxnStatus("LOADING");
+                console.log('LOADING');
+                const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
+                const txn = await lendingPoolContract.withdraw(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                await txn.wait(1);
+                await fetchNTokenBalance(tokenSymbol);
+                setTxnStatus("COMPLETE");
+                console.log('COMPLETE');
+            } catch (error) {
+                setTxnStatus("ERROR");
+                console.log('ERROR', error);
+            }
+        }
+    };
+
     return {
         fetchBorrowFloorPrice,
         borrowFloorPrice,
-        deposit
+        deposit,
+        withdraw
     }
 };
 
