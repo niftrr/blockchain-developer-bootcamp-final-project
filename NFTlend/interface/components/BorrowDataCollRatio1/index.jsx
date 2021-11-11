@@ -14,12 +14,21 @@ function BorrowDataCollRatio(props) {
     }  
   }, [account]);
 
-  return (
-    <div className={`borrow-data-coll-ratio-2 oxanium-normal-black-20px ${className || ""}`}>
-      <div className="apr-1 valign-text-middle">{collateralRatio}</div>
-      <div className="percent-3 valign-text-middle">{Number(borrowCollRatio).toFixed(1)}%</div>
-    </div>
-  );
+  if (Number(borrowCollRatio) < 150) {
+    return (
+      <div className={`borrow-data-coll-ratio-2 oxanium-normal-black-20px ${className || ""}`}>
+        <div className="apr-1 valign-text-middle">{collateralRatio}</div>
+        <div className="percent-3-red valign-text-middle">{Number(borrowCollRatio).toFixed(1)}%</div>
+      </div>
+    );
+  } else {
+    return (
+      <div className={`borrow-data-coll-ratio-2 oxanium-normal-black-20px ${className || ""}`}>
+        <div className="apr-1 valign-text-middle">{collateralRatio}</div>
+        <div className="percent-3 valign-text-middle">{Number(borrowCollRatio).toFixed(1)}%</div>
+      </div>
+    );
+  }
 }
 
 export default BorrowDataCollRatio;

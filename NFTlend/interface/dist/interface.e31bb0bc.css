@@ -1304,6 +1304,226 @@ html {
 }
 
 
+.borrow-data-floor-price-borrowPopUpData {
+  align-items: flex-start;
+  display: flex;
+  margin-left: 0.12px;
+  margin-top: 5px;
+  min-width: 379px;
+}
+
+.borrow-amount-borrowPopUpData {
+  height: 20px;
+  letter-spacing: 0;
+  width: 219px;
+}
+
+.address-borrowPopUpData {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 32px;
+  text-align: right;
+  width: 124px;
+}
+
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-borrowPopUpData,
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-1-borrowPopUpData {
+  margin-left: unset;
+}
+
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-1-borrowPopUpData .borrow-amount-borrowPopUpData,
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-borrowPopUpData .borrow-amount-borrowPopUpData {
+  width: 220px;
+}
+
+
+.borrow-data-floor-price-borrowPopUpData {
+  align-items: flex-start;
+  display: flex;
+  margin-left: 0.12px;
+  margin-top: 5px;
+  min-width: 379px;
+}
+
+.borrow-amount-borrowPopUpData {
+  height: 20px;
+  letter-spacing: 0;
+  width: 219px;
+}
+
+.address-borrowPopUpData {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 32px;
+  text-align: right;
+  width: 124px;
+}
+
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-borrowPopUpData,
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-1-borrowPopUpData {
+  margin-left: unset;
+}
+
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-1-borrowPopUpData .borrow-amount-borrowPopUpData,
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-borrowPopUpData .borrow-amount-borrowPopUpData {
+  width: 220px;
+}
+
+
+.popupborrow-borrowPopUp {
+  align-items: flex-start;
+  background-color: var(--black-2);
+  display: flex;
+  height: 1024px;
+  padding: 0 400px;
+  width: 1440px;
+}
+
+.overlay .popupborrow-borrowPopUp {
+  background-color: #00000000;
+}
+
+.overlap-group1-borrowPopUp {
+  align-items: center;
+  background-color: var(--blue-zodiac-2);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+  min-height: 531px;
+  padding: 37px 52px;
+  width: 640px;
+}
+
+.pop-up-text-borrowPopUp {
+  height: 115px;
+  letter-spacing: 0;
+  width: 535px;
+}
+
+.borrow-details-borrowPopUp {
+  align-items: center;
+  background-color: var(--tropical-blue);
+  border-radius: 5px;
+  display: flex;
+  height: 144px;
+  justify-content: flex-end;
+  margin-top: 66px;
+  min-width: 535px;
+  padding: 0.0px 0;
+}
+
+.nft-avatar-borrowPopUp {
+  height: 100%;
+  margin-bottom: 0;
+  object-fit: cover;
+  width: 100%;
+  position:relative;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.nft-avatar-1-borrowPopUp {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background-color: #638596;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.borrow-data-borrowPopUp {
+  align-items: flex-start;
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  margin-left: 6px;
+  min-height: 137px;
+  padding: 5.5px 6.9px;
+  position: relative;
+  width: 395px;
+}
+
+.borrow-data-collateral-borrowPopUp {
+  align-items: flex-start;
+  display: flex;
+  margin-left: 0.13px;
+  min-width: 380px;
+}
+
+.collateral-borrowPopUp {
+  height: 20px;
+  letter-spacing: 0;
+  width: 99px;
+}
+
+.fidenza-157-borrowPopUp {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 151px;
+  text-align: right;
+  width: 125px;
+}
+
+.borrow-data-coll-ratio-borrowPopUp {
+  align-items: flex-start;
+  display: flex;
+  margin-left: 0.13px;
+  margin-top: 5px;
+  min-width: 379px;
+}
+
+.text-1-borrowPopUp {
+  height: 20px;
+  letter-spacing: 0;
+  width: 220px;
+}
+
+.percent-borrowPopUp {
+  align-self: flex-end;
+  height: 20px;
+  letter-spacing: 0;
+  margin-bottom: 0;
+  margin-left: 31px;
+  text-align: right;
+  width: 124px;
+}
+
+.overlap-group-borrowPopUp {
+  align-self: center;
+  height: 64px;
+  margin-right: 2.0px;
+  margin-top: 40px;
+  position: relative;
+  width: 256px;
+}
+
+.rectangle-47-borrowPopUp {
+  background-color: var(--web-orange);
+  height: 63px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 256px;
+}
+
+.borrow-borrowPopUp {
+  height: 64px;
+  left: 0;
+  letter-spacing: 0;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 256px;
+}
+
+#overlay-popupborrow-borrowPopUp {
+  background-color: var(--black-2);
+}
+
+
 .instructions,
 .instructions-1,
 .instructions-2,
@@ -1616,7 +1836,25 @@ html {
   min-width: 113px;
 }
 
+.borrow-button-deposit-3-disabled {
+  align-items: flex-start;
+  align-self: center;
+  background-color: var(--blue-zodiac-3);
+  border-radius: 5px;
+  display: flex;
+  margin-left: 44px;
+  margin-top: 0.47px;
+  min-width: 113px;
+}
+
 .borrow-place-9 {
+  height: 44px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.borrow-place-9-disabled {
   height: 44px;
   letter-spacing: 0;
   text-align: center;
@@ -1657,7 +1895,39 @@ html {
   height: 47px;
 }
 
+.borrow-button-deposit-3-disabled:hover {
+  background-color: var(--blue-zodiac-3);
+}
 
+.borrow-button-deposit-3-disabled:active {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-place-9-disabled:hover {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-place-9-disabled:active {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-button-deposit-3-disabled.button-deposit-1,
+.borrow-button-deposit-3-disabled.button-deposit-2 {
+  cursor: pointer;
+}
+
+.borrow-button-deposit-3-disabled.button-borrow {
+  align-items: flex-start;
+  background-color: var(--blue-zodiac-3);
+  border-radius: 5px;
+  display: flex;
+  margin-left: 135px;
+  min-width: 113px;
+}
+
+.borrow-button-deposit-3-disabled.button-borrow {
+  height: 47px;
+}
 .borrow-data-coll-ratio {
   align-items: flex-start;
   display: flex;
@@ -1743,6 +2013,15 @@ html {
   margin-left: 80px;
   text-align: right;
   width: 101px;
+}
+
+.percent-3-red {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 80px;
+  text-align: right;
+  width: 101px;
+  color: red;
 }
 
 .borrow-data-coll-ratio-2.borrow-data-coll-ratio-3 {

@@ -32,7 +32,7 @@ const initialContext = {
     setBorrowCollRatio: () => {},
     borrowAPR: "--",
     setBorrowAPR: () => {},
-    borrowToken: "--",
+    borrowToken: "ETH",
     setBorrowToken: () => {},
     borrowAmount: "--",
     setBorrowAmount: () => {},

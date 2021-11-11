@@ -12,7 +12,7 @@ function PopUp(props) {
   const { account } = useWeb3React();
   const { borrowNFT, borrowProject, imageDictBorrow } = useAppContext();
   const { deposit } = useLendingPool();
-  const { xnStatus } = useTransaction();
+  const { txnStatus } = useTransaction();
   const [depositAmount, setDepositAmount] = useState("");
 
   useEffect(() => {

@@ -47,7 +47,8 @@ export const useCollateralManager = () => {
         fetchWhitelistNFT,
         whitelistNFT,
         fetchAPR,
-        fetchBorrowAPR
+        fetchBorrowAPR,
+        collateralManagerContractAddress
     }
 };
 

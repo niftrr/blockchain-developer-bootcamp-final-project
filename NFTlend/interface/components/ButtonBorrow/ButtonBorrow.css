@@ -9,7 +9,25 @@
   min-width: 113px;
 }
 
+.borrow-button-deposit-3-disabled {
+  align-items: flex-start;
+  align-self: center;
+  background-color: var(--blue-zodiac-3);
+  border-radius: 5px;
+  display: flex;
+  margin-left: 44px;
+  margin-top: 0.47px;
+  min-width: 113px;
+}
+
 .borrow-place-9 {
+  height: 44px;
+  letter-spacing: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.borrow-place-9-disabled {
   height: 44px;
   letter-spacing: 0;
   text-align: center;
@@ -50,3 +68,36 @@
   height: 47px;
 }
 
+.borrow-button-deposit-3-disabled:hover {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-button-deposit-3-disabled:active {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-place-9-disabled:hover {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-place-9-disabled:active {
+  background-color: var(--blue-zodiac-3);
+}
+
+.borrow-button-deposit-3-disabled.button-deposit-1,
+.borrow-button-deposit-3-disabled.button-deposit-2 {
+  cursor: pointer;
+}
+
+.borrow-button-deposit-3-disabled.button-borrow {
+  align-items: flex-start;
+  background-color: var(--blue-zodiac-3);
+  border-radius: 5px;
+  display: flex;
+  margin-left: 135px;
+  min-width: 113px;
+}
+
+.borrow-button-deposit-3-disabled.button-borrow {
+  height: 47px;
+}

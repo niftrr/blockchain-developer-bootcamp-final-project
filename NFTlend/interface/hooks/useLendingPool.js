@@ -4,7 +4,9 @@ import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
 import useNToken from "./useNToken";
+import useNFT from "./useNFT";
 import useAssetToken from "./useAssetToken";
+import useCollateralManager from "./useCollateralManager";
 import { formatUnits, parseUnits } from "@ethersproject/units";
 
 export const useLendingPool = () => {
@@ -17,6 +19,12 @@ export const useLendingPool = () => {
     const { setBorrowFloorPrice, borrowFloorPrice, setTxnStatus } = useAppContext();
     const { nTokenContract, fetchNTokenBalance } = useNToken();
     const { assetTokenContract, assetTokenContractAddress } = useAssetToken();
+    const { nftContract } = useNFT();
+    const { collateralManagerContractAddress } = useCollateralManager();
+
+    function wait(seconds) {
+        return new Promise( res => setTimeout(res, seconds*1000) );
+    }
 
     const fetchBorrowFloorPrice = async () => {
         const price = await lendingPoolContract._mockOracle();
@@ -37,6 +45,8 @@ export const useLendingPool = () => {
                 await txn.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
+                await wait(5);
+                setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
@@ -67,11 +77,48 @@ export const useLendingPool = () => {
         }
     };
 
+    const borrow = async (
+        tokenSymbol, 
+        tokenAmount,
+        nftTokenSymbol,
+        nftTokenId,
+        interestRate,
+        numWeeks) => {
+        console.log('borrow called');
+        if (account && isValidNetwork) {
+            try {
+                setTxnStatus("LOADING");
+                console.log('APPROVING');
+                const nftTokenContract = nftContract[nftTokenSymbol];
+                await nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
+                setTxnStatus("LOADING");
+                console.log('LOADING');
+                const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
+                const txn = await lendingPoolContract.borrow(
+                    tokenContractAddress, 
+                    parseUnits(tokenAmount, 18),
+                    nftTokenContract.address,
+                    nftTokenId,
+                    interestRate,
+                    numWeeks); // TODO: remove hard-coded decimals
+                await txn.wait(1);
+                // TODO: implement useDebtToken
+                // await fetchDebtTokenBalance(tokenSymbol);
+                setTxnStatus("COMPLETE");
+                console.log('COMPLETE');
+            } catch (error) {
+                setTxnStatus("ERROR");
+                console.log('ERROR', error);
+            }
+        }
+    };
+
     return {
         fetchBorrowFloorPrice,
         borrowFloorPrice,
         deposit,
-        withdraw
+        withdraw,
+        borrow
     }
 };
 

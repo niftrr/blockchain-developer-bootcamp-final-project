@@ -22,6 +22,15 @@
   width: 101px;
 }
 
+.percent-3-red {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 80px;
+  text-align: right;
+  width: 101px;
+  color: red;
+}
+
 .borrow-data-coll-ratio-2.borrow-data-coll-ratio-3 {
   top: 56px;
 }

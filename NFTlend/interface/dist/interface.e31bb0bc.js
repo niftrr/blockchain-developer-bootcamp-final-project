@@ -29599,8 +29599,8 @@ function _inheritsLoose(subClass, superClass) {
   subClass.prototype.constructor = subClass;
   (0, _setPrototypeOf.default)(subClass, superClass);
 }
-},{"./setPrototypeOf.js":"node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js"}],"node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
-/** @license React v17.0.2
+},{"./setPrototypeOf.js":"node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js"}],"node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
+/** @license React v16.13.1
  * react-is.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -29612,77 +29612,34 @@ function _inheritsLoose(subClass, superClass) {
 
 if ("development" !== "production") {
   (function () {
-    'use strict'; // ATTENTION
-    // When adding new symbols to this file,
-    // Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
-    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    'use strict'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
     // nor polyfill, then a plain number is used for performance.
 
-    var REACT_ELEMENT_TYPE = 0xeac7;
-    var REACT_PORTAL_TYPE = 0xeaca;
-    var REACT_FRAGMENT_TYPE = 0xeacb;
-    var REACT_STRICT_MODE_TYPE = 0xeacc;
-    var REACT_PROFILER_TYPE = 0xead2;
-    var REACT_PROVIDER_TYPE = 0xeacd;
-    var REACT_CONTEXT_TYPE = 0xeace;
-    var REACT_FORWARD_REF_TYPE = 0xead0;
-    var REACT_SUSPENSE_TYPE = 0xead1;
-    var REACT_SUSPENSE_LIST_TYPE = 0xead8;
-    var REACT_MEMO_TYPE = 0xead3;
-    var REACT_LAZY_TYPE = 0xead4;
-    var REACT_BLOCK_TYPE = 0xead9;
-    var REACT_SERVER_BLOCK_TYPE = 0xeada;
-    var REACT_FUNDAMENTAL_TYPE = 0xead5;
-    var REACT_SCOPE_TYPE = 0xead7;
-    var REACT_OPAQUE_ID_TYPE = 0xeae0;
-    var REACT_DEBUG_TRACING_MODE_TYPE = 0xeae1;
-    var REACT_OFFSCREEN_TYPE = 0xeae2;
-    var REACT_LEGACY_HIDDEN_TYPE = 0xeae3;
+    var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+    // (unstable) APIs that have been removed. Can we remove the symbols?
 
-    if (typeof Symbol === 'function' && Symbol.for) {
-      var symbolFor = Symbol.for;
-      REACT_ELEMENT_TYPE = symbolFor('react.element');
-      REACT_PORTAL_TYPE = symbolFor('react.portal');
-      REACT_FRAGMENT_TYPE = symbolFor('react.fragment');
-      REACT_STRICT_MODE_TYPE = symbolFor('react.strict_mode');
-      REACT_PROFILER_TYPE = symbolFor('react.profiler');
-      REACT_PROVIDER_TYPE = symbolFor('react.provider');
-      REACT_CONTEXT_TYPE = symbolFor('react.context');
-      REACT_FORWARD_REF_TYPE = symbolFor('react.forward_ref');
-      REACT_SUSPENSE_TYPE = symbolFor('react.suspense');
-      REACT_SUSPENSE_LIST_TYPE = symbolFor('react.suspense_list');
-      REACT_MEMO_TYPE = symbolFor('react.memo');
-      REACT_LAZY_TYPE = symbolFor('react.lazy');
-      REACT_BLOCK_TYPE = symbolFor('react.block');
-      REACT_SERVER_BLOCK_TYPE = symbolFor('react.server.block');
-      REACT_FUNDAMENTAL_TYPE = symbolFor('react.fundamental');
-      REACT_SCOPE_TYPE = symbolFor('react.scope');
-      REACT_OPAQUE_ID_TYPE = symbolFor('react.opaque.id');
-      REACT_DEBUG_TRACING_MODE_TYPE = symbolFor('react.debug_trace_mode');
-      REACT_OFFSCREEN_TYPE = symbolFor('react.offscreen');
-      REACT_LEGACY_HIDDEN_TYPE = symbolFor('react.legacy_hidden');
-    } // Filter certain DOM attributes (e.g. src, href) if their values are empty strings.
-
-
-    var enableScopeAPI = false; // Experimental Create Event Handle API.
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+    var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
 
     function isValidElementType(type) {
-      if (typeof type === 'string' || typeof type === 'function') {
-        return true;
-      } // Note: typeof might be other than 'symbol' or 'number' (e.g. if it's a polyfill).
-
-
-      if (type === REACT_FRAGMENT_TYPE || type === REACT_PROFILER_TYPE || type === REACT_DEBUG_TRACING_MODE_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || type === REACT_LEGACY_HIDDEN_TYPE || enableScopeAPI) {
-        return true;
-      }
-
-      if (typeof type === 'object' && type !== null) {
-        if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_BLOCK_TYPE || type[0] === REACT_SERVER_BLOCK_TYPE) {
-          return true;
-        }
-      }
-
-      return false;
+      return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
     }
 
     function typeOf(object) {
@@ -29694,11 +29651,12 @@ if ("development" !== "production") {
             var type = object.type;
 
             switch (type) {
+              case REACT_ASYNC_MODE_TYPE:
+              case REACT_CONCURRENT_MODE_TYPE:
               case REACT_FRAGMENT_TYPE:
               case REACT_PROFILER_TYPE:
               case REACT_STRICT_MODE_TYPE:
               case REACT_SUSPENSE_TYPE:
-              case REACT_SUSPENSE_LIST_TYPE:
                 return type;
 
               default:
@@ -29724,8 +29682,11 @@ if ("development" !== "production") {
       }
 
       return undefined;
-    }
+    } // AsyncMode is deprecated along with isAsyncMode
 
+
+    var AsyncMode = REACT_ASYNC_MODE_TYPE;
+    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
     var ContextConsumer = REACT_CONTEXT_TYPE;
     var ContextProvider = REACT_PROVIDER_TYPE;
     var Element = REACT_ELEMENT_TYPE;
@@ -29737,29 +29698,21 @@ if ("development" !== "production") {
     var Profiler = REACT_PROFILER_TYPE;
     var StrictMode = REACT_STRICT_MODE_TYPE;
     var Suspense = REACT_SUSPENSE_TYPE;
-    var hasWarnedAboutDeprecatedIsAsyncMode = false;
-    var hasWarnedAboutDeprecatedIsConcurrentMode = false; // AsyncMode should be deprecated
+    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
 
     function isAsyncMode(object) {
       {
         if (!hasWarnedAboutDeprecatedIsAsyncMode) {
           hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
 
-          console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 18+.');
+          console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
         }
       }
-      return false;
+      return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
     }
 
     function isConcurrentMode(object) {
-      {
-        if (!hasWarnedAboutDeprecatedIsConcurrentMode) {
-          hasWarnedAboutDeprecatedIsConcurrentMode = true; // Using console['warn'] to evade Babel and ESLint
-
-          console['warn']('The ReactIs.isConcurrentMode() alias has been deprecated, ' + 'and will be removed in React 18+.');
-        }
-      }
-      return false;
+      return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
     }
 
     function isContextConsumer(object) {
@@ -29806,6 +29759,8 @@ if ("development" !== "production") {
       return typeOf(object) === REACT_SUSPENSE_TYPE;
     }
 
+    exports.AsyncMode = AsyncMode;
+    exports.ConcurrentMode = ConcurrentMode;
     exports.ContextConsumer = ContextConsumer;
     exports.ContextProvider = ContextProvider;
     exports.Element = Element;
@@ -29834,7 +29789,7 @@ if ("development" !== "production") {
     exports.typeOf = typeOf;
   })();
 }
-},{}],"node_modules/react-is/index.js":[function(require,module,exports) {
+},{}],"node_modules/prop-types/node_modules/react-is/index.js":[function(require,module,exports) {
 'use strict';
 
 if ("development" === 'production') {
@@ -29842,7 +29797,7 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-is.development.js');
 }
-},{"./cjs/react-is.development.js":"node_modules/react-is/cjs/react-is.development.js"}],"node_modules/prop-types/lib/ReactPropTypesSecret.js":[function(require,module,exports) {
+},{"./cjs/react-is.development.js":"node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js"}],"node_modules/prop-types/lib/ReactPropTypesSecret.js":[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -30596,7 +30551,7 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
   ReactPropTypes.PropTypes = ReactPropTypes;
   return ReactPropTypes;
 };
-},{"react-is":"node_modules/react-is/index.js","object-assign":"node_modules/object-assign/index.js","./lib/ReactPropTypesSecret":"node_modules/prop-types/lib/ReactPropTypesSecret.js","./checkPropTypes":"node_modules/prop-types/checkPropTypes.js"}],"node_modules/prop-types/index.js":[function(require,module,exports) {
+},{"react-is":"node_modules/prop-types/node_modules/react-is/index.js","object-assign":"node_modules/object-assign/index.js","./lib/ReactPropTypesSecret":"node_modules/prop-types/lib/ReactPropTypesSecret.js","./checkPropTypes":"node_modules/prop-types/checkPropTypes.js"}],"node_modules/prop-types/index.js":[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -30615,7 +30570,7 @@ if ("development" !== 'production') {
   // http://fb.me/prop-types-in-prod
   module.exports = require('./factoryWithThrowingShims')();
 }
-},{"react-is":"node_modules/react-is/index.js","./factoryWithTypeCheckers":"node_modules/prop-types/factoryWithTypeCheckers.js"}],"node_modules/@babel/runtime/helpers/esm/extends.js":[function(require,module,exports) {
+},{"react-is":"node_modules/prop-types/node_modules/react-is/index.js","./factoryWithTypeCheckers":"node_modules/prop-types/factoryWithTypeCheckers.js"}],"node_modules/@babel/runtime/helpers/esm/extends.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32378,7 +32333,205 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(/** @type {string} */ (path), /** @type {!Array} */ (keys), options)
 }
 
-},{"isarray":"node_modules/path-to-regexp/node_modules/isarray/index.js"}],"node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js":[function(require,module,exports) {
+},{"isarray":"node_modules/path-to-regexp/node_modules/isarray/index.js"}],"node_modules/react-router/node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+'use strict';
+
+if ("development" !== "production") {
+  (function () {
+    'use strict'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    // nor polyfill, then a plain number is used for performance.
+
+    var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+    // (unstable) APIs that have been removed. Can we remove the symbols?
+
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+    var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
+
+    function isValidElementType(type) {
+      return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+    }
+
+    function typeOf(object) {
+      if (typeof object === 'object' && object !== null) {
+        var $$typeof = object.$$typeof;
+
+        switch ($$typeof) {
+          case REACT_ELEMENT_TYPE:
+            var type = object.type;
+
+            switch (type) {
+              case REACT_ASYNC_MODE_TYPE:
+              case REACT_CONCURRENT_MODE_TYPE:
+              case REACT_FRAGMENT_TYPE:
+              case REACT_PROFILER_TYPE:
+              case REACT_STRICT_MODE_TYPE:
+              case REACT_SUSPENSE_TYPE:
+                return type;
+
+              default:
+                var $$typeofType = type && type.$$typeof;
+
+                switch ($$typeofType) {
+                  case REACT_CONTEXT_TYPE:
+                  case REACT_FORWARD_REF_TYPE:
+                  case REACT_LAZY_TYPE:
+                  case REACT_MEMO_TYPE:
+                  case REACT_PROVIDER_TYPE:
+                    return $$typeofType;
+
+                  default:
+                    return $$typeof;
+                }
+
+            }
+
+          case REACT_PORTAL_TYPE:
+            return $$typeof;
+        }
+      }
+
+      return undefined;
+    } // AsyncMode is deprecated along with isAsyncMode
+
+
+    var AsyncMode = REACT_ASYNC_MODE_TYPE;
+    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+    var ContextConsumer = REACT_CONTEXT_TYPE;
+    var ContextProvider = REACT_PROVIDER_TYPE;
+    var Element = REACT_ELEMENT_TYPE;
+    var ForwardRef = REACT_FORWARD_REF_TYPE;
+    var Fragment = REACT_FRAGMENT_TYPE;
+    var Lazy = REACT_LAZY_TYPE;
+    var Memo = REACT_MEMO_TYPE;
+    var Portal = REACT_PORTAL_TYPE;
+    var Profiler = REACT_PROFILER_TYPE;
+    var StrictMode = REACT_STRICT_MODE_TYPE;
+    var Suspense = REACT_SUSPENSE_TYPE;
+    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
+
+    function isAsyncMode(object) {
+      {
+        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+          hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
+
+          console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+        }
+      }
+      return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+    }
+
+    function isConcurrentMode(object) {
+      return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+    }
+
+    function isContextConsumer(object) {
+      return typeOf(object) === REACT_CONTEXT_TYPE;
+    }
+
+    function isContextProvider(object) {
+      return typeOf(object) === REACT_PROVIDER_TYPE;
+    }
+
+    function isElement(object) {
+      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+    }
+
+    function isForwardRef(object) {
+      return typeOf(object) === REACT_FORWARD_REF_TYPE;
+    }
+
+    function isFragment(object) {
+      return typeOf(object) === REACT_FRAGMENT_TYPE;
+    }
+
+    function isLazy(object) {
+      return typeOf(object) === REACT_LAZY_TYPE;
+    }
+
+    function isMemo(object) {
+      return typeOf(object) === REACT_MEMO_TYPE;
+    }
+
+    function isPortal(object) {
+      return typeOf(object) === REACT_PORTAL_TYPE;
+    }
+
+    function isProfiler(object) {
+      return typeOf(object) === REACT_PROFILER_TYPE;
+    }
+
+    function isStrictMode(object) {
+      return typeOf(object) === REACT_STRICT_MODE_TYPE;
+    }
+
+    function isSuspense(object) {
+      return typeOf(object) === REACT_SUSPENSE_TYPE;
+    }
+
+    exports.AsyncMode = AsyncMode;
+    exports.ConcurrentMode = ConcurrentMode;
+    exports.ContextConsumer = ContextConsumer;
+    exports.ContextProvider = ContextProvider;
+    exports.Element = Element;
+    exports.ForwardRef = ForwardRef;
+    exports.Fragment = Fragment;
+    exports.Lazy = Lazy;
+    exports.Memo = Memo;
+    exports.Portal = Portal;
+    exports.Profiler = Profiler;
+    exports.StrictMode = StrictMode;
+    exports.Suspense = Suspense;
+    exports.isAsyncMode = isAsyncMode;
+    exports.isConcurrentMode = isConcurrentMode;
+    exports.isContextConsumer = isContextConsumer;
+    exports.isContextProvider = isContextProvider;
+    exports.isElement = isElement;
+    exports.isForwardRef = isForwardRef;
+    exports.isFragment = isFragment;
+    exports.isLazy = isLazy;
+    exports.isMemo = isMemo;
+    exports.isPortal = isPortal;
+    exports.isProfiler = isProfiler;
+    exports.isStrictMode = isStrictMode;
+    exports.isSuspense = isSuspense;
+    exports.isValidElementType = isValidElementType;
+    exports.typeOf = typeOf;
+  })();
+}
+},{}],"node_modules/react-router/node_modules/react-is/index.js":[function(require,module,exports) {
+'use strict';
+
+if ("development" === 'production') {
+  module.exports = require('./cjs/react-is.production.min.js');
+} else {
+  module.exports = require('./cjs/react-is.development.js');
+}
+},{"./cjs/react-is.development.js":"node_modules/react-router/node_modules/react-is/cjs/react-is.development.js"}],"node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32400,7 +32553,205 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 
   return target;
 }
-},{}],"node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js":[function(require,module,exports) {
+},{}],"node_modules/hoist-non-react-statics/node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+'use strict';
+
+if ("development" !== "production") {
+  (function () {
+    'use strict'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    // nor polyfill, then a plain number is used for performance.
+
+    var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+    // (unstable) APIs that have been removed. Can we remove the symbols?
+
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+    var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
+
+    function isValidElementType(type) {
+      return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+    }
+
+    function typeOf(object) {
+      if (typeof object === 'object' && object !== null) {
+        var $$typeof = object.$$typeof;
+
+        switch ($$typeof) {
+          case REACT_ELEMENT_TYPE:
+            var type = object.type;
+
+            switch (type) {
+              case REACT_ASYNC_MODE_TYPE:
+              case REACT_CONCURRENT_MODE_TYPE:
+              case REACT_FRAGMENT_TYPE:
+              case REACT_PROFILER_TYPE:
+              case REACT_STRICT_MODE_TYPE:
+              case REACT_SUSPENSE_TYPE:
+                return type;
+
+              default:
+                var $$typeofType = type && type.$$typeof;
+
+                switch ($$typeofType) {
+                  case REACT_CONTEXT_TYPE:
+                  case REACT_FORWARD_REF_TYPE:
+                  case REACT_LAZY_TYPE:
+                  case REACT_MEMO_TYPE:
+                  case REACT_PROVIDER_TYPE:
+                    return $$typeofType;
+
+                  default:
+                    return $$typeof;
+                }
+
+            }
+
+          case REACT_PORTAL_TYPE:
+            return $$typeof;
+        }
+      }
+
+      return undefined;
+    } // AsyncMode is deprecated along with isAsyncMode
+
+
+    var AsyncMode = REACT_ASYNC_MODE_TYPE;
+    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+    var ContextConsumer = REACT_CONTEXT_TYPE;
+    var ContextProvider = REACT_PROVIDER_TYPE;
+    var Element = REACT_ELEMENT_TYPE;
+    var ForwardRef = REACT_FORWARD_REF_TYPE;
+    var Fragment = REACT_FRAGMENT_TYPE;
+    var Lazy = REACT_LAZY_TYPE;
+    var Memo = REACT_MEMO_TYPE;
+    var Portal = REACT_PORTAL_TYPE;
+    var Profiler = REACT_PROFILER_TYPE;
+    var StrictMode = REACT_STRICT_MODE_TYPE;
+    var Suspense = REACT_SUSPENSE_TYPE;
+    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
+
+    function isAsyncMode(object) {
+      {
+        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+          hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
+
+          console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+        }
+      }
+      return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+    }
+
+    function isConcurrentMode(object) {
+      return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+    }
+
+    function isContextConsumer(object) {
+      return typeOf(object) === REACT_CONTEXT_TYPE;
+    }
+
+    function isContextProvider(object) {
+      return typeOf(object) === REACT_PROVIDER_TYPE;
+    }
+
+    function isElement(object) {
+      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+    }
+
+    function isForwardRef(object) {
+      return typeOf(object) === REACT_FORWARD_REF_TYPE;
+    }
+
+    function isFragment(object) {
+      return typeOf(object) === REACT_FRAGMENT_TYPE;
+    }
+
+    function isLazy(object) {
+      return typeOf(object) === REACT_LAZY_TYPE;
+    }
+
+    function isMemo(object) {
+      return typeOf(object) === REACT_MEMO_TYPE;
+    }
+
+    function isPortal(object) {
+      return typeOf(object) === REACT_PORTAL_TYPE;
+    }
+
+    function isProfiler(object) {
+      return typeOf(object) === REACT_PROFILER_TYPE;
+    }
+
+    function isStrictMode(object) {
+      return typeOf(object) === REACT_STRICT_MODE_TYPE;
+    }
+
+    function isSuspense(object) {
+      return typeOf(object) === REACT_SUSPENSE_TYPE;
+    }
+
+    exports.AsyncMode = AsyncMode;
+    exports.ConcurrentMode = ConcurrentMode;
+    exports.ContextConsumer = ContextConsumer;
+    exports.ContextProvider = ContextProvider;
+    exports.Element = Element;
+    exports.ForwardRef = ForwardRef;
+    exports.Fragment = Fragment;
+    exports.Lazy = Lazy;
+    exports.Memo = Memo;
+    exports.Portal = Portal;
+    exports.Profiler = Profiler;
+    exports.StrictMode = StrictMode;
+    exports.Suspense = Suspense;
+    exports.isAsyncMode = isAsyncMode;
+    exports.isConcurrentMode = isConcurrentMode;
+    exports.isContextConsumer = isContextConsumer;
+    exports.isContextProvider = isContextProvider;
+    exports.isElement = isElement;
+    exports.isForwardRef = isForwardRef;
+    exports.isFragment = isFragment;
+    exports.isLazy = isLazy;
+    exports.isMemo = isMemo;
+    exports.isPortal = isPortal;
+    exports.isProfiler = isProfiler;
+    exports.isStrictMode = isStrictMode;
+    exports.isSuspense = isSuspense;
+    exports.isValidElementType = isValidElementType;
+    exports.typeOf = typeOf;
+  })();
+}
+},{}],"node_modules/hoist-non-react-statics/node_modules/react-is/index.js":[function(require,module,exports) {
+'use strict';
+
+if ("development" === 'production') {
+  module.exports = require('./cjs/react-is.production.min.js');
+} else {
+  module.exports = require('./cjs/react-is.development.js');
+}
+},{"./cjs/react-is.development.js":"node_modules/hoist-non-react-statics/node_modules/react-is/cjs/react-is.development.js"}],"node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js":[function(require,module,exports) {
 'use strict';
 
 var reactIs = require('react-is');
@@ -32505,7 +32856,7 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
 
 module.exports = hoistNonReactStatics;
 
-},{"react-is":"node_modules/react-is/index.js"}],"node_modules/react-router/esm/react-router.js":[function(require,module,exports) {
+},{"react-is":"node_modules/hoist-non-react-statics/node_modules/react-is/index.js"}],"node_modules/react-router/esm/react-router.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -33301,7 +33652,7 @@ if ("development" !== "production") {
     global[key] = "esm";
   }
 }
-},{"@babel/runtime/helpers/esm/inheritsLoose":"node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"node_modules/react/index.js","prop-types":"node_modules/prop-types/index.js","history":"node_modules/history/esm/history.js","tiny-warning":"node_modules/tiny-warning/dist/tiny-warning.esm.js","mini-create-react-context":"node_modules/mini-create-react-context/dist/esm/index.js","tiny-invariant":"node_modules/tiny-invariant/dist/tiny-invariant.esm.js","@babel/runtime/helpers/esm/extends":"node_modules/@babel/runtime/helpers/esm/extends.js","path-to-regexp":"node_modules/path-to-regexp/index.js","react-is":"node_modules/react-is/index.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","hoist-non-react-statics":"node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js"}],"node_modules/react-router-dom/esm/react-router-dom.js":[function(require,module,exports) {
+},{"@babel/runtime/helpers/esm/inheritsLoose":"node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"node_modules/react/index.js","prop-types":"node_modules/prop-types/index.js","history":"node_modules/history/esm/history.js","tiny-warning":"node_modules/tiny-warning/dist/tiny-warning.esm.js","mini-create-react-context":"node_modules/mini-create-react-context/dist/esm/index.js","tiny-invariant":"node_modules/tiny-invariant/dist/tiny-invariant.esm.js","@babel/runtime/helpers/esm/extends":"node_modules/@babel/runtime/helpers/esm/extends.js","path-to-regexp":"node_modules/path-to-regexp/index.js","react-is":"node_modules/react-router/node_modules/react-is/index.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","hoist-non-react-statics":"node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js"}],"node_modules/react-router-dom/esm/react-router-dom.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39318,7 +39669,7 @@ var initialContext = {
   setBorrowCollRatio: function setBorrowCollRatio() {},
   borrowAPR: "--",
   setBorrowAPR: function setBorrowAPR() {},
-  borrowToken: "--",
+  borrowToken: "ETH",
   setBorrowToken: function setBorrowToken() {},
   borrowAmount: "--",
   setBorrowAmount: function setBorrowAmount() {},
@@ -60155,7 +60506,510 @@ var useNToken = function useNToken() {
 exports.useNToken = useNToken;
 var _default = useNToken;
 exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/Ntoken.sol/NToken.json":"../v1-core/artifacts/contracts/Ntoken.sol/NToken.json","../hooks/useIsValidNetwork":"hooks/useIsValidNetwork.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js","react":"node_modules/react/index.js"}],"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":[function(require,module,exports) {
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/Ntoken.sol/NToken.json":"../v1-core/artifacts/contracts/Ntoken.sol/NToken.json","../hooks/useIsValidNetwork":"hooks/useIsValidNetwork.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js","react":"node_modules/react/index.js"}],"../v1-core/artifacts/contracts/NFT.sol/NFT.json":[function(require,module,exports) {
+module.exports = {
+  "_format": "hh-sol-artifact-1",
+  "contractName": "NFT",
+  "sourceName": "contracts/NFT.sol",
+  "abi": [{
+    "inputs": [{
+      "internalType": "string",
+      "name": "name",
+      "type": "string"
+    }, {
+      "internalType": "string",
+      "name": "symbol",
+      "type": "string"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "approved",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "Approval",
+    "type": "event"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "operator",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "bool",
+      "name": "approved",
+      "type": "bool"
+    }],
+    "name": "ApprovalForAll",
+    "type": "event"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "Transfer",
+    "type": "event"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "approve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }],
+    "name": "balanceOf",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "getApproved",
+    "outputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "operator",
+      "type": "address"
+    }],
+    "name": "isApprovedForAll",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "mint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "name",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "ownerOf",
+    "outputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "safeTransferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "internalType": "bytes",
+      "name": "_data",
+      "type": "bytes"
+    }],
+    "name": "safeTransferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "operator",
+      "type": "address"
+    }, {
+      "internalType": "bool",
+      "name": "approved",
+      "type": "bool"
+    }],
+    "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "bytes4",
+      "name": "interfaceId",
+      "type": "bytes4"
+    }],
+    "name": "supportsInterface",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "tokenURI",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "transferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }],
+  "bytecode": "0x60806040523480156200001157600080fd5b5060405162002a1a38038062002a1a833981810160405281019062000037919062000197565b818181600090805190602001906200005192919062000075565b5080600190805190602001906200006a92919062000075565b50505050506200037a565b82805462000083906200029f565b90600052602060002090601f016020900481019282620000a75760008555620000f3565b82601f10620000c257805160ff1916838001178555620000f3565b82800160010185558215620000f3579182015b82811115620000f2578251825591602001919060010190620000d5565b5b50905062000102919062000106565b5090565b5b808211156200012157600081600090555060010162000107565b5090565b60006200013c620001368462000233565b6200020a565b9050828152602081018484840111156200015557600080fd5b6200016284828562000269565b509392505050565b600082601f8301126200017c57600080fd5b81516200018e84826020860162000125565b91505092915050565b60008060408385031215620001ab57600080fd5b600083015167ffffffffffffffff811115620001c657600080fd5b620001d4858286016200016a565b925050602083015167ffffffffffffffff811115620001f257600080fd5b62000200858286016200016a565b9150509250929050565b60006200021662000229565b9050620002248282620002d5565b919050565b6000604051905090565b600067ffffffffffffffff8211156200025157620002506200033a565b5b6200025c8262000369565b9050602081019050919050565b60005b83811015620002895780820151818401526020810190506200026c565b8381111562000299576000848401525b50505050565b60006002820490506001821680620002b857607f821691505b60208210811415620002cf57620002ce6200030b565b5b50919050565b620002e08262000369565b810181811067ffffffffffffffff821117156200030257620003016200033a565b5b80604052505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b612690806200038a6000396000f3fe608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea26469706673582212207bb4ba1ec56e9427950f8656f172cde3a93e11f5771ee9886629b56c96187b8664736f6c63430008040033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea26469706673582212207bb4ba1ec56e9427950f8656f172cde3a93e11f5771ee9886629b56c96187b8664736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+};
+},{}],"hooks/useNFT.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useNFT = exports.default = void 0;
+
+var _useContract = require("./useContract");
+
+var _NFT = _interopRequireDefault(require("../../v1-core/artifacts/contracts/NFT.sol/NFT.json"));
+
+var _core = require("@web3-react/core");
+
+var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
+
+var _AppContext = require("../AppContext");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var useNFT = function useNFT() {
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
+      isValidNetwork = _useIsValidNetwork.isValidNetwork;
+
+  var nftContractAddressPUNK = "0x4c04377f90Eb1E42D845AB21De874803B8773669";
+  var nftContractAddressBAYC = "0xf93b0549cD50c849D792f0eAE94A598fA77C7718";
+  var nftContractABI = _NFT.default["abi"];
+  var nftContractPUNK = (0, _useContract.useContract)(nftContractAddressPUNK, nftContractABI);
+  var nftContractBAYC = (0, _useContract.useContract)(nftContractAddressBAYC, nftContractABI);
+  var nftContract = {
+    "PUNK": nftContractPUNK,
+    "BAYC": nftContractBAYC
+  };
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      setImageDict = _useAppContext.setImageDict,
+      imageDictPUNK = _useAppContext.imageDictPUNK,
+      imageDictBAYC = _useAppContext.imageDictBAYC,
+      borrowProject = _useAppContext.borrowProject;
+
+  var nftAddressSymbolDict = {};
+  nftAddressSymbolDict[nftContractAddressPUNK] = "PUNK";
+  nftAddressSymbolDict[nftContractAddressBAYC] = "BAYC";
+
+  var fetchImagesPUNK = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var imageDict, tokenId, owner, paddedTokenId, imageURL;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              imageDict = {};
+              tokenId = 0;
+
+            case 2:
+              if (!(tokenId < 6)) {
+                _context.next = 10;
+                break;
+              }
+
+              _context.next = 5;
+              return nftContract["PUNK"].ownerOf(tokenId);
+
+            case 5:
+              owner = _context.sent;
+
+              if (owner == account) {
+                paddedTokenId = tokenId.toString().padStart(4, '0');
+                imageURL = "https://larvalabs.com/public/images/cryptopunks/punk".concat(paddedTokenId, ".png");
+                imageDict[tokenId] = imageURL;
+              }
+
+            case 7:
+              tokenId++;
+              _context.next = 2;
+              break;
+
+            case 10:
+              setImageDict("PUNK", imageDict);
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchImagesPUNK() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var fetchImagesBAYC = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var imageDict, tokenId, owner, response, data, imageIPFS, imageURL;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              imageDict = {};
+              tokenId = 0;
+
+            case 2:
+              if (!(tokenId < 6)) {
+                _context2.next = 19;
+                break;
+              }
+
+              _context2.next = 5;
+              return nftContract["BAYC"].ownerOf(tokenId);
+
+            case 5:
+              owner = _context2.sent;
+
+              if (!(owner == account)) {
+                _context2.next = 16;
+                break;
+              }
+
+              _context2.next = 9;
+              return fetch("https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/".concat(tokenId));
+
+            case 9:
+              response = _context2.sent;
+              _context2.next = 12;
+              return response.json();
+
+            case 12:
+              data = _context2.sent;
+              imageIPFS = data["image"];
+              imageURL = "https://ipfs.io/ipfs/".concat(imageIPFS.split("//")[1]);
+              imageDict[tokenId] = imageURL;
+
+            case 16:
+              tokenId++;
+              _context2.next = 2;
+              break;
+
+            case 19:
+              setImageDict("BAYC", imageDict);
+
+            case 20:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function fetchImagesBAYC() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var fetchImagesBorrow = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+      var imageDict;
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              console.log('fetchImagesBorrow borrowProject', borrowProject);
+              imageDict = {};
+
+              if (borrowProject == "PUNK") {
+                imageDictPUNK, _readOnlyError("imageDict");
+                console.log("PUNK-");
+              } // else if (borrowProject == "BAYC") {
+              //     imageDict = imageDictBAYC;
+              //     console.log("BAYC-");
+              // }
+
+
+              setImageDict("BORROW", imageDict);
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function fetchImagesBorrow() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  return {
+    fetchImagesPUNK: fetchImagesPUNK,
+    fetchImagesBAYC: fetchImagesBAYC,
+    fetchImagesBorrow: fetchImagesBorrow,
+    imageDictPUNK: imageDictPUNK,
+    imageDictBAYC: imageDictBAYC,
+    nftAddressSymbolDict: nftAddressSymbolDict,
+    nftContract: nftContract
+  };
+};
+
+exports.useNFT = useNFT;
+var _default = useNFT;
+exports.default = _default;
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/NFT.sol/NFT.json":"../v1-core/artifacts/contracts/NFT.sol/NFT.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js"}],"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":[function(require,module,exports) {
 module.exports = {
   "_format": "hh-sol-artifact-1",
   "contractName": "AssetToken",
@@ -60444,7 +61298,526 @@ var useAssetToken = function useAssetToken() {
 exports.useAssetToken = useAssetToken;
 var _default = useAssetToken;
 exports.default = _default;
-},{"@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json","../AppContext":"AppContext.js"}],"hooks/useLendingPool.js":[function(require,module,exports) {
+},{"@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json","../AppContext":"AppContext.js"}],"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":[function(require,module,exports) {
+module.exports = {
+  "_format": "hh-sol-artifact-1",
+  "contractName": "CollateralManager",
+  "sourceName": "contracts/CollateralManager.sol",
+  "abi": [{
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "id",
+      "type": "uint256"
+    }],
+    "name": "DepositCollateral",
+    "type": "event"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "id",
+      "type": "uint256"
+    }],
+    "name": "WithdrawCollateral",
+    "type": "event"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "borrows",
+    "outputs": [{
+      "components": [{
+        "internalType": "address",
+        "name": "erc721Token",
+        "type": "address"
+      }, {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }],
+      "internalType": "struct CollateralManager.Collateral",
+      "name": "collateral",
+      "type": "tuple"
+    }, {
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "erc20Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "repaymentAmount",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "liquidationPrice",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "maturity",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "erc20Token",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "repaymentAmount",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "collateralIndexPrice",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "maturity",
+      "type": "uint256"
+    }],
+    "name": "deposit",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "payable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }],
+    "name": "getInterestRate",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "_erc721Token",
+      "type": "address"
+    }],
+    "name": "getLiquidationThreshold",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "user",
+      "type": "address"
+    }],
+    "name": "getUserBorrows",
+    "outputs": [{
+      "internalType": "uint256[]",
+      "name": "",
+      "type": "uint256[]"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "getWhitelist",
+    "outputs": [{
+      "internalType": "address[]",
+      "name": "",
+      "type": "address[]"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "interestRates",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "liquidationThresholds",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }, {
+      "internalType": "bytes",
+      "name": "",
+      "type": "bytes"
+    }],
+    "name": "onERC721Received",
+    "outputs": [{
+      "internalType": "bytes4",
+      "name": "",
+      "type": "bytes4"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "internalType": "address payable",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "interestRate",
+      "type": "uint256"
+    }],
+    "name": "setInterestRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "_erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "_threshold",
+      "type": "uint256"
+    }],
+    "name": "setLiquidationThreshold",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "bool",
+      "name": "isWhitelisted",
+      "type": "bool"
+    }],
+    "name": "updateWhitelist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "userBorrows",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "whitelist",
+    "outputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "whitelisted",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "_id",
+      "type": "uint256"
+    }, {
+      "internalType": "address",
+      "name": "_asset",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "_repaymentAmount",
+      "type": "uint256"
+    }],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }],
+  "bytecode": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061226f806100606000396000f3fe6080604052600436106100fe5760003560e01c80637b86e42c11610095578063d01f63f511610064578063d01f63f514610389578063d3ea0f89146103b4578063d936547e146103f1578063dccda03d1461042e578063e63697c81461046b576100fe565b80637b86e42c146102a75780637ebd1b30146102e45780638da5cb5b14610321578063b696bdf91461034c576100fe565b8063338a1996116100d1578063338a1996146101d45780633b12b9d61461021157806373e5515e14610241578063783274381461026a576100fe565b80630d392cd9146101035780630e30428d1461012c578063150b7a0214610155578063191e9d7c14610192575b600080fd5b34801561010f57600080fd5b5061012a600480360381019061012591906118f1565b610494565b005b34801561013857600080fd5b50610153600480360381019061014e919061192d565b61081a565b005b34801561016157600080fd5b5061017c60048036038101906101779190611876565b6108f0565b6040516101899190611d02565b60405180910390f35b34801561019e57600080fd5b506101b960048036038101906101b49190611969565b610904565b6040516101cb96959493929190611d9d565b60405180910390f35b3480156101e057600080fd5b506101fb60048036038101906101f691906117af565b6109ea565b6040516102089190611cc5565b60405180910390f35b61022b600480360381019061022691906117d8565b610a81565b6040516102389190611ce7565b60405180910390f35b34801561024d57600080fd5b506102686004803603810190610263919061192d565b610e0a565b005b34801561027657600080fd5b50610291600480360381019061028c91906117af565b610ee0565b60405161029e9190611dfe565b60405180910390f35b3480156102b357600080fd5b506102ce60048036038101906102c991906117af565b610ef8565b6040516102db9190611dfe565b60405180910390f35b3480156102f057600080fd5b5061030b60048036038101906103069190611969565b610f41565b6040516103189190611bf1565b60405180910390f35b34801561032d57600080fd5b50610336610f80565b6040516103439190611c0c565b60405180910390f35b34801561035857600080fd5b50610373600480360381019061036e919061192d565b610fa4565b6040516103809190611dfe565b60405180910390f35b34801561039557600080fd5b5061039e610fd5565b6040516103ab9190611ca3565b60405180910390f35b3480156103c057600080fd5b506103db60048036038101906103d691906117af565b611063565b6040516103e89190611dfe565b60405180910390f35b3480156103fd57600080fd5b50610418600480360381019061041391906117af565b6110ac565b6040516104259190611ce7565b60405180910390f35b34801561043a57600080fd5b50610455600480360381019061045091906117af565b6110cc565b6040516104629190611dfe565b60405180910390f35b34801561047757600080fd5b50610492600480360381019061048d9190611992565b6110e4565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610522576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161051990611d7d565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff02191690831515021790555080156105e7576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610816565b60005b60016007805490506105fc9190611f23565b811015610814578273ffffffffffffffffffffffffffffffffffffffff1660078281548110610654577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561080157600760016007805490506106af9190611f23565b815481106106e6577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166007828154811061074b577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060078054806107cb577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061080c9061201d565b9150506105ea565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161089f90611d7d565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154905086565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610a7557602002820191906000526020600020905b815481526020019060010190808311610a61575b50505050509050919050565b6000600660008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610b0f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b0690611d5d565b60405180910390fd5b8573ffffffffffffffffffffffffffffffffffffffff166323b872dd8930886040518463ffffffff1660e01b8152600401610b4c93929190611c27565b600060405180830381600087803b158015610b6657600080fd5b505af1158015610b7a573d6000803e3d6000fd5b505050506000610b8a60016113f3565b90506000610ba9610b9a89610ef8565b8661140190919063ffffffff16565b90506040518060c0016040528060405180604001604052808b73ffffffffffffffffffffffffffffffffffffffff1681526020018a81525081526020018b73ffffffffffffffffffffffffffffffffffffffff1681526020018a73ffffffffffffffffffffffffffffffffffffffff168152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a08201518160060155905050600360008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610dbc6001611417565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8a898985604051610df19493929190611c5e565b60405180910390a1600192505050979650505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610e98576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8f90611d7d565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610f5157600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60036020528160005260406000208181548110610fc057600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561105957602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001906001019080831161100f575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206004015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146111a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161119f90611d1d565b60405180910390fd5b8281146111ea576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016111e190611d3d565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600482016000905560058201600090556006820160009055505061133d838961142d565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161137a93929190611c27565b600060405180830381600087803b15801561139457600080fd5b505af11580156113a8573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516113e19493929190611c5e565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361140f9190611ef2565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061147f9190611f23565b8110156117035781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002082815481106114fe577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156116f057600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061159d9190611f23565b815481106115d4577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611656577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806116d9577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b80806116fb9061201d565b915050611430565b505050565b600061171b61171684611e3e565b611e19565b90508281526020810184848401111561173357600080fd5b61173e848285611fdd565b509392505050565b600081359050611755816121f4565b92915050565b60008135905061176a8161220b565b92915050565b600082601f83011261178157600080fd5b8135611791848260208601611708565b91505092915050565b6000813590506117a981612222565b92915050565b6000602082840312156117c157600080fd5b60006117cf84828501611746565b91505092915050565b600080600080600080600060e0888a0312156117f357600080fd5b60006118018a828b01611746565b97505060206118128a828b01611746565b96505060406118238a828b01611746565b95505060606118348a828b0161179a565b94505060806118458a828b0161179a565b93505060a06118568a828b0161179a565b92505060c06118678a828b0161179a565b91505092959891949750929550565b6000806000806080858703121561188c57600080fd5b600061189a87828801611746565b94505060206118ab87828801611746565b93505060406118bc8782880161179a565b925050606085013567ffffffffffffffff8111156118d957600080fd5b6118e587828801611770565b91505092959194509250565b6000806040838503121561190457600080fd5b600061191285828601611746565b92505060206119238582860161175b565b9150509250929050565b6000806040838503121561194057600080fd5b600061194e85828601611746565b925050602061195f8582860161179a565b9150509250929050565b60006020828403121561197b57600080fd5b60006119898482850161179a565b91505092915050565b6000806000606084860312156119a757600080fd5b60006119b58682870161179a565b93505060206119c686828701611746565b92505060406119d78682870161179a565b9150509250925092565b60006119ed8383611a20565b60208301905092915050565b6000611a058383611bd3565b60208301905092915050565b611a1a81611f69565b82525050565b611a2981611f57565b82525050565b611a3881611f57565b82525050565b6000611a4982611e8f565b611a538185611ebf565b9350611a5e83611e6f565b8060005b83811015611a8f578151611a7688826119e1565b9750611a8183611ea5565b925050600181019050611a62565b5085935050505092915050565b6000611aa782611e9a565b611ab18185611ed0565b9350611abc83611e7f565b8060005b83811015611aed578151611ad488826119f9565b9750611adf83611eb2565b925050600181019050611ac0565b5085935050505092915050565b611b0381611f7b565b82525050565b611b1281611f87565b82525050565b6000611b25602483611ee1565b9150611b3082612104565b604082019050919050565b6000611b48602583611ee1565b9150611b5382612153565b604082019050919050565b6000611b6b601383611ee1565b9150611b76826121a2565b602082019050919050565b6000611b8e600a83611ee1565b9150611b99826121cb565b602082019050919050565b604082016000820151611bba6000850182611a20565b506020820151611bcd6020850182611bd3565b50505050565b611bdc81611fd3565b82525050565b611beb81611fd3565b82525050565b6000602082019050611c066000830184611a2f565b92915050565b6000602082019050611c216000830184611a11565b92915050565b6000606082019050611c3c6000830186611a2f565b611c496020830185611a2f565b611c566040830184611be2565b949350505050565b6000608082019050611c736000830187611a2f565b611c806020830186611a2f565b611c8d6040830185611be2565b611c9a6060830184611be2565b95945050505050565b60006020820190508181036000830152611cbd8184611a3e565b905092915050565b60006020820190508181036000830152611cdf8184611a9c565b905092915050565b6000602082019050611cfc6000830184611afa565b92915050565b6000602082019050611d176000830184611b09565b92915050565b60006020820190508181036000830152611d3681611b18565b9050919050565b60006020820190508181036000830152611d5681611b3b565b9050919050565b60006020820190508181036000830152611d7681611b5e565b9050919050565b60006020820190508181036000830152611d9681611b81565b9050919050565b600060e082019050611db26000830189611ba4565b611dbf6040830188611a2f565b611dcc6060830187611a2f565b611dd96080830186611be2565b611de660a0830185611be2565b611df360c0830184611be2565b979650505050505050565b6000602082019050611e136000830184611be2565b92915050565b6000611e23611e34565b9050611e2f8282611fec565b919050565b6000604051905090565b600067ffffffffffffffff821115611e5957611e586120c4565b5b611e62826120f3565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b6000611efd82611fd3565b9150611f0883611fd3565b925082611f1857611f17612095565b5b828204905092915050565b6000611f2e82611fd3565b9150611f3983611fd3565b925082821015611f4c57611f4b612066565b5b828203905092915050565b6000611f6282611fb3565b9050919050565b6000611f7482611fb3565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b611ff5826120f3565b810181811067ffffffffffffffff82111715612014576120136120c4565b5b80604052505050565b600061202882611fd3565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561205b5761205a612066565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6121fd81611f57565b811461220857600080fd5b50565b61221481611f7b565b811461221f57600080fd5b50565b61222b81611fd3565b811461223657600080fd5b5056fea2646970667358221220b7b476a114e82dda94c987ac771bbb66262078ae40847e2f972e98bc9a37cb2f64736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600436106100fe5760003560e01c80637b86e42c11610095578063d01f63f511610064578063d01f63f514610389578063d3ea0f89146103b4578063d936547e146103f1578063dccda03d1461042e578063e63697c81461046b576100fe565b80637b86e42c146102a75780637ebd1b30146102e45780638da5cb5b14610321578063b696bdf91461034c576100fe565b8063338a1996116100d1578063338a1996146101d45780633b12b9d61461021157806373e5515e14610241578063783274381461026a576100fe565b80630d392cd9146101035780630e30428d1461012c578063150b7a0214610155578063191e9d7c14610192575b600080fd5b34801561010f57600080fd5b5061012a600480360381019061012591906118f1565b610494565b005b34801561013857600080fd5b50610153600480360381019061014e919061192d565b61081a565b005b34801561016157600080fd5b5061017c60048036038101906101779190611876565b6108f0565b6040516101899190611d02565b60405180910390f35b34801561019e57600080fd5b506101b960048036038101906101b49190611969565b610904565b6040516101cb96959493929190611d9d565b60405180910390f35b3480156101e057600080fd5b506101fb60048036038101906101f691906117af565b6109ea565b6040516102089190611cc5565b60405180910390f35b61022b600480360381019061022691906117d8565b610a81565b6040516102389190611ce7565b60405180910390f35b34801561024d57600080fd5b506102686004803603810190610263919061192d565b610e0a565b005b34801561027657600080fd5b50610291600480360381019061028c91906117af565b610ee0565b60405161029e9190611dfe565b60405180910390f35b3480156102b357600080fd5b506102ce60048036038101906102c991906117af565b610ef8565b6040516102db9190611dfe565b60405180910390f35b3480156102f057600080fd5b5061030b60048036038101906103069190611969565b610f41565b6040516103189190611bf1565b60405180910390f35b34801561032d57600080fd5b50610336610f80565b6040516103439190611c0c565b60405180910390f35b34801561035857600080fd5b50610373600480360381019061036e919061192d565b610fa4565b6040516103809190611dfe565b60405180910390f35b34801561039557600080fd5b5061039e610fd5565b6040516103ab9190611ca3565b60405180910390f35b3480156103c057600080fd5b506103db60048036038101906103d691906117af565b611063565b6040516103e89190611dfe565b60405180910390f35b3480156103fd57600080fd5b50610418600480360381019061041391906117af565b6110ac565b6040516104259190611ce7565b60405180910390f35b34801561043a57600080fd5b50610455600480360381019061045091906117af565b6110cc565b6040516104629190611dfe565b60405180910390f35b34801561047757600080fd5b50610492600480360381019061048d9190611992565b6110e4565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610522576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161051990611d7d565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff02191690831515021790555080156105e7576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610816565b60005b60016007805490506105fc9190611f23565b811015610814578273ffffffffffffffffffffffffffffffffffffffff1660078281548110610654577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561080157600760016007805490506106af9190611f23565b815481106106e6577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166007828154811061074b577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060078054806107cb577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061080c9061201d565b9150506105ea565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161089f90611d7d565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154905086565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610a7557602002820191906000526020600020905b815481526020019060010190808311610a61575b50505050509050919050565b6000600660008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610b0f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b0690611d5d565b60405180910390fd5b8573ffffffffffffffffffffffffffffffffffffffff166323b872dd8930886040518463ffffffff1660e01b8152600401610b4c93929190611c27565b600060405180830381600087803b158015610b6657600080fd5b505af1158015610b7a573d6000803e3d6000fd5b505050506000610b8a60016113f3565b90506000610ba9610b9a89610ef8565b8661140190919063ffffffff16565b90506040518060c0016040528060405180604001604052808b73ffffffffffffffffffffffffffffffffffffffff1681526020018a81525081526020018b73ffffffffffffffffffffffffffffffffffffffff1681526020018a73ffffffffffffffffffffffffffffffffffffffff168152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a08201518160060155905050600360008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610dbc6001611417565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8a898985604051610df19493929190611c5e565b60405180910390a1600192505050979650505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610e98576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8f90611d7d565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610f5157600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60036020528160005260406000208181548110610fc057600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561105957602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001906001019080831161100f575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206004015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146111a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161119f90611d1d565b60405180910390fd5b8281146111ea576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016111e190611d3d565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600482016000905560058201600090556006820160009055505061133d838961142d565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161137a93929190611c27565b600060405180830381600087803b15801561139457600080fd5b505af11580156113a8573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516113e19493929190611c5e565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361140f9190611ef2565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061147f9190611f23565b8110156117035781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002082815481106114fe577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156116f057600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061159d9190611f23565b815481106115d4577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611656577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806116d9577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b80806116fb9061201d565b915050611430565b505050565b600061171b61171684611e3e565b611e19565b90508281526020810184848401111561173357600080fd5b61173e848285611fdd565b509392505050565b600081359050611755816121f4565b92915050565b60008135905061176a8161220b565b92915050565b600082601f83011261178157600080fd5b8135611791848260208601611708565b91505092915050565b6000813590506117a981612222565b92915050565b6000602082840312156117c157600080fd5b60006117cf84828501611746565b91505092915050565b600080600080600080600060e0888a0312156117f357600080fd5b60006118018a828b01611746565b97505060206118128a828b01611746565b96505060406118238a828b01611746565b95505060606118348a828b0161179a565b94505060806118458a828b0161179a565b93505060a06118568a828b0161179a565b92505060c06118678a828b0161179a565b91505092959891949750929550565b6000806000806080858703121561188c57600080fd5b600061189a87828801611746565b94505060206118ab87828801611746565b93505060406118bc8782880161179a565b925050606085013567ffffffffffffffff8111156118d957600080fd5b6118e587828801611770565b91505092959194509250565b6000806040838503121561190457600080fd5b600061191285828601611746565b92505060206119238582860161175b565b9150509250929050565b6000806040838503121561194057600080fd5b600061194e85828601611746565b925050602061195f8582860161179a565b9150509250929050565b60006020828403121561197b57600080fd5b60006119898482850161179a565b91505092915050565b6000806000606084860312156119a757600080fd5b60006119b58682870161179a565b93505060206119c686828701611746565b92505060406119d78682870161179a565b9150509250925092565b60006119ed8383611a20565b60208301905092915050565b6000611a058383611bd3565b60208301905092915050565b611a1a81611f69565b82525050565b611a2981611f57565b82525050565b611a3881611f57565b82525050565b6000611a4982611e8f565b611a538185611ebf565b9350611a5e83611e6f565b8060005b83811015611a8f578151611a7688826119e1565b9750611a8183611ea5565b925050600181019050611a62565b5085935050505092915050565b6000611aa782611e9a565b611ab18185611ed0565b9350611abc83611e7f565b8060005b83811015611aed578151611ad488826119f9565b9750611adf83611eb2565b925050600181019050611ac0565b5085935050505092915050565b611b0381611f7b565b82525050565b611b1281611f87565b82525050565b6000611b25602483611ee1565b9150611b3082612104565b604082019050919050565b6000611b48602583611ee1565b9150611b5382612153565b604082019050919050565b6000611b6b601383611ee1565b9150611b76826121a2565b602082019050919050565b6000611b8e600a83611ee1565b9150611b99826121cb565b602082019050919050565b604082016000820151611bba6000850182611a20565b506020820151611bcd6020850182611bd3565b50505050565b611bdc81611fd3565b82525050565b611beb81611fd3565b82525050565b6000602082019050611c066000830184611a2f565b92915050565b6000602082019050611c216000830184611a11565b92915050565b6000606082019050611c3c6000830186611a2f565b611c496020830185611a2f565b611c566040830184611be2565b949350505050565b6000608082019050611c736000830187611a2f565b611c806020830186611a2f565b611c8d6040830185611be2565b611c9a6060830184611be2565b95945050505050565b60006020820190508181036000830152611cbd8184611a3e565b905092915050565b60006020820190508181036000830152611cdf8184611a9c565b905092915050565b6000602082019050611cfc6000830184611afa565b92915050565b6000602082019050611d176000830184611b09565b92915050565b60006020820190508181036000830152611d3681611b18565b9050919050565b60006020820190508181036000830152611d5681611b3b565b9050919050565b60006020820190508181036000830152611d7681611b5e565b9050919050565b60006020820190508181036000830152611d9681611b81565b9050919050565b600060e082019050611db26000830189611ba4565b611dbf6040830188611a2f565b611dcc6060830187611a2f565b611dd96080830186611be2565b611de660a0830185611be2565b611df360c0830184611be2565b979650505050505050565b6000602082019050611e136000830184611be2565b92915050565b6000611e23611e34565b9050611e2f8282611fec565b919050565b6000604051905090565b600067ffffffffffffffff821115611e5957611e586120c4565b5b611e62826120f3565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b6000611efd82611fd3565b9150611f0883611fd3565b925082611f1857611f17612095565b5b828204905092915050565b6000611f2e82611fd3565b9150611f3983611fd3565b925082821015611f4c57611f4b612066565b5b828203905092915050565b6000611f6282611fb3565b9050919050565b6000611f7482611fb3565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b611ff5826120f3565b810181811067ffffffffffffffff82111715612014576120136120c4565b5b80604052505050565b600061202882611fd3565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561205b5761205a612066565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6121fd81611f57565b811461220857600080fd5b50565b61221481611f7b565b811461221f57600080fd5b50565b61222b81611fd3565b811461223657600080fd5b5056fea2646970667358221220b7b476a114e82dda94c987ac771bbb66262078ae40847e2f972e98bc9a37cb2f64736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+};
+},{}],"hooks/useCollateralManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useCollateralManager = exports.default = void 0;
+
+var _useContract = require("./useContract");
+
+var _CollateralManager = _interopRequireDefault(require("../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json"));
+
+var _core = require("@web3-react/core");
+
+var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
+
+var _AppContext = require("../AppContext");
+
+var _units = require("@ethersproject/units");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var useCollateralManager = function useCollateralManager() {
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
+      isValidNetwork = _useIsValidNetwork.isValidNetwork;
+
+  var collateralManagerContractAddress = "0x0B32a3F8f5b7E5d315b9E52E640a49A89d89c820";
+  var collateralManagerABI = _CollateralManager.default["abi"];
+  var collateralManagerContract = (0, _useContract.useContract)(collateralManagerContractAddress, collateralManagerABI); // NFT contract data (c&p from hooks/useNFT.js)
+
+  var nftContractAddressPUNK = "0x4c04377f90Eb1E42D845AB21De874803B8773669";
+  var nftContractAddressBAYC = "0xf93b0549cD50c849D792f0eAE94A598fA77C7718";
+  var nftContractAddress = {
+    "PUNK": nftContractAddressPUNK,
+    "BAYC": nftContractAddressBAYC
+  };
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      setWhitelistNFT = _useAppContext.setWhitelistNFT,
+      whitelistNFT = _useAppContext.whitelistNFT,
+      setAprPUNK = _useAppContext.setAprPUNK,
+      setAprBAYC = _useAppContext.setAprBAYC,
+      aprPUNK = _useAppContext.aprPUNK,
+      aprBAYC = _useAppContext.aprBAYC,
+      setBorrowAPR = _useAppContext.setBorrowAPR;
+
+  var fetchWhitelistNFT = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var whitelist;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return collateralManagerContract.getWhitelist();
+
+            case 2:
+              whitelist = _context.sent;
+              setWhitelistNFT(whitelist);
+              console.log(whitelist);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchWhitelistNFT() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var fetchAPR = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var aprPUNK, aprBAYC;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return collateralManagerContract.getInterestRate(nftContractAddress["PUNK"]);
+
+            case 2:
+              aprPUNK = _context2.sent;
+              _context2.next = 5;
+              return collateralManagerContract.getInterestRate(nftContractAddress["BAYC"]);
+
+            case 5:
+              aprBAYC = _context2.sent;
+              setAprPUNK((0, _units.formatUnits)(aprPUNK, 0));
+              setAprBAYC((0, _units.formatUnits)(aprBAYC, 0));
+
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function fetchAPR() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var fetchBorrowAPR = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(nftSymbol) {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (nftSymbol == "PUNK") {
+                setBorrowAPR(aprPUNK);
+              } else if (nftSymbol == "BAYC") {
+                setBorrowAPR(aprBAYC);
+              }
+
+            case 1:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function fetchBorrowAPR(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  return {
+    fetchWhitelistNFT: fetchWhitelistNFT,
+    whitelistNFT: whitelistNFT,
+    fetchAPR: fetchAPR,
+    fetchBorrowAPR: fetchBorrowAPR,
+    collateralManagerContractAddress: collateralManagerContractAddress
+  };
+};
+
+exports.useCollateralManager = useCollateralManager;
+var _default = useCollateralManager;
+exports.default = _default;
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js"}],"hooks/useLendingPool.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60464,7 +61837,11 @@ var _AppContext = require("../AppContext");
 
 var _useNToken2 = _interopRequireDefault(require("./useNToken"));
 
+var _useNFT2 = _interopRequireDefault(require("./useNFT"));
+
 var _useAssetToken2 = _interopRequireDefault(require("./useAssetToken"));
+
+var _useCollateralManager2 = _interopRequireDefault(require("./useCollateralManager"));
 
 var _units = require("@ethersproject/units");
 
@@ -60497,6 +61874,18 @@ var useLendingPool = function useLendingPool() {
   var _useAssetToken = (0, _useAssetToken2.default)(),
       assetTokenContract = _useAssetToken.assetTokenContract,
       assetTokenContractAddress = _useAssetToken.assetTokenContractAddress;
+
+  var _useNFT = (0, _useNFT2.default)(),
+      nftContract = _useNFT.nftContract;
+
+  var _useCollateralManager = (0, _useCollateralManager2.default)(),
+      collateralManagerContractAddress = _useCollateralManager.collateralManagerContractAddress;
+
+  function wait(seconds) {
+    return new Promise(function (res) {
+      return setTimeout(res, seconds * 1000);
+    });
+  }
 
   var fetchBorrowFloorPrice = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
@@ -60536,7 +61925,7 @@ var useLendingPool = function useLendingPool() {
               console.log('deposit called');
 
               if (!(account && isValidNetwork)) {
-                _context2.next = 23;
+                _context2.next = 26;
                 break;
               }
 
@@ -60564,21 +61953,26 @@ var useLendingPool = function useLendingPool() {
 
             case 16:
               setTxnStatus("COMPLETE");
-              _context2.next = 23;
-              break;
+              _context2.next = 19;
+              return wait(5);
 
             case 19:
-              _context2.prev = 19;
+              setTxnStatus("");
+              _context2.next = 26;
+              break;
+
+            case 22:
+              _context2.prev = 22;
               _context2.t0 = _context2["catch"](2);
               setTxnStatus("ERROR");
               console.log('ERROR', _context2.t0);
 
-            case 23:
+            case 26:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[2, 19]]);
+      }, _callee2, null, [[2, 22]]);
     }));
 
     return function deposit(_x, _x2) {
@@ -60650,18 +62044,79 @@ var useLendingPool = function useLendingPool() {
     };
   }();
 
+  var borrow = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(tokenSymbol, tokenAmount, nftTokenSymbol, nftTokenId, interestRate, numWeeks) {
+      var nftTokenContract, tokenContractAddress, txn;
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              console.log('borrow called');
+
+              if (!(account && isValidNetwork)) {
+                _context4.next = 24;
+                break;
+              }
+
+              _context4.prev = 2;
+              setTxnStatus("LOADING");
+              console.log('APPROVING');
+              nftTokenContract = nftContract[nftTokenSymbol];
+              _context4.next = 8;
+              return nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
+
+            case 8:
+              setTxnStatus("LOADING");
+              console.log('LOADING');
+              tokenContractAddress = assetTokenContractAddress[tokenSymbol];
+              _context4.next = 13;
+              return lendingPoolContract.borrow(tokenContractAddress, (0, _units.parseUnits)(tokenAmount, 18), nftTokenContract.address, nftTokenId, interestRate, numWeeks);
+
+            case 13:
+              txn = _context4.sent;
+              _context4.next = 16;
+              return txn.wait(1);
+
+            case 16:
+              // TODO: implement useDebtToken
+              // await fetchDebtTokenBalance(tokenSymbol);
+              setTxnStatus("COMPLETE");
+              console.log('COMPLETE');
+              _context4.next = 24;
+              break;
+
+            case 20:
+              _context4.prev = 20;
+              _context4.t0 = _context4["catch"](2);
+              setTxnStatus("ERROR");
+              console.log('ERROR', _context4.t0);
+
+            case 24:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[2, 20]]);
+    }));
+
+    return function borrow(_x5, _x6, _x7, _x8, _x9, _x10) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
   return {
     fetchBorrowFloorPrice: fetchBorrowFloorPrice,
     borrowFloorPrice: borrowFloorPrice,
     deposit: deposit,
-    withdraw: withdraw
+    withdraw: withdraw,
+    borrow: borrow
   };
 };
 
 exports.useLendingPool = useLendingPool;
 var _default = useLendingPool;
 exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json":"../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js","./useNToken":"hooks/useNToken.js","./useAssetToken":"hooks/useAssetToken.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js"}],"node_modules/classnames/index.js":[function(require,module,exports) {
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json":"../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js","./useNToken":"hooks/useNToken.js","./useNFT":"hooks/useNFT.js","./useAssetToken":"hooks/useAssetToken.js","./useCollateralManager":"hooks/useCollateralManager.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js"}],"node_modules/classnames/index.js":[function(require,module,exports) {
 var define;
 /*!
   Copyright (c) 2018 Jed Watson.
@@ -78845,7 +80300,12 @@ var TransactionStatus = function TransactionStatus() {
       show: "true"
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "transaction-status"
-    }, "Loading.."));
+    }, /*#__PURE__*/_react.default.createElement(_reactBootstrap.Spinner, {
+      animation: "border",
+      role: "status"
+    }, /*#__PURE__*/_react.default.createElement("span", {
+      className: "visually-hidden"
+    }, "Loading..."))));
   }
 
   if (txnStatus === 'COMPLETE') {
@@ -78926,7 +80386,7 @@ function PopUp(props) {
       deposit = _useLendingPool.deposit;
 
   var _useTransaction = (0, _useTransaction2.default)(),
-      xnStatus = _useTransaction.xnStatus;
+      txnStatus = _useTransaction.txnStatus;
 
   var _useState = (0, _react.useState)(""),
       _useState2 = _slicedToArray(_useState, 2),
@@ -79453,7 +80913,228 @@ function Dashboard(props) {
 
 var _default = Dashboard;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","../Header":"components/Header/index.jsx","../Background":"components/Background/index.jsx","../BorrowsHeader":"components/BorrowsHeader/index.jsx","../Borrow":"components/Borrow/index.jsx","../Lends":"components/Lends/index.jsx","./Dashboard.css":"components/Dashboard/Dashboard.css"}],"components/Instructions/Instructions.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../Header":"components/Header/index.jsx","../Background":"components/Background/index.jsx","../BorrowsHeader":"components/BorrowsHeader/index.jsx","../Borrow":"components/Borrow/index.jsx","../Lends":"components/Lends/index.jsx","./Dashboard.css":"components/Dashboard/Dashboard.css"}],"components/BorrowDataValues/BorrowDataValues.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/BorrowDataValues/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./BorrowDataValues.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function BorrowDataValues(props) {
+  var borrowAmount = props.borrowAmount,
+      address = props.address,
+      className = props.className;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrow-data-floor-price-borrowPopUpData oxanium-normal-black-20px ".concat(className || "")
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrow-amount-borrowPopUpData valign-text-middle"
+  }, borrowAmount), /*#__PURE__*/_react.default.createElement("div", {
+    className: "address-borrowPopUpData valign-text-middle"
+  }, address, " Weeks"));
+}
+
+var _default = BorrowDataValues;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./BorrowDataValues.css":"components/BorrowDataValues/BorrowDataValues.css"}],"components/BorrowDataAmounts/BorrowDataAmounts.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/BorrowDataAmounts/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./BorrowDataAmounts.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function BorrowDataAmounts(props) {
+  var borrowAmount = props.borrowAmount,
+      amount = props.amount,
+      token = props.token,
+      className = props.className;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrow-data-floor-price-borrowPopUpData oxanium-normal-black-20px ".concat(className || "")
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrow-amount-borrowPopUpData valign-text-middle"
+  }, borrowAmount), /*#__PURE__*/_react.default.createElement("div", {
+    className: "address-borrowPopUpData valign-text-middle"
+  }, amount, " ", token));
+}
+
+var _default = BorrowDataAmounts;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./BorrowDataAmounts.css":"components/BorrowDataAmounts/BorrowDataAmounts.css"}],"components/PopUpBorrow/PopUpBorrow.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpBorrow/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _BorrowDataValues = _interopRequireDefault(require("../BorrowDataValues"));
+
+var _BorrowDataAmounts = _interopRequireDefault(require("../BorrowDataAmounts"));
+
+require("./PopUpBorrow.css");
+
+var _AppContext = require("../../AppContext");
+
+var _useTransaction2 = _interopRequireDefault(require("../../hooks/useTransaction"));
+
+var _core = require("@web3-react/core");
+
+var _useNFT2 = _interopRequireDefault(require("../../hooks/useNFT"));
+
+var _useLendingPool2 = _interopRequireDefault(require("../../hooks/useLendingPool"));
+
+var _TransactionStatus = _interopRequireDefault(require("../TransactionStatus"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function PopUpBorrow(props) {
+  var nftAvatar = props.nftAvatar;
+
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useTransaction = (0, _useTransaction2.default)(),
+      txnStatus = _useTransaction.txnStatus;
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      borrowProject = _useAppContext.borrowProject,
+      borrowNFT = _useAppContext.borrowNFT,
+      borrowToken = _useAppContext.borrowToken,
+      borrowAmount = _useAppContext.borrowAmount,
+      borrowAPR = _useAppContext.borrowAPR,
+      borrowCollRatio = _useAppContext.borrowCollRatio,
+      borrowMaturity = _useAppContext.borrowMaturity;
+
+  var _useNFT = (0, _useNFT2.default)(),
+      fetchImagesPUNK = _useNFT.fetchImagesPUNK,
+      fetchImagesBAYC = _useNFT.fetchImagesBAYC,
+      imageDictPUNK = _useNFT.imageDictPUNK,
+      imageDictBAYC = _useNFT.imageDictBAYC;
+
+  var _useLendingPool = (0, _useLendingPool2.default)(),
+      borrow = _useLendingPool.borrow;
+
+  (0, _react.useEffect)(function () {
+    if (account) {
+      txnStatus;
+      fetchImagesPUNK();
+      fetchImagesBAYC();
+    }
+  }, [account]);
+
+  function visible(nftSymbol) {
+    var visibility = "nft-avatar-1-hidden";
+
+    if (nftSymbol == borrowProject) {
+      visibility = "nft-avatar-1-borrowPopUp";
+    }
+
+    return visibility;
+  }
+
+  var handleBorrowSubmit = function handleBorrowSubmit() {
+    console.log('handleBorrowSubmit called');
+    borrow(borrowToken, borrowAmount, borrowProject, borrowNFT, borrowAPR, borrowMaturity);
+  };
+
+  return (
+    /*#__PURE__*/
+    // <div className="container-center-horizontal">
+    _react.default.createElement("div", {
+      className: "overlap-group1-borrowPopUp"
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "pop-up-text-borrowPopUp valign-text-middle oxanium-bold-web-orange-32px"
+    }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
+      className: "oxanium-bold-web-orange-32px"
+    }, "Confirm Borrow."), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("span", {
+      className: "oxanium-extra-light-web-orange-24px"
+    }, "Please confirm borrow to access instant liquidity."))), /*#__PURE__*/_react.default.createElement(_TransactionStatus.default, null), /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-details-borrowPopUp"
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "nft-avatar-borrowPopUp"
+    }, /*#__PURE__*/_react.default.createElement("img", {
+      className: visible("PUNK"),
+      src: imageDictPUNK[borrowNFT]
+    }), /*#__PURE__*/_react.default.createElement("img", {
+      className: visible("BAYC"),
+      src: imageDictBAYC[borrowNFT]
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-data-borrowPopUp oxanium-normal-black-20px"
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-data-collateral-borrowPopUp"
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "collateral-borrowPopUp valign-text-middle"
+    }, "Collateral:"), /*#__PURE__*/_react.default.createElement("div", {
+      className: "fidenza-157-borrowPopUp valign-text-middle"
+    }, borrowProject, "#", borrowNFT)), /*#__PURE__*/_react.default.createElement(_BorrowDataAmounts.default, {
+      borrowAmount: "Borrow Amount",
+      amount: borrowAmount,
+      token: borrowToken
+    }), /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-data-coll-ratio-borrowPopUp"
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "text-1-borrowPopUp valign-text-middle"
+    }, "Collateralization Ratio:"), /*#__PURE__*/_react.default.createElement("div", {
+      className: "percent-borrowPopUp valign-text-middle"
+    }, Number(borrowCollRatio).toFixed(1), "%")), /*#__PURE__*/_react.default.createElement(_BorrowDataValues.default, {
+      borrowAmount: "Maturity",
+      address: borrowMaturity,
+      className: "borrow-data-coll-ratio-1-1"
+    }), /*#__PURE__*/_react.default.createElement(_BorrowDataAmounts.default, {
+      borrowAmount: "Repayment Amount:",
+      amount: String(Number(borrowAmount * (1 + borrowAPR / 100 * borrowMaturity / 52)).toFixed(4)),
+      token: borrowToken,
+      className: "borrow-data-coll-ratio-1"
+    }))), /*#__PURE__*/_react.default.createElement("div", {
+      onClick: handleBorrowSubmit,
+      className: "overlap-group-borrowPopUp"
+    }, /*#__PURE__*/_react.default.createElement("button", {
+      onClick: handleBorrowSubmit,
+      className: "rectangle-47-borrowPopUp"
+    }), /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-borrowPopUp valign-text-middle oxanium-normal-white-24px"
+    }, "Borrow"))) // </div>
+
+  );
+}
+
+var _default = PopUpBorrow;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","../BorrowDataValues":"components/BorrowDataValues/index.jsx","../BorrowDataAmounts":"components/BorrowDataAmounts/index.jsx","./PopUpBorrow.css":"components/PopUpBorrow/PopUpBorrow.css","../../AppContext":"AppContext.js","../../hooks/useTransaction":"hooks/useTransaction.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../../hooks/useNFT":"hooks/useNFT.js","../../hooks/useLendingPool":"hooks/useLendingPool.js","../TransactionStatus":"components/TransactionStatus/index.jsx"}],"components/Instructions/Instructions.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -79664,509 +81345,7 @@ function ItemProject(props) {
 
 var _default = ItemProject;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","../../AppContext":"AppContext.js","./ItemProject.css":"components/ItemProject/ItemProject.css"}],"../v1-core/artifacts/contracts/NFT.sol/NFT.json":[function(require,module,exports) {
-module.exports = {
-  "_format": "hh-sol-artifact-1",
-  "contractName": "NFT",
-  "sourceName": "contracts/NFT.sol",
-  "abi": [{
-    "inputs": [{
-      "internalType": "string",
-      "name": "name",
-      "type": "string"
-    }, {
-      "internalType": "string",
-      "name": "symbol",
-      "type": "string"
-    }],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": true,
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "address",
-      "name": "approved",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "Approval",
-    "type": "event"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": true,
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "address",
-      "name": "operator",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "bool",
-      "name": "approved",
-      "type": "bool"
-    }],
-    "name": "ApprovalForAll",
-    "type": "event"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": true,
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "Transfer",
-    "type": "event"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "approve",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }],
-    "name": "balanceOf",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "getApproved",
-    "outputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "operator",
-      "type": "address"
-    }],
-    "name": "isApprovedForAll",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "mint",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "name",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "ownerOf",
-    "outputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "safeTransferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "internalType": "bytes",
-      "name": "_data",
-      "type": "bytes"
-    }],
-    "name": "safeTransferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "operator",
-      "type": "address"
-    }, {
-      "internalType": "bool",
-      "name": "approved",
-      "type": "bool"
-    }],
-    "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "bytes4",
-      "name": "interfaceId",
-      "type": "bytes4"
-    }],
-    "name": "supportsInterface",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "tokenURI",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "transferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }],
-  "bytecode": "0x60806040523480156200001157600080fd5b5060405162002a1a38038062002a1a833981810160405281019062000037919062000197565b818181600090805190602001906200005192919062000075565b5080600190805190602001906200006a92919062000075565b50505050506200037a565b82805462000083906200029f565b90600052602060002090601f016020900481019282620000a75760008555620000f3565b82601f10620000c257805160ff1916838001178555620000f3565b82800160010185558215620000f3579182015b82811115620000f2578251825591602001919060010190620000d5565b5b50905062000102919062000106565b5090565b5b808211156200012157600081600090555060010162000107565b5090565b60006200013c620001368462000233565b6200020a565b9050828152602081018484840111156200015557600080fd5b6200016284828562000269565b509392505050565b600082601f8301126200017c57600080fd5b81516200018e84826020860162000125565b91505092915050565b60008060408385031215620001ab57600080fd5b600083015167ffffffffffffffff811115620001c657600080fd5b620001d4858286016200016a565b925050602083015167ffffffffffffffff811115620001f257600080fd5b62000200858286016200016a565b9150509250929050565b60006200021662000229565b9050620002248282620002d5565b919050565b6000604051905090565b600067ffffffffffffffff8211156200025157620002506200033a565b5b6200025c8262000369565b9050602081019050919050565b60005b83811015620002895780820151818401526020810190506200026c565b8381111562000299576000848401525b50505050565b60006002820490506001821680620002b857607f821691505b60208210811415620002cf57620002ce6200030b565b5b50919050565b620002e08262000369565b810181811067ffffffffffffffff821117156200030257620003016200033a565b5b80604052505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b612690806200038a6000396000f3fe608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea26469706673582212207bb4ba1ec56e9427950f8656f172cde3a93e11f5771ee9886629b56c96187b8664736f6c63430008040033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea26469706673582212207bb4ba1ec56e9427950f8656f172cde3a93e11f5771ee9886629b56c96187b8664736f6c63430008040033",
-  "linkReferences": {},
-  "deployedLinkReferences": {}
-};
-},{}],"hooks/useNFT.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.useNFT = exports.default = void 0;
-
-var _useContract = require("./useContract");
-
-var _NFT = _interopRequireDefault(require("../../v1-core/artifacts/contracts/NFT.sol/NFT.json"));
-
-var _core = require("@web3-react/core");
-
-var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
-
-var _AppContext = require("../AppContext");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var useNFT = function useNFT() {
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      account = _useWeb3React.account;
-
-  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
-      isValidNetwork = _useIsValidNetwork.isValidNetwork;
-
-  var nftContractAddressPUNK = "0x4c04377f90Eb1E42D845AB21De874803B8773669";
-  var nftContractAddressBAYC = "0xf93b0549cD50c849D792f0eAE94A598fA77C7718";
-  var nftContractABI = _NFT.default["abi"];
-  var nftContractPUNK = (0, _useContract.useContract)(nftContractAddressPUNK, nftContractABI);
-  var nftContractBAYC = (0, _useContract.useContract)(nftContractAddressBAYC, nftContractABI);
-  var nftContract = {
-    "PUNK": nftContractPUNK,
-    "BAYC": nftContractBAYC
-  };
-
-  var _useAppContext = (0, _AppContext.useAppContext)(),
-      setImageDict = _useAppContext.setImageDict,
-      imageDictPUNK = _useAppContext.imageDictPUNK,
-      imageDictBAYC = _useAppContext.imageDictBAYC,
-      borrowProject = _useAppContext.borrowProject;
-
-  var nftAddressSymbolDict = {};
-  nftAddressSymbolDict[nftContractAddressPUNK] = "PUNK";
-  nftAddressSymbolDict[nftContractAddressBAYC] = "BAYC";
-
-  var fetchImagesPUNK = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var imageDict, tokenId, owner, paddedTokenId, imageURL;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              imageDict = {};
-              tokenId = 0;
-
-            case 2:
-              if (!(tokenId < 6)) {
-                _context.next = 10;
-                break;
-              }
-
-              _context.next = 5;
-              return nftContract["PUNK"].ownerOf(tokenId);
-
-            case 5:
-              owner = _context.sent;
-
-              if (owner == account) {
-                paddedTokenId = tokenId.toString().padStart(4, '0');
-                imageURL = "https://larvalabs.com/public/images/cryptopunks/punk".concat(paddedTokenId, ".png");
-                imageDict[tokenId] = imageURL;
-              }
-
-            case 7:
-              tokenId++;
-              _context.next = 2;
-              break;
-
-            case 10:
-              setImageDict("PUNK", imageDict);
-
-            case 11:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function fetchImagesPUNK() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  var fetchImagesBAYC = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var imageDict, tokenId, owner, response, data, imageIPFS, imageURL;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              imageDict = {};
-              tokenId = 0;
-
-            case 2:
-              if (!(tokenId < 6)) {
-                _context2.next = 19;
-                break;
-              }
-
-              _context2.next = 5;
-              return nftContract["BAYC"].ownerOf(tokenId);
-
-            case 5:
-              owner = _context2.sent;
-
-              if (!(owner == account)) {
-                _context2.next = 16;
-                break;
-              }
-
-              _context2.next = 9;
-              return fetch("https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/".concat(tokenId));
-
-            case 9:
-              response = _context2.sent;
-              _context2.next = 12;
-              return response.json();
-
-            case 12:
-              data = _context2.sent;
-              imageIPFS = data["image"];
-              imageURL = "https://ipfs.io/ipfs/".concat(imageIPFS.split("//")[1]);
-              imageDict[tokenId] = imageURL;
-
-            case 16:
-              tokenId++;
-              _context2.next = 2;
-              break;
-
-            case 19:
-              setImageDict("BAYC", imageDict);
-
-            case 20:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function fetchImagesBAYC() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  var fetchImagesBorrow = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-      var imageDict;
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              console.log('fetchImagesBorrow borrowProject', borrowProject);
-              imageDict = {};
-
-              if (borrowProject == "PUNK") {
-                imageDictPUNK, _readOnlyError("imageDict");
-                console.log("PUNK-");
-              } // else if (borrowProject == "BAYC") {
-              //     imageDict = imageDictBAYC;
-              //     console.log("BAYC-");
-              // }
-
-
-              setImageDict("BORROW", imageDict);
-
-            case 4:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function fetchImagesBorrow() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  return {
-    fetchImagesPUNK: fetchImagesPUNK,
-    fetchImagesBAYC: fetchImagesBAYC,
-    fetchImagesBorrow: fetchImagesBorrow,
-    imageDictPUNK: imageDictPUNK,
-    imageDictBAYC: imageDictBAYC,
-    nftAddressSymbolDict: nftAddressSymbolDict
-  };
-};
-
-exports.useNFT = useNFT;
-var _default = useNFT;
-exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/NFT.sol/NFT.json":"../v1-core/artifacts/contracts/NFT.sol/NFT.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js"}],"components/ItemNFT/ItemNFT.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../../AppContext":"AppContext.js","./ItemProject.css":"components/ItemProject/ItemProject.css"}],"components/ItemNFT/ItemNFT.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -80392,34 +81571,41 @@ var _react = _interopRequireDefault(require("react"));
 
 require("./InputDropdown.css");
 
+var _AppContext = require("../../AppContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function InputDropdown(props) {
   var className = props.className;
-  return (
-    /*#__PURE__*/
-    // <div className={`input-dropdown ${className || ""}`}>
-    //   <img className="polygon-1" src="/img/polygon-3@2x.svg" />
-    // </div>
-    // <div className={`input-dropdown ${className || ""}`}>
-    _react.default.createElement("select", {
-      className: "input-dropdown ".concat(className || ""),
-      id: "tokens",
-      name: "tokens"
-    }, /*#__PURE__*/_react.default.createElement("option", {
-      value: "eth"
-    }, "ETH"), /*#__PURE__*/_react.default.createElement("option", {
-      value: "dai"
-    }, "DAI"), /*#__PURE__*/_react.default.createElement("option", {
-      value: "USDC"
-    }, "USDC")) //  </div>
 
-  );
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      setBorrowToken = _useAppContext.setBorrowToken;
+
+  var handleBorrowTokenInput = function handleBorrowTokenInput(value) {
+    setBorrowToken(value);
+    console.log('handleBorrowTokenInput', value);
+  };
+
+  return /*#__PURE__*/_react.default.createElement("select", {
+    onChange: function onChange(e) {
+      return handleBorrowTokenInput(e.target.value);
+    },
+    className: "input-dropdown ".concat(className || ""),
+    id: "tokens",
+    name: "tokens"
+  }, /*#__PURE__*/_react.default.createElement("option", {
+    value: "ETH",
+    defaultChecked: true
+  }, "ETH"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "DAI"
+  }, "DAI"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "USDC"
+  }, "USDC"));
 }
 
 var _default = InputDropdown;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./InputDropdown.css":"components/InputDropdownToken/InputDropdown.css"}],"components/BorrowToken/BorrowToken.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./InputDropdown.css":"components/InputDropdownToken/InputDropdown.css","../../AppContext":"AppContext.js"}],"components/BorrowToken/BorrowToken.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -80527,21 +81713,49 @@ var _reactRouterDom = require("react-router-dom");
 
 require("./ButtonBorrow.css");
 
+var _AppContext = require("../../AppContext");
+
+var _PopUpTokensDeposit = _interopRequireDefault(require("../PopUpTokensDeposit"));
+
+var _PopUpBorrow = _interopRequireDefault(require("../PopUpBorrow"));
+
+var _reactjsPopup = _interopRequireDefault(require("reactjs-popup"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function ButtonBorrow(props) {
   var children = props.children,
       className = props.className;
-  return /*#__PURE__*/_react.default.createElement("button", {
-    className: "borrow-button-deposit-3 ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "borrow-place-9 valign-text-middle oxanium-normal-white-20px"
-  }, children));
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      borrowCollRatio = _useAppContext.borrowCollRatio;
+
+  if (Number(borrowCollRatio) < 150) {
+    return /*#__PURE__*/_react.default.createElement("button", {
+      disabled: true,
+      className: "borrow-button-deposit-3-disabled ".concat(className || "")
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-place-9-disabled valign-text-middle oxanium-normal-white-20px"
+    }, children));
+  } else {
+    var _React$createElement;
+
+    return /*#__PURE__*/_react.default.createElement(_reactjsPopup.default, (_React$createElement = {
+      modal: true,
+      trigger: /*#__PURE__*/_react.default.createElement("button", {
+        className: "borrow-button-deposit-3 ".concat(className || "")
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "borrow-place-9 valign-text-middle oxanium-normal-white-20px"
+      }, children))
+    }, _defineProperty(_React$createElement, "modal", true), _defineProperty(_React$createElement, "nested", true), _React$createElement), /*#__PURE__*/_react.default.createElement(_PopUpBorrow.default, null));
+  }
 }
 
 var _default = ButtonBorrow;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./ButtonBorrow.css":"components/ButtonBorrow/ButtonBorrow.css"}],"components/BorrowDataCollRatio/BorrowDataCollRatio.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./ButtonBorrow.css":"components/ButtonBorrow/ButtonBorrow.css","../../AppContext":"AppContext.js","../PopUpTokensDeposit":"components/PopUpTokensDeposit/index.jsx","../PopUpBorrow":"components/PopUpBorrow/index.jsx","reactjs-popup":"node_modules/reactjs-popup/dist/reactjs-popup.esm.js"}],"components/BorrowDataCollRatio/BorrowDataCollRatio.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -80620,13 +81834,24 @@ function BorrowDataCollRatio(props) {
       borrowCollRatio;
     }
   }, [account]);
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "borrow-data-coll-ratio-2 oxanium-normal-black-20px ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "apr-1 valign-text-middle"
-  }, collateralRatio), /*#__PURE__*/_react.default.createElement("div", {
-    className: "percent-3 valign-text-middle"
-  }, Number(borrowCollRatio).toFixed(1), "%"));
+
+  if (Number(borrowCollRatio) < 150) {
+    return /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-data-coll-ratio-2 oxanium-normal-black-20px ".concat(className || "")
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "apr-1 valign-text-middle"
+    }, collateralRatio), /*#__PURE__*/_react.default.createElement("div", {
+      className: "percent-3-red valign-text-middle"
+    }, Number(borrowCollRatio).toFixed(1), "%"));
+  } else {
+    return /*#__PURE__*/_react.default.createElement("div", {
+      className: "borrow-data-coll-ratio-2 oxanium-normal-black-20px ".concat(className || "")
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "apr-1 valign-text-middle"
+    }, collateralRatio), /*#__PURE__*/_react.default.createElement("div", {
+      className: "percent-3 valign-text-middle"
+    }, Number(borrowCollRatio).toFixed(1), "%"));
+  }
 }
 
 var _default = BorrowDataCollRatio;
@@ -80636,525 +81861,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":[function(require,module,exports) {
-module.exports = {
-  "_format": "hh-sol-artifact-1",
-  "contractName": "CollateralManager",
-  "sourceName": "contracts/CollateralManager.sol",
-  "abi": [{
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": false,
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "id",
-      "type": "uint256"
-    }],
-    "name": "DepositCollateral",
-    "type": "event"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": false,
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "id",
-      "type": "uint256"
-    }],
-    "name": "WithdrawCollateral",
-    "type": "event"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "borrows",
-    "outputs": [{
-      "components": [{
-        "internalType": "address",
-        "name": "erc721Token",
-        "type": "address"
-      }, {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }],
-      "internalType": "struct CollateralManager.Collateral",
-      "name": "collateral",
-      "type": "tuple"
-    }, {
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "erc20Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "repaymentAmount",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "liquidationPrice",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "maturity",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "erc20Token",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "repaymentAmount",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "collateralIndexPrice",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "maturity",
-      "type": "uint256"
-    }],
-    "name": "deposit",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "payable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }],
-    "name": "getInterestRate",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "_erc721Token",
-      "type": "address"
-    }],
-    "name": "getLiquidationThreshold",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "user",
-      "type": "address"
-    }],
-    "name": "getUserBorrows",
-    "outputs": [{
-      "internalType": "uint256[]",
-      "name": "",
-      "type": "uint256[]"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "getWhitelist",
-    "outputs": [{
-      "internalType": "address[]",
-      "name": "",
-      "type": "address[]"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "name": "interestRates",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "name": "liquidationThresholds",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }, {
-      "internalType": "bytes",
-      "name": "",
-      "type": "bytes"
-    }],
-    "name": "onERC721Received",
-    "outputs": [{
-      "internalType": "bytes4",
-      "name": "",
-      "type": "bytes4"
-    }],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "internalType": "address payable",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "interestRate",
-      "type": "uint256"
-    }],
-    "name": "setInterestRate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "_erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "_threshold",
-      "type": "uint256"
-    }],
-    "name": "setLiquidationThreshold",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "bool",
-      "name": "isWhitelisted",
-      "type": "bool"
-    }],
-    "name": "updateWhitelist",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "userBorrows",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "whitelist",
-    "outputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "name": "whitelisted",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "_id",
-      "type": "uint256"
-    }, {
-      "internalType": "address",
-      "name": "_asset",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "_repaymentAmount",
-      "type": "uint256"
-    }],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }],
-  "bytecode": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555061226f806100606000396000f3fe6080604052600436106100fe5760003560e01c80637b86e42c11610095578063d01f63f511610064578063d01f63f514610389578063d3ea0f89146103b4578063d936547e146103f1578063dccda03d1461042e578063e63697c81461046b576100fe565b80637b86e42c146102a75780637ebd1b30146102e45780638da5cb5b14610321578063b696bdf91461034c576100fe565b8063338a1996116100d1578063338a1996146101d45780633b12b9d61461021157806373e5515e14610241578063783274381461026a576100fe565b80630d392cd9146101035780630e30428d1461012c578063150b7a0214610155578063191e9d7c14610192575b600080fd5b34801561010f57600080fd5b5061012a600480360381019061012591906118f1565b610494565b005b34801561013857600080fd5b50610153600480360381019061014e919061192d565b61081a565b005b34801561016157600080fd5b5061017c60048036038101906101779190611876565b6108f0565b6040516101899190611d02565b60405180910390f35b34801561019e57600080fd5b506101b960048036038101906101b49190611969565b610904565b6040516101cb96959493929190611d9d565b60405180910390f35b3480156101e057600080fd5b506101fb60048036038101906101f691906117af565b6109ea565b6040516102089190611cc5565b60405180910390f35b61022b600480360381019061022691906117d8565b610a81565b6040516102389190611ce7565b60405180910390f35b34801561024d57600080fd5b506102686004803603810190610263919061192d565b610e0a565b005b34801561027657600080fd5b50610291600480360381019061028c91906117af565b610ee0565b60405161029e9190611dfe565b60405180910390f35b3480156102b357600080fd5b506102ce60048036038101906102c991906117af565b610ef8565b6040516102db9190611dfe565b60405180910390f35b3480156102f057600080fd5b5061030b60048036038101906103069190611969565b610f41565b6040516103189190611bf1565b60405180910390f35b34801561032d57600080fd5b50610336610f80565b6040516103439190611c0c565b60405180910390f35b34801561035857600080fd5b50610373600480360381019061036e919061192d565b610fa4565b6040516103809190611dfe565b60405180910390f35b34801561039557600080fd5b5061039e610fd5565b6040516103ab9190611ca3565b60405180910390f35b3480156103c057600080fd5b506103db60048036038101906103d691906117af565b611063565b6040516103e89190611dfe565b60405180910390f35b3480156103fd57600080fd5b50610418600480360381019061041391906117af565b6110ac565b6040516104259190611ce7565b60405180910390f35b34801561043a57600080fd5b50610455600480360381019061045091906117af565b6110cc565b6040516104629190611dfe565b60405180910390f35b34801561047757600080fd5b50610492600480360381019061048d9190611992565b6110e4565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610522576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161051990611d7d565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff02191690831515021790555080156105e7576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610816565b60005b60016007805490506105fc9190611f23565b811015610814578273ffffffffffffffffffffffffffffffffffffffff1660078281548110610654577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561080157600760016007805490506106af9190611f23565b815481106106e6577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166007828154811061074b577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060078054806107cb577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061080c9061201d565b9150506105ea565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161089f90611d7d565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154905086565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610a7557602002820191906000526020600020905b815481526020019060010190808311610a61575b50505050509050919050565b6000600660008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610b0f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b0690611d5d565b60405180910390fd5b8573ffffffffffffffffffffffffffffffffffffffff166323b872dd8930886040518463ffffffff1660e01b8152600401610b4c93929190611c27565b600060405180830381600087803b158015610b6657600080fd5b505af1158015610b7a573d6000803e3d6000fd5b505050506000610b8a60016113f3565b90506000610ba9610b9a89610ef8565b8661140190919063ffffffff16565b90506040518060c0016040528060405180604001604052808b73ffffffffffffffffffffffffffffffffffffffff1681526020018a81525081526020018b73ffffffffffffffffffffffffffffffffffffffff1681526020018a73ffffffffffffffffffffffffffffffffffffffff168152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a08201518160060155905050600360008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610dbc6001611417565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8a898985604051610df19493929190611c5e565b60405180910390a1600192505050979650505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610e98576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8f90611d7d565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610f5157600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60036020528160005260406000208181548110610fc057600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561105957602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001906001019080831161100f575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206004015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146111a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161119f90611d1d565b60405180910390fd5b8281146111ea576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016111e190611d3d565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600482016000905560058201600090556006820160009055505061133d838961142d565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161137a93929190611c27565b600060405180830381600087803b15801561139457600080fd5b505af11580156113a8573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516113e19493929190611c5e565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361140f9190611ef2565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061147f9190611f23565b8110156117035781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002082815481106114fe577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156116f057600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061159d9190611f23565b815481106115d4577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611656577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806116d9577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b80806116fb9061201d565b915050611430565b505050565b600061171b61171684611e3e565b611e19565b90508281526020810184848401111561173357600080fd5b61173e848285611fdd565b509392505050565b600081359050611755816121f4565b92915050565b60008135905061176a8161220b565b92915050565b600082601f83011261178157600080fd5b8135611791848260208601611708565b91505092915050565b6000813590506117a981612222565b92915050565b6000602082840312156117c157600080fd5b60006117cf84828501611746565b91505092915050565b600080600080600080600060e0888a0312156117f357600080fd5b60006118018a828b01611746565b97505060206118128a828b01611746565b96505060406118238a828b01611746565b95505060606118348a828b0161179a565b94505060806118458a828b0161179a565b93505060a06118568a828b0161179a565b92505060c06118678a828b0161179a565b91505092959891949750929550565b6000806000806080858703121561188c57600080fd5b600061189a87828801611746565b94505060206118ab87828801611746565b93505060406118bc8782880161179a565b925050606085013567ffffffffffffffff8111156118d957600080fd5b6118e587828801611770565b91505092959194509250565b6000806040838503121561190457600080fd5b600061191285828601611746565b92505060206119238582860161175b565b9150509250929050565b6000806040838503121561194057600080fd5b600061194e85828601611746565b925050602061195f8582860161179a565b9150509250929050565b60006020828403121561197b57600080fd5b60006119898482850161179a565b91505092915050565b6000806000606084860312156119a757600080fd5b60006119b58682870161179a565b93505060206119c686828701611746565b92505060406119d78682870161179a565b9150509250925092565b60006119ed8383611a20565b60208301905092915050565b6000611a058383611bd3565b60208301905092915050565b611a1a81611f69565b82525050565b611a2981611f57565b82525050565b611a3881611f57565b82525050565b6000611a4982611e8f565b611a538185611ebf565b9350611a5e83611e6f565b8060005b83811015611a8f578151611a7688826119e1565b9750611a8183611ea5565b925050600181019050611a62565b5085935050505092915050565b6000611aa782611e9a565b611ab18185611ed0565b9350611abc83611e7f565b8060005b83811015611aed578151611ad488826119f9565b9750611adf83611eb2565b925050600181019050611ac0565b5085935050505092915050565b611b0381611f7b565b82525050565b611b1281611f87565b82525050565b6000611b25602483611ee1565b9150611b3082612104565b604082019050919050565b6000611b48602583611ee1565b9150611b5382612153565b604082019050919050565b6000611b6b601383611ee1565b9150611b76826121a2565b602082019050919050565b6000611b8e600a83611ee1565b9150611b99826121cb565b602082019050919050565b604082016000820151611bba6000850182611a20565b506020820151611bcd6020850182611bd3565b50505050565b611bdc81611fd3565b82525050565b611beb81611fd3565b82525050565b6000602082019050611c066000830184611a2f565b92915050565b6000602082019050611c216000830184611a11565b92915050565b6000606082019050611c3c6000830186611a2f565b611c496020830185611a2f565b611c566040830184611be2565b949350505050565b6000608082019050611c736000830187611a2f565b611c806020830186611a2f565b611c8d6040830185611be2565b611c9a6060830184611be2565b95945050505050565b60006020820190508181036000830152611cbd8184611a3e565b905092915050565b60006020820190508181036000830152611cdf8184611a9c565b905092915050565b6000602082019050611cfc6000830184611afa565b92915050565b6000602082019050611d176000830184611b09565b92915050565b60006020820190508181036000830152611d3681611b18565b9050919050565b60006020820190508181036000830152611d5681611b3b565b9050919050565b60006020820190508181036000830152611d7681611b5e565b9050919050565b60006020820190508181036000830152611d9681611b81565b9050919050565b600060e082019050611db26000830189611ba4565b611dbf6040830188611a2f565b611dcc6060830187611a2f565b611dd96080830186611be2565b611de660a0830185611be2565b611df360c0830184611be2565b979650505050505050565b6000602082019050611e136000830184611be2565b92915050565b6000611e23611e34565b9050611e2f8282611fec565b919050565b6000604051905090565b600067ffffffffffffffff821115611e5957611e586120c4565b5b611e62826120f3565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b6000611efd82611fd3565b9150611f0883611fd3565b925082611f1857611f17612095565b5b828204905092915050565b6000611f2e82611fd3565b9150611f3983611fd3565b925082821015611f4c57611f4b612066565b5b828203905092915050565b6000611f6282611fb3565b9050919050565b6000611f7482611fb3565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b611ff5826120f3565b810181811067ffffffffffffffff82111715612014576120136120c4565b5b80604052505050565b600061202882611fd3565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561205b5761205a612066565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6121fd81611f57565b811461220857600080fd5b50565b61221481611f7b565b811461221f57600080fd5b50565b61222b81611fd3565b811461223657600080fd5b5056fea2646970667358221220b7b476a114e82dda94c987ac771bbb66262078ae40847e2f972e98bc9a37cb2f64736f6c63430008040033",
-  "deployedBytecode": "0x6080604052600436106100fe5760003560e01c80637b86e42c11610095578063d01f63f511610064578063d01f63f514610389578063d3ea0f89146103b4578063d936547e146103f1578063dccda03d1461042e578063e63697c81461046b576100fe565b80637b86e42c146102a75780637ebd1b30146102e45780638da5cb5b14610321578063b696bdf91461034c576100fe565b8063338a1996116100d1578063338a1996146101d45780633b12b9d61461021157806373e5515e14610241578063783274381461026a576100fe565b80630d392cd9146101035780630e30428d1461012c578063150b7a0214610155578063191e9d7c14610192575b600080fd5b34801561010f57600080fd5b5061012a600480360381019061012591906118f1565b610494565b005b34801561013857600080fd5b50610153600480360381019061014e919061192d565b61081a565b005b34801561016157600080fd5b5061017c60048036038101906101779190611876565b6108f0565b6040516101899190611d02565b60405180910390f35b34801561019e57600080fd5b506101b960048036038101906101b49190611969565b610904565b6040516101cb96959493929190611d9d565b60405180910390f35b3480156101e057600080fd5b506101fb60048036038101906101f691906117af565b6109ea565b6040516102089190611cc5565b60405180910390f35b61022b600480360381019061022691906117d8565b610a81565b6040516102389190611ce7565b60405180910390f35b34801561024d57600080fd5b506102686004803603810190610263919061192d565b610e0a565b005b34801561027657600080fd5b50610291600480360381019061028c91906117af565b610ee0565b60405161029e9190611dfe565b60405180910390f35b3480156102b357600080fd5b506102ce60048036038101906102c991906117af565b610ef8565b6040516102db9190611dfe565b60405180910390f35b3480156102f057600080fd5b5061030b60048036038101906103069190611969565b610f41565b6040516103189190611bf1565b60405180910390f35b34801561032d57600080fd5b50610336610f80565b6040516103439190611c0c565b60405180910390f35b34801561035857600080fd5b50610373600480360381019061036e919061192d565b610fa4565b6040516103809190611dfe565b60405180910390f35b34801561039557600080fd5b5061039e610fd5565b6040516103ab9190611ca3565b60405180910390f35b3480156103c057600080fd5b506103db60048036038101906103d691906117af565b611063565b6040516103e89190611dfe565b60405180910390f35b3480156103fd57600080fd5b50610418600480360381019061041391906117af565b6110ac565b6040516104259190611ce7565b60405180910390f35b34801561043a57600080fd5b50610455600480360381019061045091906117af565b6110cc565b6040516104629190611dfe565b60405180910390f35b34801561047757600080fd5b50610492600480360381019061048d9190611992565b6110e4565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610522576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161051990611d7d565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff02191690831515021790555080156105e7576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610816565b60005b60016007805490506105fc9190611f23565b811015610814578273ffffffffffffffffffffffffffffffffffffffff1660078281548110610654577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561080157600760016007805490506106af9190611f23565b815481106106e6577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166007828154811061074b577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060078054806107cb577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061080c9061201d565b9150506105ea565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161089f90611d7d565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154905086565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610a7557602002820191906000526020600020905b815481526020019060010190808311610a61575b50505050509050919050565b6000600660008773ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610b0f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b0690611d5d565b60405180910390fd5b8573ffffffffffffffffffffffffffffffffffffffff166323b872dd8930886040518463ffffffff1660e01b8152600401610b4c93929190611c27565b600060405180830381600087803b158015610b6657600080fd5b505af1158015610b7a573d6000803e3d6000fd5b505050506000610b8a60016113f3565b90506000610ba9610b9a89610ef8565b8661140190919063ffffffff16565b90506040518060c0016040528060405180604001604052808b73ffffffffffffffffffffffffffffffffffffffff1681526020018a81525081526020018b73ffffffffffffffffffffffffffffffffffffffff1681526020018a73ffffffffffffffffffffffffffffffffffffffff168152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a08201518160060155905050600360008b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610dbc6001611417565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8a898985604051610df19493929190611c5e565b60405180910390a1600192505050979650505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610e98576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8f90611d7d565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610f5157600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60036020528160005260406000208181548110610fc057600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561105957602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001906001019080831161100f575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206004015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146111a8576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161119f90611d1d565b60405180910390fd5b8281146111ea576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016111e190611d3d565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600482016000905560058201600090556006820160009055505061133d838961142d565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161137a93929190611c27565b600060405180830381600087803b15801561139457600080fd5b505af11580156113a8573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516113e19493929190611c5e565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361140f9190611ef2565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061147f9190611f23565b8110156117035781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002082815481106114fe577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156116f057600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054905061159d9190611f23565b815481106115d4577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611656577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806116d9577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b80806116fb9061201d565b915050611430565b505050565b600061171b61171684611e3e565b611e19565b90508281526020810184848401111561173357600080fd5b61173e848285611fdd565b509392505050565b600081359050611755816121f4565b92915050565b60008135905061176a8161220b565b92915050565b600082601f83011261178157600080fd5b8135611791848260208601611708565b91505092915050565b6000813590506117a981612222565b92915050565b6000602082840312156117c157600080fd5b60006117cf84828501611746565b91505092915050565b600080600080600080600060e0888a0312156117f357600080fd5b60006118018a828b01611746565b97505060206118128a828b01611746565b96505060406118238a828b01611746565b95505060606118348a828b0161179a565b94505060806118458a828b0161179a565b93505060a06118568a828b0161179a565b92505060c06118678a828b0161179a565b91505092959891949750929550565b6000806000806080858703121561188c57600080fd5b600061189a87828801611746565b94505060206118ab87828801611746565b93505060406118bc8782880161179a565b925050606085013567ffffffffffffffff8111156118d957600080fd5b6118e587828801611770565b91505092959194509250565b6000806040838503121561190457600080fd5b600061191285828601611746565b92505060206119238582860161175b565b9150509250929050565b6000806040838503121561194057600080fd5b600061194e85828601611746565b925050602061195f8582860161179a565b9150509250929050565b60006020828403121561197b57600080fd5b60006119898482850161179a565b91505092915050565b6000806000606084860312156119a757600080fd5b60006119b58682870161179a565b93505060206119c686828701611746565b92505060406119d78682870161179a565b9150509250925092565b60006119ed8383611a20565b60208301905092915050565b6000611a058383611bd3565b60208301905092915050565b611a1a81611f69565b82525050565b611a2981611f57565b82525050565b611a3881611f57565b82525050565b6000611a4982611e8f565b611a538185611ebf565b9350611a5e83611e6f565b8060005b83811015611a8f578151611a7688826119e1565b9750611a8183611ea5565b925050600181019050611a62565b5085935050505092915050565b6000611aa782611e9a565b611ab18185611ed0565b9350611abc83611e7f565b8060005b83811015611aed578151611ad488826119f9565b9750611adf83611eb2565b925050600181019050611ac0565b5085935050505092915050565b611b0381611f7b565b82525050565b611b1281611f87565b82525050565b6000611b25602483611ee1565b9150611b3082612104565b604082019050919050565b6000611b48602583611ee1565b9150611b5382612153565b604082019050919050565b6000611b6b601383611ee1565b9150611b76826121a2565b602082019050919050565b6000611b8e600a83611ee1565b9150611b99826121cb565b602082019050919050565b604082016000820151611bba6000850182611a20565b506020820151611bcd6020850182611bd3565b50505050565b611bdc81611fd3565b82525050565b611beb81611fd3565b82525050565b6000602082019050611c066000830184611a2f565b92915050565b6000602082019050611c216000830184611a11565b92915050565b6000606082019050611c3c6000830186611a2f565b611c496020830185611a2f565b611c566040830184611be2565b949350505050565b6000608082019050611c736000830187611a2f565b611c806020830186611a2f565b611c8d6040830185611be2565b611c9a6060830184611be2565b95945050505050565b60006020820190508181036000830152611cbd8184611a3e565b905092915050565b60006020820190508181036000830152611cdf8184611a9c565b905092915050565b6000602082019050611cfc6000830184611afa565b92915050565b6000602082019050611d176000830184611b09565b92915050565b60006020820190508181036000830152611d3681611b18565b9050919050565b60006020820190508181036000830152611d5681611b3b565b9050919050565b60006020820190508181036000830152611d7681611b5e565b9050919050565b60006020820190508181036000830152611d9681611b81565b9050919050565b600060e082019050611db26000830189611ba4565b611dbf6040830188611a2f565b611dcc6060830187611a2f565b611dd96080830186611be2565b611de660a0830185611be2565b611df360c0830184611be2565b979650505050505050565b6000602082019050611e136000830184611be2565b92915050565b6000611e23611e34565b9050611e2f8282611fec565b919050565b6000604051905090565b600067ffffffffffffffff821115611e5957611e586120c4565b5b611e62826120f3565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b6000611efd82611fd3565b9150611f0883611fd3565b925082611f1857611f17612095565b5b828204905092915050565b6000611f2e82611fd3565b9150611f3983611fd3565b925082821015611f4c57611f4b612066565b5b828203905092915050565b6000611f6282611fb3565b9050919050565b6000611f7482611fb3565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b611ff5826120f3565b810181811067ffffffffffffffff82111715612014576120136120c4565b5b80604052505050565b600061202882611fd3565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561205b5761205a612066565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6121fd81611f57565b811461220857600080fd5b50565b61221481611f7b565b811461221f57600080fd5b50565b61222b81611fd3565b811461223657600080fd5b5056fea2646970667358221220b7b476a114e82dda94c987ac771bbb66262078ae40847e2f972e98bc9a37cb2f64736f6c63430008040033",
-  "linkReferences": {},
-  "deployedLinkReferences": {}
-};
-},{}],"hooks/useCollateralManager.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.useCollateralManager = exports.default = void 0;
-
-var _useContract = require("./useContract");
-
-var _CollateralManager = _interopRequireDefault(require("../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json"));
-
-var _core = require("@web3-react/core");
-
-var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
-
-var _AppContext = require("../AppContext");
-
-var _units = require("@ethersproject/units");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var useCollateralManager = function useCollateralManager() {
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      account = _useWeb3React.account;
-
-  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
-      isValidNetwork = _useIsValidNetwork.isValidNetwork;
-
-  var collateralManagerContractAddress = "0x0B32a3F8f5b7E5d315b9E52E640a49A89d89c820";
-  var collateralManagerABI = _CollateralManager.default["abi"];
-  var collateralManagerContract = (0, _useContract.useContract)(collateralManagerContractAddress, collateralManagerABI); // NFT contract data (c&p from hooks/useNFT.js)
-
-  var nftContractAddressPUNK = "0x4c04377f90Eb1E42D845AB21De874803B8773669";
-  var nftContractAddressBAYC = "0xf93b0549cD50c849D792f0eAE94A598fA77C7718";
-  var nftContractAddress = {
-    "PUNK": nftContractAddressPUNK,
-    "BAYC": nftContractAddressBAYC
-  };
-
-  var _useAppContext = (0, _AppContext.useAppContext)(),
-      setWhitelistNFT = _useAppContext.setWhitelistNFT,
-      whitelistNFT = _useAppContext.whitelistNFT,
-      setAprPUNK = _useAppContext.setAprPUNK,
-      setAprBAYC = _useAppContext.setAprBAYC,
-      aprPUNK = _useAppContext.aprPUNK,
-      aprBAYC = _useAppContext.aprBAYC,
-      setBorrowAPR = _useAppContext.setBorrowAPR;
-
-  var fetchWhitelistNFT = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var whitelist;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return collateralManagerContract.getWhitelist();
-
-            case 2:
-              whitelist = _context.sent;
-              setWhitelistNFT(whitelist);
-              console.log(whitelist);
-
-            case 5:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function fetchWhitelistNFT() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  var fetchAPR = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var aprPUNK, aprBAYC;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return collateralManagerContract.getInterestRate(nftContractAddress["PUNK"]);
-
-            case 2:
-              aprPUNK = _context2.sent;
-              _context2.next = 5;
-              return collateralManagerContract.getInterestRate(nftContractAddress["BAYC"]);
-
-            case 5:
-              aprBAYC = _context2.sent;
-              setAprPUNK((0, _units.formatUnits)(aprPUNK, 0));
-              setAprBAYC((0, _units.formatUnits)(aprBAYC, 0));
-
-            case 8:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function fetchAPR() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  var fetchBorrowAPR = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(nftSymbol) {
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              if (nftSymbol == "PUNK") {
-                setBorrowAPR(aprPUNK);
-              } else if (nftSymbol == "BAYC") {
-                setBorrowAPR(aprBAYC);
-              }
-
-            case 1:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function fetchBorrowAPR(_x) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  return {
-    fetchWhitelistNFT: fetchWhitelistNFT,
-    whitelistNFT: whitelistNFT,
-    fetchAPR: fetchAPR,
-    fetchBorrowAPR: fetchBorrowAPR
-  };
-};
-
-exports.useCollateralManager = useCollateralManager;
-var _default = useCollateralManager;
-exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js"}],"components/BorrowDataCollRatio2/index.jsx":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/BorrowDataCollRatio2/index.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81394,7 +82101,9 @@ function Borrow2(props) {
   var _useAppContext = (0, _AppContext.useAppContext)(),
       borrowNFT = _useAppContext.borrowNFT,
       borrowProject = _useAppContext.borrowProject,
-      imageDictBorrow = _useAppContext.imageDictBorrow;
+      imageDictBorrow = _useAppContext.imageDictBorrow,
+      borrowCollRatio = _useAppContext.borrowCollRatio,
+      borrowRepaymentAmount = _useAppContext.borrowRepaymentAmount;
 
   (0, _react.useEffect)(function () {
     if (account) {
@@ -81403,6 +82112,9 @@ function Borrow2(props) {
       fetchImagesBorrow();
       fetchWhitelistNFT();
       fetchBorrowFloorPrice();
+      borrowCollRatio;
+      borrowRepaymentAmount;
+      console.log('borrow');
     }
   }, [account]);
   var nftProjectClassName = {
@@ -97059,6 +97771,8 @@ var _PopUpTokensDeposit = _interopRequireDefault(require("./components/PopUpToke
 
 var _PopUpTokensWithdraw = _interopRequireDefault(require("./components/PopUpTokensWithdraw"));
 
+var _PopUpBorrow = _interopRequireDefault(require("./components/PopUpBorrow"));
+
 var _Lend = _interopRequireDefault(require("./components/Lend2"));
 
 var _Borrow = _interopRequireDefault(require("./components/Borrow2"));
@@ -97107,6 +97821,8 @@ function App(props) {
   }, /*#__PURE__*/_react.default.createElement(_PopUpTokensWithdraw.default, {
     popUpProps: popUpTokensWithdrawData.popUpProps
   })), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/popupborrow"
+  }, /*#__PURE__*/_react.default.createElement(_PopUpBorrow.default, popUpBorrowData)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
     path: "/lend"
   }, /*#__PURE__*/_react.default.createElement(_Lend.default, {
     headerProps: lend22Data.headerProps,
@@ -97215,6 +97931,33 @@ var popUpWithdrawData = {
   inputPlaceholder: "0.0000",
   name: "MAX",
   place: "Withdraw"
+};
+var borrowDataFloorPriceData = {
+  borrowAmount: "Borrow Amount:",
+  address: "60 ETH"
+};
+var borrowDataFloorPrice2Data = {
+  borrowAmount: "Maturity:",
+  address: "4 Weeks",
+  className: "borrow-data-coll-ratio-1-1"
+};
+var borrowDataFloorPrice3Data = {
+  borrowAmount: "Repayment Amount:",
+  address: "65.6726",
+  className: "borrow-data-coll-ratio-1"
+};
+var popUpBorrowData = {
+  spanText: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "Confirm borrow.", /*#__PURE__*/_react.default.createElement("br", null)),
+  spanText2: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("br", null), "Please confirm borrow to access instant liquidity."),
+  nftAvatar: "/img/nft-avatar@2x.png",
+  collateral: "Collateral:",
+  fidenza157: "Fidenza #157",
+  text1: "Collateralization Ratio:",
+  percent: "200%",
+  borrow: "Borrow",
+  borrowDataFloorPriceProps: borrowDataFloorPriceData,
+  borrowDataFloorPrice2Props: borrowDataFloorPrice2Data,
+  borrowDataFloorPrice3Props: borrowDataFloorPrice3Data
 };
 var popUpTokensDepositData = {
   popUpProps: popUpDepositData
@@ -97465,7 +98208,7 @@ var assetData = {
   previousBorrowProps: previousBorrowData,
   asset2Props: asset2Data
 };
-},{"./App.css":"App.css","react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./components/PopUpNFTs":"components/PopUpNFTs/index.jsx","./components/Dashboard":"components/Dashboard/index.jsx","./components/PopUpTokensDeposit":"components/PopUpTokensDeposit/index.jsx","./components/PopUpTokensWithdraw":"components/PopUpTokensWithdraw/index.jsx","./components/Lend2":"components/Lend2/index.jsx","./components/Borrow2":"components/Borrow2/index.jsx","./components/LandingPage":"components/LandingPage/index.jsx","./components/Liquidate":"components/Liquidate/index.jsx","./components/Asset":"components/Asset/index.jsx","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","ethers":"node_modules/ethers/lib.esm/index.js","../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json":"../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json","./AppContext":"AppContext.js"}],"index.js":[function(require,module,exports) {
+},{"./App.css":"App.css","react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./components/PopUpNFTs":"components/PopUpNFTs/index.jsx","./components/Dashboard":"components/Dashboard/index.jsx","./components/PopUpTokensDeposit":"components/PopUpTokensDeposit/index.jsx","./components/PopUpTokensWithdraw":"components/PopUpTokensWithdraw/index.jsx","./components/PopUpBorrow":"components/PopUpBorrow/index.jsx","./components/Lend2":"components/Lend2/index.jsx","./components/Borrow2":"components/Borrow2/index.jsx","./components/LandingPage":"components/LandingPage/index.jsx","./components/Liquidate":"components/Liquidate/index.jsx","./components/Asset":"components/Asset/index.jsx","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","ethers":"node_modules/ethers/lib.esm/index.js","../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json":"../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json","./AppContext":"AppContext.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -97533,7 +98276,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61253" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62447" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

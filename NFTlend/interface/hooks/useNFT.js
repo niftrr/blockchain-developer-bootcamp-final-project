@@ -71,7 +71,8 @@ export const useNFT = () => {
         fetchImagesBorrow,
         imageDictPUNK,
         imageDictBAYC,
-        nftAddressSymbolDict
+        nftAddressSymbolDict,
+        nftContract
     }
 };
 

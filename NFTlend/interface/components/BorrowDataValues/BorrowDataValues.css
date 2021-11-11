@@ -1,0 +1,32 @@
+.borrow-data-floor-price-borrowPopUpData {
+  align-items: flex-start;
+  display: flex;
+  margin-left: 0.12px;
+  margin-top: 5px;
+  min-width: 379px;
+}
+
+.borrow-amount-borrowPopUpData {
+  height: 20px;
+  letter-spacing: 0;
+  width: 219px;
+}
+
+.address-borrowPopUpData {
+  height: 20px;
+  letter-spacing: 0;
+  margin-left: 32px;
+  text-align: right;
+  width: 124px;
+}
+
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-borrowPopUpData,
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-1-borrowPopUpData {
+  margin-left: unset;
+}
+
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-1-borrowPopUpData .borrow-amount-borrowPopUpData,
+.borrow-data-floor-price-borrowPopUpData.borrow-data-coll-ratio-1-borrowPopUpData .borrow-amount-borrowPopUpData {
+  width: 220px;
+}
+

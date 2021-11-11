@@ -5,6 +5,7 @@ import PopUpNFTs from "./components/PopUpNFTs";
 import Dashboard from "./components/Dashboard";
 import PopUpTokensDeposit from "./components/PopUpTokensDeposit";
 import PopUpTokensWithdraw from "./components/PopUpTokensWithdraw";
+import PopUpBorrow from "./components/PopUpBorrow";
 import Lend2 from "./components/Lend2";
 import Borrow2 from "./components/Borrow2";
 import LandingPage from "./components/LandingPage";
@@ -36,6 +37,9 @@ function App(props) {
                 </Route>
                 <Route path="/popuptokenswithdraw">
                 <PopUpTokensWithdraw popUpProps={popUpTokensWithdrawData.popUpProps} />
+                </Route>
+                <Route path="/popupborrow">
+                <PopUpBorrow {...popUpBorrowData} />
                 </Route>
                 <Route path="/lend">
                 <Lend2 headerProps={lend22Data.headerProps} lendsProps={lend22Data.lendsProps}/>
@@ -167,6 +171,37 @@ const popUpWithdrawData = {
     inputPlaceholder: "0.0000",
     name: "MAX",
     place: "Withdraw",
+};
+
+const borrowDataFloorPriceData = {
+    borrowAmount: "Borrow Amount:",
+    address: "60 ETH",
+};
+
+const borrowDataFloorPrice2Data = {
+    borrowAmount: "Maturity:",
+    address: "4 Weeks",
+    className: "borrow-data-coll-ratio-1-1",
+};
+
+const borrowDataFloorPrice3Data = {
+    borrowAmount: "Repayment Amount:",
+    address: "65.6726",
+    className: "borrow-data-coll-ratio-1",
+};
+
+const popUpBorrowData = {
+    spanText: <>Confirm borrow.<br /></>,
+    spanText2: <><br />Please confirm borrow to access instant liquidity.</>,
+    nftAvatar: "/img/nft-avatar@2x.png",
+    collateral: "Collateral:",
+    fidenza157: "Fidenza #157",
+    text1: "Collateralization Ratio:",
+    percent: "200%",
+    borrow: "Borrow",
+    borrowDataFloorPriceProps: borrowDataFloorPriceData,
+    borrowDataFloorPrice2Props: borrowDataFloorPrice2Data,
+    borrowDataFloorPrice3Props: borrowDataFloorPrice3Data,
 };
 
 const popUpTokensDepositData = {
