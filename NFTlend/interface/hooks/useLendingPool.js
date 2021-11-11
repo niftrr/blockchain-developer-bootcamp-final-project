@@ -4,6 +4,7 @@ import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
 import useNToken from "./useNToken";
+import useDebtToken from "./useDebtToken";
 import useNFT from "./useNFT";
 import useAssetToken from "./useAssetToken";
 import useCollateralManager from "./useCollateralManager";
@@ -12,12 +13,13 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useLendingPool = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const lendingPoolContractAddress = "0x15F2ea83eB97ede71d84Bd04fFF29444f6b7cd52";
+    const lendingPoolContractAddress = "0xdABF214E5a833269c192D9d70efDdE174680628D";
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
     const { setBorrowFloorPrice, borrowFloorPrice, setTxnStatus } = useAppContext();
     const { nTokenContract, fetchNTokenBalance } = useNToken();
+    const { debtTokenContract, fetchDebtTokenBalance } = useDebtToken();
     const { assetTokenContract, assetTokenContractAddress } = useAssetToken();
     const { nftContract } = useNFT();
     const { collateralManagerContractAddress } = useCollateralManager();
@@ -59,17 +61,16 @@ export const useLendingPool = () => {
         if (account && isValidNetwork) {
             try {
                 setTxnStatus("LOADING");
-                console.log('APPROVING');
                 const _nTokenContract = nTokenContract[tokenSymbol];
                 await _nTokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
                 setTxnStatus("LOADING");
-                console.log('LOADING');
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
                 const txn = await lendingPoolContract.withdraw(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
                 await txn.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                console.log('COMPLETE');
+                await wait(5);
+                setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
@@ -88,11 +89,9 @@ export const useLendingPool = () => {
         if (account && isValidNetwork) {
             try {
                 setTxnStatus("LOADING");
-                console.log('APPROVING');
                 const nftTokenContract = nftContract[nftTokenSymbol];
                 await nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
                 setTxnStatus("LOADING");
-                console.log('LOADING');
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
                 const txn = await lendingPoolContract.borrow(
                     tokenContractAddress, 
@@ -102,10 +101,10 @@ export const useLendingPool = () => {
                     interestRate,
                     numWeeks); // TODO: remove hard-coded decimals
                 await txn.wait(1);
-                // TODO: implement useDebtToken
-                // await fetchDebtTokenBalance(tokenSymbol);
+                await fetchDebtTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                console.log('COMPLETE');
+                await wait(5);
+                setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);

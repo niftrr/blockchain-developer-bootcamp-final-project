@@ -8,9 +8,9 @@ export const useAssetToken = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
 
-    const assetTokenContractAddressDAI = "0x519b05b3655F4b89731B677d64CEcf761f4076f6"; // hardhat
-    const assetTokenContractAddressETH = "0x057cD3082EfED32d5C907801BF3628B27D88fD80"; // hardhat
-    const assetTokenContractAddressUSDC = "0xb6057e08a11da09a998985874FE2119e98dB3D5D"; // hardhat
+    const assetTokenContractAddressDAI = "0x0b5dcAf621a877dAcF3C540c1e5208C8a3eb7B23"; // hardhat
+    const assetTokenContractAddressETH = "0x9a8164cA007ff0899140719E9aEC9a9C889CbF1E"; // hardhat
+    const assetTokenContractAddressUSDC = "0xA3E5DfE71aE3e6DeC4D98fa28821dF355d7244B3"; // hardhat
 
     const assetTokenContractAddress = {
         "DAI": assetTokenContractAddressDAI,

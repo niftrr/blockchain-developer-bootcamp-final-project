@@ -176,4 +176,7 @@ contract CollateralManager is IERC721Receiver {
         }
     }
 
+    function getBorrow(uint256 borrowId) public view returns (Borrow memory) {
+        return borrows[borrowId];
+    }
 }

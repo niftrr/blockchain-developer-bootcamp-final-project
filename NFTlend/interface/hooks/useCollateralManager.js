@@ -8,19 +8,27 @@ import { formatUnits } from "@ethersproject/units";
 export const useCollateralManager = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const collateralManagerContractAddress = "0x0B32a3F8f5b7E5d315b9E52E640a49A89d89c820";
+    const collateralManagerContractAddress = "0x645D817611E0CDaF9cD43332c4E369B9E333471d";
     const collateralManagerABI = CollateralManagerData["abi"];
     const collateralManagerContract = useContract(collateralManagerContractAddress, collateralManagerABI);
 
     // NFT contract data (c&p from hooks/useNFT.js)
-    const nftContractAddressPUNK = "0x4c04377f90Eb1E42D845AB21De874803B8773669";
-    const nftContractAddressBAYC = "0xf93b0549cD50c849D792f0eAE94A598fA77C7718";
+    const nftContractAddressPUNK = "0x30A6d2B697635a0ECf1975d2386A0FE6b608B0Fb";
+    const nftContractAddressBAYC = "0xCd9BC6cE45194398d12e27e1333D5e1d783104dD";
     const nftContractAddress = {
         "PUNK": nftContractAddressPUNK,
         "BAYC": nftContractAddressBAYC
     }
     
-    const { setWhitelistNFT, whitelistNFT, setAprPUNK, setAprBAYC, aprPUNK, aprBAYC, setBorrowAPR } = useAppContext();
+    const { 
+        setWhitelistNFT, 
+        whitelistNFT, 
+        setAprPUNK, 
+        setAprBAYC, 
+        aprPUNK, 
+        aprBAYC, 
+        setBorrowAPR, 
+        setUserBorrows } = useAppContext();
 
     const fetchWhitelistNFT = async () => {
         const whitelist = await collateralManagerContract.getWhitelist();
@@ -43,12 +51,18 @@ export const useCollateralManager = () => {
         }
     }
 
+    const fetchUserBorrows = async () => {
+        const userBorrows = await collateralManagerContract.getUserBorrows(account);
+        setUserBorrows(userBorrows);
+    }
+
     return {
         fetchWhitelistNFT,
         whitelistNFT,
         fetchAPR,
         fetchBorrowAPR,
-        collateralManagerContractAddress
+        collateralManagerContractAddress,
+        fetchUserBorrows
     }
 };
 

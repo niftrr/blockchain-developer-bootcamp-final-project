@@ -2,6 +2,10 @@ import React, { createContext, useReducer } from "react";
 import App from "./App";
 
 const initialContext = {
+    debtTokenBalanceDAI: "--",
+    debtTokenBalanceETH: "--",
+    debtTokenBalanceUSDC: "--",
+    setDebtTokenBalance: () => {},
     nTokenBalanceDAI: "--",
     nTokenBalanceETH: "--",
     nTokenBalanceUSDC: "--",
@@ -10,8 +14,8 @@ const initialContext = {
     nTokenYieldETH: "--",
     nTokenYieldUSDC: "--",
     setNTokenYield: () => {},
-    borrows: [],
-    setBorrows: () => {},
+    userBorrows: [],
+    setUserBorrows: () => {},
     borrowDefaults: [],
     setBorrowDefaults: () => {},
     imageDictPUNK: {},
@@ -50,6 +54,24 @@ const initialContext = {
 
 const appReducer = (state, { type, payload }) => {
     switch (type) {
+      case "SET_DEBTTOKEN_BALANCE_DAI":
+        return {
+          ...state,
+          debtTokenBalanceDAI: payload,
+        };
+
+      case "SET_DEBTTOKEN_BALANCE_ETH":
+        return {
+          ...state,
+          debtTokenBalanceETH: payload,
+        };
+
+      case "SET_DEBTTOKEN_BALANCE_USDC":
+        return {
+          ...state,
+          debtTokenBalanceUSDC: payload,
+        };
+
       case "SET_NTOKEN_BALANCE_DAI":
         return {
           ...state,
@@ -86,17 +108,17 @@ const appReducer = (state, { type, payload }) => {
           nTokenYieldUSDC: payload,
         };
 
-      case "SET_BORROWS":
+      case "SET_USER_BORROWS":
         return {
           ...state,
-          setBorrows: payload,
+          userBorrows: payload,
         };
     
       case "SET_BORROW_DEFAULTS":
-            return {
-              ...state,
-              setBorrowDefaults: payload,
-            };  
+        return {
+          ...state,
+          borrowDefaults: payload,
+        };  
 
       case "SET_IMAGE_DICT_PUNK":
         return {
@@ -210,7 +232,20 @@ export const AppContextProvider = ({ children }) => {
     const [store, dispatch] = useReducer(appReducer, initialContext);
 
     const contextValue = {
-        nTokenBalanceDAI: store.nTokenBalanceDAI,
+      debtTokenBalanceDAI: store.debtTokenBalanceDAI,
+      debtTokenBalanceETH: store.debtTokenBalanceETH,
+      debtTokenBalanceUSDC: store.debtTokenBalanceUSDC,
+      setDebtTokenBalance: (ccy, balance) => {
+        switch(ccy) {
+          case "DAI":
+            dispatch({ type: "SET_DEBTTOKEN_BALANCE_DAI", payload: balance});
+          case "ETH":
+            dispatch({ type: "SET_DEBTTOKEN_BALANCE_ETH", payload: balance});
+          case "USDC":
+            dispatch({ type: "SET_DEBTTOKEN_BALANCE_USDC", payload: balance});
+        };
+      },
+      nTokenBalanceDAI: store.nTokenBalanceDAI,
         nTokenBalanceETH: store.nTokenBalanceETH,
         nTokenBalanceUSDC: store.nTokenBalanceUSDC,
         setNTokenBalance: (ccy, balance) => {
@@ -236,9 +271,9 @@ export const AppContextProvider = ({ children }) => {
               dispatch({ type: "SET_NTOKEN_YIELD_USDC", payload: _yield});
           };
         },
-        borrows: store.borrows,
-        setBorrows: (borrows) => {
-          dispatch({ type: "SET_BORROWS", payload: borrows});
+        userBorrows: store.userBorrows,
+        setUserBorrows: (userBorrows) => {
+          dispatch({ type: "SET_USER_BORROWS", payload: userBorrows});
         },
         borrowDefaults: store.borrowDefaults,
         setBorrowDefaults: (defaults) => {
