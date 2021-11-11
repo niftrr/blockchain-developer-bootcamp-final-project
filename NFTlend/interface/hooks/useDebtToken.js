@@ -10,9 +10,9 @@ export const useDebtToken = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
     // DebtTokens
-    const debtTokenContractAddressDAI = "0x7A3A9876c08B3f001D10c6a8aF685699BC52e7c8"; // hardhat
-    const debtTokenContractAddressETH = "0x76d05F58D14c0838EC630C8140eDC5aB7CD159Dc"; // hardhat
-    const debtTokenContractAddressUSDC = "0xe8c3F27D20472e4f3C546A3f73C04B54DD72871d"; // hardhat
+    const debtTokenContractAddressDAI = "0x2a810409872AfC346F9B5b26571Fd6eC42EA4849"; // hardhat
+    const debtTokenContractAddressETH = "0xb9bEECD1A582768711dE1EE7B0A1d582D9d72a6C"; // hardhat
+    const debtTokenContractAddressUSDC = "0x8A93d247134d91e0de6f96547cB0204e5BE8e5D8"; // hardhat
     
     const debtTokenABI = DebtTokenData["abi"];
     const debtTokenContractDAI = useContract(debtTokenContractAddressDAI, debtTokenABI);

@@ -14,7 +14,7 @@ const initialContext = {
     nTokenYieldETH: "--",
     nTokenYieldUSDC: "--",
     setNTokenYield: () => {},
-    userBorrows: [],
+    userBorrows: {},
     setUserBorrows: () => {},
     borrowDefaults: [],
     setBorrowDefaults: () => {},

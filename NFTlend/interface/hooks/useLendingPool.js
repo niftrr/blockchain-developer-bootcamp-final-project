@@ -13,7 +13,7 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useLendingPool = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const lendingPoolContractAddress = "0xdABF214E5a833269c192D9d70efDdE174680628D";
+    const lendingPoolContractAddress = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
@@ -35,7 +35,6 @@ export const useLendingPool = () => {
     };
 
     const deposit = async (tokenSymbol, amount) => {
-        console.log('deposit called');
         if (account && isValidNetwork) {
             try {
                 setTxnStatus("LOADING");
@@ -57,7 +56,6 @@ export const useLendingPool = () => {
     };
 
     const withdraw = async (tokenSymbol, amount) => {
-        console.log('withdraw called');
         if (account && isValidNetwork) {
             try {
                 setTxnStatus("LOADING");
@@ -85,9 +83,9 @@ export const useLendingPool = () => {
         nftTokenId,
         interestRate,
         numWeeks) => {
-        console.log('borrow called');
         if (account && isValidNetwork) {
             try {
+                console.log(parseUnits(tokenAmount, 18).toString());
                 setTxnStatus("LOADING");
                 const nftTokenContract = nftContract[nftTokenSymbol];
                 await nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);

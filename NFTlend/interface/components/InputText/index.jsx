@@ -10,8 +10,6 @@ function InputText(props) {
     setBorrowAmount(value);
     const collRatio = 100* borrowFloorPrice / value;
     setBorrowCollRatio(collRatio);
-    console.log('setBorrowCollRatio:', collRatio);
-    console.log('borrowCollRatio', borrowCollRatio);
   }
 
   return (

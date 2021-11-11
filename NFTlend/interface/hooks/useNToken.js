@@ -10,13 +10,13 @@ export const useNToken = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
     // NTokens
-    const nTokenContractAddressDAI = "0x69F94e46cbC82Ab02781ac4FaFc3580d21f1a888"; // hardhat
-    const nTokenContractAddressETH = "0xE0a1556ef66873d965A2F4caD06F051646BE6707"; // hardhat
-    const nTokenContractAddressUSDC = "0x5BFaaA02cAb795d576276a19CB1c2D2D2d652717"; // hardhat
+    const nTokenContractAddressDAI = "0x3aAde2dCD2Df6a8cAc689EE797591b2913658659"; // hardhat
+    const nTokenContractAddressETH = "0xab16A69A5a8c12C732e0DEFF4BE56A70bb64c926"; // hardhat
+    const nTokenContractAddressUSDC = "0xE3011A37A904aB90C8881a99BD1F6E21401f1522"; // hardhat
     // AssetTokens
-    const assetTokenContractAddressDAI = "0x0b5dcAf621a877dAcF3C540c1e5208C8a3eb7B23"; // hardhat
-    const assetTokenContractAddressETH = "0x9a8164cA007ff0899140719E9aEC9a9C889CbF1E"; // hardhat
-    const assetTokenContractAddressUSDC = "0xA3E5DfE71aE3e6DeC4D98fa28821dF355d7244B3"; // hardhat
+    const assetTokenContractAddressDAI = "0x3155755b79aA083bd953911C92705B7aA82a18F9"; // hardhat
+    const assetTokenContractAddressETH = "0x5bf5b11053e734690269C6B9D438F8C9d48F528A"; // hardhat
+    const assetTokenContractAddressUSDC = "0xffa7CA1AEEEbBc30C874d32C7e22F052BbEa0429"; // hardhat
     const assetTokenContractAddress = {
         "DAI": assetTokenContractAddressDAI,
         "ETH": assetTokenContractAddressETH,

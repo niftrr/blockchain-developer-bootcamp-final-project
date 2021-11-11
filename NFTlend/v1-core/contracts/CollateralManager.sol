@@ -25,7 +25,9 @@ contract CollateralManager is IERC721Receiver {
         Collateral collateral;
         address borrower;
         address erc20Token;
+        uint256 borrowAmount;
         uint256 repaymentAmount;
+        uint256 interestRate;
         uint256 liquidationPrice;
         uint256 maturity;
     }
@@ -98,7 +100,9 @@ contract CollateralManager is IERC721Receiver {
         address erc20Token,
         address erc721Token, 
         uint256 tokenId, 
+        uint256 borrowAmount,
         uint256 repaymentAmount,
+        uint256 interestRate,
         uint256 collateralIndexPrice,
         uint256 maturity) public payable returns (bool)
     {
@@ -115,7 +119,9 @@ contract CollateralManager is IERC721Receiver {
             }),
             borrower: borrower,
             erc20Token: erc20Token,
+            borrowAmount: borrowAmount,
             repaymentAmount: repaymentAmount,
+            interestRate: interestRate,
             liquidationPrice: liquidationPrice,
             maturity: maturity
         });

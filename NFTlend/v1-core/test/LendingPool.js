@@ -22,8 +22,8 @@ let bob_tokenId;
 
 beforeEach(async function() {
     numDecimals = 10; // set lower than 18 due to ether.js issue
-    hhAssetTokenSupply = 3*10**numDecimals;
-    hhAssetTokenInitialBalance = 1*10**numDecimals;
+    hhAssetTokenSupply = ethers.utils.parseUnits('3', 18); //3*10**numDecimals;
+    hhAssetTokenInitialBalance = ethers.utils.parseUnits('1', 18);
     alice_tokenId = 0;
     bob_tokenId = 1;
 
@@ -44,7 +44,7 @@ beforeEach(async function() {
 
     // Get and deploy Asset Token
     AssetToken = await ethers.getContractFactory('AssetToken');
-    hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply);
+    hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
 
     // Get and deploy nToken
@@ -84,8 +84,8 @@ beforeEach(async function() {
     [owner, alice, bob] = await ethers.getSigners();
 
     // Transfer funds to alice and bob
-    await hhAssetToken.transfer(alice.address, hhAssetTokenInitialBalance);
-    await hhAssetToken.transfer(bob.address, hhAssetTokenInitialBalance);
+    await hhAssetToken.transfer(alice.address, hhAssetTokenInitialBalance.toString());
+    await hhAssetToken.transfer(bob.address, hhAssetTokenInitialBalance.toString());
 
     // Mint NFTs to alice and bob
     await hhNFT.mint(alice.address, alice_tokenId);
@@ -178,7 +178,7 @@ describe('LendingPool >> Init', function() {
 describe('LendingPool >> Deposit', function() {
 
     it('should deposit tokens to NToken reserve', async function () {
-        const tokenAmount = 1*10**numDecimals;
+        const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
 
         // Initialize reserve
         await initReserve();
@@ -218,7 +218,7 @@ describe('LendingPool >> Deposit', function() {
 describe('LendingPool >> Withdraw', function() {
 
     it('should withdraw tokens from NToken reserve', async function () {
-        const tokenAmount = 1*10**numDecimals;
+        const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
 
         // Initialize reserve
         await initReserve();
@@ -276,11 +276,10 @@ describe('LendingPool >> Borrow', function() {
     });
 
     it('should create borrow with an NFT as collateral', async function() {
-        const tokenAmount = 1*10**numDecimals;
+        const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
         const interestRate = 20;
         const numWeeks = 1;
-        const repaymentAmount = Math.round(tokenAmount*(1 + 1*interestRate/100*numWeeks/52));
-
+        const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
         // Initialize reserve
         await initReserve();
 
@@ -312,17 +311,17 @@ describe('LendingPool >> Borrow', function() {
         // Expect: assetTokens transferred to bob
         await expect(
             (await hhAssetToken.balanceOf(bob.address)))
-            .to.equal(hhAssetTokenInitialBalance + tokenAmount);
+            .to.equal(hhAssetTokenInitialBalance.add(tokenAmount));
     });
 });
 
 describe('LendingPool >> Repay', function() {
 
     it('should retreive an NFT by repaying a borrow', async function () {
-        const tokenAmount = 1*10**numDecimals;
+        const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
         const interestRate = 20;
         const numWeeks = 1;
-        const repaymentAmount = Math.round(tokenAmount*(1 + 1*interestRate/100*numWeeks/52));
+        const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
 
         // Initialize reserve
         await initReserve();
@@ -355,7 +354,7 @@ describe('LendingPool >> Repay', function() {
         // Expect: assetTokens transferred from user to nToken reserve
         await expect(
             (await hhAssetToken.balanceOf(bob.address)))
-            .to.equal(hhAssetTokenInitialBalance + tokenAmount - repaymentAmount);
+            .to.equal(hhAssetTokenInitialBalance.add(tokenAmount).sub(repaymentAmount));
         await expect(
             (await hhAssetToken.balanceOf(hhNToken.address)))
             .to.equal(repaymentAmount); // Alice's deposit - Bob's borrow + Bob's repayment  

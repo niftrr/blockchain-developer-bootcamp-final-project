@@ -9,11 +9,6 @@ import { ICollateralManager } from "./ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
-
-
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol"; // remove
-
-
 import "hardhat/console.sol";
 
 contract LendingPool is LendingPoolStorage {
@@ -115,7 +110,9 @@ contract LendingPool is LendingPoolStorage {
             asset, 
             collateral, 
             tokenId, 
+            amount,
             repaymentAmount, 
+            interestRate,
             collateralIndexPrice, 
             maturity);
 

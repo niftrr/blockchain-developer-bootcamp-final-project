@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useWeb3React } from "@web3-react/core";
 import Header from "../Header";
 import Background from "../Background";
 import BorrowsHeader from "../BorrowsHeader";
 import Borrow from "../Borrow";
 import Lends from "../Lends";
 import "./Dashboard.css";
+import useCollateralManager from "../../hooks/useCollateralManager";
+import { useAppContext } from "../../AppContext";
 
 function Dashboard(props) {
   const { lendsProps } = props;
+  const { account } = useWeb3React();
+  const { fetchUserBorrows } = useCollateralManager();
+  const { userBorrows } = useAppContext();
+
+  useEffect(() => {
+    if (account) {
+      fetchUserBorrows();
+      userBorrows;
+      console.log('user borrows');
+    }  
+  }, [account]);
 
   return (
     <div className="container-center-horizontal">
@@ -17,9 +31,9 @@ function Dashboard(props) {
           <Background />
           <div className="borrows">
             <BorrowsHeader />
-            <Borrow />
-            <Borrow />
-            <Borrow />
+            {Object.keys(userBorrows).map(borrowId => (
+              <Borrow borrowId={borrowId} key={borrowId} />
+            ))}
           </div>
           <Lends
             lendProps={lendsProps.lendProps}
