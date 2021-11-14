@@ -22,7 +22,7 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 ## System diagram
 
-![System Diagram](assets/NFTlend-system-diagram.png?raw=true "System diagram")
+![System Diagram](assets/nftlend-system-diagram.png?raw=true "System diagram")
 
 **Lending Pool** is the main contract of the protocol exposing all user interaction endpoints; `deposit`, `withdraw`, `borrow`, `repay` and `liquidate`.
 
