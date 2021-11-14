@@ -1,6 +1,6 @@
 # NFTlend Interface
 
-An interface for NFTlend -- a protocol for borrowing assets using NFTs as collateral and earning interest on deposits.
+An interface for NFTlend.
 
 ## Instructions
 ```
