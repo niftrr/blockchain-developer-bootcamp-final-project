@@ -18,7 +18,7 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 ## Demo
 
-[INSERT VIDEO DEMO]
+[![Video Demo](assets/nftlend-ui-landingpage.png)](https://www.youtube.com/watch?v=juGUTuLzXGs)
 
 ## System diagram
 
