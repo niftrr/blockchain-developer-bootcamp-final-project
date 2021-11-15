@@ -16,7 +16,7 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 - **Liquidators** repay any loan defaults (those expired or undercollateralized) to purchase the underlying NFT at a discount.
 
-## Demo
+## Video demo
 
 [![Video Demo](assets/nftlend-ui-landingpage.png)](https://www.youtube.com/watch?v=juGUTuLzXGs)
 
