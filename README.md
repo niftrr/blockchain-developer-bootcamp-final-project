@@ -80,4 +80,8 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 ## Licensing
 
-The primary license for NFTlend V1 Core is the Business Source License 1.1 (`BUSL-1.1`), see [`LICENSE`](./LICENSE)
+The primary license for both the NFTlend V1 Core and Interface is the Business Source License 1.1 (`BUSL-1.1`), see:
+* [`./v1-core/LICENSE`](./v1-core/LICENCE),
+* [`./interface/LICENSE`](./interface/LICENCE).
+
+  
