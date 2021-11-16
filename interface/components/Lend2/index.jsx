@@ -22,7 +22,7 @@ function Lend2(props) {
             daiBalance={daiBalance}
             ethBalance={ethBalance}
           />
-          <Instructions />
+          <Instructions page="LEND"/>
         </div>
       </div>
     </div>

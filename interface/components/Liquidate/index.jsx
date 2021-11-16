@@ -30,7 +30,7 @@ function Liquidate(props) {
               tokenBorrowProps={liquidate23Props.tokenBorrowProps}
             />
           </div>
-          <Instructions />
+          <Instructions page="LIQUIDATE" />
         </div>
       </div>
     </div>

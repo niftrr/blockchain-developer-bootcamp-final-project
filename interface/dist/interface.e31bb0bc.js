@@ -82464,27 +82464,55 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _process = require("process");
+
 var _react = _interopRequireDefault(require("react"));
 
 require("./Instructions.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Instructions() {
+function Instructions(props) {
+  var page = props.page; // const {title, subtitle} = () => {
+  //   switch(page) {
+  //     case "BORROW":
+  //       let _title = "Foo";
+  //       let _subtitle = "BAR";
+  //       return title, subtitle
+  //   } 
+  // }
+
+  var title = "";
+  var subtitle = "";
+
+  if (page == "BORROW") {
+    title = "Deposit your NFTs to instantly access permissionless loans.";
+    subtitle = "Note that borrows not repaid by maturity or collaterized by less than 150% may be liquidated.";
+  } else if (page == "LEND") {
+    title = "Deposit to earn interest on your assets. Liquidity can be removed at any time.";
+    subtitle = "Note that balances and APY are updated each block based on open borrows and the token supply. ";
+  } else if (page == "LIQUIDATE") {
+    title = "Liquidate defaulted borrows to purchase the underlying NFT at a discount. ";
+    subtitle = "Liquidations maintain protocol health and are incentivised with prices at 10-20% below the market floor.";
+  } else if (page == "ASSET") {
+    title = "Asset borrow details.";
+    subtitle = "Including historic data and external links.";
+  }
+
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "instructions"
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "text-13 valign-text-middle oxanium-bold-web-orange-24px"
   }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
     className: "oxanium-bold-web-orange-24px"
-  }, "Deposit your NFTs to instantly access permission-less loans.", /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
+  }, title, /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
     className: "oxanium-extra-light-web-orange-24px"
-  }, "Note that borrows not repaid by maturity or collaterized by less than 150% may be liquidated."))));
+  }, subtitle))));
 }
 
 var _default = Instructions;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./Instructions.css":"components/Instructions/Instructions.css"}],"components/Lend2/Lend2.css":[function(require,module,exports) {
+},{"process":"node_modules/process/browser.js","react":"node_modules/react/index.js","./Instructions.css":"components/Instructions/Instructions.css"}],"components/Lend2/Lend2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -82531,7 +82559,9 @@ function Lend2(props) {
     lend3Props: lendsProps.lend3Props,
     daiBalance: daiBalance,
     ethBalance: ethBalance
-  }), /*#__PURE__*/_react.default.createElement(_Instructions.default, null))));
+  }), /*#__PURE__*/_react.default.createElement(_Instructions.default, {
+    page: "LEND"
+  }))));
 }
 
 var _default = Lend2;
@@ -83534,7 +83564,9 @@ function Borrow2(props) {
     className: borrowDataCollRatio2Props2.className
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "borrow-data-container"
-  })))))), /*#__PURE__*/_react.default.createElement(_Instructions.default, null))));
+  })))))), /*#__PURE__*/_react.default.createElement(_Instructions.default, {
+    page: "BORROW"
+  }))));
 }
 
 var _default = Borrow2;
@@ -83861,7 +83893,9 @@ function Liquidate(props) {
   }), /*#__PURE__*/_react.default.createElement(_Liquidate.default, {
     assetItemProps: liquidate23Props.assetItemProps,
     tokenBorrowProps: liquidate23Props.tokenBorrowProps
-  })), /*#__PURE__*/_react.default.createElement(_Instructions.default, null))));
+  })), /*#__PURE__*/_react.default.createElement(_Instructions.default, {
+    page: "LIQUIDATE"
+  }))));
 }
 
 var _default = Liquidate;
@@ -84116,7 +84150,9 @@ function Asset(props) {
     borrowDataCollRatio22Props: asset2Props.borrowDataCollRatio22Props,
     borrowDataCollRatio2Props2: asset2Props.borrowDataCollRatio2Props2,
     borrowDataCollRatio3Props: asset2Props.borrowDataCollRatio3Props
-  }), /*#__PURE__*/_react.default.createElement(_Instructions.default, null))));
+  }), /*#__PURE__*/_react.default.createElement(_Instructions.default, {
+    page: "ASSET"
+  }))));
 }
 
 var _default = Asset;

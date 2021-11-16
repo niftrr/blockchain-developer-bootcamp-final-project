@@ -134,7 +134,7 @@ function Borrow2(props) {
               </div>
             </div>
           </div>
-          <Instructions />
+          <Instructions page="BORROW" />
         </div>
       </div>
     </div>

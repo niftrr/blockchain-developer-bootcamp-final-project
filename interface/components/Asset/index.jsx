@@ -50,7 +50,7 @@ function Asset(props) {
             borrowDataCollRatio2Props2={asset2Props.borrowDataCollRatio2Props2}
             borrowDataCollRatio3Props={asset2Props.borrowDataCollRatio3Props}
           />
-          <Instructions />
+          <Instructions page="ASSET"/>
         </div>
       </div>
     </div>
