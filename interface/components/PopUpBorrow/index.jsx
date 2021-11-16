@@ -9,10 +9,7 @@ import useNFT from "../../hooks/useNFT";
 import useLendingPool from "../../hooks/useLendingPool";
 import TransactionStatus from "../TransactionStatus";
 
-function PopUpBorrow(props) {
-  const {
-    nftAvatar,
-  } = props;
+function PopUpBorrow() {
   const { account } = useWeb3React();
   const {txnStatus} = useTransaction();
   const { 
@@ -22,11 +19,11 @@ function PopUpBorrow(props) {
     borrowAmount,
     borrowAPR,
     borrowCollRatio,
-    borrowMaturity} = useAppContext();
+    borrowMaturity,
+    imageDictBorrow} = useAppContext();
     const { 
       fetchImagesPUNK, 
-      fetchImagesBAYC,
-      imageDictPUNK, imageDictBAYC } = useNFT();
+      fetchImagesBAYC } = useNFT();
     const { borrow } = useLendingPool();
 
   useEffect(() => {
@@ -35,15 +32,7 @@ function PopUpBorrow(props) {
       fetchImagesPUNK();
       fetchImagesBAYC();
     }    
-  }, [account]);
-
-  function visible(nftSymbol) {
-    let visibility = "nft-avatar-1-hidden";
-    if (nftSymbol == borrowProject) {
-      visibility = "nft-avatar-1-borrowPopUp";
-    }
-    return visibility
-  } 
+  }, [account, imageDictBorrow]);
 
   const handleBorrowSubmit = () => {
     console.log('handleBorrowSubmit called');
@@ -68,8 +57,7 @@ function PopUpBorrow(props) {
           <TransactionStatus />
           <div className="borrow-details-borrowPopUp">
             <div className="nft-avatar-borrowPopUp">
-              <img className={visible("PUNK")} src={imageDictPUNK[borrowNFT]}/>
-              <img className={visible("BAYC")} src={imageDictBAYC[borrowNFT]} />
+              <img className="nft-avatar-1-borrowPopUp" src={imageDictBorrow[borrowNFT]} />
             </div>
             <div className="borrow-data-borrowPopUp oxanium-normal-black-20px">
               <div className="borrow-data-collateral-borrowPopUp">

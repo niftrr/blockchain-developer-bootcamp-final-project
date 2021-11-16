@@ -65,22 +65,20 @@ export const useNFT = () => {
         return imageURL
     }
 
-    const fetchImagesBorrow = async () => {
-        console.log('fetchImagesBorrow borrowProject', borrowProject);
-        const imageDict = {}
-        if (borrowProject == "PUNK") {
-            imageDict = imageDictPUNK;
+    const setImagesBorrow = async (nftSymbol) => {
+        if (nftSymbol == "PUNK") {
+            setImageDictBorrow(imageDictPUNK);
         } 
-        else if (borrowProject == "BAYC") {
-            imageDict = imageDictBAYC;
+        else if (nftSymbol == "BAYC") {
+            setImageDictBorrow(imageDictBAYC);
         }
-        setImageDictBorrow(imageDict);
+        
     }
 
     return {
         fetchImagesPUNK,
         fetchImagesBAYC,
-        fetchImagesBorrow,
+        setImagesBorrow,
         imageDictPUNK,
         imageDictBAYC,
         nftAddressSymbolDict,

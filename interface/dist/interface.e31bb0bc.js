@@ -34212,9 +34212,11 @@ var initialContext = {
   borrowDefaults: [],
   setBorrowDefaults: function setBorrowDefaults() {},
   imageDictPUNK: {},
+  setImageDictPUNK: function setImageDictPUNK() {},
   imageDictBAYC: {},
+  setImageDictBAYC: function setImageDictBAYC() {},
   imageDictBorrow: {},
-  setImageDict: function setImageDict() {},
+  setImageDictBorrow: function setImageDictBorrow() {},
   whitelistNFT: [],
   setWhitelistNFT: function setWhitelistNFT() {},
   borrowProject: "--",
@@ -58571,8 +58573,6 @@ var _AppContext = require("../AppContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -58775,25 +58775,19 @@ var useNFT = function useNFT() {
     };
   }();
 
-  var fetchImagesBorrow = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-      var imageDict;
+  var setImagesBorrow = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(nftSymbol) {
       return regeneratorRuntime.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              console.log('fetchImagesBorrow borrowProject', borrowProject);
-              imageDict = {};
-
-              if (borrowProject == "PUNK") {
-                imageDictPUNK, _readOnlyError("imageDict");
-              } else if (borrowProject == "BAYC") {
-                imageDictBAYC, _readOnlyError("imageDict");
+              if (nftSymbol == "PUNK") {
+                setImageDictBorrow(imageDictPUNK);
+              } else if (nftSymbol == "BAYC") {
+                setImageDictBorrow(imageDictBAYC);
               }
 
-              setImageDictBorrow(imageDict);
-
-            case 4:
+            case 1:
             case "end":
               return _context5.stop();
           }
@@ -58801,7 +58795,7 @@ var useNFT = function useNFT() {
       }, _callee5);
     }));
 
-    return function fetchImagesBorrow() {
+    return function setImagesBorrow(_x3) {
       return _ref5.apply(this, arguments);
     };
   }();
@@ -58809,7 +58803,7 @@ var useNFT = function useNFT() {
   return {
     fetchImagesPUNK: fetchImagesPUNK,
     fetchImagesBAYC: fetchImagesBAYC,
-    fetchImagesBorrow: fetchImagesBorrow,
+    setImagesBorrow: setImagesBorrow,
     imageDictPUNK: imageDictPUNK,
     imageDictBAYC: imageDictBAYC,
     nftAddressSymbolDict: nftAddressSymbolDict,
@@ -82355,9 +82349,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function PopUpBorrow(props) {
-  var nftAvatar = props.nftAvatar;
-
+function PopUpBorrow() {
   var _useWeb3React = (0, _core.useWeb3React)(),
       account = _useWeb3React.account;
 
@@ -82371,13 +82363,12 @@ function PopUpBorrow(props) {
       borrowAmount = _useAppContext.borrowAmount,
       borrowAPR = _useAppContext.borrowAPR,
       borrowCollRatio = _useAppContext.borrowCollRatio,
-      borrowMaturity = _useAppContext.borrowMaturity;
+      borrowMaturity = _useAppContext.borrowMaturity,
+      imageDictBorrow = _useAppContext.imageDictBorrow;
 
   var _useNFT = (0, _useNFT2.default)(),
       fetchImagesPUNK = _useNFT.fetchImagesPUNK,
-      fetchImagesBAYC = _useNFT.fetchImagesBAYC,
-      imageDictPUNK = _useNFT.imageDictPUNK,
-      imageDictBAYC = _useNFT.imageDictBAYC;
+      fetchImagesBAYC = _useNFT.fetchImagesBAYC;
 
   var _useLendingPool = (0, _useLendingPool2.default)(),
       borrow = _useLendingPool.borrow;
@@ -82388,17 +82379,7 @@ function PopUpBorrow(props) {
       fetchImagesPUNK();
       fetchImagesBAYC();
     }
-  }, [account]);
-
-  function visible(nftSymbol) {
-    var visibility = "nft-avatar-1-hidden";
-
-    if (nftSymbol == borrowProject) {
-      visibility = "nft-avatar-1-borrowPopUp";
-    }
-
-    return visibility;
-  }
+  }, [account, imageDictBorrow]);
 
   var handleBorrowSubmit = function handleBorrowSubmit() {
     console.log('handleBorrowSubmit called');
@@ -82421,11 +82402,8 @@ function PopUpBorrow(props) {
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "nft-avatar-borrowPopUp"
     }, /*#__PURE__*/_react.default.createElement("img", {
-      className: visible("PUNK"),
-      src: imageDictPUNK[borrowNFT]
-    }), /*#__PURE__*/_react.default.createElement("img", {
-      className: visible("BAYC"),
-      src: imageDictBAYC[borrowNFT]
+      className: "nft-avatar-1-borrowPopUp",
+      src: imageDictBorrow[borrowNFT]
     })), /*#__PURE__*/_react.default.createElement("div", {
       className: "borrow-data-borrowPopUp oxanium-normal-black-20px"
     }, /*#__PURE__*/_react.default.createElement("div", {
@@ -82631,21 +82609,37 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _core = require("@web3-react/core");
+
 var _AppContext = require("../../AppContext");
 
+var _useNFT2 = _interopRequireDefault(require("../../hooks/useNFT"));
+
 require("./ItemProject.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function ItemProject(props) {
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
   var className = props.className,
       nftSymbol = props.nftSymbol;
 
   var _useAppContext = (0, _AppContext.useAppContext)(),
       setBorrowProject = _useAppContext.setBorrowProject,
-      borrowProject = _useAppContext.borrowProject;
+      borrowProject = _useAppContext.borrowProject,
+      setImageDictBorrow = _useAppContext.setImageDictBorrow;
+
+  var _useNFT = (0, _useNFT2.default)(),
+      imageDictPUNK = _useNFT.imageDictPUNK,
+      imageDictBAYC = _useNFT.imageDictBAYC,
+      imageDictBorrow = _useNFT.imageDictBorrow,
+      setImagesBorrow = _useNFT.setImagesBorrow;
 
   var nftProjectImage = {
     "PUNK": "/img/rectangle-18-4@2x.png",
@@ -82653,14 +82647,20 @@ function ItemProject(props) {
   };
 
   var handleChange = function handleChange(nftSymbol) {
-    if (nftSymbol == borrowProject) {
-      setBorrowProject("--");
-    } else {
-      setBorrowProject(nftSymbol);
-      console.log('setting borrowProject to', nftSymbol);
-    }
+    console.log('ItemPoject handleChange');
+    setBorrowProject(nftSymbol); // if (nftSymbol == "PUNK") {
+    //   setImageDictBorrow(imageDictPUNK);
+    // } 
+    // else if (nftSymbol == "BAYC") {
+    //   setImageDictBorrow(imageDictBAYC);
+    // }
+
+    setImagesBorrow(nftSymbol);
   };
 
+  console.log('ItemProject nftSymbol', nftSymbol);
+  console.log('ItemProject borrowProject', borrowProject);
+  console.log('ItemProject imageDictBorrow', imageDictBorrow);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "item-project ".concat(className || "")
   }, /*#__PURE__*/_react.default.createElement("input", {
@@ -82679,7 +82679,7 @@ function ItemProject(props) {
 
 var _default = ItemProject;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","../../AppContext":"AppContext.js","./ItemProject.css":"components/ItemProject/ItemProject.css"}],"components/ItemNFT/ItemNFT.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../../AppContext":"AppContext.js","../../hooks/useNFT":"hooks/useNFT.js","./ItemProject.css":"components/ItemProject/ItemProject.css"}],"components/ItemNFT/ItemNFT.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -82701,6 +82701,8 @@ var _useNFT2 = _interopRequireDefault(require("../../hooks/useNFT"));
 require("./ItemNFT.css");
 
 var _AppContext = require("../../AppContext");
+
+var _useTransaction2 = _interopRequireDefault(require("../../hooks/useTransaction"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82727,12 +82729,15 @@ function ItemNFT(props) {
       borrowNFT = _useAppContext.borrowNFT,
       borrowProject = _useAppContext.borrowProject;
 
+  var _useTransaction = (0, _useTransaction2.default)(),
+      txnStatus = _useTransaction.txnStatus;
+
   (0, _react.useEffect)(function () {
     if (account) {
       fetchImagesPUNK();
       fetchImagesBAYC();
     }
-  }, [account]);
+  }, [account, txnStatus]);
   var nftItemClassName = {
     0: "item-nft-0",
     1: "item-nft-1"
@@ -82799,7 +82804,7 @@ function ItemNFT(props) {
 
 var _default = ItemNFT;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../../hooks/useNFT":"hooks/useNFT.js","./ItemNFT.css":"components/ItemNFT/ItemNFT.css","../../AppContext":"AppContext.js"}],"components/InputDropdownMaturity/InputDropdown.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../../hooks/useNFT":"hooks/useNFT.js","./ItemNFT.css":"components/ItemNFT/ItemNFT.css","../../AppContext":"AppContext.js","../../hooks/useTransaction":"hooks/useTransaction.js"}],"components/InputDropdownMaturity/InputDropdown.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -83417,7 +83422,6 @@ function Borrow2(props) {
   var _useNFT = (0, _useNFT2.default)(),
       fetchImagesPUNK = _useNFT.fetchImagesPUNK,
       fetchImagesBAYC = _useNFT.fetchImagesBAYC,
-      fetchImagesBorrow = _useNFT.fetchImagesBorrow,
       imageDictPUNK = _useNFT.imageDictPUNK,
       imageDictBAYC = _useNFT.imageDictBAYC,
       nftAddressSymbolDict = _useNFT.nftAddressSymbolDict;
@@ -83441,30 +83445,18 @@ function Borrow2(props) {
     if (account) {
       fetchImagesPUNK();
       fetchImagesBAYC();
-      fetchImagesBorrow();
       fetchWhitelistNFT();
       fetchBorrowFloorPrice();
       borrowCollRatio;
       borrowRepaymentAmount;
       console.log('borrow');
     }
-  }, [account]);
+  }, [account, imageDictBorrow]);
   var nftProjectClassName = {
     "PUNK": itemProject2Props.className,
     "BAYC": "",
     "Fidenza": itemProject2Props.className
   };
-
-  function visible(nftSymbol) {
-    var visibility = "nft-avatar-1-hidden";
-
-    if (nftSymbol == borrowProject) {
-      visibility = "nft-avatar-1";
-    }
-
-    return visibility;
-  }
-
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container-center-horizontal"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -83495,11 +83487,8 @@ function Borrow2(props) {
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "nft-avatar-container"
   }, /*#__PURE__*/_react.default.createElement("img", {
-    className: visible("PUNK"),
-    src: imageDictPUNK[borrowNFT]
-  }), /*#__PURE__*/_react.default.createElement("img", {
-    className: visible("BAYC"),
-    src: imageDictBAYC[borrowNFT]
+    className: "nft-avatar-1",
+    src: imageDictBorrow[borrowNFT]
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "flex-col-12"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -99608,7 +99597,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53480" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59173" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

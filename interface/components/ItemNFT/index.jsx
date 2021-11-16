@@ -3,20 +3,22 @@ import { useWeb3React } from "@web3-react/core";
 import useNFT from "../../hooks/useNFT";
 import "./ItemNFT.css";
 import { useAppContext } from "../../AppContext";
+import useTransaction from "../../hooks/useTransaction";
 
 function ItemNFT(props) {
   const { rectangle32, fidenza157 } = props;
   const { account } = useWeb3React();
-  const { fetchImagesPUNK, fetchImagesBAYC, 
+  const { fetchImagesPUNK, fetchImagesBAYC,
     imageDictPUNK, imageDictBAYC, nftAddressSymbolDict } = useNFT();
   const { setBorrowNFT, borrowNFT, borrowProject } = useAppContext();
+  const { txnStatus } = useTransaction();
 
   useEffect(() => {
     if (account) {
       fetchImagesPUNK();
       fetchImagesBAYC();
     }  
-  }, [account]);
+  }, [account, txnStatus]);
 
   const nftItemClassName = {
     0: "item-nft-0",

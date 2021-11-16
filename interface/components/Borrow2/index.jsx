@@ -44,7 +44,7 @@ function Borrow2(props) {
     borrowDataCollRatio2Props2,
   } = props;
   const { account } = useWeb3React();
-  const { fetchImagesPUNK, fetchImagesBAYC, fetchImagesBorrow,
+  const { fetchImagesPUNK, fetchImagesBAYC, 
     imageDictPUNK, imageDictBAYC, nftAddressSymbolDict } = useNFT();
   const { fetchWhitelistNFT, whitelistNFT } = useCollateralManager();
   const { fetchBorrowFloorPrice, borrowFloorPrice } = useLendingPool();
@@ -54,28 +54,19 @@ function Borrow2(props) {
     if (account) {
       fetchImagesPUNK();
       fetchImagesBAYC();
-      fetchImagesBorrow();
       fetchWhitelistNFT();
       fetchBorrowFloorPrice();
       borrowCollRatio
       borrowRepaymentAmount
       console.log('borrow');
     }  
-  }, [account]);
+  }, [account, imageDictBorrow]);
 
   const nftProjectClassName = {
     "PUNK": itemProject2Props.className,
     "BAYC": "",
     "Fidenza": itemProject2Props.className
   }
-
-  function visible(nftSymbol) {
-    let visibility = "nft-avatar-1-hidden";
-    if (nftSymbol == borrowProject) {
-      visibility = "nft-avatar-1";
-    }
-    return visibility
-  } 
 
   return (
     <div className="container-center-horizontal">
@@ -98,8 +89,7 @@ function Borrow2(props) {
               </div>
               <div className="borrow-body">
                 <div className="nft-avatar-container">
-                <img className={visible("PUNK")} src={imageDictPUNK[borrowNFT]}/>
-                <img className={visible("BAYC")} src={imageDictBAYC[borrowNFT]} />
+                <img className="nft-avatar-1" src={imageDictBorrow[borrowNFT]} />
                 </div>
                 <div className="flex-col-12">
                   <div className="flex-row-1">

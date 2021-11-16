@@ -1,10 +1,14 @@
 import React, { useEffect } from "react";
+import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../../AppContext";
+import useNFT from "../../hooks/useNFT";
 import "./ItemProject.css";
 
 function ItemProject(props) {
+  const { account } = useWeb3React();
   const { className, nftSymbol } = props;
-  const { setBorrowProject, borrowProject } = useAppContext();
+  const { setBorrowProject, borrowProject, setImageDictBorrow } = useAppContext();
+  const { imageDictPUNK, imageDictBAYC, imageDictBorrow, setImagesBorrow } = useNFT();
   
   const nftProjectImage = {
     "PUNK": "/img/rectangle-18-4@2x.png",
@@ -12,13 +16,20 @@ function ItemProject(props) {
   }
 
   const handleChange = (nftSymbol) => {
-    if (nftSymbol == borrowProject) {
-      setBorrowProject("--");
-    } else {
-      setBorrowProject(nftSymbol);
-      console.log('setting borrowProject to', nftSymbol);
-    }
+    console.log('ItemPoject handleChange');
+    setBorrowProject(nftSymbol);
+    // if (nftSymbol == "PUNK") {
+    //   setImageDictBorrow(imageDictPUNK);
+    // } 
+    // else if (nftSymbol == "BAYC") {
+    //   setImageDictBorrow(imageDictBAYC);
+    // }
+    setImagesBorrow(nftSymbol);
   }
+
+  console.log('ItemProject nftSymbol', nftSymbol);
+  console.log('ItemProject borrowProject', borrowProject);
+  console.log('ItemProject imageDictBorrow', imageDictBorrow);
 
   return (
     <div className={`item-project ${className || ""}`}>
