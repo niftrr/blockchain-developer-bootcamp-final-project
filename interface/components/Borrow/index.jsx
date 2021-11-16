@@ -38,8 +38,6 @@ function Borrow(props) {
     }  
   }, [account]);
 
-  console.log('USER BORROWS', userBorrows);
-
   const formatDate = (timestamp) => {
     let monthNames =["Jan","Feb","Mar","Apr",
                       "May","Jun","Jul","Aug",
@@ -81,7 +79,14 @@ function Borrow(props) {
           nftTokenId={userBorrows[borrowId]["nftTokenId"]}
           imgUrl={imgUrl}
         />
-        <ButtonRepay />
+        <ButtonRepay 
+          borrowId={borrowId}
+          repaymentAmount={userBorrows[borrowId]["repaymentAmount"]}
+          nftSymbol={userBorrows[borrowId]["nftSymbol"]}
+          nftTokenId={userBorrows[borrowId]["nftTokenId"]}
+          imgUrl={imgUrl}
+          tokenAddress={userBorrows[borrowId]["erc20Token"]}
+        />
         <div className="x175-min-150 valign-text-middle oxanium-bold-black-20px">
           <span>
             <span className="oxanium-bold-black-20px">

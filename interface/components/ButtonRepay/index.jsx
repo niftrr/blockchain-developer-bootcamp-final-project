@@ -4,7 +4,15 @@ import "./ButtonRepay.css";
 import PopUpNFTs from '../PopUpNFTs';
 import Popup from 'reactjs-popup';
 
-function ButtonRepay() {
+function ButtonRepay(props) {
+  const { 
+    borrowId, 
+    repaymentAmount,
+    tokenAddress,
+    nftSymbol,
+    nftTokenId, 
+    imgUrl} = props;
+
   return (
     <Popup modal trigger={
       <div className="button-repay">
@@ -13,7 +21,14 @@ function ButtonRepay() {
           <div className="repay-1 valign-text-middle oxanium-normal-white-20px">Repay</div>
         </button>
       </div>} modal nested>
-      <PopUpNFTs />
+      <PopUpNFTs
+        borrowId={borrowId}
+        repaymentAmount={repaymentAmount}
+        tokenAddress={tokenAddress}
+        nftSymbol={nftSymbol}
+        nftTokenId={nftTokenId}
+        imgUrl={imgUrl}
+      />
       </Popup>
   );
 }

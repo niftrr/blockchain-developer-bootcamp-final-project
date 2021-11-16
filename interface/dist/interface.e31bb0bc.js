@@ -34152,1932 +34152,17 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpNFT/index.jsx":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"AppContext.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./PopUpNFT.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function PopUpNFT(props) {
-  var spanText = props.spanText,
-      spanText2 = props.spanText2,
-      nftAvatar = props.nftAvatar,
-      rectangle19 = props.rectangle19,
-      inputType = props.inputType,
-      inputPlaceholder = props.inputPlaceholder,
-      repay = props.repay;
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "pop-up-nft"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "pop-up-text valign-text-middle oxanium-bold-web-orange-32px"
-  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
-    className: "oxanium-bold-web-orange-32px"
-  }, spanText, /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
-    className: "oxanium-extra-light-web-orange-24px"
-  }, spanText2))), /*#__PURE__*/_react.default.createElement("img", {
-    className: "nft-avatar",
-    src: nftAvatar
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "overlap-group1 border-1px-black"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "rectangle-19",
-    src: rectangle19
-  }), /*#__PURE__*/_react.default.createElement("input", {
-    className: "x19111 oxanium-normal-black-24px",
-    name: "19111",
-    placeholder: inputPlaceholder,
-    type: inputType
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "overlap-group"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "rectangle-47"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "repay valign-text-middle oxanium-normal-white-24px"
-  }, repay)));
-}
-
-var _default = PopUpNFT;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","./PopUpNFT.css":"components/PopUpNFT/PopUpNFT.css"}],"components/PopUpNFTs/PopUpNFTs.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpNFTs/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _PopUpNFT = _interopRequireDefault(require("../PopUpNFT"));
-
-require("./PopUpNFTs.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function PopUpNFTs(props) {
-  var popUpNFTProps = props.popUpNFTProps;
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "container-center-horizontal"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "popupnfts screen"
-  }, /*#__PURE__*/_react.default.createElement(_PopUpNFT.default, {
-    spanText: "Repay borrow.",
-    spanText2: "Repay borrow to retreive your NFT.",
-    nftAvatar: "/img/nft-avatar@2x.png",
-    rectangle19: "/img/rectangle-19@2x.png",
-    inputType: "text",
-    inputPlaceholder: "0.0000",
-    repay: "Repay"
-  })));
-}
-
-var _default = PopUpNFTs;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","../PopUpNFT":"components/PopUpNFT/index.jsx","./PopUpNFTs.css":"components/PopUpNFTs/PopUpNFTs.css"}],"node_modules/@web3-react/types/dist/types.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ConnectorEvent = void 0;
-var ConnectorEvent;
-exports.ConnectorEvent = ConnectorEvent;
-
-(function (ConnectorEvent) {
-  ConnectorEvent["Update"] = "Web3ReactUpdate";
-  ConnectorEvent["Error"] = "Web3ReactError";
-  ConnectorEvent["Deactivate"] = "Web3ReactDeactivate";
-})(ConnectorEvent || (exports.ConnectorEvent = ConnectorEvent = {}));
-},{}],"node_modules/@ethersproject/logger/lib.esm/_version.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.version = void 0;
-const version = "logger/5.5.0";
-exports.version = version;
-},{}],"node_modules/@ethersproject/logger/lib.esm/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Logger = exports.LogLevel = exports.ErrorCode = void 0;
-
-var _version = require("./_version");
-
-let _permanentCensorErrors = false;
-let _censorErrors = false;
-const LogLevels = {
-  debug: 1,
-  "default": 2,
-  info: 2,
-  warning: 3,
-  error: 4,
-  off: 5
-};
-let _logLevel = LogLevels["default"];
-let _globalLogger = null;
-
-function _checkNormalize() {
-  try {
-    const missing = []; // Make sure all forms of normalization are supported
-
-    ["NFD", "NFC", "NFKD", "NFKC"].forEach(form => {
-      try {
-        if ("test".normalize(form) !== "test") {
-          throw new Error("bad normalize");
-        }
-
-        ;
-      } catch (error) {
-        missing.push(form);
-      }
-    });
-
-    if (missing.length) {
-      throw new Error("missing " + missing.join(", "));
-    }
-
-    if (String.fromCharCode(0xe9).normalize("NFD") !== String.fromCharCode(0x65, 0x0301)) {
-      throw new Error("broken implementation");
-    }
-  } catch (error) {
-    return error.message;
-  }
-
-  return null;
-}
-
-const _normalizeError = _checkNormalize();
-
-var LogLevel;
-exports.LogLevel = LogLevel;
-
-(function (LogLevel) {
-  LogLevel["DEBUG"] = "DEBUG";
-  LogLevel["INFO"] = "INFO";
-  LogLevel["WARNING"] = "WARNING";
-  LogLevel["ERROR"] = "ERROR";
-  LogLevel["OFF"] = "OFF";
-})(LogLevel || (exports.LogLevel = LogLevel = {}));
-
-var ErrorCode;
-exports.ErrorCode = ErrorCode;
-
-(function (ErrorCode) {
-  ///////////////////
-  // Generic Errors
-  // Unknown Error
-  ErrorCode["UNKNOWN_ERROR"] = "UNKNOWN_ERROR"; // Not Implemented
-
-  ErrorCode["NOT_IMPLEMENTED"] = "NOT_IMPLEMENTED"; // Unsupported Operation
-  //   - operation
-
-  ErrorCode["UNSUPPORTED_OPERATION"] = "UNSUPPORTED_OPERATION"; // Network Error (i.e. Ethereum Network, such as an invalid chain ID)
-  //   - event ("noNetwork" is not re-thrown in provider.ready; otherwise thrown)
-
-  ErrorCode["NETWORK_ERROR"] = "NETWORK_ERROR"; // Some sort of bad response from the server
-
-  ErrorCode["SERVER_ERROR"] = "SERVER_ERROR"; // Timeout
-
-  ErrorCode["TIMEOUT"] = "TIMEOUT"; ///////////////////
-  // Operational  Errors
-  // Buffer Overrun
-
-  ErrorCode["BUFFER_OVERRUN"] = "BUFFER_OVERRUN"; // Numeric Fault
-  //   - operation: the operation being executed
-  //   - fault: the reason this faulted
-
-  ErrorCode["NUMERIC_FAULT"] = "NUMERIC_FAULT"; ///////////////////
-  // Argument Errors
-  // Missing new operator to an object
-  //  - name: The name of the class
-
-  ErrorCode["MISSING_NEW"] = "MISSING_NEW"; // Invalid argument (e.g. value is incompatible with type) to a function:
-  //   - argument: The argument name that was invalid
-  //   - value: The value of the argument
-
-  ErrorCode["INVALID_ARGUMENT"] = "INVALID_ARGUMENT"; // Missing argument to a function:
-  //   - count: The number of arguments received
-  //   - expectedCount: The number of arguments expected
-
-  ErrorCode["MISSING_ARGUMENT"] = "MISSING_ARGUMENT"; // Too many arguments
-  //   - count: The number of arguments received
-  //   - expectedCount: The number of arguments expected
-
-  ErrorCode["UNEXPECTED_ARGUMENT"] = "UNEXPECTED_ARGUMENT"; ///////////////////
-  // Blockchain Errors
-  // Call exception
-  //  - transaction: the transaction
-  //  - address?: the contract address
-  //  - args?: The arguments passed into the function
-  //  - method?: The Solidity method signature
-  //  - errorSignature?: The EIP848 error signature
-  //  - errorArgs?: The EIP848 error parameters
-  //  - reason: The reason (only for EIP848 "Error(string)")
-
-  ErrorCode["CALL_EXCEPTION"] = "CALL_EXCEPTION"; // Insufficient funds (< value + gasLimit * gasPrice)
-  //   - transaction: the transaction attempted
-
-  ErrorCode["INSUFFICIENT_FUNDS"] = "INSUFFICIENT_FUNDS"; // Nonce has already been used
-  //   - transaction: the transaction attempted
-
-  ErrorCode["NONCE_EXPIRED"] = "NONCE_EXPIRED"; // The replacement fee for the transaction is too low
-  //   - transaction: the transaction attempted
-
-  ErrorCode["REPLACEMENT_UNDERPRICED"] = "REPLACEMENT_UNDERPRICED"; // The gas limit could not be estimated
-  //   - transaction: the transaction passed to estimateGas
-
-  ErrorCode["UNPREDICTABLE_GAS_LIMIT"] = "UNPREDICTABLE_GAS_LIMIT"; // The transaction was replaced by one with a higher gas price
-  //   - reason: "cancelled", "replaced" or "repriced"
-  //   - cancelled: true if reason == "cancelled" or reason == "replaced")
-  //   - hash: original transaction hash
-  //   - replacement: the full TransactionsResponse for the replacement
-  //   - receipt: the receipt of the replacement
-
-  ErrorCode["TRANSACTION_REPLACED"] = "TRANSACTION_REPLACED";
-})(ErrorCode || (exports.ErrorCode = ErrorCode = {}));
-
-;
-const HEX = "0123456789abcdef";
-
-class Logger {
-  constructor(version) {
-    Object.defineProperty(this, "version", {
-      enumerable: true,
-      value: version,
-      writable: false
-    });
-  }
-
-  _log(logLevel, args) {
-    const level = logLevel.toLowerCase();
-
-    if (LogLevels[level] == null) {
-      this.throwArgumentError("invalid log level name", "logLevel", logLevel);
-    }
-
-    if (_logLevel > LogLevels[level]) {
-      return;
-    }
-
-    console.log.apply(console, args);
-  }
-
-  debug(...args) {
-    this._log(Logger.levels.DEBUG, args);
-  }
-
-  info(...args) {
-    this._log(Logger.levels.INFO, args);
-  }
-
-  warn(...args) {
-    this._log(Logger.levels.WARNING, args);
-  }
-
-  makeError(message, code, params) {
-    // Errors are being censored
-    if (_censorErrors) {
-      return this.makeError("censored error", code, {});
-    }
-
-    if (!code) {
-      code = Logger.errors.UNKNOWN_ERROR;
-    }
-
-    if (!params) {
-      params = {};
-    }
-
-    const messageDetails = [];
-    Object.keys(params).forEach(key => {
-      const value = params[key];
-
-      try {
-        if (value instanceof Uint8Array) {
-          let hex = "";
-
-          for (let i = 0; i < value.length; i++) {
-            hex += HEX[value[i] >> 4];
-            hex += HEX[value[i] & 0x0f];
-          }
-
-          messageDetails.push(key + "=Uint8Array(0x" + hex + ")");
-        } else {
-          messageDetails.push(key + "=" + JSON.stringify(value));
-        }
-      } catch (error) {
-        messageDetails.push(key + "=" + JSON.stringify(params[key].toString()));
-      }
-    });
-    messageDetails.push(`code=${code}`);
-    messageDetails.push(`version=${this.version}`);
-    const reason = message;
-
-    if (messageDetails.length) {
-      message += " (" + messageDetails.join(", ") + ")";
-    } // @TODO: Any??
-
-
-    const error = new Error(message);
-    error.reason = reason;
-    error.code = code;
-    Object.keys(params).forEach(function (key) {
-      error[key] = params[key];
-    });
-    return error;
-  }
-
-  throwError(message, code, params) {
-    throw this.makeError(message, code, params);
-  }
-
-  throwArgumentError(message, name, value) {
-    return this.throwError(message, Logger.errors.INVALID_ARGUMENT, {
-      argument: name,
-      value: value
-    });
-  }
-
-  assert(condition, message, code, params) {
-    if (!!condition) {
-      return;
-    }
-
-    this.throwError(message, code, params);
-  }
-
-  assertArgument(condition, message, name, value) {
-    if (!!condition) {
-      return;
-    }
-
-    this.throwArgumentError(message, name, value);
-  }
-
-  checkNormalize(message) {
-    if (message == null) {
-      message = "platform missing String.prototype.normalize";
-    }
-
-    if (_normalizeError) {
-      this.throwError("platform missing String.prototype.normalize", Logger.errors.UNSUPPORTED_OPERATION, {
-        operation: "String.prototype.normalize",
-        form: _normalizeError
-      });
-    }
-  }
-
-  checkSafeUint53(value, message) {
-    if (typeof value !== "number") {
-      return;
-    }
-
-    if (message == null) {
-      message = "value not safe";
-    }
-
-    if (value < 0 || value >= 0x1fffffffffffff) {
-      this.throwError(message, Logger.errors.NUMERIC_FAULT, {
-        operation: "checkSafeInteger",
-        fault: "out-of-safe-range",
-        value: value
-      });
-    }
-
-    if (value % 1) {
-      this.throwError(message, Logger.errors.NUMERIC_FAULT, {
-        operation: "checkSafeInteger",
-        fault: "non-integer",
-        value: value
-      });
-    }
-  }
-
-  checkArgumentCount(count, expectedCount, message) {
-    if (message) {
-      message = ": " + message;
-    } else {
-      message = "";
-    }
-
-    if (count < expectedCount) {
-      this.throwError("missing argument" + message, Logger.errors.MISSING_ARGUMENT, {
-        count: count,
-        expectedCount: expectedCount
-      });
-    }
-
-    if (count > expectedCount) {
-      this.throwError("too many arguments" + message, Logger.errors.UNEXPECTED_ARGUMENT, {
-        count: count,
-        expectedCount: expectedCount
-      });
-    }
-  }
-
-  checkNew(target, kind) {
-    if (target === Object || target == null) {
-      this.throwError("missing new", Logger.errors.MISSING_NEW, {
-        name: kind.name
-      });
-    }
-  }
-
-  checkAbstract(target, kind) {
-    if (target === kind) {
-      this.throwError("cannot instantiate abstract class " + JSON.stringify(kind.name) + " directly; use a sub-class", Logger.errors.UNSUPPORTED_OPERATION, {
-        name: target.name,
-        operation: "new"
-      });
-    } else if (target === Object || target == null) {
-      this.throwError("missing new", Logger.errors.MISSING_NEW, {
-        name: kind.name
-      });
-    }
-  }
-
-  static globalLogger() {
-    if (!_globalLogger) {
-      _globalLogger = new Logger(_version.version);
-    }
-
-    return _globalLogger;
-  }
-
-  static setCensorship(censorship, permanent) {
-    if (!censorship && permanent) {
-      this.globalLogger().throwError("cannot permanently disable censorship", Logger.errors.UNSUPPORTED_OPERATION, {
-        operation: "setCensorship"
-      });
-    }
-
-    if (_permanentCensorErrors) {
-      if (!censorship) {
-        return;
-      }
-
-      this.globalLogger().throwError("error censorship permanent", Logger.errors.UNSUPPORTED_OPERATION, {
-        operation: "setCensorship"
-      });
-    }
-
-    _censorErrors = !!censorship;
-    _permanentCensorErrors = !!permanent;
-  }
-
-  static setLogLevel(logLevel) {
-    const level = LogLevels[logLevel.toLowerCase()];
-
-    if (level == null) {
-      Logger.globalLogger().warn("invalid log level - " + logLevel);
-      return;
-    }
-
-    _logLevel = level;
-  }
-
-  static from(version) {
-    return new Logger(version);
-  }
-
-}
-
-exports.Logger = Logger;
-Logger.errors = ErrorCode;
-Logger.levels = LogLevel;
-},{"./_version":"node_modules/@ethersproject/logger/lib.esm/_version.js"}],"node_modules/@ethersproject/bytes/lib.esm/_version.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.version = void 0;
-const version = "bytes/5.5.0";
-exports.version = version;
-},{}],"node_modules/@ethersproject/bytes/lib.esm/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.arrayify = arrayify;
-exports.concat = concat;
-exports.hexConcat = hexConcat;
-exports.hexDataLength = hexDataLength;
-exports.hexDataSlice = hexDataSlice;
-exports.hexStripZeros = hexStripZeros;
-exports.hexValue = hexValue;
-exports.hexZeroPad = hexZeroPad;
-exports.hexlify = hexlify;
-exports.isBytes = isBytes;
-exports.isBytesLike = isBytesLike;
-exports.isHexString = isHexString;
-exports.joinSignature = joinSignature;
-exports.splitSignature = splitSignature;
-exports.stripZeros = stripZeros;
-exports.zeroPad = zeroPad;
-
-var _logger = require("@ethersproject/logger");
-
-var _version = require("./_version");
-
-const logger = new _logger.Logger(_version.version); ///////////////////////////////
-
-function isHexable(value) {
-  return !!value.toHexString;
-}
-
-function addSlice(array) {
-  if (array.slice) {
-    return array;
-  }
-
-  array.slice = function () {
-    const args = Array.prototype.slice.call(arguments);
-    return addSlice(new Uint8Array(Array.prototype.slice.apply(array, args)));
-  };
-
-  return array;
-}
-
-function isBytesLike(value) {
-  return isHexString(value) && !(value.length % 2) || isBytes(value);
-}
-
-function isInteger(value) {
-  return typeof value === "number" && value == value && value % 1 === 0;
-}
-
-function isBytes(value) {
-  if (value == null) {
-    return false;
-  }
-
-  if (value.constructor === Uint8Array) {
-    return true;
-  }
-
-  if (typeof value === "string") {
-    return false;
-  }
-
-  if (!isInteger(value.length) || value.length < 0) {
-    return false;
-  }
-
-  for (let i = 0; i < value.length; i++) {
-    const v = value[i];
-
-    if (!isInteger(v) || v < 0 || v >= 256) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function arrayify(value, options) {
-  if (!options) {
-    options = {};
-  }
-
-  if (typeof value === "number") {
-    logger.checkSafeUint53(value, "invalid arrayify value");
-    const result = [];
-
-    while (value) {
-      result.unshift(value & 0xff);
-      value = parseInt(String(value / 256));
-    }
-
-    if (result.length === 0) {
-      result.push(0);
-    }
-
-    return addSlice(new Uint8Array(result));
-  }
-
-  if (options.allowMissingPrefix && typeof value === "string" && value.substring(0, 2) !== "0x") {
-    value = "0x" + value;
-  }
-
-  if (isHexable(value)) {
-    value = value.toHexString();
-  }
-
-  if (isHexString(value)) {
-    let hex = value.substring(2);
-
-    if (hex.length % 2) {
-      if (options.hexPad === "left") {
-        hex = "0x0" + hex.substring(2);
-      } else if (options.hexPad === "right") {
-        hex += "0";
-      } else {
-        logger.throwArgumentError("hex data is odd-length", "value", value);
-      }
-    }
-
-    const result = [];
-
-    for (let i = 0; i < hex.length; i += 2) {
-      result.push(parseInt(hex.substring(i, i + 2), 16));
-    }
-
-    return addSlice(new Uint8Array(result));
-  }
-
-  if (isBytes(value)) {
-    return addSlice(new Uint8Array(value));
-  }
-
-  return logger.throwArgumentError("invalid arrayify value", "value", value);
-}
-
-function concat(items) {
-  const objects = items.map(item => arrayify(item));
-  const length = objects.reduce((accum, item) => accum + item.length, 0);
-  const result = new Uint8Array(length);
-  objects.reduce((offset, object) => {
-    result.set(object, offset);
-    return offset + object.length;
-  }, 0);
-  return addSlice(result);
-}
-
-function stripZeros(value) {
-  let result = arrayify(value);
-
-  if (result.length === 0) {
-    return result;
-  } // Find the first non-zero entry
-
-
-  let start = 0;
-
-  while (start < result.length && result[start] === 0) {
-    start++;
-  } // If we started with zeros, strip them
-
-
-  if (start) {
-    result = result.slice(start);
-  }
-
-  return result;
-}
-
-function zeroPad(value, length) {
-  value = arrayify(value);
-
-  if (value.length > length) {
-    logger.throwArgumentError("value out of range", "value", arguments[0]);
-  }
-
-  const result = new Uint8Array(length);
-  result.set(value, length - value.length);
-  return addSlice(result);
-}
-
-function isHexString(value, length) {
-  if (typeof value !== "string" || !value.match(/^0x[0-9A-Fa-f]*$/)) {
-    return false;
-  }
-
-  if (length && value.length !== 2 + 2 * length) {
-    return false;
-  }
-
-  return true;
-}
-
-const HexCharacters = "0123456789abcdef";
-
-function hexlify(value, options) {
-  if (!options) {
-    options = {};
-  }
-
-  if (typeof value === "number") {
-    logger.checkSafeUint53(value, "invalid hexlify value");
-    let hex = "";
-
-    while (value) {
-      hex = HexCharacters[value & 0xf] + hex;
-      value = Math.floor(value / 16);
-    }
-
-    if (hex.length) {
-      if (hex.length % 2) {
-        hex = "0" + hex;
-      }
-
-      return "0x" + hex;
-    }
-
-    return "0x00";
-  }
-
-  if (typeof value === "bigint") {
-    value = value.toString(16);
-
-    if (value.length % 2) {
-      return "0x0" + value;
-    }
-
-    return "0x" + value;
-  }
-
-  if (options.allowMissingPrefix && typeof value === "string" && value.substring(0, 2) !== "0x") {
-    value = "0x" + value;
-  }
-
-  if (isHexable(value)) {
-    return value.toHexString();
-  }
-
-  if (isHexString(value)) {
-    if (value.length % 2) {
-      if (options.hexPad === "left") {
-        value = "0x0" + value.substring(2);
-      } else if (options.hexPad === "right") {
-        value += "0";
-      } else {
-        logger.throwArgumentError("hex data is odd-length", "value", value);
-      }
-    }
-
-    return value.toLowerCase();
-  }
-
-  if (isBytes(value)) {
-    let result = "0x";
-
-    for (let i = 0; i < value.length; i++) {
-      let v = value[i];
-      result += HexCharacters[(v & 0xf0) >> 4] + HexCharacters[v & 0x0f];
-    }
-
-    return result;
-  }
-
-  return logger.throwArgumentError("invalid hexlify value", "value", value);
-}
-/*
-function unoddify(value: BytesLike | Hexable | number): BytesLike | Hexable | number {
-    if (typeof(value) === "string" && value.length % 2 && value.substring(0, 2) === "0x") {
-        return "0x0" + value.substring(2);
-    }
-    return value;
-}
-*/
-
-
-function hexDataLength(data) {
-  if (typeof data !== "string") {
-    data = hexlify(data);
-  } else if (!isHexString(data) || data.length % 2) {
-    return null;
-  }
-
-  return (data.length - 2) / 2;
-}
-
-function hexDataSlice(data, offset, endOffset) {
-  if (typeof data !== "string") {
-    data = hexlify(data);
-  } else if (!isHexString(data) || data.length % 2) {
-    logger.throwArgumentError("invalid hexData", "value", data);
-  }
-
-  offset = 2 + 2 * offset;
-
-  if (endOffset != null) {
-    return "0x" + data.substring(offset, 2 + 2 * endOffset);
-  }
-
-  return "0x" + data.substring(offset);
-}
-
-function hexConcat(items) {
-  let result = "0x";
-  items.forEach(item => {
-    result += hexlify(item).substring(2);
-  });
-  return result;
-}
-
-function hexValue(value) {
-  const trimmed = hexStripZeros(hexlify(value, {
-    hexPad: "left"
-  }));
-
-  if (trimmed === "0x") {
-    return "0x0";
-  }
-
-  return trimmed;
-}
-
-function hexStripZeros(value) {
-  if (typeof value !== "string") {
-    value = hexlify(value);
-  }
-
-  if (!isHexString(value)) {
-    logger.throwArgumentError("invalid hex string", "value", value);
-  }
-
-  value = value.substring(2);
-  let offset = 0;
-
-  while (offset < value.length && value[offset] === "0") {
-    offset++;
-  }
-
-  return "0x" + value.substring(offset);
-}
-
-function hexZeroPad(value, length) {
-  if (typeof value !== "string") {
-    value = hexlify(value);
-  } else if (!isHexString(value)) {
-    logger.throwArgumentError("invalid hex string", "value", value);
-  }
-
-  if (value.length > 2 * length + 2) {
-    logger.throwArgumentError("value out of range", "value", arguments[1]);
-  }
-
-  while (value.length < 2 * length + 2) {
-    value = "0x0" + value.substring(2);
-  }
-
-  return value;
-}
-
-function splitSignature(signature) {
-  const result = {
-    r: "0x",
-    s: "0x",
-    _vs: "0x",
-    recoveryParam: 0,
-    v: 0
-  };
-
-  if (isBytesLike(signature)) {
-    const bytes = arrayify(signature);
-
-    if (bytes.length !== 65) {
-      logger.throwArgumentError("invalid signature string; must be 65 bytes", "signature", signature);
-    } // Get the r, s and v
-
-
-    result.r = hexlify(bytes.slice(0, 32));
-    result.s = hexlify(bytes.slice(32, 64));
-    result.v = bytes[64]; // Allow a recid to be used as the v
-
-    if (result.v < 27) {
-      if (result.v === 0 || result.v === 1) {
-        result.v += 27;
-      } else {
-        logger.throwArgumentError("signature invalid v byte", "signature", signature);
-      }
-    } // Compute recoveryParam from v
-
-
-    result.recoveryParam = 1 - result.v % 2; // Compute _vs from recoveryParam and s
-
-    if (result.recoveryParam) {
-      bytes[32] |= 0x80;
-    }
-
-    result._vs = hexlify(bytes.slice(32, 64));
-  } else {
-    result.r = signature.r;
-    result.s = signature.s;
-    result.v = signature.v;
-    result.recoveryParam = signature.recoveryParam;
-    result._vs = signature._vs; // If the _vs is available, use it to populate missing s, v and recoveryParam
-    // and verify non-missing s, v and recoveryParam
-
-    if (result._vs != null) {
-      const vs = zeroPad(arrayify(result._vs), 32);
-      result._vs = hexlify(vs); // Set or check the recid
-
-      const recoveryParam = vs[0] >= 128 ? 1 : 0;
-
-      if (result.recoveryParam == null) {
-        result.recoveryParam = recoveryParam;
-      } else if (result.recoveryParam !== recoveryParam) {
-        logger.throwArgumentError("signature recoveryParam mismatch _vs", "signature", signature);
-      } // Set or check the s
-
-
-      vs[0] &= 0x7f;
-      const s = hexlify(vs);
-
-      if (result.s == null) {
-        result.s = s;
-      } else if (result.s !== s) {
-        logger.throwArgumentError("signature v mismatch _vs", "signature", signature);
-      }
-    } // Use recid and v to populate each other
-
-
-    if (result.recoveryParam == null) {
-      if (result.v == null) {
-        logger.throwArgumentError("signature missing v and recoveryParam", "signature", signature);
-      } else if (result.v === 0 || result.v === 1) {
-        result.recoveryParam = result.v;
-      } else {
-        result.recoveryParam = 1 - result.v % 2;
-      }
-    } else {
-      if (result.v == null) {
-        result.v = 27 + result.recoveryParam;
-      } else {
-        const recId = result.v === 0 || result.v === 1 ? result.v : 1 - result.v % 2;
-
-        if (result.recoveryParam !== recId) {
-          logger.throwArgumentError("signature recoveryParam mismatch v", "signature", signature);
-        }
-      }
-    }
-
-    if (result.r == null || !isHexString(result.r)) {
-      logger.throwArgumentError("signature missing or invalid r", "signature", signature);
-    } else {
-      result.r = hexZeroPad(result.r, 32);
-    }
-
-    if (result.s == null || !isHexString(result.s)) {
-      logger.throwArgumentError("signature missing or invalid s", "signature", signature);
-    } else {
-      result.s = hexZeroPad(result.s, 32);
-    }
-
-    const vs = arrayify(result.s);
-
-    if (vs[0] >= 128) {
-      logger.throwArgumentError("signature s out of range", "signature", signature);
-    }
-
-    if (result.recoveryParam) {
-      vs[0] |= 0x80;
-    }
-
-    const _vs = hexlify(vs);
-
-    if (result._vs) {
-      if (!isHexString(result._vs)) {
-        logger.throwArgumentError("signature invalid _vs", "signature", signature);
-      }
-
-      result._vs = hexZeroPad(result._vs, 32);
-    } // Set or check the _vs
-
-
-    if (result._vs == null) {
-      result._vs = _vs;
-    } else if (result._vs !== _vs) {
-      logger.throwArgumentError("signature _vs mismatch v and s", "signature", signature);
-    }
-  }
-
-  return result;
-}
-
-function joinSignature(signature) {
-  signature = splitSignature(signature);
-  return hexlify(concat([signature.r, signature.s, signature.recoveryParam ? "0x1c" : "0x1b"]));
-}
-},{"@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","./_version":"node_modules/@ethersproject/bytes/lib.esm/_version.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
-
-// shim for using process in browser
-var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-  throw new Error('setTimeout has not been defined');
-}
-
-function defaultClearTimeout() {
-  throw new Error('clearTimeout has not been defined');
-}
-
-(function () {
-  try {
-    if (typeof setTimeout === 'function') {
-      cachedSetTimeout = setTimeout;
-    } else {
-      cachedSetTimeout = defaultSetTimout;
-    }
-  } catch (e) {
-    cachedSetTimeout = defaultSetTimout;
-  }
-
-  try {
-    if (typeof clearTimeout === 'function') {
-      cachedClearTimeout = clearTimeout;
-    } else {
-      cachedClearTimeout = defaultClearTimeout;
-    }
-  } catch (e) {
-    cachedClearTimeout = defaultClearTimeout;
-  }
-})();
-
-function runTimeout(fun) {
-  if (cachedSetTimeout === setTimeout) {
-    //normal enviroments in sane situations
-    return setTimeout(fun, 0);
-  } // if setTimeout wasn't available but was latter defined
-
-
-  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-    cachedSetTimeout = setTimeout;
-    return setTimeout(fun, 0);
-  }
-
-  try {
-    // when when somebody has screwed with setTimeout but no I.E. maddness
-    return cachedSetTimeout(fun, 0);
-  } catch (e) {
-    try {
-      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-      return cachedSetTimeout.call(null, fun, 0);
-    } catch (e) {
-      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-      return cachedSetTimeout.call(this, fun, 0);
-    }
-  }
-}
-
-function runClearTimeout(marker) {
-  if (cachedClearTimeout === clearTimeout) {
-    //normal enviroments in sane situations
-    return clearTimeout(marker);
-  } // if clearTimeout wasn't available but was latter defined
-
-
-  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-    cachedClearTimeout = clearTimeout;
-    return clearTimeout(marker);
-  }
-
-  try {
-    // when when somebody has screwed with setTimeout but no I.E. maddness
-    return cachedClearTimeout(marker);
-  } catch (e) {
-    try {
-      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-      return cachedClearTimeout.call(null, marker);
-    } catch (e) {
-      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-      return cachedClearTimeout.call(this, marker);
-    }
-  }
-}
-
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-  if (!draining || !currentQueue) {
-    return;
-  }
-
-  draining = false;
-
-  if (currentQueue.length) {
-    queue = currentQueue.concat(queue);
-  } else {
-    queueIndex = -1;
-  }
-
-  if (queue.length) {
-    drainQueue();
-  }
-}
-
-function drainQueue() {
-  if (draining) {
-    return;
-  }
-
-  var timeout = runTimeout(cleanUpNextTick);
-  draining = true;
-  var len = queue.length;
-
-  while (len) {
-    currentQueue = queue;
-    queue = [];
-
-    while (++queueIndex < len) {
-      if (currentQueue) {
-        currentQueue[queueIndex].run();
-      }
-    }
-
-    queueIndex = -1;
-    len = queue.length;
-  }
-
-  currentQueue = null;
-  draining = false;
-  runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-  var args = new Array(arguments.length - 1);
-
-  if (arguments.length > 1) {
-    for (var i = 1; i < arguments.length; i++) {
-      args[i - 1] = arguments[i];
-    }
-  }
-
-  queue.push(new Item(fun, args));
-
-  if (queue.length === 1 && !draining) {
-    runTimeout(drainQueue);
-  }
-}; // v8 likes predictible objects
-
-
-function Item(fun, array) {
-  this.fun = fun;
-  this.array = array;
-}
-
-Item.prototype.run = function () {
-  this.fun.apply(null, this.array);
-};
-
-process.title = 'browser';
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) {
-  return [];
-};
-
-process.binding = function (name) {
-  throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () {
-  return '/';
-};
-
-process.chdir = function (dir) {
-  throw new Error('process.chdir is not supported');
-};
-
-process.umask = function () {
-  return 0;
-};
-},{}],"node_modules/js-sha3/src/sha3.js":[function(require,module,exports) {
-var process = require("process");
-var global = arguments[3];
-var define;
-/**
- * [js-sha3]{@link https://github.com/emn178/js-sha3}
- *
- * @version 0.8.0
- * @author Chen, Yi-Cyuan [emn178@gmail.com]
- * @copyright Chen, Yi-Cyuan 2015-2018
- * @license MIT
- */
-/*jslint bitwise: true */
-(function () {
-  'use strict';
-
-  var INPUT_ERROR = 'input is invalid type';
-  var FINALIZE_ERROR = 'finalize already called';
-  var WINDOW = typeof window === 'object';
-  var root = WINDOW ? window : {};
-  if (root.JS_SHA3_NO_WINDOW) {
-    WINDOW = false;
-  }
-  var WEB_WORKER = !WINDOW && typeof self === 'object';
-  var NODE_JS = !root.JS_SHA3_NO_NODE_JS && typeof process === 'object' && process.versions && process.versions.node;
-  if (NODE_JS) {
-    root = global;
-  } else if (WEB_WORKER) {
-    root = self;
-  }
-  var COMMON_JS = !root.JS_SHA3_NO_COMMON_JS && typeof module === 'object' && module.exports;
-  var AMD = typeof define === 'function' && define.amd;
-  var ARRAY_BUFFER = !root.JS_SHA3_NO_ARRAY_BUFFER && typeof ArrayBuffer !== 'undefined';
-  var HEX_CHARS = '0123456789abcdef'.split('');
-  var SHAKE_PADDING = [31, 7936, 2031616, 520093696];
-  var CSHAKE_PADDING = [4, 1024, 262144, 67108864];
-  var KECCAK_PADDING = [1, 256, 65536, 16777216];
-  var PADDING = [6, 1536, 393216, 100663296];
-  var SHIFT = [0, 8, 16, 24];
-  var RC = [1, 0, 32898, 0, 32906, 2147483648, 2147516416, 2147483648, 32907, 0, 2147483649,
-    0, 2147516545, 2147483648, 32777, 2147483648, 138, 0, 136, 0, 2147516425, 0,
-    2147483658, 0, 2147516555, 0, 139, 2147483648, 32905, 2147483648, 32771,
-    2147483648, 32770, 2147483648, 128, 2147483648, 32778, 0, 2147483658, 2147483648,
-    2147516545, 2147483648, 32896, 2147483648, 2147483649, 0, 2147516424, 2147483648];
-  var BITS = [224, 256, 384, 512];
-  var SHAKE_BITS = [128, 256];
-  var OUTPUT_TYPES = ['hex', 'buffer', 'arrayBuffer', 'array', 'digest'];
-  var CSHAKE_BYTEPAD = {
-    '128': 168,
-    '256': 136
-  };
-
-  if (root.JS_SHA3_NO_NODE_JS || !Array.isArray) {
-    Array.isArray = function (obj) {
-      return Object.prototype.toString.call(obj) === '[object Array]';
-    };
-  }
-
-  if (ARRAY_BUFFER && (root.JS_SHA3_NO_ARRAY_BUFFER_IS_VIEW || !ArrayBuffer.isView)) {
-    ArrayBuffer.isView = function (obj) {
-      return typeof obj === 'object' && obj.buffer && obj.buffer.constructor === ArrayBuffer;
-    };
-  }
-
-  var createOutputMethod = function (bits, padding, outputType) {
-    return function (message) {
-      return new Keccak(bits, padding, bits).update(message)[outputType]();
-    };
-  };
-
-  var createShakeOutputMethod = function (bits, padding, outputType) {
-    return function (message, outputBits) {
-      return new Keccak(bits, padding, outputBits).update(message)[outputType]();
-    };
-  };
-
-  var createCshakeOutputMethod = function (bits, padding, outputType) {
-    return function (message, outputBits, n, s) {
-      return methods['cshake' + bits].update(message, outputBits, n, s)[outputType]();
-    };
-  };
-
-  var createKmacOutputMethod = function (bits, padding, outputType) {
-    return function (key, message, outputBits, s) {
-      return methods['kmac' + bits].update(key, message, outputBits, s)[outputType]();
-    };
-  };
-
-  var createOutputMethods = function (method, createMethod, bits, padding) {
-    for (var i = 0; i < OUTPUT_TYPES.length; ++i) {
-      var type = OUTPUT_TYPES[i];
-      method[type] = createMethod(bits, padding, type);
-    }
-    return method;
-  };
-
-  var createMethod = function (bits, padding) {
-    var method = createOutputMethod(bits, padding, 'hex');
-    method.create = function () {
-      return new Keccak(bits, padding, bits);
-    };
-    method.update = function (message) {
-      return method.create().update(message);
-    };
-    return createOutputMethods(method, createOutputMethod, bits, padding);
-  };
-
-  var createShakeMethod = function (bits, padding) {
-    var method = createShakeOutputMethod(bits, padding, 'hex');
-    method.create = function (outputBits) {
-      return new Keccak(bits, padding, outputBits);
-    };
-    method.update = function (message, outputBits) {
-      return method.create(outputBits).update(message);
-    };
-    return createOutputMethods(method, createShakeOutputMethod, bits, padding);
-  };
-
-  var createCshakeMethod = function (bits, padding) {
-    var w = CSHAKE_BYTEPAD[bits];
-    var method = createCshakeOutputMethod(bits, padding, 'hex');
-    method.create = function (outputBits, n, s) {
-      if (!n && !s) {
-        return methods['shake' + bits].create(outputBits);
-      } else {
-        return new Keccak(bits, padding, outputBits).bytepad([n, s], w);
-      }
-    };
-    method.update = function (message, outputBits, n, s) {
-      return method.create(outputBits, n, s).update(message);
-    };
-    return createOutputMethods(method, createCshakeOutputMethod, bits, padding);
-  };
-
-  var createKmacMethod = function (bits, padding) {
-    var w = CSHAKE_BYTEPAD[bits];
-    var method = createKmacOutputMethod(bits, padding, 'hex');
-    method.create = function (key, outputBits, s) {
-      return new Kmac(bits, padding, outputBits).bytepad(['KMAC', s], w).bytepad([key], w);
-    };
-    method.update = function (key, message, outputBits, s) {
-      return method.create(key, outputBits, s).update(message);
-    };
-    return createOutputMethods(method, createKmacOutputMethod, bits, padding);
-  };
-
-  var algorithms = [
-    { name: 'keccak', padding: KECCAK_PADDING, bits: BITS, createMethod: createMethod },
-    { name: 'sha3', padding: PADDING, bits: BITS, createMethod: createMethod },
-    { name: 'shake', padding: SHAKE_PADDING, bits: SHAKE_BITS, createMethod: createShakeMethod },
-    { name: 'cshake', padding: CSHAKE_PADDING, bits: SHAKE_BITS, createMethod: createCshakeMethod },
-    { name: 'kmac', padding: CSHAKE_PADDING, bits: SHAKE_BITS, createMethod: createKmacMethod }
-  ];
-
-  var methods = {}, methodNames = [];
-
-  for (var i = 0; i < algorithms.length; ++i) {
-    var algorithm = algorithms[i];
-    var bits = algorithm.bits;
-    for (var j = 0; j < bits.length; ++j) {
-      var methodName = algorithm.name + '_' + bits[j];
-      methodNames.push(methodName);
-      methods[methodName] = algorithm.createMethod(bits[j], algorithm.padding);
-      if (algorithm.name !== 'sha3') {
-        var newMethodName = algorithm.name + bits[j];
-        methodNames.push(newMethodName);
-        methods[newMethodName] = methods[methodName];
-      }
-    }
-  }
-
-  function Keccak(bits, padding, outputBits) {
-    this.blocks = [];
-    this.s = [];
-    this.padding = padding;
-    this.outputBits = outputBits;
-    this.reset = true;
-    this.finalized = false;
-    this.block = 0;
-    this.start = 0;
-    this.blockCount = (1600 - (bits << 1)) >> 5;
-    this.byteCount = this.blockCount << 2;
-    this.outputBlocks = outputBits >> 5;
-    this.extraBytes = (outputBits & 31) >> 3;
-
-    for (var i = 0; i < 50; ++i) {
-      this.s[i] = 0;
-    }
-  }
-
-  Keccak.prototype.update = function (message) {
-    if (this.finalized) {
-      throw new Error(FINALIZE_ERROR);
-    }
-    var notString, type = typeof message;
-    if (type !== 'string') {
-      if (type === 'object') {
-        if (message === null) {
-          throw new Error(INPUT_ERROR);
-        } else if (ARRAY_BUFFER && message.constructor === ArrayBuffer) {
-          message = new Uint8Array(message);
-        } else if (!Array.isArray(message)) {
-          if (!ARRAY_BUFFER || !ArrayBuffer.isView(message)) {
-            throw new Error(INPUT_ERROR);
-          }
-        }
-      } else {
-        throw new Error(INPUT_ERROR);
-      }
-      notString = true;
-    }
-    var blocks = this.blocks, byteCount = this.byteCount, length = message.length,
-      blockCount = this.blockCount, index = 0, s = this.s, i, code;
-
-    while (index < length) {
-      if (this.reset) {
-        this.reset = false;
-        blocks[0] = this.block;
-        for (i = 1; i < blockCount + 1; ++i) {
-          blocks[i] = 0;
-        }
-      }
-      if (notString) {
-        for (i = this.start; index < length && i < byteCount; ++index) {
-          blocks[i >> 2] |= message[index] << SHIFT[i++ & 3];
-        }
-      } else {
-        for (i = this.start; index < length && i < byteCount; ++index) {
-          code = message.charCodeAt(index);
-          if (code < 0x80) {
-            blocks[i >> 2] |= code << SHIFT[i++ & 3];
-          } else if (code < 0x800) {
-            blocks[i >> 2] |= (0xc0 | (code >> 6)) << SHIFT[i++ & 3];
-            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
-          } else if (code < 0xd800 || code >= 0xe000) {
-            blocks[i >> 2] |= (0xe0 | (code >> 12)) << SHIFT[i++ & 3];
-            blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3];
-            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
-          } else {
-            code = 0x10000 + (((code & 0x3ff) << 10) | (message.charCodeAt(++index) & 0x3ff));
-            blocks[i >> 2] |= (0xf0 | (code >> 18)) << SHIFT[i++ & 3];
-            blocks[i >> 2] |= (0x80 | ((code >> 12) & 0x3f)) << SHIFT[i++ & 3];
-            blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3];
-            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
-          }
-        }
-      }
-      this.lastByteIndex = i;
-      if (i >= byteCount) {
-        this.start = i - byteCount;
-        this.block = blocks[blockCount];
-        for (i = 0; i < blockCount; ++i) {
-          s[i] ^= blocks[i];
-        }
-        f(s);
-        this.reset = true;
-      } else {
-        this.start = i;
-      }
-    }
-    return this;
-  };
-
-  Keccak.prototype.encode = function (x, right) {
-    var o = x & 255, n = 1;
-    var bytes = [o];
-    x = x >> 8;
-    o = x & 255;
-    while (o > 0) {
-      bytes.unshift(o);
-      x = x >> 8;
-      o = x & 255;
-      ++n;
-    }
-    if (right) {
-      bytes.push(n);
-    } else {
-      bytes.unshift(n);
-    }
-    this.update(bytes);
-    return bytes.length;
-  };
-
-  Keccak.prototype.encodeString = function (str) {
-    var notString, type = typeof str;
-    if (type !== 'string') {
-      if (type === 'object') {
-        if (str === null) {
-          throw new Error(INPUT_ERROR);
-        } else if (ARRAY_BUFFER && str.constructor === ArrayBuffer) {
-          str = new Uint8Array(str);
-        } else if (!Array.isArray(str)) {
-          if (!ARRAY_BUFFER || !ArrayBuffer.isView(str)) {
-            throw new Error(INPUT_ERROR);
-          }
-        }
-      } else {
-        throw new Error(INPUT_ERROR);
-      }
-      notString = true;
-    }
-    var bytes = 0, length = str.length;
-    if (notString) {
-      bytes = length;
-    } else {
-      for (var i = 0; i < str.length; ++i) {
-        var code = str.charCodeAt(i);
-        if (code < 0x80) {
-          bytes += 1;
-        } else if (code < 0x800) {
-          bytes += 2;
-        } else if (code < 0xd800 || code >= 0xe000) {
-          bytes += 3;
-        } else {
-          code = 0x10000 + (((code & 0x3ff) << 10) | (str.charCodeAt(++i) & 0x3ff));
-          bytes += 4;
-        }
-      }
-    }
-    bytes += this.encode(bytes * 8);
-    this.update(str);
-    return bytes;
-  };
-
-  Keccak.prototype.bytepad = function (strs, w) {
-    var bytes = this.encode(w);
-    for (var i = 0; i < strs.length; ++i) {
-      bytes += this.encodeString(strs[i]);
-    }
-    var paddingBytes = w - bytes % w;
-    var zeros = [];
-    zeros.length = paddingBytes;
-    this.update(zeros);
-    return this;
-  };
-
-  Keccak.prototype.finalize = function () {
-    if (this.finalized) {
-      return;
-    }
-    this.finalized = true;
-    var blocks = this.blocks, i = this.lastByteIndex, blockCount = this.blockCount, s = this.s;
-    blocks[i >> 2] |= this.padding[i & 3];
-    if (this.lastByteIndex === this.byteCount) {
-      blocks[0] = blocks[blockCount];
-      for (i = 1; i < blockCount + 1; ++i) {
-        blocks[i] = 0;
-      }
-    }
-    blocks[blockCount - 1] |= 0x80000000;
-    for (i = 0; i < blockCount; ++i) {
-      s[i] ^= blocks[i];
-    }
-    f(s);
-  };
-
-  Keccak.prototype.toString = Keccak.prototype.hex = function () {
-    this.finalize();
-
-    var blockCount = this.blockCount, s = this.s, outputBlocks = this.outputBlocks,
-      extraBytes = this.extraBytes, i = 0, j = 0;
-    var hex = '', block;
-    while (j < outputBlocks) {
-      for (i = 0; i < blockCount && j < outputBlocks; ++i, ++j) {
-        block = s[i];
-        hex += HEX_CHARS[(block >> 4) & 0x0F] + HEX_CHARS[block & 0x0F] +
-          HEX_CHARS[(block >> 12) & 0x0F] + HEX_CHARS[(block >> 8) & 0x0F] +
-          HEX_CHARS[(block >> 20) & 0x0F] + HEX_CHARS[(block >> 16) & 0x0F] +
-          HEX_CHARS[(block >> 28) & 0x0F] + HEX_CHARS[(block >> 24) & 0x0F];
-      }
-      if (j % blockCount === 0) {
-        f(s);
-        i = 0;
-      }
-    }
-    if (extraBytes) {
-      block = s[i];
-      hex += HEX_CHARS[(block >> 4) & 0x0F] + HEX_CHARS[block & 0x0F];
-      if (extraBytes > 1) {
-        hex += HEX_CHARS[(block >> 12) & 0x0F] + HEX_CHARS[(block >> 8) & 0x0F];
-      }
-      if (extraBytes > 2) {
-        hex += HEX_CHARS[(block >> 20) & 0x0F] + HEX_CHARS[(block >> 16) & 0x0F];
-      }
-    }
-    return hex;
-  };
-
-  Keccak.prototype.arrayBuffer = function () {
-    this.finalize();
-
-    var blockCount = this.blockCount, s = this.s, outputBlocks = this.outputBlocks,
-      extraBytes = this.extraBytes, i = 0, j = 0;
-    var bytes = this.outputBits >> 3;
-    var buffer;
-    if (extraBytes) {
-      buffer = new ArrayBuffer((outputBlocks + 1) << 2);
-    } else {
-      buffer = new ArrayBuffer(bytes);
-    }
-    var array = new Uint32Array(buffer);
-    while (j < outputBlocks) {
-      for (i = 0; i < blockCount && j < outputBlocks; ++i, ++j) {
-        array[j] = s[i];
-      }
-      if (j % blockCount === 0) {
-        f(s);
-      }
-    }
-    if (extraBytes) {
-      array[i] = s[i];
-      buffer = buffer.slice(0, bytes);
-    }
-    return buffer;
-  };
-
-  Keccak.prototype.buffer = Keccak.prototype.arrayBuffer;
-
-  Keccak.prototype.digest = Keccak.prototype.array = function () {
-    this.finalize();
-
-    var blockCount = this.blockCount, s = this.s, outputBlocks = this.outputBlocks,
-      extraBytes = this.extraBytes, i = 0, j = 0;
-    var array = [], offset, block;
-    while (j < outputBlocks) {
-      for (i = 0; i < blockCount && j < outputBlocks; ++i, ++j) {
-        offset = j << 2;
-        block = s[i];
-        array[offset] = block & 0xFF;
-        array[offset + 1] = (block >> 8) & 0xFF;
-        array[offset + 2] = (block >> 16) & 0xFF;
-        array[offset + 3] = (block >> 24) & 0xFF;
-      }
-      if (j % blockCount === 0) {
-        f(s);
-      }
-    }
-    if (extraBytes) {
-      offset = j << 2;
-      block = s[i];
-      array[offset] = block & 0xFF;
-      if (extraBytes > 1) {
-        array[offset + 1] = (block >> 8) & 0xFF;
-      }
-      if (extraBytes > 2) {
-        array[offset + 2] = (block >> 16) & 0xFF;
-      }
-    }
-    return array;
-  };
-
-  function Kmac(bits, padding, outputBits) {
-    Keccak.call(this, bits, padding, outputBits);
-  }
-
-  Kmac.prototype = new Keccak();
-
-  Kmac.prototype.finalize = function () {
-    this.encode(this.outputBits, true);
-    return Keccak.prototype.finalize.call(this);
-  };
-
-  var f = function (s) {
-    var h, l, n, c0, c1, c2, c3, c4, c5, c6, c7, c8, c9,
-      b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17,
-      b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33,
-      b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49;
-    for (n = 0; n < 48; n += 2) {
-      c0 = s[0] ^ s[10] ^ s[20] ^ s[30] ^ s[40];
-      c1 = s[1] ^ s[11] ^ s[21] ^ s[31] ^ s[41];
-      c2 = s[2] ^ s[12] ^ s[22] ^ s[32] ^ s[42];
-      c3 = s[3] ^ s[13] ^ s[23] ^ s[33] ^ s[43];
-      c4 = s[4] ^ s[14] ^ s[24] ^ s[34] ^ s[44];
-      c5 = s[5] ^ s[15] ^ s[25] ^ s[35] ^ s[45];
-      c6 = s[6] ^ s[16] ^ s[26] ^ s[36] ^ s[46];
-      c7 = s[7] ^ s[17] ^ s[27] ^ s[37] ^ s[47];
-      c8 = s[8] ^ s[18] ^ s[28] ^ s[38] ^ s[48];
-      c9 = s[9] ^ s[19] ^ s[29] ^ s[39] ^ s[49];
-
-      h = c8 ^ ((c2 << 1) | (c3 >>> 31));
-      l = c9 ^ ((c3 << 1) | (c2 >>> 31));
-      s[0] ^= h;
-      s[1] ^= l;
-      s[10] ^= h;
-      s[11] ^= l;
-      s[20] ^= h;
-      s[21] ^= l;
-      s[30] ^= h;
-      s[31] ^= l;
-      s[40] ^= h;
-      s[41] ^= l;
-      h = c0 ^ ((c4 << 1) | (c5 >>> 31));
-      l = c1 ^ ((c5 << 1) | (c4 >>> 31));
-      s[2] ^= h;
-      s[3] ^= l;
-      s[12] ^= h;
-      s[13] ^= l;
-      s[22] ^= h;
-      s[23] ^= l;
-      s[32] ^= h;
-      s[33] ^= l;
-      s[42] ^= h;
-      s[43] ^= l;
-      h = c2 ^ ((c6 << 1) | (c7 >>> 31));
-      l = c3 ^ ((c7 << 1) | (c6 >>> 31));
-      s[4] ^= h;
-      s[5] ^= l;
-      s[14] ^= h;
-      s[15] ^= l;
-      s[24] ^= h;
-      s[25] ^= l;
-      s[34] ^= h;
-      s[35] ^= l;
-      s[44] ^= h;
-      s[45] ^= l;
-      h = c4 ^ ((c8 << 1) | (c9 >>> 31));
-      l = c5 ^ ((c9 << 1) | (c8 >>> 31));
-      s[6] ^= h;
-      s[7] ^= l;
-      s[16] ^= h;
-      s[17] ^= l;
-      s[26] ^= h;
-      s[27] ^= l;
-      s[36] ^= h;
-      s[37] ^= l;
-      s[46] ^= h;
-      s[47] ^= l;
-      h = c6 ^ ((c0 << 1) | (c1 >>> 31));
-      l = c7 ^ ((c1 << 1) | (c0 >>> 31));
-      s[8] ^= h;
-      s[9] ^= l;
-      s[18] ^= h;
-      s[19] ^= l;
-      s[28] ^= h;
-      s[29] ^= l;
-      s[38] ^= h;
-      s[39] ^= l;
-      s[48] ^= h;
-      s[49] ^= l;
-
-      b0 = s[0];
-      b1 = s[1];
-      b32 = (s[11] << 4) | (s[10] >>> 28);
-      b33 = (s[10] << 4) | (s[11] >>> 28);
-      b14 = (s[20] << 3) | (s[21] >>> 29);
-      b15 = (s[21] << 3) | (s[20] >>> 29);
-      b46 = (s[31] << 9) | (s[30] >>> 23);
-      b47 = (s[30] << 9) | (s[31] >>> 23);
-      b28 = (s[40] << 18) | (s[41] >>> 14);
-      b29 = (s[41] << 18) | (s[40] >>> 14);
-      b20 = (s[2] << 1) | (s[3] >>> 31);
-      b21 = (s[3] << 1) | (s[2] >>> 31);
-      b2 = (s[13] << 12) | (s[12] >>> 20);
-      b3 = (s[12] << 12) | (s[13] >>> 20);
-      b34 = (s[22] << 10) | (s[23] >>> 22);
-      b35 = (s[23] << 10) | (s[22] >>> 22);
-      b16 = (s[33] << 13) | (s[32] >>> 19);
-      b17 = (s[32] << 13) | (s[33] >>> 19);
-      b48 = (s[42] << 2) | (s[43] >>> 30);
-      b49 = (s[43] << 2) | (s[42] >>> 30);
-      b40 = (s[5] << 30) | (s[4] >>> 2);
-      b41 = (s[4] << 30) | (s[5] >>> 2);
-      b22 = (s[14] << 6) | (s[15] >>> 26);
-      b23 = (s[15] << 6) | (s[14] >>> 26);
-      b4 = (s[25] << 11) | (s[24] >>> 21);
-      b5 = (s[24] << 11) | (s[25] >>> 21);
-      b36 = (s[34] << 15) | (s[35] >>> 17);
-      b37 = (s[35] << 15) | (s[34] >>> 17);
-      b18 = (s[45] << 29) | (s[44] >>> 3);
-      b19 = (s[44] << 29) | (s[45] >>> 3);
-      b10 = (s[6] << 28) | (s[7] >>> 4);
-      b11 = (s[7] << 28) | (s[6] >>> 4);
-      b42 = (s[17] << 23) | (s[16] >>> 9);
-      b43 = (s[16] << 23) | (s[17] >>> 9);
-      b24 = (s[26] << 25) | (s[27] >>> 7);
-      b25 = (s[27] << 25) | (s[26] >>> 7);
-      b6 = (s[36] << 21) | (s[37] >>> 11);
-      b7 = (s[37] << 21) | (s[36] >>> 11);
-      b38 = (s[47] << 24) | (s[46] >>> 8);
-      b39 = (s[46] << 24) | (s[47] >>> 8);
-      b30 = (s[8] << 27) | (s[9] >>> 5);
-      b31 = (s[9] << 27) | (s[8] >>> 5);
-      b12 = (s[18] << 20) | (s[19] >>> 12);
-      b13 = (s[19] << 20) | (s[18] >>> 12);
-      b44 = (s[29] << 7) | (s[28] >>> 25);
-      b45 = (s[28] << 7) | (s[29] >>> 25);
-      b26 = (s[38] << 8) | (s[39] >>> 24);
-      b27 = (s[39] << 8) | (s[38] >>> 24);
-      b8 = (s[48] << 14) | (s[49] >>> 18);
-      b9 = (s[49] << 14) | (s[48] >>> 18);
-
-      s[0] = b0 ^ (~b2 & b4);
-      s[1] = b1 ^ (~b3 & b5);
-      s[10] = b10 ^ (~b12 & b14);
-      s[11] = b11 ^ (~b13 & b15);
-      s[20] = b20 ^ (~b22 & b24);
-      s[21] = b21 ^ (~b23 & b25);
-      s[30] = b30 ^ (~b32 & b34);
-      s[31] = b31 ^ (~b33 & b35);
-      s[40] = b40 ^ (~b42 & b44);
-      s[41] = b41 ^ (~b43 & b45);
-      s[2] = b2 ^ (~b4 & b6);
-      s[3] = b3 ^ (~b5 & b7);
-      s[12] = b12 ^ (~b14 & b16);
-      s[13] = b13 ^ (~b15 & b17);
-      s[22] = b22 ^ (~b24 & b26);
-      s[23] = b23 ^ (~b25 & b27);
-      s[32] = b32 ^ (~b34 & b36);
-      s[33] = b33 ^ (~b35 & b37);
-      s[42] = b42 ^ (~b44 & b46);
-      s[43] = b43 ^ (~b45 & b47);
-      s[4] = b4 ^ (~b6 & b8);
-      s[5] = b5 ^ (~b7 & b9);
-      s[14] = b14 ^ (~b16 & b18);
-      s[15] = b15 ^ (~b17 & b19);
-      s[24] = b24 ^ (~b26 & b28);
-      s[25] = b25 ^ (~b27 & b29);
-      s[34] = b34 ^ (~b36 & b38);
-      s[35] = b35 ^ (~b37 & b39);
-      s[44] = b44 ^ (~b46 & b48);
-      s[45] = b45 ^ (~b47 & b49);
-      s[6] = b6 ^ (~b8 & b0);
-      s[7] = b7 ^ (~b9 & b1);
-      s[16] = b16 ^ (~b18 & b10);
-      s[17] = b17 ^ (~b19 & b11);
-      s[26] = b26 ^ (~b28 & b20);
-      s[27] = b27 ^ (~b29 & b21);
-      s[36] = b36 ^ (~b38 & b30);
-      s[37] = b37 ^ (~b39 & b31);
-      s[46] = b46 ^ (~b48 & b40);
-      s[47] = b47 ^ (~b49 & b41);
-      s[8] = b8 ^ (~b0 & b2);
-      s[9] = b9 ^ (~b1 & b3);
-      s[18] = b18 ^ (~b10 & b12);
-      s[19] = b19 ^ (~b11 & b13);
-      s[28] = b28 ^ (~b20 & b22);
-      s[29] = b29 ^ (~b21 & b23);
-      s[38] = b38 ^ (~b30 & b32);
-      s[39] = b39 ^ (~b31 & b33);
-      s[48] = b48 ^ (~b40 & b42);
-      s[49] = b49 ^ (~b41 & b43);
-
-      s[0] ^= RC[n];
-      s[1] ^= RC[n + 1];
-    }
-  };
-
-  if (COMMON_JS) {
-    module.exports = methods;
-  } else {
-    for (i = 0; i < methodNames.length; ++i) {
-      root[methodNames[i]] = methods[methodNames[i]];
-    }
-    if (AMD) {
-      define(function () {
-        return methods;
-      });
-    }
-  }
-})();
-
-},{"process":"node_modules/process/browser.js"}],"node_modules/@ethersproject/keccak256/lib.esm/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.keccak256 = keccak256;
-
-var _jsSha = _interopRequireDefault(require("js-sha3"));
-
-var _bytes = require("@ethersproject/bytes");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function keccak256(data) {
-  return '0x' + _jsSha.default.keccak_256((0, _bytes.arrayify)(data));
-}
-},{"js-sha3":"node_modules/js-sha3/src/sha3.js","@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js"}],"node_modules/@web3-react/core/dist/core.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Web3ReactProvider = exports.UnsupportedChainIdError = exports.PRIMARY_KEY = void 0;
-exports.createWeb3ReactRoot = createWeb3ReactRoot;
-exports.getWeb3ReactContext = getWeb3ReactContext;
-exports.useWeb3React = useWeb3React;
+exports.useAppContext = exports.AppContextProvider = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _tinyInvariant = _interopRequireDefault(require("tiny-invariant"));
-
-var _types = require("@web3-react/types");
-
-var _tinyWarning = _interopRequireDefault(require("tiny-warning"));
-
-var _bytes = require("@ethersproject/bytes");
-
-var _keccak = require("@ethersproject/keccak256");
+var _App = _interopRequireDefault(require("./App"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36085,3396 +34170,459 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-    return target;
-  };
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-  return _extends.apply(this, arguments);
-}
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-  _setPrototypeOf(subClass, superClass);
-}
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-  return _setPrototypeOf(o, p);
-}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function _construct(Parent, args, Class) {
-  if (_isNativeReflectConstruct()) {
-    _construct = Reflect.construct;
-  } else {
-    _construct = function _construct(Parent, args, Class) {
-      var a = [null];
-      a.push.apply(a, args);
-      var Constructor = Function.bind.apply(Parent, a);
-      var instance = new Constructor();
-      if (Class) _setPrototypeOf(instance, Class.prototype);
-      return instance;
-    };
-  }
-
-  return _construct.apply(null, arguments);
-}
-
-function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
-}
-
-function _wrapNativeSuper(Class) {
-  var _cache = typeof Map === "function" ? new Map() : undefined;
-
-  _wrapNativeSuper = function _wrapNativeSuper(Class) {
-    if (Class === null || !_isNativeFunction(Class)) return Class;
-
-    if (typeof Class !== "function") {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    if (typeof _cache !== "undefined") {
-      if (_cache.has(Class)) return _cache.get(Class);
-
-      _cache.set(Class, Wrapper);
-    }
-
-    function Wrapper() {
-      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-    }
-
-    Wrapper.prototype = Object.create(Class.prototype, {
-      constructor: {
-        value: Wrapper,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    return _setPrototypeOf(Wrapper, Class);
-  };
-
-  return _wrapNativeSuper(Class);
-} // A type of promise-like that resolves synchronously and supports only one observer
-
-
-var _iteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.iterator || (Symbol.iterator = /*#__PURE__*/Symbol("Symbol.iterator")) : "@@iterator"; // Asynchronously iterate through an object's values
-
-
-var _asyncIteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.asyncIterator || (Symbol.asyncIterator = /*#__PURE__*/Symbol("Symbol.asyncIterator")) : "@@asyncIterator"; // Asynchronously iterate on a value using it's async iterator if present, or its synchronous iterator if missing
-
-
-function _catch(body, recover) {
-  try {
-    var result = body();
-  } catch (e) {
-    return recover(e);
-  }
-
-  if (result && result.then) {
-    return result.then(void 0, recover);
-  }
-
-  return result;
-} // Asynchronously await a promise and pass the result to a finally continuation
-
-
-function normalizeChainId(chainId) {
-  if (typeof chainId === 'string') {
-    // Temporary fix until the next version of Metamask Mobile gets released.
-    // In the current version (0.2.13), the chainId starts with “Ox” rather
-    // than “0x”. Fix: https://github.com/MetaMask/metamask-mobile/pull/1275
-    chainId = chainId.replace(/^Ox/, '0x');
-    var parsedChainId = Number.parseInt(chainId, chainId.trim().substring(0, 2) === '0x' ? 16 : 10);
-    !!Number.isNaN(parsedChainId) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "chainId " + chainId + " is not an integer") : (0, _tinyInvariant.default)(false) : void 0;
-    return parsedChainId;
-  } else {
-    !Number.isInteger(chainId) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "chainId " + chainId + " is not an integer") : (0, _tinyInvariant.default)(false) : void 0;
-    return chainId;
-  }
-} // https://github.com/ethers-io/ethers.js/blob/d9d438a119bb11f8516fc9cf02c534ab3816fcb3/packages/address/src.ts/index.ts
-
-
-function normalizeAccount(_address) {
-  !(typeof _address === 'string' && _address.match(/^(0x)?[0-9a-fA-F]{40}$/)) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "Invalid address " + _address) : (0, _tinyInvariant.default)(false) : void 0;
-  var address = _address.substring(0, 2) === '0x' ? _address : "0x" + _address;
-  var chars = address.toLowerCase().substring(2).split('');
-  var charsArray = new Uint8Array(40);
-
-  for (var i = 0; i < 40; i++) {
-    charsArray[i] = chars[i].charCodeAt(0);
-  }
-
-  var hashed = (0, _bytes.arrayify)((0, _keccak.keccak256)(charsArray));
-
-  for (var _i = 0; _i < 40; _i += 2) {
-    if (hashed[_i >> 1] >> 4 >= 8) {
-      chars[_i] = chars[_i].toUpperCase();
-    }
-
-    if ((hashed[_i >> 1] & 0x0f) >= 8) {
-      chars[_i + 1] = chars[_i + 1].toUpperCase();
-    }
-  }
-
-  var addressChecksum = "0x" + chars.join('');
-  !!(address.match(/([A-F].*[a-f])|([a-f].*[A-F])/) && address !== addressChecksum) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "Bad address checksum " + address + " " + addressChecksum) : (0, _tinyInvariant.default)(false) : void 0;
-  return addressChecksum;
-}
-
-var augmentConnectorUpdate = function augmentConnectorUpdate(connector, update) {
-  try {
-    var _temp3 = function _temp3(provider) {
-      return Promise.resolve(Promise.all([update.chainId === undefined ? connector.getChainId() : update.chainId, update.account === undefined ? connector.getAccount() : update.account])).then(function (_ref2) {
-        var _chainId = _ref2[0],
-            _account = _ref2[1];
-        var chainId = normalizeChainId(_chainId);
-
-        if (!!connector.supportedChainIds && !connector.supportedChainIds.includes(chainId)) {
-          throw new UnsupportedChainIdError(chainId, connector.supportedChainIds);
-        }
-
-        var account = _account === null ? _account : normalizeAccount(_account);
-        return {
-          provider: provider,
-          chainId: chainId,
-          account: account
-        };
-      });
-    };
-
-    var _temp4 = update.provider === undefined;
-
-    return Promise.resolve(_temp4 ? Promise.resolve(connector.getProvider()).then(_temp3) : _temp3(update.provider));
-  } catch (e) {
-    return Promise.reject(e);
-  }
+var initialContext = {
+  debtTokenBalanceDAI: "--",
+  debtTokenBalanceETH: "--",
+  debtTokenBalanceUSDC: "--",
+  setDebtTokenBalance: function setDebtTokenBalance() {},
+  nTokenBalanceDAI: "--",
+  nTokenBalanceETH: "--",
+  nTokenBalanceUSDC: "--",
+  setNTokenBalance: function setNTokenBalance() {},
+  nTokenYieldDAI: "--",
+  nTokenYieldETH: "--",
+  nTokenYieldUSDC: "--",
+  setNTokenYield: function setNTokenYield() {},
+  userBorrows: {},
+  setUserBorrows: function setUserBorrows() {},
+  borrowDefaults: [],
+  setBorrowDefaults: function setBorrowDefaults() {},
+  imageDictPUNK: {},
+  imageDictBAYC: {},
+  imageDictBorrow: {},
+  setImageDict: function setImageDict() {},
+  whitelistNFT: [],
+  setWhitelistNFT: function setWhitelistNFT() {},
+  borrowProject: "--",
+  setBorrowProject: function setBorrowProject() {},
+  borrowNFT: "",
+  setBorrowNFT: function setBorrowNFT() {},
+  borrowForm: "--",
+  setBorrowForm: function setBorrowForm() {},
+  borrowFloorPrice: "--",
+  setBorrowFloorPrice: function setBorrowFloorPrice() {},
+  borrowCollRatio: "--",
+  setBorrowCollRatio: function setBorrowCollRatio() {},
+  borrowAPR: "--",
+  setBorrowAPR: function setBorrowAPR() {},
+  borrowToken: "ETH",
+  setBorrowToken: function setBorrowToken() {},
+  borrowAmount: "--",
+  setBorrowAmount: function setBorrowAmount() {},
+  borrowRepaymentAmount: "--",
+  setBorrowRepaymentAmount: function setBorrowRepaymentAmount() {},
+  borrowMaturity: 1,
+  setBorrowMaturity: function setBorrowMaturity() {},
+  aprPUNK: "--",
+  setAprPUNK: function setAprPUNK() {},
+  aprBAYC: "--",
+  setAprBAYC: function setAprBAYC() {},
+  txnStatus: "NOT_SUMBITTED",
+  setTxnStatus: function setTxnStatus() {}
 };
 
-var StaleConnectorError = /*#__PURE__*/function (_Error) {
-  _inheritsLoose(StaleConnectorError, _Error);
-
-  function StaleConnectorError() {
-    var _this;
-
-    _this = _Error.call(this) || this;
-    _this.name = _this.constructor.name;
-    return _this;
-  }
-
-  return StaleConnectorError;
-}( /*#__PURE__*/_wrapNativeSuper(Error));
-
-var UnsupportedChainIdError = /*#__PURE__*/function (_Error2) {
-  _inheritsLoose(UnsupportedChainIdError, _Error2);
-
-  function UnsupportedChainIdError(unsupportedChainId, supportedChainIds) {
-    var _this2;
-
-    _this2 = _Error2.call(this) || this;
-    _this2.name = _this2.constructor.name;
-    _this2.message = "Unsupported chain id: " + unsupportedChainId + ". Supported chain ids are: " + supportedChainIds + ".";
-    return _this2;
-  }
-
-  return UnsupportedChainIdError;
-}( /*#__PURE__*/_wrapNativeSuper(Error));
-
-exports.UnsupportedChainIdError = UnsupportedChainIdError;
-var ActionType;
-
-(function (ActionType) {
-  ActionType[ActionType["ACTIVATE_CONNECTOR"] = 0] = "ACTIVATE_CONNECTOR";
-  ActionType[ActionType["UPDATE"] = 1] = "UPDATE";
-  ActionType[ActionType["UPDATE_FROM_ERROR"] = 2] = "UPDATE_FROM_ERROR";
-  ActionType[ActionType["ERROR"] = 3] = "ERROR";
-  ActionType[ActionType["ERROR_FROM_ACTIVATION"] = 4] = "ERROR_FROM_ACTIVATION";
-  ActionType[ActionType["DEACTIVATE_CONNECTOR"] = 5] = "DEACTIVATE_CONNECTOR";
-})(ActionType || (ActionType = {}));
-
-function reducer(state, _ref) {
+var appReducer = function appReducer(state, _ref) {
   var type = _ref.type,
       payload = _ref.payload;
 
   switch (type) {
-    case ActionType.ACTIVATE_CONNECTOR:
-      {
-        var connector = payload.connector,
-            provider = payload.provider,
-            chainId = payload.chainId,
-            account = payload.account,
-            onError = payload.onError;
-        return {
-          connector: connector,
-          provider: provider,
-          chainId: chainId,
-          account: account,
-          onError: onError
-        };
-      }
+    case "SET_DEBTTOKEN_BALANCE_DAI":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        debtTokenBalanceDAI: payload
+      });
 
-    case ActionType.UPDATE:
-      {
-        var _provider = payload.provider,
-            _chainId2 = payload.chainId,
-            _account2 = payload.account;
-        return _extends({}, state, _provider === undefined ? {} : {
-          provider: _provider
-        }, _chainId2 === undefined ? {} : {
-          chainId: _chainId2
-        }, _account2 === undefined ? {} : {
-          account: _account2
-        });
-      }
+    case "SET_DEBTTOKEN_BALANCE_ETH":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        debtTokenBalanceETH: payload
+      });
 
-    case ActionType.UPDATE_FROM_ERROR:
-      {
-        var _provider2 = payload.provider,
-            _chainId3 = payload.chainId,
-            _account3 = payload.account;
-        return _extends({}, state, _provider2 === undefined ? {} : {
-          provider: _provider2
-        }, _chainId3 === undefined ? {} : {
-          chainId: _chainId3
-        }, _account3 === undefined ? {} : {
-          account: _account3
-        }, {
-          error: undefined
-        });
-      }
+    case "SET_DEBTTOKEN_BALANCE_USDC":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        debtTokenBalanceUSDC: payload
+      });
 
-    case ActionType.ERROR:
-      {
-        var error = payload.error;
-        var _connector = state.connector,
-            _onError = state.onError;
-        return {
-          connector: _connector,
-          error: error,
-          onError: _onError
-        };
-      }
+    case "SET_NTOKEN_BALANCE_DAI":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nTokenBalanceDAI: payload
+      });
 
-    case ActionType.ERROR_FROM_ACTIVATION:
-      {
-        var _connector2 = payload.connector,
-            _error = payload.error;
-        return {
-          connector: _connector2,
-          error: _error
-        };
-      }
+    case "SET_NTOKEN_BALANCE_ETH":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nTokenBalanceETH: payload
+      });
 
-    case ActionType.DEACTIVATE_CONNECTOR:
-      {
-        return {};
-      }
+    case "SET_NTOKEN_BALANCE_USDC":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nTokenBalanceUSDC: payload
+      });
+
+    case "SET_NTOKEN_YIELD_DAI":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nTokenYieldDAI: payload
+      });
+
+    case "SET_NTOKEN_YIELD_ETH":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nTokenYieldETH: payload
+      });
+
+    case "SET_NTOKEN_YIELD_USDC":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        nTokenYieldUSDC: payload
+      });
+
+    case "SET_USER_BORROWS":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        userBorrows: payload
+      });
+
+    case "SET_BORROW_DEFAULTS":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowDefaults: payload
+      });
+
+    case "SET_IMAGE_DICT_PUNK":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        imageDictPUNK: payload
+      });
+
+    case "SET_IMAGE_DICT_BAYC":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        imageDictBAYC: payload
+      });
+
+    case "SET_IMAGE_DICT_BORROW":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        imageDictBorrow: payload
+      });
+
+    case "SET_WHITELIST_NFT":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        whitelistNFT: payload
+      });
+
+    case "SET_BORROW_PROJECT":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowProject: payload
+      });
+
+    case "SET_BORROW_NFT":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowNFT: payload
+      });
+
+    case "SET_BORROW_FORM":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowForm: payload
+      });
+
+    case "SET_BORROW_FLOOR_PRICE":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowFloorPrice: payload
+      });
+
+    case "SET_BORROW_COLL_RATIO":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowCollRatio: payload
+      });
+
+    case "SET_BORROW_APR":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowAPR: payload
+      });
+
+    case "SET_BORROW_TOKEN":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowToken: payload
+      });
+
+    case "SET_BORROW_AMOUNT":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowAmount: payload
+      });
+
+    case "SET_BORROW_REPAYMENT_AMOUNT":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowRepaymentAmount: payload
+      });
+
+    case "SET_BORROW_MATURITY":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        borrowMaturity: payload
+      });
+
+    case "SET_APR_PUNK":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        aprPUNK: payload
+      });
+
+    case "SET_APR_BAYC":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        aprBAYC: payload
+      });
+
+    case "SET_TXN_STATUS":
+      return _objectSpread(_objectSpread({}, state), {}, {
+        txnStatus: payload
+      });
+
+    default:
+      return state;
   }
-}
+};
 
-function useWeb3ReactManager() {
-  var _useReducer = (0, _react.useReducer)(reducer, {}),
-      state = _useReducer[0],
-      dispatch = _useReducer[1];
+var AppContext = /*#__PURE__*/(0, _react.createContext)(initialContext);
 
-  var connector = state.connector,
-      provider = state.provider,
-      chainId = state.chainId,
-      account = state.account,
-      onError = state.onError,
-      error = state.error;
-  var updateBusterRef = (0, _react.useRef)(-1);
-  updateBusterRef.current += 1;
-  var activate = (0, _react.useCallback)(function (connector, onError, throwErrors) {
-    if (throwErrors === void 0) {
-      throwErrors = false;
-    }
+var useAppContext = function useAppContext() {
+  return _react.default.useContext(AppContext);
+};
 
-    try {
-      var updateBusterInitial = updateBusterRef.current;
-      var activated = false;
-      return Promise.resolve(_catch(function () {
-        return Promise.resolve(connector.activate().then(function (update) {
-          activated = true;
-          return update;
-        })).then(function (update) {
-          return Promise.resolve(augmentConnectorUpdate(connector, update)).then(function (augmentedUpdate) {
-            if (updateBusterRef.current > updateBusterInitial) {
-              throw new StaleConnectorError();
-            }
+exports.useAppContext = useAppContext;
 
-            dispatch({
-              type: ActionType.ACTIVATE_CONNECTOR,
-              payload: _extends({
-                connector: connector
-              }, augmentedUpdate, {
-                onError: onError
-              })
-            });
-          });
-        });
-      }, function (error) {
-        if (error instanceof StaleConnectorError) {
-          activated && connector.deactivate();
-          "development" !== "production" ? (0, _tinyWarning.default)(false, "Suppressed stale connector activation " + connector) : void 0;
-        } else if (throwErrors) {
-          activated && connector.deactivate();
-          throw error;
-        } else if (onError) {
-          activated && connector.deactivate();
-          onError(error);
-        } else {
-          // we don't call activated && connector.deactivate() here because it'll be handled in the useEffect
+var AppContextProvider = function AppContextProvider(_ref2) {
+  var children = _ref2.children;
+
+  var _useReducer = (0, _react.useReducer)(appReducer, initialContext),
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      store = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  var contextValue = {
+    debtTokenBalanceDAI: store.debtTokenBalanceDAI,
+    debtTokenBalanceETH: store.debtTokenBalanceETH,
+    debtTokenBalanceUSDC: store.debtTokenBalanceUSDC,
+    setDebtTokenBalance: function setDebtTokenBalance(ccy, balance) {
+      switch (ccy) {
+        case "DAI":
           dispatch({
-            type: ActionType.ERROR_FROM_ACTIVATION,
-            payload: {
-              connector: connector,
-              error: error
-            }
+            type: "SET_DEBTTOKEN_BALANCE_DAI",
+            payload: balance
           });
-        }
-      }));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }, []);
-  var setError = (0, _react.useCallback)(function (error) {
-    dispatch({
-      type: ActionType.ERROR,
-      payload: {
-        error: error
-      }
-    });
-  }, []);
-  var deactivate = (0, _react.useCallback)(function () {
-    dispatch({
-      type: ActionType.DEACTIVATE_CONNECTOR
-    });
-  }, []);
-  var handleUpdate = (0, _react.useCallback)(function (update) {
-    try {
-      if (!connector) {
-        throw Error("This should never happen, it's just so Typescript stops complaining");
-      }
 
-      var updateBusterInitial = updateBusterRef.current; // updates are handled differently depending on whether the connector is active vs in an error state
-
-      return Promise.resolve(function () {
-        if (!error) {
-          var _chainId4 = update.chainId === undefined ? undefined : normalizeChainId(update.chainId);
-
-          if (_chainId4 !== undefined && !!connector.supportedChainIds && !connector.supportedChainIds.includes(_chainId4)) {
-            var _error2 = new UnsupportedChainIdError(_chainId4, connector.supportedChainIds);
-
-            onError ? onError(_error2) : dispatch({
-              type: ActionType.ERROR,
-              payload: {
-                error: _error2
-              }
-            });
-          } else {
-            var _account4 = typeof update.account === 'string' ? normalizeAccount(update.account) : update.account;
-
-            dispatch({
-              type: ActionType.UPDATE,
-              payload: {
-                provider: update.provider,
-                chainId: _chainId4,
-                account: _account4
-              }
-            });
-          }
-        } else {
-          return _catch(function () {
-            return Promise.resolve(augmentConnectorUpdate(connector, update)).then(function (augmentedUpdate) {
-              if (updateBusterRef.current > updateBusterInitial) {
-                throw new StaleConnectorError();
-              }
-
-              dispatch({
-                type: ActionType.UPDATE_FROM_ERROR,
-                payload: augmentedUpdate
-              });
-            });
-          }, function (error) {
-            if (error instanceof StaleConnectorError) {
-              "development" !== "production" ? (0, _tinyWarning.default)(false, "Suppressed stale connector update from error state " + connector + " " + update) : void 0;
-            } else {
-              // though we don't have to, we're re-circulating the new error
-              onError ? onError(error) : dispatch({
-                type: ActionType.ERROR,
-                payload: {
-                  error: error
-                }
-              });
-            }
+        case "ETH":
+          dispatch({
+            type: "SET_DEBTTOKEN_BALANCE_ETH",
+            payload: balance
           });
-        }
-      }());
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }, [connector, error, onError]);
-  var handleError = (0, _react.useCallback)(function (error) {
-    onError ? onError(error) : dispatch({
-      type: ActionType.ERROR,
-      payload: {
-        error: error
-      }
-    });
-  }, [onError]);
-  var handleDeactivate = (0, _react.useCallback)(function () {
-    dispatch({
-      type: ActionType.DEACTIVATE_CONNECTOR
-    });
-  }, []); // ensure that connectors which were set are deactivated
 
-  (0, _react.useEffect)(function () {
-    return function () {
-      if (connector) {
-        connector.deactivate();
-      }
-    };
-  }, [connector]); // ensure that events emitted from the set connector are handled appropriately
-
-  (0, _react.useEffect)(function () {
-    if (connector) {
-      connector.on(_types.ConnectorEvent.Update, handleUpdate).on(_types.ConnectorEvent.Error, handleError).on(_types.ConnectorEvent.Deactivate, handleDeactivate);
-    }
-
-    return function () {
-      if (connector) {
-        connector.off(_types.ConnectorEvent.Update, handleUpdate).off(_types.ConnectorEvent.Error, handleError).off(_types.ConnectorEvent.Deactivate, handleDeactivate);
-      }
-    };
-  }, [connector, handleUpdate, handleError, handleDeactivate]);
-  return {
-    connector: connector,
-    provider: provider,
-    chainId: chainId,
-    account: account,
-    activate: activate,
-    setError: setError,
-    deactivate: deactivate,
-    error: error
-  };
-}
-
-var PRIMARY_KEY = 'primary';
-exports.PRIMARY_KEY = PRIMARY_KEY;
-var CONTEXTS = {};
-
-function createWeb3ReactRoot(key) {
-  !!CONTEXTS[key] ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "A root already exists for provided key " + key) : (0, _tinyInvariant.default)(false) : void 0;
-  CONTEXTS[key] = (0, _react.createContext)({
-    activate: function () {
-      try {
-        !false ? "development" !== "production" ? (0, _tinyInvariant.default)(false, 'No <Web3ReactProvider ... /> found.') : (0, _tinyInvariant.default)(false) : void 0;
-        return Promise.resolve();
-      } catch (e) {
-        return Promise.reject(e);
-      }
-    },
-    setError: function setError() {
-      "development" !== "production" ? (0, _tinyInvariant.default)(false, 'No <Web3ReactProvider ... /> found.') : (0, _tinyInvariant.default)(false);
-    },
-    deactivate: function deactivate() {
-      "development" !== "production" ? (0, _tinyInvariant.default)(false, 'No <Web3ReactProvider ... /> found.') : (0, _tinyInvariant.default)(false);
-    },
-    active: false
-  });
-  CONTEXTS[key].displayName = "Web3ReactContext - " + key;
-  var Provider = CONTEXTS[key].Provider;
-  return function Web3ReactProvider(_ref) {
-    var getLibrary = _ref.getLibrary,
-        children = _ref.children;
-
-    var _useWeb3ReactManager = useWeb3ReactManager(),
-        connector = _useWeb3ReactManager.connector,
-        provider = _useWeb3ReactManager.provider,
-        chainId = _useWeb3ReactManager.chainId,
-        account = _useWeb3ReactManager.account,
-        activate = _useWeb3ReactManager.activate,
-        setError = _useWeb3ReactManager.setError,
-        deactivate = _useWeb3ReactManager.deactivate,
-        error = _useWeb3ReactManager.error;
-
-    var active = connector !== undefined && chainId !== undefined && account !== undefined && !!!error;
-    var library = (0, _react.useMemo)(function () {
-      return active && chainId !== undefined && Number.isInteger(chainId) && !!connector ? getLibrary(provider, connector) : undefined;
-    }, [active, getLibrary, provider, connector, chainId]);
-    var web3ReactContext = {
-      connector: connector,
-      library: library,
-      chainId: chainId,
-      account: account,
-      activate: activate,
-      setError: setError,
-      deactivate: deactivate,
-      active: active,
-      error: error
-    };
-    return _react.default.createElement(Provider, {
-      value: web3ReactContext
-    }, children);
-  };
-}
-
-var Web3ReactProvider = /*#__PURE__*/createWeb3ReactRoot(PRIMARY_KEY);
-exports.Web3ReactProvider = Web3ReactProvider;
-
-function getWeb3ReactContext(key) {
-  if (key === void 0) {
-    key = PRIMARY_KEY;
-  }
-
-  !Object.keys(CONTEXTS).includes(key) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "Invalid key " + key) : (0, _tinyInvariant.default)(false) : void 0;
-  return CONTEXTS[key];
-}
-
-function useWeb3React(key) {
-  return (0, _react.useContext)(getWeb3ReactContext(key));
-}
-},{"react":"node_modules/react/index.js","tiny-invariant":"node_modules/tiny-invariant/dist/tiny-invariant.esm.js","@web3-react/types":"node_modules/@web3-react/types/dist/types.esm.js","tiny-warning":"node_modules/tiny-warning/dist/tiny-warning.esm.js","@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js","@ethersproject/keccak256":"node_modules/@ethersproject/keccak256/lib.esm/index.js"}],"node_modules/events/events.js":[function(require,module,exports) {
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-'use strict';
-
-var R = typeof Reflect === 'object' ? Reflect : null;
-var ReflectApply = R && typeof R.apply === 'function' ? R.apply : function ReflectApply(target, receiver, args) {
-  return Function.prototype.apply.call(target, receiver, args);
-};
-var ReflectOwnKeys;
-
-if (R && typeof R.ownKeys === 'function') {
-  ReflectOwnKeys = R.ownKeys;
-} else if (Object.getOwnPropertySymbols) {
-  ReflectOwnKeys = function ReflectOwnKeys(target) {
-    return Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target));
-  };
-} else {
-  ReflectOwnKeys = function ReflectOwnKeys(target) {
-    return Object.getOwnPropertyNames(target);
-  };
-}
-
-function ProcessEmitWarning(warning) {
-  if (console && console.warn) console.warn(warning);
-}
-
-var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
-  return value !== value;
-};
-
-function EventEmitter() {
-  EventEmitter.init.call(this);
-}
-
-module.exports = EventEmitter;
-module.exports.once = once; // Backwards-compat with node 0.10.x
-
-EventEmitter.EventEmitter = EventEmitter;
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._eventsCount = 0;
-EventEmitter.prototype._maxListeners = undefined; // By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-
-var defaultMaxListeners = 10;
-
-function checkListener(listener) {
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-  }
-}
-
-Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
-  enumerable: true,
-  get: function () {
-    return defaultMaxListeners;
-  },
-  set: function (arg) {
-    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
-      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
-    }
-
-    defaultMaxListeners = arg;
-  }
-});
-
-EventEmitter.init = function () {
-  if (this._events === undefined || this._events === Object.getPrototypeOf(this)._events) {
-    this._events = Object.create(null);
-    this._eventsCount = 0;
-  }
-
-  this._maxListeners = this._maxListeners || undefined;
-}; // Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-
-
-EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
-  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
-    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
-  }
-
-  this._maxListeners = n;
-  return this;
-};
-
-function _getMaxListeners(that) {
-  if (that._maxListeners === undefined) return EventEmitter.defaultMaxListeners;
-  return that._maxListeners;
-}
-
-EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-  return _getMaxListeners(this);
-};
-
-EventEmitter.prototype.emit = function emit(type) {
-  var args = [];
-
-  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
-
-  var doError = type === 'error';
-  var events = this._events;
-  if (events !== undefined) doError = doError && events.error === undefined;else if (!doError) return false; // If there is no 'error' event listener then throw.
-
-  if (doError) {
-    var er;
-    if (args.length > 0) er = args[0];
-
-    if (er instanceof Error) {
-      // Note: The comments on the `throw` lines are intentional, they show
-      // up in Node's output if this results in an unhandled exception.
-      throw er; // Unhandled 'error' event
-    } // At least give some kind of context to the user
-
-
-    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
-    err.context = er;
-    throw err; // Unhandled 'error' event
-  }
-
-  var handler = events[type];
-  if (handler === undefined) return false;
-
-  if (typeof handler === 'function') {
-    ReflectApply(handler, this, args);
-  } else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-
-    for (var i = 0; i < len; ++i) ReflectApply(listeners[i], this, args);
-  }
-
-  return true;
-};
-
-function _addListener(target, type, listener, prepend) {
-  var m;
-  var events;
-  var existing;
-  checkListener(listener);
-  events = target._events;
-
-  if (events === undefined) {
-    events = target._events = Object.create(null);
-    target._eventsCount = 0;
-  } else {
-    // To avoid recursion in the case that type === "newListener"! Before
-    // adding it to the listeners, first emit "newListener".
-    if (events.newListener !== undefined) {
-      target.emit('newListener', type, listener.listener ? listener.listener : listener); // Re-assign `events` because a newListener handler could have caused the
-      // this._events to be assigned to a new object
-
-      events = target._events;
-    }
-
-    existing = events[type];
-  }
-
-  if (existing === undefined) {
-    // Optimize the case of one listener. Don't need the extra array object.
-    existing = events[type] = listener;
-    ++target._eventsCount;
-  } else {
-    if (typeof existing === 'function') {
-      // Adding the second element, need to change to array.
-      existing = events[type] = prepend ? [listener, existing] : [existing, listener]; // If we've already got an array, just append.
-    } else if (prepend) {
-      existing.unshift(listener);
-    } else {
-      existing.push(listener);
-    } // Check for listener leak
-
-
-    m = _getMaxListeners(target);
-
-    if (m > 0 && existing.length > m && !existing.warned) {
-      existing.warned = true; // No error code for this since it is a Warning
-      // eslint-disable-next-line no-restricted-syntax
-
-      var w = new Error('Possible EventEmitter memory leak detected. ' + existing.length + ' ' + String(type) + ' listeners ' + 'added. Use emitter.setMaxListeners() to ' + 'increase limit');
-      w.name = 'MaxListenersExceededWarning';
-      w.emitter = target;
-      w.type = type;
-      w.count = existing.length;
-      ProcessEmitWarning(w);
-    }
-  }
-
-  return target;
-}
-
-EventEmitter.prototype.addListener = function addListener(type, listener) {
-  return _addListener(this, type, listener, false);
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.prependListener = function prependListener(type, listener) {
-  return _addListener(this, type, listener, true);
-};
-
-function onceWrapper() {
-  if (!this.fired) {
-    this.target.removeListener(this.type, this.wrapFn);
-    this.fired = true;
-    if (arguments.length === 0) return this.listener.call(this.target);
-    return this.listener.apply(this.target, arguments);
-  }
-}
-
-function _onceWrap(target, type, listener) {
-  var state = {
-    fired: false,
-    wrapFn: undefined,
-    target: target,
-    type: type,
-    listener: listener
-  };
-  var wrapped = onceWrapper.bind(state);
-  wrapped.listener = listener;
-  state.wrapFn = wrapped;
-  return wrapped;
-}
-
-EventEmitter.prototype.once = function once(type, listener) {
-  checkListener(listener);
-  this.on(type, _onceWrap(this, type, listener));
-  return this;
-};
-
-EventEmitter.prototype.prependOnceListener = function prependOnceListener(type, listener) {
-  checkListener(listener);
-  this.prependListener(type, _onceWrap(this, type, listener));
-  return this;
-}; // Emits a 'removeListener' event if and only if the listener was removed.
-
-
-EventEmitter.prototype.removeListener = function removeListener(type, listener) {
-  var list, events, position, i, originalListener;
-  checkListener(listener);
-  events = this._events;
-  if (events === undefined) return this;
-  list = events[type];
-  if (list === undefined) return this;
-
-  if (list === listener || list.listener === listener) {
-    if (--this._eventsCount === 0) this._events = Object.create(null);else {
-      delete events[type];
-      if (events.removeListener) this.emit('removeListener', type, list.listener || listener);
-    }
-  } else if (typeof list !== 'function') {
-    position = -1;
-
-    for (i = list.length - 1; i >= 0; i--) {
-      if (list[i] === listener || list[i].listener === listener) {
-        originalListener = list[i].listener;
-        position = i;
-        break;
-      }
-    }
-
-    if (position < 0) return this;
-    if (position === 0) list.shift();else {
-      spliceOne(list, position);
-    }
-    if (list.length === 1) events[type] = list[0];
-    if (events.removeListener !== undefined) this.emit('removeListener', type, originalListener || listener);
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-
-EventEmitter.prototype.removeAllListeners = function removeAllListeners(type) {
-  var listeners, events, i;
-  events = this._events;
-  if (events === undefined) return this; // not listening for removeListener, no need to emit
-
-  if (events.removeListener === undefined) {
-    if (arguments.length === 0) {
-      this._events = Object.create(null);
-      this._eventsCount = 0;
-    } else if (events[type] !== undefined) {
-      if (--this._eventsCount === 0) this._events = Object.create(null);else delete events[type];
-    }
-
-    return this;
-  } // emit removeListener for all listeners on all events
-
-
-  if (arguments.length === 0) {
-    var keys = Object.keys(events);
-    var key;
-
-    for (i = 0; i < keys.length; ++i) {
-      key = keys[i];
-      if (key === 'removeListener') continue;
-      this.removeAllListeners(key);
-    }
-
-    this.removeAllListeners('removeListener');
-    this._events = Object.create(null);
-    this._eventsCount = 0;
-    return this;
-  }
-
-  listeners = events[type];
-
-  if (typeof listeners === 'function') {
-    this.removeListener(type, listeners);
-  } else if (listeners !== undefined) {
-    // LIFO order
-    for (i = listeners.length - 1; i >= 0; i--) {
-      this.removeListener(type, listeners[i]);
-    }
-  }
-
-  return this;
-};
-
-function _listeners(target, type, unwrap) {
-  var events = target._events;
-  if (events === undefined) return [];
-  var evlistener = events[type];
-  if (evlistener === undefined) return [];
-  if (typeof evlistener === 'function') return unwrap ? [evlistener.listener || evlistener] : [evlistener];
-  return unwrap ? unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
-}
-
-EventEmitter.prototype.listeners = function listeners(type) {
-  return _listeners(this, type, true);
-};
-
-EventEmitter.prototype.rawListeners = function rawListeners(type) {
-  return _listeners(this, type, false);
-};
-
-EventEmitter.listenerCount = function (emitter, type) {
-  if (typeof emitter.listenerCount === 'function') {
-    return emitter.listenerCount(type);
-  } else {
-    return listenerCount.call(emitter, type);
-  }
-};
-
-EventEmitter.prototype.listenerCount = listenerCount;
-
-function listenerCount(type) {
-  var events = this._events;
-
-  if (events !== undefined) {
-    var evlistener = events[type];
-
-    if (typeof evlistener === 'function') {
-      return 1;
-    } else if (evlistener !== undefined) {
-      return evlistener.length;
-    }
-  }
-
-  return 0;
-}
-
-EventEmitter.prototype.eventNames = function eventNames() {
-  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
-};
-
-function arrayClone(arr, n) {
-  var copy = new Array(n);
-
-  for (var i = 0; i < n; ++i) copy[i] = arr[i];
-
-  return copy;
-}
-
-function spliceOne(list, index) {
-  for (; index + 1 < list.length; index++) list[index] = list[index + 1];
-
-  list.pop();
-}
-
-function unwrapListeners(arr) {
-  var ret = new Array(arr.length);
-
-  for (var i = 0; i < ret.length; ++i) {
-    ret[i] = arr[i].listener || arr[i];
-  }
-
-  return ret;
-}
-
-function once(emitter, name) {
-  return new Promise(function (resolve, reject) {
-    function errorListener(err) {
-      emitter.removeListener(name, resolver);
-      reject(err);
-    }
-
-    function resolver() {
-      if (typeof emitter.removeListener === 'function') {
-        emitter.removeListener('error', errorListener);
-      }
-
-      resolve([].slice.call(arguments));
-    }
-
-    ;
-    eventTargetAgnosticAddListener(emitter, name, resolver, {
-      once: true
-    });
-
-    if (name !== 'error') {
-      addErrorHandlerIfEventEmitter(emitter, errorListener, {
-        once: true
-      });
-    }
-  });
-}
-
-function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
-  if (typeof emitter.on === 'function') {
-    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
-  }
-}
-
-function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
-  if (typeof emitter.on === 'function') {
-    if (flags.once) {
-      emitter.once(name, listener);
-    } else {
-      emitter.on(name, listener);
-    }
-  } else if (typeof emitter.addEventListener === 'function') {
-    // EventTarget does not have `error` event semantics like Node
-    // EventEmitters, we do not listen for `error` events here.
-    emitter.addEventListener(name, function wrapListener(arg) {
-      // IE does not have builtin `{ once: true }` support so we
-      // have to do it manually.
-      if (flags.once) {
-        emitter.removeEventListener(name, wrapListener);
-      }
-
-      listener(arg);
-    });
-  } else {
-    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
-  }
-}
-},{}],"node_modules/@web3-react/abstract-connector/dist/abstract-connector.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.AbstractConnector = void 0;
-
-var _events = require("events");
-
-var _types = require("@web3-react/types");
-
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-
-var AbstractConnector = /*#__PURE__*/function (_EventEmitter) {
-  _inheritsLoose(AbstractConnector, _EventEmitter);
-
-  function AbstractConnector(_temp) {
-    var _this;
-
-    var _ref = _temp === void 0 ? {} : _temp,
-        supportedChainIds = _ref.supportedChainIds;
-
-    _this = _EventEmitter.call(this) || this;
-    _this.supportedChainIds = supportedChainIds;
-    return _this;
-  }
-
-  var _proto = AbstractConnector.prototype;
-
-  _proto.emitUpdate = function emitUpdate(update) {
-    if ("development" !== "production") {
-      console.log("Emitting '" + _types.ConnectorEvent.Update + "' with payload", update);
-    }
-
-    this.emit(_types.ConnectorEvent.Update, update);
-  };
-
-  _proto.emitError = function emitError(error) {
-    if ("development" !== "production") {
-      console.log("Emitting '" + _types.ConnectorEvent.Error + "' with payload", error);
-    }
-
-    this.emit(_types.ConnectorEvent.Error, error);
-  };
-
-  _proto.emitDeactivate = function emitDeactivate() {
-    if ("development" !== "production") {
-      console.log("Emitting '" + _types.ConnectorEvent.Deactivate + "'");
-    }
-
-    this.emit(_types.ConnectorEvent.Deactivate);
-  };
-
-  return AbstractConnector;
-}(_events.EventEmitter);
-
-exports.AbstractConnector = AbstractConnector;
-},{"events":"node_modules/events/events.js","@web3-react/types":"node_modules/@web3-react/types/dist/types.esm.js"}],"node_modules/@web3-react/injected-connector/dist/injected-connector.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.UserRejectedRequestError = exports.NoEthereumProviderError = exports.InjectedConnector = void 0;
-
-var _abstractConnector = require("@web3-react/abstract-connector");
-
-var _tinyWarning = _interopRequireDefault(require("tiny-warning"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-function isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function _construct(Parent, args, Class) {
-  if (isNativeReflectConstruct()) {
-    _construct = Reflect.construct;
-  } else {
-    _construct = function _construct(Parent, args, Class) {
-      var a = [null];
-      a.push.apply(a, args);
-      var Constructor = Function.bind.apply(Parent, a);
-      var instance = new Constructor();
-      if (Class) _setPrototypeOf(instance, Class.prototype);
-      return instance;
-    };
-  }
-
-  return _construct.apply(null, arguments);
-}
-
-function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
-}
-
-function _wrapNativeSuper(Class) {
-  var _cache = typeof Map === "function" ? new Map() : undefined;
-
-  _wrapNativeSuper = function _wrapNativeSuper(Class) {
-    if (Class === null || !_isNativeFunction(Class)) return Class;
-
-    if (typeof Class !== "function") {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    if (typeof _cache !== "undefined") {
-      if (_cache.has(Class)) return _cache.get(Class);
-
-      _cache.set(Class, Wrapper);
-    }
-
-    function Wrapper() {
-      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-    }
-
-    Wrapper.prototype = Object.create(Class.prototype, {
-      constructor: {
-        value: Wrapper,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    return _setPrototypeOf(Wrapper, Class);
-  };
-
-  return _wrapNativeSuper(Class);
-}
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-} // A type of promise-like that resolves synchronously and supports only one observer
-
-
-var _iteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.iterator || (Symbol.iterator = /*#__PURE__*/Symbol("Symbol.iterator")) : "@@iterator"; // Asynchronously iterate through an object's values
-
-
-var _asyncIteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.asyncIterator || (Symbol.asyncIterator = /*#__PURE__*/Symbol("Symbol.asyncIterator")) : "@@asyncIterator"; // Asynchronously iterate on a value using it's async iterator if present, or its synchronous iterator if missing
-
-
-function _catch(body, recover) {
-  try {
-    var result = body();
-  } catch (e) {
-    return recover(e);
-  }
-
-  if (result && result.then) {
-    return result.then(void 0, recover);
-  }
-
-  return result;
-} // Asynchronously await a promise and pass the result to a finally continuation
-
-
-function parseSendReturn(sendReturn) {
-  return sendReturn.hasOwnProperty('result') ? sendReturn.result : sendReturn;
-}
-
-var NoEthereumProviderError = /*#__PURE__*/function (_Error) {
-  _inheritsLoose(NoEthereumProviderError, _Error);
-
-  function NoEthereumProviderError() {
-    var _this;
-
-    _this = _Error.call(this) || this;
-    _this.name = _this.constructor.name;
-    _this.message = 'No Ethereum provider was found on window.ethereum.';
-    return _this;
-  }
-
-  return NoEthereumProviderError;
-}( /*#__PURE__*/_wrapNativeSuper(Error));
-
-exports.NoEthereumProviderError = NoEthereumProviderError;
-
-var UserRejectedRequestError = /*#__PURE__*/function (_Error2) {
-  _inheritsLoose(UserRejectedRequestError, _Error2);
-
-  function UserRejectedRequestError() {
-    var _this2;
-
-    _this2 = _Error2.call(this) || this;
-    _this2.name = _this2.constructor.name;
-    _this2.message = 'The user rejected the request.';
-    return _this2;
-  }
-
-  return UserRejectedRequestError;
-}( /*#__PURE__*/_wrapNativeSuper(Error));
-
-exports.UserRejectedRequestError = UserRejectedRequestError;
-
-var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
-  _inheritsLoose(InjectedConnector, _AbstractConnector);
-
-  function InjectedConnector(kwargs) {
-    var _this3;
-
-    _this3 = _AbstractConnector.call(this, kwargs) || this;
-    _this3.handleNetworkChanged = _this3.handleNetworkChanged.bind(_assertThisInitialized(_this3));
-    _this3.handleChainChanged = _this3.handleChainChanged.bind(_assertThisInitialized(_this3));
-    _this3.handleAccountsChanged = _this3.handleAccountsChanged.bind(_assertThisInitialized(_this3));
-    _this3.handleClose = _this3.handleClose.bind(_assertThisInitialized(_this3));
-    return _this3;
-  }
-
-  var _proto = InjectedConnector.prototype;
-
-  _proto.handleChainChanged = function handleChainChanged(chainId) {
-    if ("development" !== "production") {
-      console.log("Handling 'chainChanged' event with payload", chainId);
-    }
-
-    this.emitUpdate({
-      chainId: chainId,
-      provider: window.ethereum
-    });
-  };
-
-  _proto.handleAccountsChanged = function handleAccountsChanged(accounts) {
-    if ("development" !== "production") {
-      console.log("Handling 'accountsChanged' event with payload", accounts);
-    }
-
-    if (accounts.length === 0) {
-      this.emitDeactivate();
-    } else {
-      this.emitUpdate({
-        account: accounts[0]
-      });
-    }
-  };
-
-  _proto.handleClose = function handleClose(code, reason) {
-    if ("development" !== "production") {
-      console.log("Handling 'close' event with payload", code, reason);
-    }
-
-    this.emitDeactivate();
-  };
-
-  _proto.handleNetworkChanged = function handleNetworkChanged(networkId) {
-    if ("development" !== "production") {
-      console.log("Handling 'networkChanged' event with payload", networkId);
-    }
-
-    this.emitUpdate({
-      chainId: networkId,
-      provider: window.ethereum
-    });
-  };
-
-  _proto.activate = function activate() {
-    try {
-      var _temp5 = function _temp5(_result) {
-        if (_exit2) return _result;
-
-        function _temp2() {
-          return _extends({
-            provider: window.ethereum
-          }, account ? {
-            account: account
-          } : {});
-        }
-
-        var _temp = function () {
-          if (!account) {
-            // if enable is successful but doesn't return accounts, fall back to getAccount (not happy i have to do this...)
-            return Promise.resolve(window.ethereum.enable().then(function (sendReturn) {
-              return sendReturn && parseSendReturn(sendReturn)[0];
-            })).then(function (_window$ethereum$enab) {
-              account = _window$ethereum$enab;
-            });
-          }
-        }(); // if unsuccessful, try enable
-
-
-        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
-      };
-
-      var _exit2 = false;
-
-      var _this5 = this;
-
-      if (!window.ethereum) {
-        throw new NoEthereumProviderError();
-      }
-
-      if (window.ethereum.on) {
-        window.ethereum.on('chainChanged', _this5.handleChainChanged);
-        window.ethereum.on('accountsChanged', _this5.handleAccountsChanged);
-        window.ethereum.on('close', _this5.handleClose);
-        window.ethereum.on('networkChanged', _this5.handleNetworkChanged);
-      }
-
-      if (window.ethereum.isMetaMask) {
-        ;
-        window.ethereum.autoRefreshOnNetworkChange = false;
-      } // try to activate + get account via eth_requestAccounts
-
-
-      var account;
-
-      var _temp6 = _catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_requestAccounts').then(function (sendReturn) {
-          return parseSendReturn(sendReturn)[0];
-        })).then(function (_window$ethereum$send) {
-          account = _window$ethereum$send;
-        });
-      }, function (error) {
-        if (error.code === 4001) {
-          throw new UserRejectedRequestError();
-        }
-
-        "development" !== "production" ? (0, _tinyWarning.default)(false, 'eth_requestAccounts was unsuccessful, falling back to enable') : void 0;
-      });
-
-      return Promise.resolve(_temp6 && _temp6.then ? _temp6.then(_temp5) : _temp5(_temp6));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  _proto.getProvider = function getProvider() {
-    try {
-      return Promise.resolve(window.ethereum);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  _proto.getChainId = function getChainId() {
-    try {
-      var _temp12 = function _temp12() {
-        function _temp9() {
-          if (!chainId) {
-            try {
-              chainId = parseSendReturn(window.ethereum.send({
-                method: 'net_version'
-              }));
-            } catch (_unused) {
-              "development" !== "production" ? (0, _tinyWarning.default)(false, 'net_version v2 was unsuccessful, falling back to manual matches and static properties') : void 0;
-            }
-          }
-
-          if (!chainId) {
-            if (window.ethereum.isDapper) {
-              chainId = parseSendReturn(window.ethereum.cachedResults.net_version);
-            } else {
-              chainId = window.ethereum.chainId || window.ethereum.netVersion || window.ethereum.networkVersion || window.ethereum._chainId;
-            }
-          }
-
-          return chainId;
-        }
-
-        var _temp8 = function () {
-          if (!chainId) {
-            var _temp14 = _catch(function () {
-              return Promise.resolve(window.ethereum.send('net_version').then(parseSendReturn)).then(function (_window$ethereum$send3) {
-                chainId = _window$ethereum$send3;
-              });
-            }, function () {
-              "development" !== "production" ? (0, _tinyWarning.default)(false, 'net_version was unsuccessful, falling back to net version v2') : void 0;
-            });
-
-            if (_temp14 && _temp14.then) return _temp14.then(function () {});
-          }
-        }();
-
-        return _temp8 && _temp8.then ? _temp8.then(_temp9) : _temp9(_temp8);
-      };
-
-      if (!window.ethereum) {
-        throw new NoEthereumProviderError();
-      }
-
-      var chainId;
-
-      var _temp13 = _catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_chainId').then(parseSendReturn)).then(function (_window$ethereum$send2) {
-          chainId = _window$ethereum$send2;
-        });
-      }, function () {
-        "development" !== "production" ? (0, _tinyWarning.default)(false, 'eth_chainId was unsuccessful, falling back to net_version') : void 0;
-      });
-
-      return Promise.resolve(_temp13 && _temp13.then ? _temp13.then(_temp12) : _temp12(_temp13));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  _proto.getAccount = function getAccount() {
-    try {
-      var _temp20 = function _temp20() {
-        function _temp17() {
-          if (!account) {
-            account = parseSendReturn(window.ethereum.send({
-              method: 'eth_accounts'
-            }))[0];
-          }
-
-          return account;
-        }
-
-        var _temp16 = function () {
-          if (!account) {
-            var _temp22 = _catch(function () {
-              return Promise.resolve(window.ethereum.enable().then(function (sendReturn) {
-                return parseSendReturn(sendReturn)[0];
-              })).then(function (_window$ethereum$enab2) {
-                account = _window$ethereum$enab2;
-              });
-            }, function () {
-              "development" !== "production" ? (0, _tinyWarning.default)(false, 'enable was unsuccessful, falling back to eth_accounts v2') : void 0;
-            });
-
-            if (_temp22 && _temp22.then) return _temp22.then(function () {});
-          }
-        }();
-
-        return _temp16 && _temp16.then ? _temp16.then(_temp17) : _temp17(_temp16);
-      };
-
-      if (!window.ethereum) {
-        throw new NoEthereumProviderError();
-      }
-
-      var account;
-
-      var _temp21 = _catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_accounts').then(function (sendReturn) {
-          return parseSendReturn(sendReturn)[0];
-        })).then(function (_window$ethereum$send4) {
-          account = _window$ethereum$send4;
-        });
-      }, function () {
-        "development" !== "production" ? (0, _tinyWarning.default)(false, 'eth_accounts was unsuccessful, falling back to enable') : void 0;
-      });
-
-      return Promise.resolve(_temp21 && _temp21.then ? _temp21.then(_temp20) : _temp20(_temp21));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  _proto.deactivate = function deactivate() {
-    if (window.ethereum && window.ethereum.removeListener) {
-      window.ethereum.removeListener('chainChanged', this.handleChainChanged);
-      window.ethereum.removeListener('accountsChanged', this.handleAccountsChanged);
-      window.ethereum.removeListener('close', this.handleClose);
-      window.ethereum.removeListener('networkChanged', this.handleNetworkChanged);
-    }
-  };
-
-  _proto.isAuthorized = function isAuthorized() {
-    try {
-      if (!window.ethereum) {
-        return Promise.resolve(false);
-      }
-
-      return Promise.resolve(_catch(function () {
-        return Promise.resolve(window.ethereum.send('eth_accounts').then(function (sendReturn) {
-          if (parseSendReturn(sendReturn).length > 0) {
-            return true;
-          } else {
-            return false;
-          }
-        }));
-      }, function () {
-        return false;
-      }));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  return InjectedConnector;
-}(_abstractConnector.AbstractConnector);
-
-exports.InjectedConnector = InjectedConnector;
-},{"@web3-react/abstract-connector":"node_modules/@web3-react/abstract-connector/dist/abstract-connector.esm.js","tiny-warning":"node_modules/tiny-warning/dist/tiny-warning.esm.js"}],"connectors.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.injected = void 0;
-
-var _injectedConnector = require("@web3-react/injected-connector");
-
-var injected = new _injectedConnector.InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 1337, 5777, 31337]
-});
-exports.injected = injected;
-},{"@web3-react/injected-connector":"node_modules/@web3-react/injected-connector/dist/injected-connector.esm.js"}],"node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
-var define;
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-var runtime = (function (exports) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-    return obj[key];
-  }
-  try {
-    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
-    define({}, "");
-  } catch (err) {
-    define = function(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  exports.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
-    return this;
-  });
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = GeneratorFunctionPrototype;
-  define(Gp, "constructor", GeneratorFunctionPrototype);
-  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  GeneratorFunction.displayName = define(
-    GeneratorFunctionPrototype,
-    toStringTagSymbol,
-    "GeneratorFunction"
-  );
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      define(prototype, method, function(arg) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-
-  exports.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  exports.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      define(genFun, toStringTagSymbol, "GeneratorFunction");
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  exports.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return PromiseImpl.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
+        case "USDC":
+          dispatch({
+            type: "SET_DEBTTOKEN_BALANCE_USDC",
+            payload: balance
           });
-        }
-
-        return PromiseImpl.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
       }
 
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
-    return this;
-  });
-  exports.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList),
-      PromiseImpl
-    );
-
-    return exports.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        // Note: ["return"] must be used for ES3 parsing compatibility.
-        if (delegate.iterator["return"]) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  define(Gp, toStringTagSymbol, "Generator");
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  define(Gp, iteratorSymbol, function() {
-    return this;
-  });
-
-  define(Gp, "toString", function() {
-    return "[object Generator]";
-  });
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  exports.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  exports.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
+      ;
     },
+    nTokenBalanceDAI: store.nTokenBalanceDAI,
+    nTokenBalanceETH: store.nTokenBalanceETH,
+    nTokenBalanceUSDC: store.nTokenBalanceUSDC,
+    setNTokenBalance: function setNTokenBalance(ccy, balance) {
+      switch (ccy) {
+        case "DAI":
+          dispatch({
+            type: "SET_NTOKEN_BALANCE_DAI",
+            payload: balance
+          });
 
-    stop: function() {
-      this.done = true;
+        case "ETH":
+          dispatch({
+            type: "SET_NTOKEN_BALANCE_ETH",
+            payload: balance
+          });
 
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
+        case "USDC":
+          dispatch({
+            type: "SET_NTOKEN_BALANCE_USDC",
+            payload: balance
+          });
       }
 
-      return this.rval;
+      ;
     },
+    nTokenYieldDAI: store.nTokenYieldDAI,
+    nTokenYieldETH: store.nTokenYieldETH,
+    nTokenYieldUSDC: store.nTokenYieldUSDC,
+    setNTokenYield: function setNTokenYield(ccy, _yield) {
+      switch (ccy) {
+        case "DAI":
+          dispatch({
+            type: "SET_NTOKEN_YIELD_DAI",
+            payload: _yield
+          });
 
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
+        case "ETH":
+          dispatch({
+            type: "SET_NTOKEN_YIELD_ETH",
+            payload: _yield
+          });
+
+        case "USDC":
+          dispatch({
+            type: "SET_NTOKEN_YIELD_USDC",
+            payload: _yield
+          });
       }
 
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
+      ;
     },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-
-  // Regardless of whether this script is executing as a CommonJS module
-  // or not, return the runtime object so that we can declare the variable
-  // regeneratorRuntime in the outer scope, which allows this module to be
-  // injected easily by `bin/regenerator --include-runtime script.js`.
-  return exports;
-
-}(
-  // If this script is executing as a CommonJS module, use module.exports
-  // as the regeneratorRuntime namespace. Otherwise create a new empty
-  // object. Either way, the resulting object will be used to initialize
-  // the regeneratorRuntime variable at the top of this file.
-  typeof module === "object" ? module.exports : {}
-));
-
-try {
-  regeneratorRuntime = runtime;
-} catch (accidentalStrictMode) {
-  // This module should not be running in strict mode, so the above
-  // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, in modern engines
-  // we can explicitly access globalThis. In older engines we can escape
-  // strict mode using a global Function call. This could conceivably fail
-  // if a Content Security Policy forbids using Function, but in that case
-  // the proper solution is to fix the accidental strict mode problem. If
-  // you've misconfigured your bundler to force strict mode and applied a
-  // CSP to forbid Function, and you're not willing to fix either of those
-  // problems, please detail your unique predicament in a GitHub issue.
-  if (typeof globalThis === "object") {
-    globalThis.regeneratorRuntime = runtime;
-  } else {
-    Function("r", "regeneratorRuntime = r")(runtime);
-  }
-}
-
-},{}],"components/Header/Header.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Header/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _reactRouterDom = require("react-router-dom");
-
-var _core = require("@web3-react/core");
-
-var _connectors = require("../../connectors");
-
-require("regenerator-runtime/runtime");
-
-require("./Header.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function Header(props) {
-  var className = props.className;
-
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      active = _useWeb3React.active,
-      account = _useWeb3React.account,
-      activate = _useWeb3React.activate,
-      deactivate = _useWeb3React.deactivate;
-
-  console.log(active, account);
-
-  function connect() {
-    return _connect.apply(this, arguments);
-  }
-
-  function _connect() {
-    _connect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              _context.next = 3;
-              return activate(_connectors.injected);
-
-            case 3:
-              _context.next = 8;
-              break;
-
-            case 5:
-              _context.prev = 5;
-              _context.t0 = _context["catch"](0);
-              console.log(_context.t0);
-
-            case 8:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 5]]);
-    }));
-    return _connect.apply(this, arguments);
-  }
-
-  function disconnect() {
-    return _disconnect.apply(this, arguments);
-  }
-
-  function _disconnect() {
-    _disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
-              _context2.next = 3;
-              return deactivate(_connectors.injected);
-
-            case 3:
-              _context2.next = 8;
-              break;
-
-            case 5:
-              _context2.prev = 5;
-              _context2.t0 = _context2["catch"](0);
-              console.log(_context2.t0);
-
-            case 8:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, null, [[0, 5]]);
-    }));
-    return _disconnect.apply(this, arguments);
-  }
-
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "header ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/landing-page"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "logo"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "nf-tlend-logo-light-1",
-    src: "/img/nftlend-logo-light-1@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "nf-tlendxyz valign-text-middle oxanium-semi-bold-web-orange-36px"
-  }, "NFTlend.xyz"))), /*#__PURE__*/_react.default.createElement("div", {
-    className: "navigation"
-  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/dashboard"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "nav-title dashboard-1 valign-text-middle oxanium-normal-white-22px"
-  }, "DASHBOARD")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/borrow"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "nav-title borrow valign-text-middle oxanium-normal-white-22px"
-  }, "BORROW")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/lend"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "nav-title place valign-text-middle oxanium-normal-white-22px"
-  }, "LEND")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/liquidate"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "nav-title liquidate valign-text-middle oxanium-normal-white-22px"
-  }, "LIQUIDATE")), active ? /*#__PURE__*/_react.default.createElement("button", {
-    onClick: disconnect,
-    className: "overlap-group-1"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "connect-wallet valign-text-middle oxanium-bold-white-22px"
-  }, account.substring(0, 6), "...", account.slice(-4))) : /*#__PURE__*/_react.default.createElement("button", {
-    onClick: connect,
-    className: "overlap-group-1"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "connect-wallet valign-text-middle oxanium-bold-white-22px"
-  }, "Connect Wallet"))));
-}
-
-var _default = Header;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../../connectors":"connectors.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./Header.css":"components/Header/Header.css"}],"components/Background/Background.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Background/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./Background.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Background(props) {
-  var className = props.className;
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "background ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "flex-col"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "bored-ape-logo-outline-1",
-    src: "/img/bored-ape-logo-outline-1@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("img", {
-    className: "punk-woman-outl-ovebg-preview-1",
-    src: "/img/punk-woman-outline-removebg-preview-1@2x.png"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "flex-col-1"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "punk-pipe-outli-ovebg-preview-1",
-    src: "/img/punk-pipe-outline-removebg-preview-1@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "overlap-group-7"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "coolcat-outline-ovebg-preview-1",
-    src: "/img/coolcat-outline-removebg-preview-1@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("img", {
-    className: "punk-ape-outlin-ovebg-preview-1",
-    src: "/img/punk-ape-outline-removebg-preview-1@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("img", {
-    className: "bbape-removebg-convert-image-2",
-    src: "/img/bb-ape-removebg-preview-convertimage-2@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("img", {
-    className: "loading-skull-noun-2",
-    src: "/img/loading-skull-noun-2@2x.png"
-  }))));
-}
-
-var _default = Background;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","./Background.css":"components/Background/Background.css"}],"components/BorrowsHeader/BorrowsHeader.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/BorrowsHeader/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./BorrowsHeader.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function BorrowsHeader() {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "borrows-header oxanium-normal-white-20px"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "your-borrows valign-text-middle"
-  }, "Your Borrows"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "borrowed valign-text-middle"
-  }, "Borrowed"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "repayment valign-text-middle"
-  }, "Repayment"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "apr valign-text-middle"
-  }, "APR"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "collateral valign-text-middle"
-  }, "Collateral"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "coll-ratio valign-text-middle"
-  }, "Coll. Ratio"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "maturity valign-text-middle"
-  }, "Maturity"));
-}
-
-var _default = BorrowsHeader;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","./BorrowsHeader.css":"components/BorrowsHeader/BorrowsHeader.css"}],"components/AssetItem/AssetItem.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/AssetItem/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _reactRouterDom = require("react-router-dom");
-
-require("./AssetItem.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function AssetItem(props) {
-  var className = props.className,
-      nftSymbol = props.nftSymbol,
-      nftTokenId = props.nftTokenId,
-      imgUrl = props.imgUrl;
-  return /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-    to: "/asset"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "asset-item-3 ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "rectangle-18",
-    src: imgUrl
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "fidenza-157 valign-text-middle oxanium-semi-bold-black-20px"
-  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
-    className: "span-2 oxanium-semi-bold-black-20px"
-  }, nftSymbol, /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
-    className: "span-2 oxanium-normal-black-20px"
-  }, "#", nftTokenId)))));
-}
-
-var _default = AssetItem;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./AssetItem.css":"components/AssetItem/AssetItem.css"}],"components/ButtonRepay/ButtonRepay.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/reactjs-popup/dist/reactjs-popup.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.Popup = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _reactDom = _interopRequireDefault(require("react-dom"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-var useOnEscape = function useOnEscape(handler, active) {
-  if (active === void 0) {
-    active = true;
-  }
-
-  (0, _react.useEffect)(function () {
-    if (!active) return;
-
-    var listener = function listener(event) {
-      // check if key is an Escape
-      if (event.key === 'Escape') handler(event);
-    };
-
-    document.addEventListener('keyup', listener);
-    return function () {
-      if (!active) return;
-      document.removeEventListener('keyup', listener);
-    };
-  }, [handler, active]);
-};
-
-var useRepositionOnResize = function useRepositionOnResize(handler, active) {
-  if (active === void 0) {
-    active = true;
-  }
-
-  (0, _react.useEffect)(function () {
-    if (!active) return;
-
-    var listener = function listener() {
-      handler();
-    };
-
-    window.addEventListener('resize', listener);
-    return function () {
-      if (!active) return;
-      window.removeEventListener('resize', listener);
-    };
-  }, [handler, active]);
-};
-
-var useOnClickOutside = function useOnClickOutside(ref, handler, active) {
-  if (active === void 0) {
-    active = true;
-  }
-
-  (0, _react.useEffect)(function () {
-    if (!active) return;
-
-    var listener = function listener(event) {
-      // Do nothing if clicking ref's element or descendent elements
-      var refs = Array.isArray(ref) ? ref : [ref];
-      var contains = false;
-      refs.forEach(function (r) {
-        if (!r.current || r.current.contains(event.target)) {
-          contains = true;
-          return;
-        }
+    userBorrows: store.userBorrows,
+    setUserBorrows: function setUserBorrows(userBorrows) {
+      dispatch({
+        type: "SET_USER_BORROWS",
+        payload: userBorrows
       });
-      event.stopPropagation();
-      if (!contains) handler(event);
-    };
-
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-    return function () {
-      if (!active) return;
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [ref, handler, active]);
-}; // Make sure that user is not able TAB out of the Modal content on Open
-
-
-var useTabbing = function useTabbing(contentRef, active) {
-  if (active === void 0) {
-    active = true;
-  }
-
-  (0, _react.useEffect)(function () {
-    if (!active) return;
-
-    var listener = function listener(event) {
-      // check if key is an Tab
-      if (event.keyCode === 9) {
-        var _contentRef$current;
-
-        var els = contentRef === null || contentRef === void 0 ? void 0 : (_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
-        var focusableEls = Array.prototype.slice.call(els);
-
-        if (focusableEls.length === 1) {
-          event.preventDefault();
-          return;
-        }
-
-        var firstFocusableEl = focusableEls[0];
-        var lastFocusableEl = focusableEls[focusableEls.length - 1];
-
-        if (event.shiftKey && document.activeElement === firstFocusableEl) {
-          event.preventDefault();
-          lastFocusableEl.focus();
-        } else if (document.activeElement === lastFocusableEl) {
-          event.preventDefault();
-          firstFocusableEl.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', listener);
-    return function () {
-      if (!active) return;
-      document.removeEventListener('keydown', listener);
-    };
-  }, [contentRef, active]);
-};
-
-var useIsomorphicLayoutEffect = typeof window !== 'undefined' ? _react.useLayoutEffect : _react.useEffect;
-var Style = {
-  popupContent: {
-    tooltip: {
-      position: 'absolute',
-      zIndex: 999
     },
-    modal: {
-      position: 'relative',
-      margin: 'auto'
-    }
-  },
-  popupArrow: {
-    height: '8px',
-    width: '16px',
-    position: 'absolute',
-    background: 'transparent',
-    color: '#FFF',
-    zIndex: -1
-  },
-  overlay: {
-    tooltip: {
-      position: 'fixed',
-      top: '0',
-      bottom: '0',
-      left: '0',
-      right: '0',
-      zIndex: 999
+    borrowDefaults: store.borrowDefaults,
+    setBorrowDefaults: function setBorrowDefaults(defaults) {
+      dispatch({
+        type: "SET_BORROW_DEFAULTS",
+        payload: defaults
+      });
     },
-    modal: {
-      position: 'fixed',
-      top: '0',
-      bottom: '0',
-      left: '0',
-      right: '0',
-      display: 'flex',
-      zIndex: 999
-    }
-  }
-};
-var POSITION_TYPES = ['top left', 'top center', 'top right', 'right top', 'right center', 'right bottom', 'bottom left', 'bottom center', 'bottom right', 'left top', 'left center', 'left bottom'];
+    imageDictPUNK: store.imageDictPUNK,
+    imageDictBAYC: store.imageDictBAYC,
+    imageDictBorrow: store.imageDictBorrow,
+    setImageDict: function setImageDict(symbol, imageDict) {
+      switch (symbol) {
+        case "PUNK":
+          dispatch({
+            type: "SET_IMAGE_DICT_PUNK",
+            payload: imageDict
+          });
 
-var getCoordinatesForPosition = function getCoordinatesForPosition(triggerBounding, ContentBounding, position, //PopupPosition | PopupPosition[],
-arrow, _ref) {
-  var offsetX = _ref.offsetX,
-      offsetY = _ref.offsetY;
-  var margin = arrow ? 8 : 0;
-  var args = position.split(' '); // the step N 1 : center the popup content => ok
+        case "BAYC":
+          dispatch({
+            type: "SET_IMAGE_DICT_BAYC",
+            payload: imageDict
+          });
 
-  var CenterTop = triggerBounding.top + triggerBounding.height / 2;
-  var CenterLeft = triggerBounding.left + triggerBounding.width / 2;
-  var height = ContentBounding.height,
-      width = ContentBounding.width;
-  var top = CenterTop - height / 2;
-  var left = CenterLeft - width / 2;
-  var transform = '';
-  var arrowTop = '0%';
-  var arrowLeft = '0%'; // the  step N 2 : => ok
-
-  switch (args[0]) {
-    case 'top':
-      top -= height / 2 + triggerBounding.height / 2 + margin;
-      transform = "rotate(180deg)  translateX(50%)";
-      arrowTop = '100%';
-      arrowLeft = '50%';
-      break;
-
-    case 'bottom':
-      top += height / 2 + triggerBounding.height / 2 + margin;
-      transform = "rotate(0deg) translateY(-100%) translateX(-50%)";
-      arrowLeft = '50%';
-      break;
-
-    case 'left':
-      left -= width / 2 + triggerBounding.width / 2 + margin;
-      transform = " rotate(90deg)  translateY(50%) translateX(-25%)";
-      arrowLeft = '100%';
-      arrowTop = '50%';
-      break;
-
-    case 'right':
-      left += width / 2 + triggerBounding.width / 2 + margin;
-      transform = "rotate(-90deg)  translateY(-150%) translateX(25%)";
-      arrowTop = '50%';
-      break;
-  }
-
-  switch (args[1]) {
-    case 'top':
-      top = triggerBounding.top;
-      arrowTop = triggerBounding.height / 2 + "px";
-      break;
-
-    case 'bottom':
-      top = triggerBounding.top - height + triggerBounding.height;
-      arrowTop = height - triggerBounding.height / 2 + "px";
-      break;
-
-    case 'left':
-      left = triggerBounding.left;
-      arrowLeft = triggerBounding.width / 2 + "px";
-      break;
-
-    case 'right':
-      left = triggerBounding.left - width + triggerBounding.width;
-      arrowLeft = width - triggerBounding.width / 2 + "px";
-      break;
-  }
-
-  top = args[0] === 'top' ? top - offsetY : top + offsetY;
-  left = args[0] === 'left' ? left - offsetX : left + offsetX;
-  return {
-    top: top,
-    left: left,
-    transform: transform,
-    arrowLeft: arrowLeft,
-    arrowTop: arrowTop
-  };
-};
-
-var getTooltipBoundary = function getTooltipBoundary(keepTooltipInside) {
-  // add viewport
-  var boundingBox = {
-    top: 0,
-    left: 0,
-
-    /* eslint-disable-next-line no-undef */
-    width: window.innerWidth,
-
-    /* eslint-disable-next-line no-undef */
-    height: window.innerHeight
-  };
-
-  if (typeof keepTooltipInside === 'string') {
-    /* eslint-disable-next-line no-undef */
-    var selector = document.querySelector(keepTooltipInside);
-
-    if ("development" !== 'production') {
-      if (selector === null) throw new Error(keepTooltipInside + " selector does not exist : keepTooltipInside must be a valid html selector 'class' or 'Id'  or a boolean value");
-    }
-
-    if (selector !== null) boundingBox = selector.getBoundingClientRect();
-  }
-
-  return boundingBox;
-};
-
-var calculatePosition = function calculatePosition(triggerBounding, ContentBounding, position, arrow, _ref2, keepTooltipInside) {
-  var offsetX = _ref2.offsetX,
-      offsetY = _ref2.offsetY;
-  var bestCoords = {
-    arrowLeft: '0%',
-    arrowTop: '0%',
-    left: 0,
-    top: 0,
-    transform: 'rotate(135deg)'
-  };
-  var i = 0;
-  var wrapperBox = getTooltipBoundary(keepTooltipInside);
-  var positions = Array.isArray(position) ? position : [position]; // keepTooltipInside would be activated if the  keepTooltipInside exist or the position is Array
-
-  if (keepTooltipInside || Array.isArray(position)) positions = [].concat(positions, POSITION_TYPES); // add viewPort for WarpperBox
-  // wrapperBox.top = wrapperBox.top + window.scrollY;
-  // wrapperBox.left = wrapperBox.left + window.scrollX;
-
-  while (i < positions.length) {
-    bestCoords = getCoordinatesForPosition(triggerBounding, ContentBounding, positions[i], arrow, {
-      offsetX: offsetX,
-      offsetY: offsetY
-    });
-    var contentBox = {
-      top: bestCoords.top,
-      left: bestCoords.left,
-      width: ContentBounding.width,
-      height: ContentBounding.height
-    };
-
-    if (contentBox.top <= wrapperBox.top || contentBox.left <= wrapperBox.left || contentBox.top + contentBox.height >= wrapperBox.top + wrapperBox.height || contentBox.left + contentBox.width >= wrapperBox.left + wrapperBox.width) {
-      i++;
-    } else {
-      break;
-    }
-  }
-
-  return bestCoords;
-};
-
-var popupIdCounter = 0;
-
-var getRootPopup = function getRootPopup() {
-  var PopupRoot = document.getElementById('popup-root');
-
-  if (PopupRoot === null) {
-    PopupRoot = document.createElement('div');
-    PopupRoot.setAttribute('id', 'popup-root');
-    document.body.appendChild(PopupRoot);
-  }
-
-  return PopupRoot;
-};
-
-var Popup = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
-  var _ref$trigger = _ref.trigger,
-      trigger = _ref$trigger === void 0 ? null : _ref$trigger,
-      _ref$onOpen = _ref.onOpen,
-      onOpen = _ref$onOpen === void 0 ? function () {} : _ref$onOpen,
-      _ref$onClose = _ref.onClose,
-      onClose = _ref$onClose === void 0 ? function () {} : _ref$onClose,
-      _ref$defaultOpen = _ref.defaultOpen,
-      defaultOpen = _ref$defaultOpen === void 0 ? false : _ref$defaultOpen,
-      _ref$open = _ref.open,
-      open = _ref$open === void 0 ? undefined : _ref$open,
-      _ref$disabled = _ref.disabled,
-      disabled = _ref$disabled === void 0 ? false : _ref$disabled,
-      _ref$nested = _ref.nested,
-      nested = _ref$nested === void 0 ? false : _ref$nested,
-      _ref$closeOnDocumentC = _ref.closeOnDocumentClick,
-      closeOnDocumentClick = _ref$closeOnDocumentC === void 0 ? true : _ref$closeOnDocumentC,
-      _ref$repositionOnResi = _ref.repositionOnResize,
-      repositionOnResize = _ref$repositionOnResi === void 0 ? true : _ref$repositionOnResi,
-      _ref$closeOnEscape = _ref.closeOnEscape,
-      closeOnEscape = _ref$closeOnEscape === void 0 ? true : _ref$closeOnEscape,
-      _ref$on = _ref.on,
-      on = _ref$on === void 0 ? ['click'] : _ref$on,
-      _ref$contentStyle = _ref.contentStyle,
-      contentStyle = _ref$contentStyle === void 0 ? {} : _ref$contentStyle,
-      _ref$arrowStyle = _ref.arrowStyle,
-      arrowStyle = _ref$arrowStyle === void 0 ? {} : _ref$arrowStyle,
-      _ref$overlayStyle = _ref.overlayStyle,
-      overlayStyle = _ref$overlayStyle === void 0 ? {} : _ref$overlayStyle,
-      _ref$className = _ref.className,
-      className = _ref$className === void 0 ? '' : _ref$className,
-      _ref$position = _ref.position,
-      position = _ref$position === void 0 ? 'bottom center' : _ref$position,
-      _ref$modal = _ref.modal,
-      modal = _ref$modal === void 0 ? false : _ref$modal,
-      _ref$lockScroll = _ref.lockScroll,
-      lockScroll = _ref$lockScroll === void 0 ? false : _ref$lockScroll,
-      _ref$arrow = _ref.arrow,
-      arrow = _ref$arrow === void 0 ? true : _ref$arrow,
-      _ref$offsetX = _ref.offsetX,
-      offsetX = _ref$offsetX === void 0 ? 0 : _ref$offsetX,
-      _ref$offsetY = _ref.offsetY,
-      offsetY = _ref$offsetY === void 0 ? 0 : _ref$offsetY,
-      _ref$mouseEnterDelay = _ref.mouseEnterDelay,
-      mouseEnterDelay = _ref$mouseEnterDelay === void 0 ? 100 : _ref$mouseEnterDelay,
-      _ref$mouseLeaveDelay = _ref.mouseLeaveDelay,
-      mouseLeaveDelay = _ref$mouseLeaveDelay === void 0 ? 100 : _ref$mouseLeaveDelay,
-      _ref$keepTooltipInsid = _ref.keepTooltipInside,
-      keepTooltipInside = _ref$keepTooltipInsid === void 0 ? false : _ref$keepTooltipInsid,
-      children = _ref.children;
-
-  var _useState = (0, _react.useState)(open || defaultOpen),
-      isOpen = _useState[0],
-      setIsOpen = _useState[1];
-
-  var triggerRef = (0, _react.useRef)(null);
-  var contentRef = (0, _react.useRef)(null);
-  var arrowRef = (0, _react.useRef)(null);
-  var focusedElBeforeOpen = (0, _react.useRef)(null);
-  var popupId = (0, _react.useRef)("popup-" + ++popupIdCounter);
-  var isModal = modal ? true : !trigger;
-  var timeOut = (0, _react.useRef)(0);
-  useIsomorphicLayoutEffect(function () {
-    if (isOpen) {
-      focusedElBeforeOpen.current = document.activeElement;
-      setPosition();
-      focusContentOnOpen(); // for accessibility
-
-      lockScrolll();
-    } else {
-      resetScroll();
-    }
-
-    return function () {
-      clearTimeout(timeOut.current);
-    };
-  }, [isOpen]); // for uncontrolled popup we need to sync isOpen with open prop
-
-  (0, _react.useEffect)(function () {
-    if (typeof open === 'boolean') {
-      if (open) openPopup();else closePopup();
-    }
-  }, [open, disabled]);
-
-  var openPopup = function openPopup(event) {
-    if (isOpen || disabled) return;
-    setIsOpen(true);
-    setTimeout(function () {
-      return onOpen(event);
-    }, 0);
-  };
-
-  var closePopup = function closePopup(event) {
-    var _focusedElBeforeOpen$;
-
-    if (!isOpen || disabled) return;
-    setIsOpen(false);
-    if (isModal) (_focusedElBeforeOpen$ = focusedElBeforeOpen.current) === null || _focusedElBeforeOpen$ === void 0 ? void 0 : _focusedElBeforeOpen$.focus();
-    setTimeout(function () {
-      return onClose(event);
-    }, 0);
-  };
-
-  var togglePopup = function togglePopup(event) {
-    event === null || event === void 0 ? void 0 : event.stopPropagation();
-    if (!isOpen) openPopup(event);else closePopup(event);
-  };
-
-  var onMouseEnter = function onMouseEnter(event) {
-    clearTimeout(timeOut.current);
-    timeOut.current = setTimeout(function () {
-      return openPopup(event);
-    }, mouseEnterDelay);
-  };
-
-  var onContextMenu = function onContextMenu(event) {
-    event === null || event === void 0 ? void 0 : event.preventDefault();
-    togglePopup();
-  };
-
-  var onMouseLeave = function onMouseLeave(event) {
-    clearTimeout(timeOut.current);
-    timeOut.current = setTimeout(function () {
-      return closePopup(event);
-    }, mouseLeaveDelay);
-  };
-
-  var lockScrolll = function lockScrolll() {
-    if (isModal && lockScroll) document.getElementsByTagName('body')[0].style.overflow = 'hidden'; // migrate to document.body
-  };
-
-  var resetScroll = function resetScroll() {
-    if (isModal && lockScroll) document.getElementsByTagName('body')[0].style.overflow = 'auto';
-  };
-
-  var focusContentOnOpen = function focusContentOnOpen() {
-    var _contentRef$current;
-
-    var focusableEls = contentRef === null || contentRef === void 0 ? void 0 : (_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
-    var firstEl = Array.prototype.slice.call(focusableEls)[0];
-    firstEl === null || firstEl === void 0 ? void 0 : firstEl.focus();
-  };
-
-  (0, _react.useImperativeHandle)(ref, function () {
-    return {
-      open: function open() {
-        openPopup();
-      },
-      close: function close() {
-        closePopup();
-      },
-      toggle: function toggle() {
-        togglePopup();
+        case "BORROW":
+          dispatch({
+            type: "SET_IMAGE_DICT_BORROW",
+            payload: imageDict
+          });
       }
-    };
-  }); // set Position
 
-  var setPosition = function setPosition() {
-    if (isModal || !isOpen) return;
-    if (!(triggerRef === null || triggerRef === void 0 ? void 0 : triggerRef.current) || !(triggerRef === null || triggerRef === void 0 ? void 0 : triggerRef.current) || !(contentRef === null || contentRef === void 0 ? void 0 : contentRef.current)) return; /// show error as one of ref is undefined
-
-    var trigger = triggerRef.current.getBoundingClientRect();
-    var content = contentRef.current.getBoundingClientRect();
-    var cords = calculatePosition(trigger, content, position, arrow, {
-      offsetX: offsetX,
-      offsetY: offsetY
-    }, keepTooltipInside);
-    contentRef.current.style.top = cords.top + window.scrollY + "px";
-    contentRef.current.style.left = cords.left + window.scrollX + "px";
-
-    if (arrow && !!arrowRef.current) {
-      var _arrowStyle$top, _arrowStyle$left;
-
-      arrowRef.current.style.transform = cords.transform;
-      arrowRef.current.style.setProperty('-ms-transform', cords.transform);
-      arrowRef.current.style.setProperty('-webkit-transform', cords.transform);
-      arrowRef.current.style.top = ((_arrowStyle$top = arrowStyle.top) === null || _arrowStyle$top === void 0 ? void 0 : _arrowStyle$top.toString()) || cords.arrowTop;
-      arrowRef.current.style.left = ((_arrowStyle$left = arrowStyle.left) === null || _arrowStyle$left === void 0 ? void 0 : _arrowStyle$left.toString()) || cords.arrowLeft;
+      ;
+    },
+    whitelistNFT: store.whitelistNFT,
+    setWhitelistNFT: function setWhitelistNFT(whitelist) {
+      dispatch({
+        type: "SET_WHITELIST_NFT",
+        payload: whitelist
+      });
+    },
+    borrowProject: store.borrowProject,
+    setBorrowProject: function setBorrowProject(projectSymbol) {
+      dispatch({
+        type: "SET_BORROW_PROJECT",
+        payload: projectSymbol
+      });
+    },
+    borrowNFT: store.borrowNFT,
+    setBorrowNFT: function setBorrowNFT(tokenId) {
+      dispatch({
+        type: "SET_BORROW_NFT",
+        payload: tokenId
+      });
+    },
+    borrowFloorPrice: store.borrowFloorPrice,
+    setBorrowFloorPrice: function setBorrowFloorPrice(price) {
+      dispatch({
+        type: "SET_BORROW_FLOOR_PRICE",
+        payload: price
+      });
+    },
+    borrowCollRatio: store.borrowCollRatio,
+    setBorrowCollRatio: function setBorrowCollRatio(collRatio) {
+      dispatch({
+        type: "SET_BORROW_COLL_RATIO",
+        payload: collRatio
+      });
+    },
+    borrowAPR: store.borrowAPR,
+    setBorrowAPR: function setBorrowAPR(apr) {
+      dispatch({
+        type: "SET_BORROW_APR",
+        payload: apr
+      });
+    },
+    borrowToken: store.borrowToken,
+    setBorrowToken: function setBorrowToken(token) {
+      dispatch({
+        type: "SET_BORROW_TOKEN",
+        payload: token
+      });
+    },
+    borrowAmount: store.borrowAmount,
+    setBorrowAmount: function setBorrowAmount(amount) {
+      dispatch({
+        type: "SET_BORROW_AMOUNT",
+        payload: amount
+      });
+    },
+    borrowRepaymentAmount: store.borrowRepaymentAmount,
+    setBorrowRepaymentAmount: function setBorrowRepaymentAmount(amount) {
+      dispatch({
+        type: "SET_BORROW_REPAYMENT_AMOUNT",
+        payload: amount
+      });
+    },
+    borrowMaturity: store.borrowMaturity,
+    setBorrowMaturity: function setBorrowMaturity(numWeeks) {
+      dispatch({
+        type: "SET_BORROW_MATURITY",
+        payload: numWeeks
+      });
+    },
+    aprPUNK: store.aprPUNK,
+    setAprPUNK: function setAprPUNK(apr) {
+      dispatch({
+        type: "SET_APR_PUNK",
+        payload: apr
+      });
+    },
+    aprBAYC: store.aprBAYC,
+    setAprBAYC: function setAprBAYC(apr) {
+      dispatch({
+        type: "SET_APR_BAYC",
+        payload: apr
+      });
+    },
+    txnStatus: store.txnStatus,
+    setTxnStatus: function setTxnStatus(status) {
+      dispatch({
+        type: "SET_TXN_STATUS",
+        payload: status
+      });
     }
-  }; // hooks
-
-
-  useOnEscape(closePopup, closeOnEscape); // can be optimized if we disabled for hover
-
-  useTabbing(contentRef, isOpen && isModal);
-  useRepositionOnResize(setPosition, repositionOnResize);
-  useOnClickOutside(!!trigger ? [contentRef, triggerRef] : [contentRef], closePopup, closeOnDocumentClick && !nested); // we need to add a ne
-  // render the trigger element and add events
-
-  var renderTrigger = function renderTrigger() {
-    var triggerProps = {
-      key: 'T',
-      ref: triggerRef,
-      'aria-describedby': popupId.current
-    };
-    var onAsArray = Array.isArray(on) ? on : [on];
-
-    for (var i = 0, len = onAsArray.length; i < len; i++) {
-      switch (onAsArray[i]) {
-        case 'click':
-          triggerProps.onClick = togglePopup;
-          break;
-
-        case 'right-click':
-          triggerProps.onContextMenu = onContextMenu;
-          break;
-
-        case 'hover':
-          triggerProps.onMouseEnter = onMouseEnter;
-          triggerProps.onMouseLeave = onMouseLeave;
-          break;
-
-        case 'focus':
-          triggerProps.onFocus = onMouseEnter;
-          triggerProps.onBlur = onMouseLeave;
-          break;
-      }
-    }
-
-    if (typeof trigger === 'function') {
-      var comp = trigger(isOpen);
-      return !!trigger && _react.default.cloneElement(comp, triggerProps);
-    }
-
-    return !!trigger && _react.default.cloneElement(trigger, triggerProps);
   };
+  return /*#__PURE__*/_react.default.createElement(AppContext.Provider, {
+    value: contextValue
+  }, children);
+};
 
-  var addWarperAction = function addWarperAction() {
-    var popupContentStyle = isModal ? Style.popupContent.modal : Style.popupContent.tooltip;
-    var childrenElementProps = {
-      className: "popup-content " + (className !== '' ? className.split(' ').map(function (c) {
-        return c + "-content";
-      }).join(' ') : ''),
-      style: _extends({}, popupContentStyle, contentStyle, {
-        pointerEvents: 'auto'
-      }),
-      ref: contentRef,
-      onClick: function onClick(e) {
-        e.stopPropagation();
-      }
-    };
-
-    if (!modal && on.indexOf('hover') >= 0) {
-      childrenElementProps.onMouseEnter = onMouseEnter;
-      childrenElementProps.onMouseLeave = onMouseLeave;
-    }
-
-    return childrenElementProps;
-  };
-
-  var renderContent = function renderContent() {
-    return _react.default.createElement("div", Object.assign({}, addWarperAction(), {
-      key: "C",
-      role: isModal ? 'dialog' : 'tooltip',
-      id: popupId.current
-    }), arrow && !isModal && _react.default.createElement("div", {
-      ref: arrowRef,
-      style: Style.popupArrow
-    }, _react.default.createElement("svg", {
-      "data-testid": "arrow",
-      className: "popup-arrow " + (className !== '' ? className.split(' ').map(function (c) {
-        return c + "-arrow";
-      }).join(' ') : ''),
-      viewBox: "0 0 32 16",
-      style: _extends({
-        position: 'absolute'
-      }, arrowStyle)
-    }, _react.default.createElement("path", {
-      d: "M16 0l16 16H0z",
-      fill: "currentcolor"
-    }))), children && typeof children === 'function' ? children(closePopup, isOpen) : children);
-  };
-
-  var overlay = !(on.indexOf('hover') >= 0);
-  var ovStyle = isModal ? Style.overlay.modal : Style.overlay.tooltip;
-  var content = [overlay && _react.default.createElement("div", {
-    key: "O",
-    "data-testid": "overlay",
-    "data-popup": isModal ? 'modal' : 'tooltip',
-    className: "popup-overlay " + (className !== '' ? className.split(' ').map(function (c) {
-      return c + "-overlay";
-    }).join(' ') : ''),
-    style: _extends({}, ovStyle, overlayStyle, {
-      pointerEvents: closeOnDocumentClick && nested || isModal ? 'auto' : 'none'
-    }),
-    onClick: closeOnDocumentClick && nested ? closePopup : undefined,
-    tabIndex: -1
-  }, isModal && renderContent()), !isModal && renderContent()];
-  return _react.default.createElement(_react.default.Fragment, null, renderTrigger(), isOpen && _reactDom.default.createPortal(content, getRootPopup()));
-});
-exports.Popup = Popup;
-var _default = Popup;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js"}],"components/ButtonRepay/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _reactRouterDom = require("react-router-dom");
-
-require("./ButtonRepay.css");
-
-var _PopUpNFTs = _interopRequireDefault(require("../PopUpNFTs"));
-
-var _reactjsPopup = _interopRequireDefault(require("reactjs-popup"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function ButtonRepay() {
-  var _React$createElement;
-
-  return /*#__PURE__*/_react.default.createElement(_reactjsPopup.default, (_React$createElement = {
-    modal: true,
-    trigger: /*#__PURE__*/_react.default.createElement("div", {
-      className: "button-repay"
-    }, /*#__PURE__*/_react.default.createElement("button", {
-      className: "overlap-group-14"
-    }, /*#__PURE__*/_react.default.createElement("div", {
-      className: "rectangle-11"
-    }), /*#__PURE__*/_react.default.createElement("div", {
-      className: "repay-1 valign-text-middle oxanium-normal-white-20px"
-    }, "Repay")))
-  }, _defineProperty(_React$createElement, "modal", true), _defineProperty(_React$createElement, "nested", true), _React$createElement), /*#__PURE__*/_react.default.createElement(_PopUpNFTs.default, null));
-}
-
-var _default = ButtonRepay;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./ButtonRepay.css":"components/ButtonRepay/ButtonRepay.css","../PopUpNFTs":"components/PopUpNFTs/index.jsx","reactjs-popup":"node_modules/reactjs-popup/dist/reactjs-popup.esm.js"}],"components/TokenBorrow/TokenBorrow.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/TokenBorrow/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./TokenBorrow.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function TokenBorrow(props) {
-  var className = props.className;
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "token-borrow-3 ".concat(className || "")
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "rectangle-19-1",
-    src: "/img/rectangle-19@2x.png"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "place-6 valign-text-middle oxanium-normal-black-24px"
-  }, "ETH"));
-}
-
-var _default = TokenBorrow;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","./TokenBorrow.css":"components/TokenBorrow/TokenBorrow.css"}],"components/Borrow/Borrow.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/_empty.js":[function(require,module,exports) {
+exports.AppContextProvider = AppContextProvider;
+},{"react":"node_modules/react/index.js","./App":"App.jsx"}],"node_modules/parcel-bundler/src/builtins/_empty.js":[function(require,module,exports) {
 
 },{}],"node_modules/@ethersproject/bignumber/node_modules/bn.js/lib/bn.js":[function(require,module,exports) {
 var Buffer = require("buffer").Buffer;
@@ -42925,7 +38073,915 @@ var Buffer = require("buffer").Buffer;
   };
 })(typeof module === 'undefined' || module, this);
 
-},{"buffer":"node_modules/parcel-bundler/src/builtins/_empty.js"}],"node_modules/@ethersproject/bignumber/lib.esm/_version.js":[function(require,module,exports) {
+},{"buffer":"node_modules/parcel-bundler/src/builtins/_empty.js"}],"node_modules/@ethersproject/logger/lib.esm/_version.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.version = void 0;
+const version = "logger/5.5.0";
+exports.version = version;
+},{}],"node_modules/@ethersproject/logger/lib.esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Logger = exports.LogLevel = exports.ErrorCode = void 0;
+
+var _version = require("./_version");
+
+let _permanentCensorErrors = false;
+let _censorErrors = false;
+const LogLevels = {
+  debug: 1,
+  "default": 2,
+  info: 2,
+  warning: 3,
+  error: 4,
+  off: 5
+};
+let _logLevel = LogLevels["default"];
+let _globalLogger = null;
+
+function _checkNormalize() {
+  try {
+    const missing = []; // Make sure all forms of normalization are supported
+
+    ["NFD", "NFC", "NFKD", "NFKC"].forEach(form => {
+      try {
+        if ("test".normalize(form) !== "test") {
+          throw new Error("bad normalize");
+        }
+
+        ;
+      } catch (error) {
+        missing.push(form);
+      }
+    });
+
+    if (missing.length) {
+      throw new Error("missing " + missing.join(", "));
+    }
+
+    if (String.fromCharCode(0xe9).normalize("NFD") !== String.fromCharCode(0x65, 0x0301)) {
+      throw new Error("broken implementation");
+    }
+  } catch (error) {
+    return error.message;
+  }
+
+  return null;
+}
+
+const _normalizeError = _checkNormalize();
+
+var LogLevel;
+exports.LogLevel = LogLevel;
+
+(function (LogLevel) {
+  LogLevel["DEBUG"] = "DEBUG";
+  LogLevel["INFO"] = "INFO";
+  LogLevel["WARNING"] = "WARNING";
+  LogLevel["ERROR"] = "ERROR";
+  LogLevel["OFF"] = "OFF";
+})(LogLevel || (exports.LogLevel = LogLevel = {}));
+
+var ErrorCode;
+exports.ErrorCode = ErrorCode;
+
+(function (ErrorCode) {
+  ///////////////////
+  // Generic Errors
+  // Unknown Error
+  ErrorCode["UNKNOWN_ERROR"] = "UNKNOWN_ERROR"; // Not Implemented
+
+  ErrorCode["NOT_IMPLEMENTED"] = "NOT_IMPLEMENTED"; // Unsupported Operation
+  //   - operation
+
+  ErrorCode["UNSUPPORTED_OPERATION"] = "UNSUPPORTED_OPERATION"; // Network Error (i.e. Ethereum Network, such as an invalid chain ID)
+  //   - event ("noNetwork" is not re-thrown in provider.ready; otherwise thrown)
+
+  ErrorCode["NETWORK_ERROR"] = "NETWORK_ERROR"; // Some sort of bad response from the server
+
+  ErrorCode["SERVER_ERROR"] = "SERVER_ERROR"; // Timeout
+
+  ErrorCode["TIMEOUT"] = "TIMEOUT"; ///////////////////
+  // Operational  Errors
+  // Buffer Overrun
+
+  ErrorCode["BUFFER_OVERRUN"] = "BUFFER_OVERRUN"; // Numeric Fault
+  //   - operation: the operation being executed
+  //   - fault: the reason this faulted
+
+  ErrorCode["NUMERIC_FAULT"] = "NUMERIC_FAULT"; ///////////////////
+  // Argument Errors
+  // Missing new operator to an object
+  //  - name: The name of the class
+
+  ErrorCode["MISSING_NEW"] = "MISSING_NEW"; // Invalid argument (e.g. value is incompatible with type) to a function:
+  //   - argument: The argument name that was invalid
+  //   - value: The value of the argument
+
+  ErrorCode["INVALID_ARGUMENT"] = "INVALID_ARGUMENT"; // Missing argument to a function:
+  //   - count: The number of arguments received
+  //   - expectedCount: The number of arguments expected
+
+  ErrorCode["MISSING_ARGUMENT"] = "MISSING_ARGUMENT"; // Too many arguments
+  //   - count: The number of arguments received
+  //   - expectedCount: The number of arguments expected
+
+  ErrorCode["UNEXPECTED_ARGUMENT"] = "UNEXPECTED_ARGUMENT"; ///////////////////
+  // Blockchain Errors
+  // Call exception
+  //  - transaction: the transaction
+  //  - address?: the contract address
+  //  - args?: The arguments passed into the function
+  //  - method?: The Solidity method signature
+  //  - errorSignature?: The EIP848 error signature
+  //  - errorArgs?: The EIP848 error parameters
+  //  - reason: The reason (only for EIP848 "Error(string)")
+
+  ErrorCode["CALL_EXCEPTION"] = "CALL_EXCEPTION"; // Insufficient funds (< value + gasLimit * gasPrice)
+  //   - transaction: the transaction attempted
+
+  ErrorCode["INSUFFICIENT_FUNDS"] = "INSUFFICIENT_FUNDS"; // Nonce has already been used
+  //   - transaction: the transaction attempted
+
+  ErrorCode["NONCE_EXPIRED"] = "NONCE_EXPIRED"; // The replacement fee for the transaction is too low
+  //   - transaction: the transaction attempted
+
+  ErrorCode["REPLACEMENT_UNDERPRICED"] = "REPLACEMENT_UNDERPRICED"; // The gas limit could not be estimated
+  //   - transaction: the transaction passed to estimateGas
+
+  ErrorCode["UNPREDICTABLE_GAS_LIMIT"] = "UNPREDICTABLE_GAS_LIMIT"; // The transaction was replaced by one with a higher gas price
+  //   - reason: "cancelled", "replaced" or "repriced"
+  //   - cancelled: true if reason == "cancelled" or reason == "replaced")
+  //   - hash: original transaction hash
+  //   - replacement: the full TransactionsResponse for the replacement
+  //   - receipt: the receipt of the replacement
+
+  ErrorCode["TRANSACTION_REPLACED"] = "TRANSACTION_REPLACED";
+})(ErrorCode || (exports.ErrorCode = ErrorCode = {}));
+
+;
+const HEX = "0123456789abcdef";
+
+class Logger {
+  constructor(version) {
+    Object.defineProperty(this, "version", {
+      enumerable: true,
+      value: version,
+      writable: false
+    });
+  }
+
+  _log(logLevel, args) {
+    const level = logLevel.toLowerCase();
+
+    if (LogLevels[level] == null) {
+      this.throwArgumentError("invalid log level name", "logLevel", logLevel);
+    }
+
+    if (_logLevel > LogLevels[level]) {
+      return;
+    }
+
+    console.log.apply(console, args);
+  }
+
+  debug(...args) {
+    this._log(Logger.levels.DEBUG, args);
+  }
+
+  info(...args) {
+    this._log(Logger.levels.INFO, args);
+  }
+
+  warn(...args) {
+    this._log(Logger.levels.WARNING, args);
+  }
+
+  makeError(message, code, params) {
+    // Errors are being censored
+    if (_censorErrors) {
+      return this.makeError("censored error", code, {});
+    }
+
+    if (!code) {
+      code = Logger.errors.UNKNOWN_ERROR;
+    }
+
+    if (!params) {
+      params = {};
+    }
+
+    const messageDetails = [];
+    Object.keys(params).forEach(key => {
+      const value = params[key];
+
+      try {
+        if (value instanceof Uint8Array) {
+          let hex = "";
+
+          for (let i = 0; i < value.length; i++) {
+            hex += HEX[value[i] >> 4];
+            hex += HEX[value[i] & 0x0f];
+          }
+
+          messageDetails.push(key + "=Uint8Array(0x" + hex + ")");
+        } else {
+          messageDetails.push(key + "=" + JSON.stringify(value));
+        }
+      } catch (error) {
+        messageDetails.push(key + "=" + JSON.stringify(params[key].toString()));
+      }
+    });
+    messageDetails.push(`code=${code}`);
+    messageDetails.push(`version=${this.version}`);
+    const reason = message;
+
+    if (messageDetails.length) {
+      message += " (" + messageDetails.join(", ") + ")";
+    } // @TODO: Any??
+
+
+    const error = new Error(message);
+    error.reason = reason;
+    error.code = code;
+    Object.keys(params).forEach(function (key) {
+      error[key] = params[key];
+    });
+    return error;
+  }
+
+  throwError(message, code, params) {
+    throw this.makeError(message, code, params);
+  }
+
+  throwArgumentError(message, name, value) {
+    return this.throwError(message, Logger.errors.INVALID_ARGUMENT, {
+      argument: name,
+      value: value
+    });
+  }
+
+  assert(condition, message, code, params) {
+    if (!!condition) {
+      return;
+    }
+
+    this.throwError(message, code, params);
+  }
+
+  assertArgument(condition, message, name, value) {
+    if (!!condition) {
+      return;
+    }
+
+    this.throwArgumentError(message, name, value);
+  }
+
+  checkNormalize(message) {
+    if (message == null) {
+      message = "platform missing String.prototype.normalize";
+    }
+
+    if (_normalizeError) {
+      this.throwError("platform missing String.prototype.normalize", Logger.errors.UNSUPPORTED_OPERATION, {
+        operation: "String.prototype.normalize",
+        form: _normalizeError
+      });
+    }
+  }
+
+  checkSafeUint53(value, message) {
+    if (typeof value !== "number") {
+      return;
+    }
+
+    if (message == null) {
+      message = "value not safe";
+    }
+
+    if (value < 0 || value >= 0x1fffffffffffff) {
+      this.throwError(message, Logger.errors.NUMERIC_FAULT, {
+        operation: "checkSafeInteger",
+        fault: "out-of-safe-range",
+        value: value
+      });
+    }
+
+    if (value % 1) {
+      this.throwError(message, Logger.errors.NUMERIC_FAULT, {
+        operation: "checkSafeInteger",
+        fault: "non-integer",
+        value: value
+      });
+    }
+  }
+
+  checkArgumentCount(count, expectedCount, message) {
+    if (message) {
+      message = ": " + message;
+    } else {
+      message = "";
+    }
+
+    if (count < expectedCount) {
+      this.throwError("missing argument" + message, Logger.errors.MISSING_ARGUMENT, {
+        count: count,
+        expectedCount: expectedCount
+      });
+    }
+
+    if (count > expectedCount) {
+      this.throwError("too many arguments" + message, Logger.errors.UNEXPECTED_ARGUMENT, {
+        count: count,
+        expectedCount: expectedCount
+      });
+    }
+  }
+
+  checkNew(target, kind) {
+    if (target === Object || target == null) {
+      this.throwError("missing new", Logger.errors.MISSING_NEW, {
+        name: kind.name
+      });
+    }
+  }
+
+  checkAbstract(target, kind) {
+    if (target === kind) {
+      this.throwError("cannot instantiate abstract class " + JSON.stringify(kind.name) + " directly; use a sub-class", Logger.errors.UNSUPPORTED_OPERATION, {
+        name: target.name,
+        operation: "new"
+      });
+    } else if (target === Object || target == null) {
+      this.throwError("missing new", Logger.errors.MISSING_NEW, {
+        name: kind.name
+      });
+    }
+  }
+
+  static globalLogger() {
+    if (!_globalLogger) {
+      _globalLogger = new Logger(_version.version);
+    }
+
+    return _globalLogger;
+  }
+
+  static setCensorship(censorship, permanent) {
+    if (!censorship && permanent) {
+      this.globalLogger().throwError("cannot permanently disable censorship", Logger.errors.UNSUPPORTED_OPERATION, {
+        operation: "setCensorship"
+      });
+    }
+
+    if (_permanentCensorErrors) {
+      if (!censorship) {
+        return;
+      }
+
+      this.globalLogger().throwError("error censorship permanent", Logger.errors.UNSUPPORTED_OPERATION, {
+        operation: "setCensorship"
+      });
+    }
+
+    _censorErrors = !!censorship;
+    _permanentCensorErrors = !!permanent;
+  }
+
+  static setLogLevel(logLevel) {
+    const level = LogLevels[logLevel.toLowerCase()];
+
+    if (level == null) {
+      Logger.globalLogger().warn("invalid log level - " + logLevel);
+      return;
+    }
+
+    _logLevel = level;
+  }
+
+  static from(version) {
+    return new Logger(version);
+  }
+
+}
+
+exports.Logger = Logger;
+Logger.errors = ErrorCode;
+Logger.levels = LogLevel;
+},{"./_version":"node_modules/@ethersproject/logger/lib.esm/_version.js"}],"node_modules/@ethersproject/bytes/lib.esm/_version.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.version = void 0;
+const version = "bytes/5.5.0";
+exports.version = version;
+},{}],"node_modules/@ethersproject/bytes/lib.esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.arrayify = arrayify;
+exports.concat = concat;
+exports.hexConcat = hexConcat;
+exports.hexDataLength = hexDataLength;
+exports.hexDataSlice = hexDataSlice;
+exports.hexStripZeros = hexStripZeros;
+exports.hexValue = hexValue;
+exports.hexZeroPad = hexZeroPad;
+exports.hexlify = hexlify;
+exports.isBytes = isBytes;
+exports.isBytesLike = isBytesLike;
+exports.isHexString = isHexString;
+exports.joinSignature = joinSignature;
+exports.splitSignature = splitSignature;
+exports.stripZeros = stripZeros;
+exports.zeroPad = zeroPad;
+
+var _logger = require("@ethersproject/logger");
+
+var _version = require("./_version");
+
+const logger = new _logger.Logger(_version.version); ///////////////////////////////
+
+function isHexable(value) {
+  return !!value.toHexString;
+}
+
+function addSlice(array) {
+  if (array.slice) {
+    return array;
+  }
+
+  array.slice = function () {
+    const args = Array.prototype.slice.call(arguments);
+    return addSlice(new Uint8Array(Array.prototype.slice.apply(array, args)));
+  };
+
+  return array;
+}
+
+function isBytesLike(value) {
+  return isHexString(value) && !(value.length % 2) || isBytes(value);
+}
+
+function isInteger(value) {
+  return typeof value === "number" && value == value && value % 1 === 0;
+}
+
+function isBytes(value) {
+  if (value == null) {
+    return false;
+  }
+
+  if (value.constructor === Uint8Array) {
+    return true;
+  }
+
+  if (typeof value === "string") {
+    return false;
+  }
+
+  if (!isInteger(value.length) || value.length < 0) {
+    return false;
+  }
+
+  for (let i = 0; i < value.length; i++) {
+    const v = value[i];
+
+    if (!isInteger(v) || v < 0 || v >= 256) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function arrayify(value, options) {
+  if (!options) {
+    options = {};
+  }
+
+  if (typeof value === "number") {
+    logger.checkSafeUint53(value, "invalid arrayify value");
+    const result = [];
+
+    while (value) {
+      result.unshift(value & 0xff);
+      value = parseInt(String(value / 256));
+    }
+
+    if (result.length === 0) {
+      result.push(0);
+    }
+
+    return addSlice(new Uint8Array(result));
+  }
+
+  if (options.allowMissingPrefix && typeof value === "string" && value.substring(0, 2) !== "0x") {
+    value = "0x" + value;
+  }
+
+  if (isHexable(value)) {
+    value = value.toHexString();
+  }
+
+  if (isHexString(value)) {
+    let hex = value.substring(2);
+
+    if (hex.length % 2) {
+      if (options.hexPad === "left") {
+        hex = "0x0" + hex.substring(2);
+      } else if (options.hexPad === "right") {
+        hex += "0";
+      } else {
+        logger.throwArgumentError("hex data is odd-length", "value", value);
+      }
+    }
+
+    const result = [];
+
+    for (let i = 0; i < hex.length; i += 2) {
+      result.push(parseInt(hex.substring(i, i + 2), 16));
+    }
+
+    return addSlice(new Uint8Array(result));
+  }
+
+  if (isBytes(value)) {
+    return addSlice(new Uint8Array(value));
+  }
+
+  return logger.throwArgumentError("invalid arrayify value", "value", value);
+}
+
+function concat(items) {
+  const objects = items.map(item => arrayify(item));
+  const length = objects.reduce((accum, item) => accum + item.length, 0);
+  const result = new Uint8Array(length);
+  objects.reduce((offset, object) => {
+    result.set(object, offset);
+    return offset + object.length;
+  }, 0);
+  return addSlice(result);
+}
+
+function stripZeros(value) {
+  let result = arrayify(value);
+
+  if (result.length === 0) {
+    return result;
+  } // Find the first non-zero entry
+
+
+  let start = 0;
+
+  while (start < result.length && result[start] === 0) {
+    start++;
+  } // If we started with zeros, strip them
+
+
+  if (start) {
+    result = result.slice(start);
+  }
+
+  return result;
+}
+
+function zeroPad(value, length) {
+  value = arrayify(value);
+
+  if (value.length > length) {
+    logger.throwArgumentError("value out of range", "value", arguments[0]);
+  }
+
+  const result = new Uint8Array(length);
+  result.set(value, length - value.length);
+  return addSlice(result);
+}
+
+function isHexString(value, length) {
+  if (typeof value !== "string" || !value.match(/^0x[0-9A-Fa-f]*$/)) {
+    return false;
+  }
+
+  if (length && value.length !== 2 + 2 * length) {
+    return false;
+  }
+
+  return true;
+}
+
+const HexCharacters = "0123456789abcdef";
+
+function hexlify(value, options) {
+  if (!options) {
+    options = {};
+  }
+
+  if (typeof value === "number") {
+    logger.checkSafeUint53(value, "invalid hexlify value");
+    let hex = "";
+
+    while (value) {
+      hex = HexCharacters[value & 0xf] + hex;
+      value = Math.floor(value / 16);
+    }
+
+    if (hex.length) {
+      if (hex.length % 2) {
+        hex = "0" + hex;
+      }
+
+      return "0x" + hex;
+    }
+
+    return "0x00";
+  }
+
+  if (typeof value === "bigint") {
+    value = value.toString(16);
+
+    if (value.length % 2) {
+      return "0x0" + value;
+    }
+
+    return "0x" + value;
+  }
+
+  if (options.allowMissingPrefix && typeof value === "string" && value.substring(0, 2) !== "0x") {
+    value = "0x" + value;
+  }
+
+  if (isHexable(value)) {
+    return value.toHexString();
+  }
+
+  if (isHexString(value)) {
+    if (value.length % 2) {
+      if (options.hexPad === "left") {
+        value = "0x0" + value.substring(2);
+      } else if (options.hexPad === "right") {
+        value += "0";
+      } else {
+        logger.throwArgumentError("hex data is odd-length", "value", value);
+      }
+    }
+
+    return value.toLowerCase();
+  }
+
+  if (isBytes(value)) {
+    let result = "0x";
+
+    for (let i = 0; i < value.length; i++) {
+      let v = value[i];
+      result += HexCharacters[(v & 0xf0) >> 4] + HexCharacters[v & 0x0f];
+    }
+
+    return result;
+  }
+
+  return logger.throwArgumentError("invalid hexlify value", "value", value);
+}
+/*
+function unoddify(value: BytesLike | Hexable | number): BytesLike | Hexable | number {
+    if (typeof(value) === "string" && value.length % 2 && value.substring(0, 2) === "0x") {
+        return "0x0" + value.substring(2);
+    }
+    return value;
+}
+*/
+
+
+function hexDataLength(data) {
+  if (typeof data !== "string") {
+    data = hexlify(data);
+  } else if (!isHexString(data) || data.length % 2) {
+    return null;
+  }
+
+  return (data.length - 2) / 2;
+}
+
+function hexDataSlice(data, offset, endOffset) {
+  if (typeof data !== "string") {
+    data = hexlify(data);
+  } else if (!isHexString(data) || data.length % 2) {
+    logger.throwArgumentError("invalid hexData", "value", data);
+  }
+
+  offset = 2 + 2 * offset;
+
+  if (endOffset != null) {
+    return "0x" + data.substring(offset, 2 + 2 * endOffset);
+  }
+
+  return "0x" + data.substring(offset);
+}
+
+function hexConcat(items) {
+  let result = "0x";
+  items.forEach(item => {
+    result += hexlify(item).substring(2);
+  });
+  return result;
+}
+
+function hexValue(value) {
+  const trimmed = hexStripZeros(hexlify(value, {
+    hexPad: "left"
+  }));
+
+  if (trimmed === "0x") {
+    return "0x0";
+  }
+
+  return trimmed;
+}
+
+function hexStripZeros(value) {
+  if (typeof value !== "string") {
+    value = hexlify(value);
+  }
+
+  if (!isHexString(value)) {
+    logger.throwArgumentError("invalid hex string", "value", value);
+  }
+
+  value = value.substring(2);
+  let offset = 0;
+
+  while (offset < value.length && value[offset] === "0") {
+    offset++;
+  }
+
+  return "0x" + value.substring(offset);
+}
+
+function hexZeroPad(value, length) {
+  if (typeof value !== "string") {
+    value = hexlify(value);
+  } else if (!isHexString(value)) {
+    logger.throwArgumentError("invalid hex string", "value", value);
+  }
+
+  if (value.length > 2 * length + 2) {
+    logger.throwArgumentError("value out of range", "value", arguments[1]);
+  }
+
+  while (value.length < 2 * length + 2) {
+    value = "0x0" + value.substring(2);
+  }
+
+  return value;
+}
+
+function splitSignature(signature) {
+  const result = {
+    r: "0x",
+    s: "0x",
+    _vs: "0x",
+    recoveryParam: 0,
+    v: 0
+  };
+
+  if (isBytesLike(signature)) {
+    const bytes = arrayify(signature);
+
+    if (bytes.length !== 65) {
+      logger.throwArgumentError("invalid signature string; must be 65 bytes", "signature", signature);
+    } // Get the r, s and v
+
+
+    result.r = hexlify(bytes.slice(0, 32));
+    result.s = hexlify(bytes.slice(32, 64));
+    result.v = bytes[64]; // Allow a recid to be used as the v
+
+    if (result.v < 27) {
+      if (result.v === 0 || result.v === 1) {
+        result.v += 27;
+      } else {
+        logger.throwArgumentError("signature invalid v byte", "signature", signature);
+      }
+    } // Compute recoveryParam from v
+
+
+    result.recoveryParam = 1 - result.v % 2; // Compute _vs from recoveryParam and s
+
+    if (result.recoveryParam) {
+      bytes[32] |= 0x80;
+    }
+
+    result._vs = hexlify(bytes.slice(32, 64));
+  } else {
+    result.r = signature.r;
+    result.s = signature.s;
+    result.v = signature.v;
+    result.recoveryParam = signature.recoveryParam;
+    result._vs = signature._vs; // If the _vs is available, use it to populate missing s, v and recoveryParam
+    // and verify non-missing s, v and recoveryParam
+
+    if (result._vs != null) {
+      const vs = zeroPad(arrayify(result._vs), 32);
+      result._vs = hexlify(vs); // Set or check the recid
+
+      const recoveryParam = vs[0] >= 128 ? 1 : 0;
+
+      if (result.recoveryParam == null) {
+        result.recoveryParam = recoveryParam;
+      } else if (result.recoveryParam !== recoveryParam) {
+        logger.throwArgumentError("signature recoveryParam mismatch _vs", "signature", signature);
+      } // Set or check the s
+
+
+      vs[0] &= 0x7f;
+      const s = hexlify(vs);
+
+      if (result.s == null) {
+        result.s = s;
+      } else if (result.s !== s) {
+        logger.throwArgumentError("signature v mismatch _vs", "signature", signature);
+      }
+    } // Use recid and v to populate each other
+
+
+    if (result.recoveryParam == null) {
+      if (result.v == null) {
+        logger.throwArgumentError("signature missing v and recoveryParam", "signature", signature);
+      } else if (result.v === 0 || result.v === 1) {
+        result.recoveryParam = result.v;
+      } else {
+        result.recoveryParam = 1 - result.v % 2;
+      }
+    } else {
+      if (result.v == null) {
+        result.v = 27 + result.recoveryParam;
+      } else {
+        const recId = result.v === 0 || result.v === 1 ? result.v : 1 - result.v % 2;
+
+        if (result.recoveryParam !== recId) {
+          logger.throwArgumentError("signature recoveryParam mismatch v", "signature", signature);
+        }
+      }
+    }
+
+    if (result.r == null || !isHexString(result.r)) {
+      logger.throwArgumentError("signature missing or invalid r", "signature", signature);
+    } else {
+      result.r = hexZeroPad(result.r, 32);
+    }
+
+    if (result.s == null || !isHexString(result.s)) {
+      logger.throwArgumentError("signature missing or invalid s", "signature", signature);
+    } else {
+      result.s = hexZeroPad(result.s, 32);
+    }
+
+    const vs = arrayify(result.s);
+
+    if (vs[0] >= 128) {
+      logger.throwArgumentError("signature s out of range", "signature", signature);
+    }
+
+    if (result.recoveryParam) {
+      vs[0] |= 0x80;
+    }
+
+    const _vs = hexlify(vs);
+
+    if (result._vs) {
+      if (!isHexString(result._vs)) {
+        logger.throwArgumentError("signature invalid _vs", "signature", signature);
+      }
+
+      result._vs = hexZeroPad(result._vs, 32);
+    } // Set or check the _vs
+
+
+    if (result._vs == null) {
+      result._vs = _vs;
+    } else if (result._vs !== _vs) {
+      logger.throwArgumentError("signature _vs mismatch v and s", "signature", signature);
+    }
+  }
+
+  return result;
+}
+
+function joinSignature(signature) {
+  signature = splitSignature(signature);
+  return hexlify(concat([signature.r, signature.s, signature.recoveryParam ? "0x1c" : "0x1b"]));
+}
+},{"@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","./_version":"node_modules/@ethersproject/bytes/lib.esm/_version.js"}],"node_modules/@ethersproject/bignumber/lib.esm/_version.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45403,7 +41459,894 @@ class Reader {
 }
 
 exports.Reader = Reader;
-},{"@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js","@ethersproject/bignumber":"node_modules/@ethersproject/bignumber/lib.esm/index.js","@ethersproject/properties":"node_modules/@ethersproject/properties/lib.esm/index.js","@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","../_version":"node_modules/@ethersproject/contracts/node_modules/@ethersproject/abi/lib.esm/_version.js"}],"node_modules/@ethersproject/rlp/lib.esm/_version.js":[function(require,module,exports) {
+},{"@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js","@ethersproject/bignumber":"node_modules/@ethersproject/bignumber/lib.esm/index.js","@ethersproject/properties":"node_modules/@ethersproject/properties/lib.esm/index.js","@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","../_version":"node_modules/@ethersproject/contracts/node_modules/@ethersproject/abi/lib.esm/_version.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
+
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
+},{}],"node_modules/js-sha3/src/sha3.js":[function(require,module,exports) {
+var process = require("process");
+var global = arguments[3];
+var define;
+/**
+ * [js-sha3]{@link https://github.com/emn178/js-sha3}
+ *
+ * @version 0.8.0
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2015-2018
+ * @license MIT
+ */
+/*jslint bitwise: true */
+(function () {
+  'use strict';
+
+  var INPUT_ERROR = 'input is invalid type';
+  var FINALIZE_ERROR = 'finalize already called';
+  var WINDOW = typeof window === 'object';
+  var root = WINDOW ? window : {};
+  if (root.JS_SHA3_NO_WINDOW) {
+    WINDOW = false;
+  }
+  var WEB_WORKER = !WINDOW && typeof self === 'object';
+  var NODE_JS = !root.JS_SHA3_NO_NODE_JS && typeof process === 'object' && process.versions && process.versions.node;
+  if (NODE_JS) {
+    root = global;
+  } else if (WEB_WORKER) {
+    root = self;
+  }
+  var COMMON_JS = !root.JS_SHA3_NO_COMMON_JS && typeof module === 'object' && module.exports;
+  var AMD = typeof define === 'function' && define.amd;
+  var ARRAY_BUFFER = !root.JS_SHA3_NO_ARRAY_BUFFER && typeof ArrayBuffer !== 'undefined';
+  var HEX_CHARS = '0123456789abcdef'.split('');
+  var SHAKE_PADDING = [31, 7936, 2031616, 520093696];
+  var CSHAKE_PADDING = [4, 1024, 262144, 67108864];
+  var KECCAK_PADDING = [1, 256, 65536, 16777216];
+  var PADDING = [6, 1536, 393216, 100663296];
+  var SHIFT = [0, 8, 16, 24];
+  var RC = [1, 0, 32898, 0, 32906, 2147483648, 2147516416, 2147483648, 32907, 0, 2147483649,
+    0, 2147516545, 2147483648, 32777, 2147483648, 138, 0, 136, 0, 2147516425, 0,
+    2147483658, 0, 2147516555, 0, 139, 2147483648, 32905, 2147483648, 32771,
+    2147483648, 32770, 2147483648, 128, 2147483648, 32778, 0, 2147483658, 2147483648,
+    2147516545, 2147483648, 32896, 2147483648, 2147483649, 0, 2147516424, 2147483648];
+  var BITS = [224, 256, 384, 512];
+  var SHAKE_BITS = [128, 256];
+  var OUTPUT_TYPES = ['hex', 'buffer', 'arrayBuffer', 'array', 'digest'];
+  var CSHAKE_BYTEPAD = {
+    '128': 168,
+    '256': 136
+  };
+
+  if (root.JS_SHA3_NO_NODE_JS || !Array.isArray) {
+    Array.isArray = function (obj) {
+      return Object.prototype.toString.call(obj) === '[object Array]';
+    };
+  }
+
+  if (ARRAY_BUFFER && (root.JS_SHA3_NO_ARRAY_BUFFER_IS_VIEW || !ArrayBuffer.isView)) {
+    ArrayBuffer.isView = function (obj) {
+      return typeof obj === 'object' && obj.buffer && obj.buffer.constructor === ArrayBuffer;
+    };
+  }
+
+  var createOutputMethod = function (bits, padding, outputType) {
+    return function (message) {
+      return new Keccak(bits, padding, bits).update(message)[outputType]();
+    };
+  };
+
+  var createShakeOutputMethod = function (bits, padding, outputType) {
+    return function (message, outputBits) {
+      return new Keccak(bits, padding, outputBits).update(message)[outputType]();
+    };
+  };
+
+  var createCshakeOutputMethod = function (bits, padding, outputType) {
+    return function (message, outputBits, n, s) {
+      return methods['cshake' + bits].update(message, outputBits, n, s)[outputType]();
+    };
+  };
+
+  var createKmacOutputMethod = function (bits, padding, outputType) {
+    return function (key, message, outputBits, s) {
+      return methods['kmac' + bits].update(key, message, outputBits, s)[outputType]();
+    };
+  };
+
+  var createOutputMethods = function (method, createMethod, bits, padding) {
+    for (var i = 0; i < OUTPUT_TYPES.length; ++i) {
+      var type = OUTPUT_TYPES[i];
+      method[type] = createMethod(bits, padding, type);
+    }
+    return method;
+  };
+
+  var createMethod = function (bits, padding) {
+    var method = createOutputMethod(bits, padding, 'hex');
+    method.create = function () {
+      return new Keccak(bits, padding, bits);
+    };
+    method.update = function (message) {
+      return method.create().update(message);
+    };
+    return createOutputMethods(method, createOutputMethod, bits, padding);
+  };
+
+  var createShakeMethod = function (bits, padding) {
+    var method = createShakeOutputMethod(bits, padding, 'hex');
+    method.create = function (outputBits) {
+      return new Keccak(bits, padding, outputBits);
+    };
+    method.update = function (message, outputBits) {
+      return method.create(outputBits).update(message);
+    };
+    return createOutputMethods(method, createShakeOutputMethod, bits, padding);
+  };
+
+  var createCshakeMethod = function (bits, padding) {
+    var w = CSHAKE_BYTEPAD[bits];
+    var method = createCshakeOutputMethod(bits, padding, 'hex');
+    method.create = function (outputBits, n, s) {
+      if (!n && !s) {
+        return methods['shake' + bits].create(outputBits);
+      } else {
+        return new Keccak(bits, padding, outputBits).bytepad([n, s], w);
+      }
+    };
+    method.update = function (message, outputBits, n, s) {
+      return method.create(outputBits, n, s).update(message);
+    };
+    return createOutputMethods(method, createCshakeOutputMethod, bits, padding);
+  };
+
+  var createKmacMethod = function (bits, padding) {
+    var w = CSHAKE_BYTEPAD[bits];
+    var method = createKmacOutputMethod(bits, padding, 'hex');
+    method.create = function (key, outputBits, s) {
+      return new Kmac(bits, padding, outputBits).bytepad(['KMAC', s], w).bytepad([key], w);
+    };
+    method.update = function (key, message, outputBits, s) {
+      return method.create(key, outputBits, s).update(message);
+    };
+    return createOutputMethods(method, createKmacOutputMethod, bits, padding);
+  };
+
+  var algorithms = [
+    { name: 'keccak', padding: KECCAK_PADDING, bits: BITS, createMethod: createMethod },
+    { name: 'sha3', padding: PADDING, bits: BITS, createMethod: createMethod },
+    { name: 'shake', padding: SHAKE_PADDING, bits: SHAKE_BITS, createMethod: createShakeMethod },
+    { name: 'cshake', padding: CSHAKE_PADDING, bits: SHAKE_BITS, createMethod: createCshakeMethod },
+    { name: 'kmac', padding: CSHAKE_PADDING, bits: SHAKE_BITS, createMethod: createKmacMethod }
+  ];
+
+  var methods = {}, methodNames = [];
+
+  for (var i = 0; i < algorithms.length; ++i) {
+    var algorithm = algorithms[i];
+    var bits = algorithm.bits;
+    for (var j = 0; j < bits.length; ++j) {
+      var methodName = algorithm.name + '_' + bits[j];
+      methodNames.push(methodName);
+      methods[methodName] = algorithm.createMethod(bits[j], algorithm.padding);
+      if (algorithm.name !== 'sha3') {
+        var newMethodName = algorithm.name + bits[j];
+        methodNames.push(newMethodName);
+        methods[newMethodName] = methods[methodName];
+      }
+    }
+  }
+
+  function Keccak(bits, padding, outputBits) {
+    this.blocks = [];
+    this.s = [];
+    this.padding = padding;
+    this.outputBits = outputBits;
+    this.reset = true;
+    this.finalized = false;
+    this.block = 0;
+    this.start = 0;
+    this.blockCount = (1600 - (bits << 1)) >> 5;
+    this.byteCount = this.blockCount << 2;
+    this.outputBlocks = outputBits >> 5;
+    this.extraBytes = (outputBits & 31) >> 3;
+
+    for (var i = 0; i < 50; ++i) {
+      this.s[i] = 0;
+    }
+  }
+
+  Keccak.prototype.update = function (message) {
+    if (this.finalized) {
+      throw new Error(FINALIZE_ERROR);
+    }
+    var notString, type = typeof message;
+    if (type !== 'string') {
+      if (type === 'object') {
+        if (message === null) {
+          throw new Error(INPUT_ERROR);
+        } else if (ARRAY_BUFFER && message.constructor === ArrayBuffer) {
+          message = new Uint8Array(message);
+        } else if (!Array.isArray(message)) {
+          if (!ARRAY_BUFFER || !ArrayBuffer.isView(message)) {
+            throw new Error(INPUT_ERROR);
+          }
+        }
+      } else {
+        throw new Error(INPUT_ERROR);
+      }
+      notString = true;
+    }
+    var blocks = this.blocks, byteCount = this.byteCount, length = message.length,
+      blockCount = this.blockCount, index = 0, s = this.s, i, code;
+
+    while (index < length) {
+      if (this.reset) {
+        this.reset = false;
+        blocks[0] = this.block;
+        for (i = 1; i < blockCount + 1; ++i) {
+          blocks[i] = 0;
+        }
+      }
+      if (notString) {
+        for (i = this.start; index < length && i < byteCount; ++index) {
+          blocks[i >> 2] |= message[index] << SHIFT[i++ & 3];
+        }
+      } else {
+        for (i = this.start; index < length && i < byteCount; ++index) {
+          code = message.charCodeAt(index);
+          if (code < 0x80) {
+            blocks[i >> 2] |= code << SHIFT[i++ & 3];
+          } else if (code < 0x800) {
+            blocks[i >> 2] |= (0xc0 | (code >> 6)) << SHIFT[i++ & 3];
+            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
+          } else if (code < 0xd800 || code >= 0xe000) {
+            blocks[i >> 2] |= (0xe0 | (code >> 12)) << SHIFT[i++ & 3];
+            blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3];
+            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
+          } else {
+            code = 0x10000 + (((code & 0x3ff) << 10) | (message.charCodeAt(++index) & 0x3ff));
+            blocks[i >> 2] |= (0xf0 | (code >> 18)) << SHIFT[i++ & 3];
+            blocks[i >> 2] |= (0x80 | ((code >> 12) & 0x3f)) << SHIFT[i++ & 3];
+            blocks[i >> 2] |= (0x80 | ((code >> 6) & 0x3f)) << SHIFT[i++ & 3];
+            blocks[i >> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
+          }
+        }
+      }
+      this.lastByteIndex = i;
+      if (i >= byteCount) {
+        this.start = i - byteCount;
+        this.block = blocks[blockCount];
+        for (i = 0; i < blockCount; ++i) {
+          s[i] ^= blocks[i];
+        }
+        f(s);
+        this.reset = true;
+      } else {
+        this.start = i;
+      }
+    }
+    return this;
+  };
+
+  Keccak.prototype.encode = function (x, right) {
+    var o = x & 255, n = 1;
+    var bytes = [o];
+    x = x >> 8;
+    o = x & 255;
+    while (o > 0) {
+      bytes.unshift(o);
+      x = x >> 8;
+      o = x & 255;
+      ++n;
+    }
+    if (right) {
+      bytes.push(n);
+    } else {
+      bytes.unshift(n);
+    }
+    this.update(bytes);
+    return bytes.length;
+  };
+
+  Keccak.prototype.encodeString = function (str) {
+    var notString, type = typeof str;
+    if (type !== 'string') {
+      if (type === 'object') {
+        if (str === null) {
+          throw new Error(INPUT_ERROR);
+        } else if (ARRAY_BUFFER && str.constructor === ArrayBuffer) {
+          str = new Uint8Array(str);
+        } else if (!Array.isArray(str)) {
+          if (!ARRAY_BUFFER || !ArrayBuffer.isView(str)) {
+            throw new Error(INPUT_ERROR);
+          }
+        }
+      } else {
+        throw new Error(INPUT_ERROR);
+      }
+      notString = true;
+    }
+    var bytes = 0, length = str.length;
+    if (notString) {
+      bytes = length;
+    } else {
+      for (var i = 0; i < str.length; ++i) {
+        var code = str.charCodeAt(i);
+        if (code < 0x80) {
+          bytes += 1;
+        } else if (code < 0x800) {
+          bytes += 2;
+        } else if (code < 0xd800 || code >= 0xe000) {
+          bytes += 3;
+        } else {
+          code = 0x10000 + (((code & 0x3ff) << 10) | (str.charCodeAt(++i) & 0x3ff));
+          bytes += 4;
+        }
+      }
+    }
+    bytes += this.encode(bytes * 8);
+    this.update(str);
+    return bytes;
+  };
+
+  Keccak.prototype.bytepad = function (strs, w) {
+    var bytes = this.encode(w);
+    for (var i = 0; i < strs.length; ++i) {
+      bytes += this.encodeString(strs[i]);
+    }
+    var paddingBytes = w - bytes % w;
+    var zeros = [];
+    zeros.length = paddingBytes;
+    this.update(zeros);
+    return this;
+  };
+
+  Keccak.prototype.finalize = function () {
+    if (this.finalized) {
+      return;
+    }
+    this.finalized = true;
+    var blocks = this.blocks, i = this.lastByteIndex, blockCount = this.blockCount, s = this.s;
+    blocks[i >> 2] |= this.padding[i & 3];
+    if (this.lastByteIndex === this.byteCount) {
+      blocks[0] = blocks[blockCount];
+      for (i = 1; i < blockCount + 1; ++i) {
+        blocks[i] = 0;
+      }
+    }
+    blocks[blockCount - 1] |= 0x80000000;
+    for (i = 0; i < blockCount; ++i) {
+      s[i] ^= blocks[i];
+    }
+    f(s);
+  };
+
+  Keccak.prototype.toString = Keccak.prototype.hex = function () {
+    this.finalize();
+
+    var blockCount = this.blockCount, s = this.s, outputBlocks = this.outputBlocks,
+      extraBytes = this.extraBytes, i = 0, j = 0;
+    var hex = '', block;
+    while (j < outputBlocks) {
+      for (i = 0; i < blockCount && j < outputBlocks; ++i, ++j) {
+        block = s[i];
+        hex += HEX_CHARS[(block >> 4) & 0x0F] + HEX_CHARS[block & 0x0F] +
+          HEX_CHARS[(block >> 12) & 0x0F] + HEX_CHARS[(block >> 8) & 0x0F] +
+          HEX_CHARS[(block >> 20) & 0x0F] + HEX_CHARS[(block >> 16) & 0x0F] +
+          HEX_CHARS[(block >> 28) & 0x0F] + HEX_CHARS[(block >> 24) & 0x0F];
+      }
+      if (j % blockCount === 0) {
+        f(s);
+        i = 0;
+      }
+    }
+    if (extraBytes) {
+      block = s[i];
+      hex += HEX_CHARS[(block >> 4) & 0x0F] + HEX_CHARS[block & 0x0F];
+      if (extraBytes > 1) {
+        hex += HEX_CHARS[(block >> 12) & 0x0F] + HEX_CHARS[(block >> 8) & 0x0F];
+      }
+      if (extraBytes > 2) {
+        hex += HEX_CHARS[(block >> 20) & 0x0F] + HEX_CHARS[(block >> 16) & 0x0F];
+      }
+    }
+    return hex;
+  };
+
+  Keccak.prototype.arrayBuffer = function () {
+    this.finalize();
+
+    var blockCount = this.blockCount, s = this.s, outputBlocks = this.outputBlocks,
+      extraBytes = this.extraBytes, i = 0, j = 0;
+    var bytes = this.outputBits >> 3;
+    var buffer;
+    if (extraBytes) {
+      buffer = new ArrayBuffer((outputBlocks + 1) << 2);
+    } else {
+      buffer = new ArrayBuffer(bytes);
+    }
+    var array = new Uint32Array(buffer);
+    while (j < outputBlocks) {
+      for (i = 0; i < blockCount && j < outputBlocks; ++i, ++j) {
+        array[j] = s[i];
+      }
+      if (j % blockCount === 0) {
+        f(s);
+      }
+    }
+    if (extraBytes) {
+      array[i] = s[i];
+      buffer = buffer.slice(0, bytes);
+    }
+    return buffer;
+  };
+
+  Keccak.prototype.buffer = Keccak.prototype.arrayBuffer;
+
+  Keccak.prototype.digest = Keccak.prototype.array = function () {
+    this.finalize();
+
+    var blockCount = this.blockCount, s = this.s, outputBlocks = this.outputBlocks,
+      extraBytes = this.extraBytes, i = 0, j = 0;
+    var array = [], offset, block;
+    while (j < outputBlocks) {
+      for (i = 0; i < blockCount && j < outputBlocks; ++i, ++j) {
+        offset = j << 2;
+        block = s[i];
+        array[offset] = block & 0xFF;
+        array[offset + 1] = (block >> 8) & 0xFF;
+        array[offset + 2] = (block >> 16) & 0xFF;
+        array[offset + 3] = (block >> 24) & 0xFF;
+      }
+      if (j % blockCount === 0) {
+        f(s);
+      }
+    }
+    if (extraBytes) {
+      offset = j << 2;
+      block = s[i];
+      array[offset] = block & 0xFF;
+      if (extraBytes > 1) {
+        array[offset + 1] = (block >> 8) & 0xFF;
+      }
+      if (extraBytes > 2) {
+        array[offset + 2] = (block >> 16) & 0xFF;
+      }
+    }
+    return array;
+  };
+
+  function Kmac(bits, padding, outputBits) {
+    Keccak.call(this, bits, padding, outputBits);
+  }
+
+  Kmac.prototype = new Keccak();
+
+  Kmac.prototype.finalize = function () {
+    this.encode(this.outputBits, true);
+    return Keccak.prototype.finalize.call(this);
+  };
+
+  var f = function (s) {
+    var h, l, n, c0, c1, c2, c3, c4, c5, c6, c7, c8, c9,
+      b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17,
+      b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33,
+      b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49;
+    for (n = 0; n < 48; n += 2) {
+      c0 = s[0] ^ s[10] ^ s[20] ^ s[30] ^ s[40];
+      c1 = s[1] ^ s[11] ^ s[21] ^ s[31] ^ s[41];
+      c2 = s[2] ^ s[12] ^ s[22] ^ s[32] ^ s[42];
+      c3 = s[3] ^ s[13] ^ s[23] ^ s[33] ^ s[43];
+      c4 = s[4] ^ s[14] ^ s[24] ^ s[34] ^ s[44];
+      c5 = s[5] ^ s[15] ^ s[25] ^ s[35] ^ s[45];
+      c6 = s[6] ^ s[16] ^ s[26] ^ s[36] ^ s[46];
+      c7 = s[7] ^ s[17] ^ s[27] ^ s[37] ^ s[47];
+      c8 = s[8] ^ s[18] ^ s[28] ^ s[38] ^ s[48];
+      c9 = s[9] ^ s[19] ^ s[29] ^ s[39] ^ s[49];
+
+      h = c8 ^ ((c2 << 1) | (c3 >>> 31));
+      l = c9 ^ ((c3 << 1) | (c2 >>> 31));
+      s[0] ^= h;
+      s[1] ^= l;
+      s[10] ^= h;
+      s[11] ^= l;
+      s[20] ^= h;
+      s[21] ^= l;
+      s[30] ^= h;
+      s[31] ^= l;
+      s[40] ^= h;
+      s[41] ^= l;
+      h = c0 ^ ((c4 << 1) | (c5 >>> 31));
+      l = c1 ^ ((c5 << 1) | (c4 >>> 31));
+      s[2] ^= h;
+      s[3] ^= l;
+      s[12] ^= h;
+      s[13] ^= l;
+      s[22] ^= h;
+      s[23] ^= l;
+      s[32] ^= h;
+      s[33] ^= l;
+      s[42] ^= h;
+      s[43] ^= l;
+      h = c2 ^ ((c6 << 1) | (c7 >>> 31));
+      l = c3 ^ ((c7 << 1) | (c6 >>> 31));
+      s[4] ^= h;
+      s[5] ^= l;
+      s[14] ^= h;
+      s[15] ^= l;
+      s[24] ^= h;
+      s[25] ^= l;
+      s[34] ^= h;
+      s[35] ^= l;
+      s[44] ^= h;
+      s[45] ^= l;
+      h = c4 ^ ((c8 << 1) | (c9 >>> 31));
+      l = c5 ^ ((c9 << 1) | (c8 >>> 31));
+      s[6] ^= h;
+      s[7] ^= l;
+      s[16] ^= h;
+      s[17] ^= l;
+      s[26] ^= h;
+      s[27] ^= l;
+      s[36] ^= h;
+      s[37] ^= l;
+      s[46] ^= h;
+      s[47] ^= l;
+      h = c6 ^ ((c0 << 1) | (c1 >>> 31));
+      l = c7 ^ ((c1 << 1) | (c0 >>> 31));
+      s[8] ^= h;
+      s[9] ^= l;
+      s[18] ^= h;
+      s[19] ^= l;
+      s[28] ^= h;
+      s[29] ^= l;
+      s[38] ^= h;
+      s[39] ^= l;
+      s[48] ^= h;
+      s[49] ^= l;
+
+      b0 = s[0];
+      b1 = s[1];
+      b32 = (s[11] << 4) | (s[10] >>> 28);
+      b33 = (s[10] << 4) | (s[11] >>> 28);
+      b14 = (s[20] << 3) | (s[21] >>> 29);
+      b15 = (s[21] << 3) | (s[20] >>> 29);
+      b46 = (s[31] << 9) | (s[30] >>> 23);
+      b47 = (s[30] << 9) | (s[31] >>> 23);
+      b28 = (s[40] << 18) | (s[41] >>> 14);
+      b29 = (s[41] << 18) | (s[40] >>> 14);
+      b20 = (s[2] << 1) | (s[3] >>> 31);
+      b21 = (s[3] << 1) | (s[2] >>> 31);
+      b2 = (s[13] << 12) | (s[12] >>> 20);
+      b3 = (s[12] << 12) | (s[13] >>> 20);
+      b34 = (s[22] << 10) | (s[23] >>> 22);
+      b35 = (s[23] << 10) | (s[22] >>> 22);
+      b16 = (s[33] << 13) | (s[32] >>> 19);
+      b17 = (s[32] << 13) | (s[33] >>> 19);
+      b48 = (s[42] << 2) | (s[43] >>> 30);
+      b49 = (s[43] << 2) | (s[42] >>> 30);
+      b40 = (s[5] << 30) | (s[4] >>> 2);
+      b41 = (s[4] << 30) | (s[5] >>> 2);
+      b22 = (s[14] << 6) | (s[15] >>> 26);
+      b23 = (s[15] << 6) | (s[14] >>> 26);
+      b4 = (s[25] << 11) | (s[24] >>> 21);
+      b5 = (s[24] << 11) | (s[25] >>> 21);
+      b36 = (s[34] << 15) | (s[35] >>> 17);
+      b37 = (s[35] << 15) | (s[34] >>> 17);
+      b18 = (s[45] << 29) | (s[44] >>> 3);
+      b19 = (s[44] << 29) | (s[45] >>> 3);
+      b10 = (s[6] << 28) | (s[7] >>> 4);
+      b11 = (s[7] << 28) | (s[6] >>> 4);
+      b42 = (s[17] << 23) | (s[16] >>> 9);
+      b43 = (s[16] << 23) | (s[17] >>> 9);
+      b24 = (s[26] << 25) | (s[27] >>> 7);
+      b25 = (s[27] << 25) | (s[26] >>> 7);
+      b6 = (s[36] << 21) | (s[37] >>> 11);
+      b7 = (s[37] << 21) | (s[36] >>> 11);
+      b38 = (s[47] << 24) | (s[46] >>> 8);
+      b39 = (s[46] << 24) | (s[47] >>> 8);
+      b30 = (s[8] << 27) | (s[9] >>> 5);
+      b31 = (s[9] << 27) | (s[8] >>> 5);
+      b12 = (s[18] << 20) | (s[19] >>> 12);
+      b13 = (s[19] << 20) | (s[18] >>> 12);
+      b44 = (s[29] << 7) | (s[28] >>> 25);
+      b45 = (s[28] << 7) | (s[29] >>> 25);
+      b26 = (s[38] << 8) | (s[39] >>> 24);
+      b27 = (s[39] << 8) | (s[38] >>> 24);
+      b8 = (s[48] << 14) | (s[49] >>> 18);
+      b9 = (s[49] << 14) | (s[48] >>> 18);
+
+      s[0] = b0 ^ (~b2 & b4);
+      s[1] = b1 ^ (~b3 & b5);
+      s[10] = b10 ^ (~b12 & b14);
+      s[11] = b11 ^ (~b13 & b15);
+      s[20] = b20 ^ (~b22 & b24);
+      s[21] = b21 ^ (~b23 & b25);
+      s[30] = b30 ^ (~b32 & b34);
+      s[31] = b31 ^ (~b33 & b35);
+      s[40] = b40 ^ (~b42 & b44);
+      s[41] = b41 ^ (~b43 & b45);
+      s[2] = b2 ^ (~b4 & b6);
+      s[3] = b3 ^ (~b5 & b7);
+      s[12] = b12 ^ (~b14 & b16);
+      s[13] = b13 ^ (~b15 & b17);
+      s[22] = b22 ^ (~b24 & b26);
+      s[23] = b23 ^ (~b25 & b27);
+      s[32] = b32 ^ (~b34 & b36);
+      s[33] = b33 ^ (~b35 & b37);
+      s[42] = b42 ^ (~b44 & b46);
+      s[43] = b43 ^ (~b45 & b47);
+      s[4] = b4 ^ (~b6 & b8);
+      s[5] = b5 ^ (~b7 & b9);
+      s[14] = b14 ^ (~b16 & b18);
+      s[15] = b15 ^ (~b17 & b19);
+      s[24] = b24 ^ (~b26 & b28);
+      s[25] = b25 ^ (~b27 & b29);
+      s[34] = b34 ^ (~b36 & b38);
+      s[35] = b35 ^ (~b37 & b39);
+      s[44] = b44 ^ (~b46 & b48);
+      s[45] = b45 ^ (~b47 & b49);
+      s[6] = b6 ^ (~b8 & b0);
+      s[7] = b7 ^ (~b9 & b1);
+      s[16] = b16 ^ (~b18 & b10);
+      s[17] = b17 ^ (~b19 & b11);
+      s[26] = b26 ^ (~b28 & b20);
+      s[27] = b27 ^ (~b29 & b21);
+      s[36] = b36 ^ (~b38 & b30);
+      s[37] = b37 ^ (~b39 & b31);
+      s[46] = b46 ^ (~b48 & b40);
+      s[47] = b47 ^ (~b49 & b41);
+      s[8] = b8 ^ (~b0 & b2);
+      s[9] = b9 ^ (~b1 & b3);
+      s[18] = b18 ^ (~b10 & b12);
+      s[19] = b19 ^ (~b11 & b13);
+      s[28] = b28 ^ (~b20 & b22);
+      s[29] = b29 ^ (~b21 & b23);
+      s[38] = b38 ^ (~b30 & b32);
+      s[39] = b39 ^ (~b31 & b33);
+      s[48] = b48 ^ (~b40 & b42);
+      s[49] = b49 ^ (~b41 & b43);
+
+      s[0] ^= RC[n];
+      s[1] ^= RC[n + 1];
+    }
+  };
+
+  if (COMMON_JS) {
+    module.exports = methods;
+  } else {
+    for (i = 0; i < methodNames.length; ++i) {
+      root[methodNames[i]] = methods[methodNames[i]];
+    }
+    if (AMD) {
+      define(function () {
+        return methods;
+      });
+    }
+  }
+})();
+
+},{"process":"node_modules/process/browser.js"}],"node_modules/@ethersproject/keccak256/lib.esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.keccak256 = keccak256;
+
+var _jsSha = _interopRequireDefault(require("js-sha3"));
+
+var _bytes = require("@ethersproject/bytes");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function keccak256(data) {
+  return '0x' + _jsSha.default.keccak_256((0, _bytes.arrayify)(data));
+}
+},{"js-sha3":"node_modules/js-sha3/src/sha3.js","@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js"}],"node_modules/@ethersproject/rlp/lib.esm/_version.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58650,7 +55593,638 @@ class ContractFactory {
 }
 
 exports.ContractFactory = ContractFactory;
-},{"@ethersproject/abi":"node_modules/@ethersproject/contracts/node_modules/@ethersproject/abi/lib.esm/index.js","@ethersproject/abstract-provider":"node_modules/@ethersproject/abstract-provider/lib.esm/index.js","@ethersproject/abstract-signer":"node_modules/@ethersproject/abstract-signer/lib.esm/index.js","@ethersproject/address":"node_modules/@ethersproject/address/lib.esm/index.js","@ethersproject/bignumber":"node_modules/@ethersproject/bignumber/lib.esm/index.js","@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js","@ethersproject/properties":"node_modules/@ethersproject/properties/lib.esm/index.js","@ethersproject/transactions":"node_modules/@ethersproject/transactions/lib.esm/index.js","@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","./_version":"node_modules/@ethersproject/contracts/lib.esm/_version.js"}],"hooks/useContract.js":[function(require,module,exports) {
+},{"@ethersproject/abi":"node_modules/@ethersproject/contracts/node_modules/@ethersproject/abi/lib.esm/index.js","@ethersproject/abstract-provider":"node_modules/@ethersproject/abstract-provider/lib.esm/index.js","@ethersproject/abstract-signer":"node_modules/@ethersproject/abstract-signer/lib.esm/index.js","@ethersproject/address":"node_modules/@ethersproject/address/lib.esm/index.js","@ethersproject/bignumber":"node_modules/@ethersproject/bignumber/lib.esm/index.js","@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js","@ethersproject/properties":"node_modules/@ethersproject/properties/lib.esm/index.js","@ethersproject/transactions":"node_modules/@ethersproject/transactions/lib.esm/index.js","@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","./_version":"node_modules/@ethersproject/contracts/lib.esm/_version.js"}],"node_modules/@web3-react/types/dist/types.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ConnectorEvent = void 0;
+var ConnectorEvent;
+exports.ConnectorEvent = ConnectorEvent;
+
+(function (ConnectorEvent) {
+  ConnectorEvent["Update"] = "Web3ReactUpdate";
+  ConnectorEvent["Error"] = "Web3ReactError";
+  ConnectorEvent["Deactivate"] = "Web3ReactDeactivate";
+})(ConnectorEvent || (exports.ConnectorEvent = ConnectorEvent = {}));
+},{}],"node_modules/@web3-react/core/dist/core.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Web3ReactProvider = exports.UnsupportedChainIdError = exports.PRIMARY_KEY = void 0;
+exports.createWeb3ReactRoot = createWeb3ReactRoot;
+exports.getWeb3ReactContext = getWeb3ReactContext;
+exports.useWeb3React = useWeb3React;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _tinyInvariant = _interopRequireDefault(require("tiny-invariant"));
+
+var _types = require("@web3-react/types");
+
+var _tinyWarning = _interopRequireDefault(require("tiny-warning"));
+
+var _bytes = require("@ethersproject/bytes");
+
+var _keccak = require("@ethersproject/keccak256");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+
+  _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _construct(Parent, args, Class) {
+  if (_isNativeReflectConstruct()) {
+    _construct = Reflect.construct;
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) _setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
+
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return _setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
+} // A type of promise-like that resolves synchronously and supports only one observer
+
+
+var _iteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.iterator || (Symbol.iterator = /*#__PURE__*/Symbol("Symbol.iterator")) : "@@iterator"; // Asynchronously iterate through an object's values
+
+
+var _asyncIteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.asyncIterator || (Symbol.asyncIterator = /*#__PURE__*/Symbol("Symbol.asyncIterator")) : "@@asyncIterator"; // Asynchronously iterate on a value using it's async iterator if present, or its synchronous iterator if missing
+
+
+function _catch(body, recover) {
+  try {
+    var result = body();
+  } catch (e) {
+    return recover(e);
+  }
+
+  if (result && result.then) {
+    return result.then(void 0, recover);
+  }
+
+  return result;
+} // Asynchronously await a promise and pass the result to a finally continuation
+
+
+function normalizeChainId(chainId) {
+  if (typeof chainId === 'string') {
+    // Temporary fix until the next version of Metamask Mobile gets released.
+    // In the current version (0.2.13), the chainId starts with “Ox” rather
+    // than “0x”. Fix: https://github.com/MetaMask/metamask-mobile/pull/1275
+    chainId = chainId.replace(/^Ox/, '0x');
+    var parsedChainId = Number.parseInt(chainId, chainId.trim().substring(0, 2) === '0x' ? 16 : 10);
+    !!Number.isNaN(parsedChainId) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "chainId " + chainId + " is not an integer") : (0, _tinyInvariant.default)(false) : void 0;
+    return parsedChainId;
+  } else {
+    !Number.isInteger(chainId) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "chainId " + chainId + " is not an integer") : (0, _tinyInvariant.default)(false) : void 0;
+    return chainId;
+  }
+} // https://github.com/ethers-io/ethers.js/blob/d9d438a119bb11f8516fc9cf02c534ab3816fcb3/packages/address/src.ts/index.ts
+
+
+function normalizeAccount(_address) {
+  !(typeof _address === 'string' && _address.match(/^(0x)?[0-9a-fA-F]{40}$/)) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "Invalid address " + _address) : (0, _tinyInvariant.default)(false) : void 0;
+  var address = _address.substring(0, 2) === '0x' ? _address : "0x" + _address;
+  var chars = address.toLowerCase().substring(2).split('');
+  var charsArray = new Uint8Array(40);
+
+  for (var i = 0; i < 40; i++) {
+    charsArray[i] = chars[i].charCodeAt(0);
+  }
+
+  var hashed = (0, _bytes.arrayify)((0, _keccak.keccak256)(charsArray));
+
+  for (var _i = 0; _i < 40; _i += 2) {
+    if (hashed[_i >> 1] >> 4 >= 8) {
+      chars[_i] = chars[_i].toUpperCase();
+    }
+
+    if ((hashed[_i >> 1] & 0x0f) >= 8) {
+      chars[_i + 1] = chars[_i + 1].toUpperCase();
+    }
+  }
+
+  var addressChecksum = "0x" + chars.join('');
+  !!(address.match(/([A-F].*[a-f])|([a-f].*[A-F])/) && address !== addressChecksum) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "Bad address checksum " + address + " " + addressChecksum) : (0, _tinyInvariant.default)(false) : void 0;
+  return addressChecksum;
+}
+
+var augmentConnectorUpdate = function augmentConnectorUpdate(connector, update) {
+  try {
+    var _temp3 = function _temp3(provider) {
+      return Promise.resolve(Promise.all([update.chainId === undefined ? connector.getChainId() : update.chainId, update.account === undefined ? connector.getAccount() : update.account])).then(function (_ref2) {
+        var _chainId = _ref2[0],
+            _account = _ref2[1];
+        var chainId = normalizeChainId(_chainId);
+
+        if (!!connector.supportedChainIds && !connector.supportedChainIds.includes(chainId)) {
+          throw new UnsupportedChainIdError(chainId, connector.supportedChainIds);
+        }
+
+        var account = _account === null ? _account : normalizeAccount(_account);
+        return {
+          provider: provider,
+          chainId: chainId,
+          account: account
+        };
+      });
+    };
+
+    var _temp4 = update.provider === undefined;
+
+    return Promise.resolve(_temp4 ? Promise.resolve(connector.getProvider()).then(_temp3) : _temp3(update.provider));
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
+var StaleConnectorError = /*#__PURE__*/function (_Error) {
+  _inheritsLoose(StaleConnectorError, _Error);
+
+  function StaleConnectorError() {
+    var _this;
+
+    _this = _Error.call(this) || this;
+    _this.name = _this.constructor.name;
+    return _this;
+  }
+
+  return StaleConnectorError;
+}( /*#__PURE__*/_wrapNativeSuper(Error));
+
+var UnsupportedChainIdError = /*#__PURE__*/function (_Error2) {
+  _inheritsLoose(UnsupportedChainIdError, _Error2);
+
+  function UnsupportedChainIdError(unsupportedChainId, supportedChainIds) {
+    var _this2;
+
+    _this2 = _Error2.call(this) || this;
+    _this2.name = _this2.constructor.name;
+    _this2.message = "Unsupported chain id: " + unsupportedChainId + ". Supported chain ids are: " + supportedChainIds + ".";
+    return _this2;
+  }
+
+  return UnsupportedChainIdError;
+}( /*#__PURE__*/_wrapNativeSuper(Error));
+
+exports.UnsupportedChainIdError = UnsupportedChainIdError;
+var ActionType;
+
+(function (ActionType) {
+  ActionType[ActionType["ACTIVATE_CONNECTOR"] = 0] = "ACTIVATE_CONNECTOR";
+  ActionType[ActionType["UPDATE"] = 1] = "UPDATE";
+  ActionType[ActionType["UPDATE_FROM_ERROR"] = 2] = "UPDATE_FROM_ERROR";
+  ActionType[ActionType["ERROR"] = 3] = "ERROR";
+  ActionType[ActionType["ERROR_FROM_ACTIVATION"] = 4] = "ERROR_FROM_ACTIVATION";
+  ActionType[ActionType["DEACTIVATE_CONNECTOR"] = 5] = "DEACTIVATE_CONNECTOR";
+})(ActionType || (ActionType = {}));
+
+function reducer(state, _ref) {
+  var type = _ref.type,
+      payload = _ref.payload;
+
+  switch (type) {
+    case ActionType.ACTIVATE_CONNECTOR:
+      {
+        var connector = payload.connector,
+            provider = payload.provider,
+            chainId = payload.chainId,
+            account = payload.account,
+            onError = payload.onError;
+        return {
+          connector: connector,
+          provider: provider,
+          chainId: chainId,
+          account: account,
+          onError: onError
+        };
+      }
+
+    case ActionType.UPDATE:
+      {
+        var _provider = payload.provider,
+            _chainId2 = payload.chainId,
+            _account2 = payload.account;
+        return _extends({}, state, _provider === undefined ? {} : {
+          provider: _provider
+        }, _chainId2 === undefined ? {} : {
+          chainId: _chainId2
+        }, _account2 === undefined ? {} : {
+          account: _account2
+        });
+      }
+
+    case ActionType.UPDATE_FROM_ERROR:
+      {
+        var _provider2 = payload.provider,
+            _chainId3 = payload.chainId,
+            _account3 = payload.account;
+        return _extends({}, state, _provider2 === undefined ? {} : {
+          provider: _provider2
+        }, _chainId3 === undefined ? {} : {
+          chainId: _chainId3
+        }, _account3 === undefined ? {} : {
+          account: _account3
+        }, {
+          error: undefined
+        });
+      }
+
+    case ActionType.ERROR:
+      {
+        var error = payload.error;
+        var _connector = state.connector,
+            _onError = state.onError;
+        return {
+          connector: _connector,
+          error: error,
+          onError: _onError
+        };
+      }
+
+    case ActionType.ERROR_FROM_ACTIVATION:
+      {
+        var _connector2 = payload.connector,
+            _error = payload.error;
+        return {
+          connector: _connector2,
+          error: _error
+        };
+      }
+
+    case ActionType.DEACTIVATE_CONNECTOR:
+      {
+        return {};
+      }
+  }
+}
+
+function useWeb3ReactManager() {
+  var _useReducer = (0, _react.useReducer)(reducer, {}),
+      state = _useReducer[0],
+      dispatch = _useReducer[1];
+
+  var connector = state.connector,
+      provider = state.provider,
+      chainId = state.chainId,
+      account = state.account,
+      onError = state.onError,
+      error = state.error;
+  var updateBusterRef = (0, _react.useRef)(-1);
+  updateBusterRef.current += 1;
+  var activate = (0, _react.useCallback)(function (connector, onError, throwErrors) {
+    if (throwErrors === void 0) {
+      throwErrors = false;
+    }
+
+    try {
+      var updateBusterInitial = updateBusterRef.current;
+      var activated = false;
+      return Promise.resolve(_catch(function () {
+        return Promise.resolve(connector.activate().then(function (update) {
+          activated = true;
+          return update;
+        })).then(function (update) {
+          return Promise.resolve(augmentConnectorUpdate(connector, update)).then(function (augmentedUpdate) {
+            if (updateBusterRef.current > updateBusterInitial) {
+              throw new StaleConnectorError();
+            }
+
+            dispatch({
+              type: ActionType.ACTIVATE_CONNECTOR,
+              payload: _extends({
+                connector: connector
+              }, augmentedUpdate, {
+                onError: onError
+              })
+            });
+          });
+        });
+      }, function (error) {
+        if (error instanceof StaleConnectorError) {
+          activated && connector.deactivate();
+          "development" !== "production" ? (0, _tinyWarning.default)(false, "Suppressed stale connector activation " + connector) : void 0;
+        } else if (throwErrors) {
+          activated && connector.deactivate();
+          throw error;
+        } else if (onError) {
+          activated && connector.deactivate();
+          onError(error);
+        } else {
+          // we don't call activated && connector.deactivate() here because it'll be handled in the useEffect
+          dispatch({
+            type: ActionType.ERROR_FROM_ACTIVATION,
+            payload: {
+              connector: connector,
+              error: error
+            }
+          });
+        }
+      }));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }, []);
+  var setError = (0, _react.useCallback)(function (error) {
+    dispatch({
+      type: ActionType.ERROR,
+      payload: {
+        error: error
+      }
+    });
+  }, []);
+  var deactivate = (0, _react.useCallback)(function () {
+    dispatch({
+      type: ActionType.DEACTIVATE_CONNECTOR
+    });
+  }, []);
+  var handleUpdate = (0, _react.useCallback)(function (update) {
+    try {
+      if (!connector) {
+        throw Error("This should never happen, it's just so Typescript stops complaining");
+      }
+
+      var updateBusterInitial = updateBusterRef.current; // updates are handled differently depending on whether the connector is active vs in an error state
+
+      return Promise.resolve(function () {
+        if (!error) {
+          var _chainId4 = update.chainId === undefined ? undefined : normalizeChainId(update.chainId);
+
+          if (_chainId4 !== undefined && !!connector.supportedChainIds && !connector.supportedChainIds.includes(_chainId4)) {
+            var _error2 = new UnsupportedChainIdError(_chainId4, connector.supportedChainIds);
+
+            onError ? onError(_error2) : dispatch({
+              type: ActionType.ERROR,
+              payload: {
+                error: _error2
+              }
+            });
+          } else {
+            var _account4 = typeof update.account === 'string' ? normalizeAccount(update.account) : update.account;
+
+            dispatch({
+              type: ActionType.UPDATE,
+              payload: {
+                provider: update.provider,
+                chainId: _chainId4,
+                account: _account4
+              }
+            });
+          }
+        } else {
+          return _catch(function () {
+            return Promise.resolve(augmentConnectorUpdate(connector, update)).then(function (augmentedUpdate) {
+              if (updateBusterRef.current > updateBusterInitial) {
+                throw new StaleConnectorError();
+              }
+
+              dispatch({
+                type: ActionType.UPDATE_FROM_ERROR,
+                payload: augmentedUpdate
+              });
+            });
+          }, function (error) {
+            if (error instanceof StaleConnectorError) {
+              "development" !== "production" ? (0, _tinyWarning.default)(false, "Suppressed stale connector update from error state " + connector + " " + update) : void 0;
+            } else {
+              // though we don't have to, we're re-circulating the new error
+              onError ? onError(error) : dispatch({
+                type: ActionType.ERROR,
+                payload: {
+                  error: error
+                }
+              });
+            }
+          });
+        }
+      }());
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }, [connector, error, onError]);
+  var handleError = (0, _react.useCallback)(function (error) {
+    onError ? onError(error) : dispatch({
+      type: ActionType.ERROR,
+      payload: {
+        error: error
+      }
+    });
+  }, [onError]);
+  var handleDeactivate = (0, _react.useCallback)(function () {
+    dispatch({
+      type: ActionType.DEACTIVATE_CONNECTOR
+    });
+  }, []); // ensure that connectors which were set are deactivated
+
+  (0, _react.useEffect)(function () {
+    return function () {
+      if (connector) {
+        connector.deactivate();
+      }
+    };
+  }, [connector]); // ensure that events emitted from the set connector are handled appropriately
+
+  (0, _react.useEffect)(function () {
+    if (connector) {
+      connector.on(_types.ConnectorEvent.Update, handleUpdate).on(_types.ConnectorEvent.Error, handleError).on(_types.ConnectorEvent.Deactivate, handleDeactivate);
+    }
+
+    return function () {
+      if (connector) {
+        connector.off(_types.ConnectorEvent.Update, handleUpdate).off(_types.ConnectorEvent.Error, handleError).off(_types.ConnectorEvent.Deactivate, handleDeactivate);
+      }
+    };
+  }, [connector, handleUpdate, handleError, handleDeactivate]);
+  return {
+    connector: connector,
+    provider: provider,
+    chainId: chainId,
+    account: account,
+    activate: activate,
+    setError: setError,
+    deactivate: deactivate,
+    error: error
+  };
+}
+
+var PRIMARY_KEY = 'primary';
+exports.PRIMARY_KEY = PRIMARY_KEY;
+var CONTEXTS = {};
+
+function createWeb3ReactRoot(key) {
+  !!CONTEXTS[key] ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "A root already exists for provided key " + key) : (0, _tinyInvariant.default)(false) : void 0;
+  CONTEXTS[key] = (0, _react.createContext)({
+    activate: function () {
+      try {
+        !false ? "development" !== "production" ? (0, _tinyInvariant.default)(false, 'No <Web3ReactProvider ... /> found.') : (0, _tinyInvariant.default)(false) : void 0;
+        return Promise.resolve();
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    },
+    setError: function setError() {
+      "development" !== "production" ? (0, _tinyInvariant.default)(false, 'No <Web3ReactProvider ... /> found.') : (0, _tinyInvariant.default)(false);
+    },
+    deactivate: function deactivate() {
+      "development" !== "production" ? (0, _tinyInvariant.default)(false, 'No <Web3ReactProvider ... /> found.') : (0, _tinyInvariant.default)(false);
+    },
+    active: false
+  });
+  CONTEXTS[key].displayName = "Web3ReactContext - " + key;
+  var Provider = CONTEXTS[key].Provider;
+  return function Web3ReactProvider(_ref) {
+    var getLibrary = _ref.getLibrary,
+        children = _ref.children;
+
+    var _useWeb3ReactManager = useWeb3ReactManager(),
+        connector = _useWeb3ReactManager.connector,
+        provider = _useWeb3ReactManager.provider,
+        chainId = _useWeb3ReactManager.chainId,
+        account = _useWeb3ReactManager.account,
+        activate = _useWeb3ReactManager.activate,
+        setError = _useWeb3ReactManager.setError,
+        deactivate = _useWeb3ReactManager.deactivate,
+        error = _useWeb3ReactManager.error;
+
+    var active = connector !== undefined && chainId !== undefined && account !== undefined && !!!error;
+    var library = (0, _react.useMemo)(function () {
+      return active && chainId !== undefined && Number.isInteger(chainId) && !!connector ? getLibrary(provider, connector) : undefined;
+    }, [active, getLibrary, provider, connector, chainId]);
+    var web3ReactContext = {
+      connector: connector,
+      library: library,
+      chainId: chainId,
+      account: account,
+      activate: activate,
+      setError: setError,
+      deactivate: deactivate,
+      active: active,
+      error: error
+    };
+    return _react.default.createElement(Provider, {
+      value: web3ReactContext
+    }, children);
+  };
+}
+
+var Web3ReactProvider = /*#__PURE__*/createWeb3ReactRoot(PRIMARY_KEY);
+exports.Web3ReactProvider = Web3ReactProvider;
+
+function getWeb3ReactContext(key) {
+  if (key === void 0) {
+    key = PRIMARY_KEY;
+  }
+
+  !Object.keys(CONTEXTS).includes(key) ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "Invalid key " + key) : (0, _tinyInvariant.default)(false) : void 0;
+  return CONTEXTS[key];
+}
+
+function useWeb3React(key) {
+  return (0, _react.useContext)(getWeb3ReactContext(key));
+}
+},{"react":"node_modules/react/index.js","tiny-invariant":"node_modules/tiny-invariant/dist/tiny-invariant.esm.js","@web3-react/types":"node_modules/@web3-react/types/dist/types.esm.js","tiny-warning":"node_modules/tiny-warning/dist/tiny-warning.esm.js","@ethersproject/bytes":"node_modules/@ethersproject/bytes/lib.esm/index.js","@ethersproject/keccak256":"node_modules/@ethersproject/keccak256/lib.esm/index.js"}],"hooks/useContract.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58680,2124 +56254,7 @@ function useContract(contractAddress, ABI) {
     return new _contracts.Contract(contractAddress, ABI, signerOrProvider);
   }, [contractAddress, ABI, signerOrProvider]);
 }
-},{"react":"node_modules/react/index.js","@ethersproject/contracts":"node_modules/@ethersproject/contracts/lib.esm/index.js","@ethersproject/constants":"node_modules/@ethersproject/constants/lib.esm/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js"}],"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":[function(require,module,exports) {
-module.exports = {
-  "_format": "hh-sol-artifact-1",
-  "contractName": "CollateralManager",
-  "sourceName": "contracts/CollateralManager.sol",
-  "abi": [{
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": false,
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "id",
-      "type": "uint256"
-    }],
-    "name": "DepositCollateral",
-    "type": "event"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": false,
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "indexed": false,
-      "internalType": "uint256",
-      "name": "id",
-      "type": "uint256"
-    }],
-    "name": "WithdrawCollateral",
-    "type": "event"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "borrows",
-    "outputs": [{
-      "components": [{
-        "internalType": "address",
-        "name": "erc721Token",
-        "type": "address"
-      }, {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }],
-      "internalType": "struct CollateralManager.Collateral",
-      "name": "collateral",
-      "type": "tuple"
-    }, {
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "erc20Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "borrowAmount",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "repaymentAmount",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "interestRate",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "liquidationPrice",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "maturity",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "erc20Token",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "borrowAmount",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "repaymentAmount",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "interestRate",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "collateralIndexPrice",
-      "type": "uint256"
-    }, {
-      "internalType": "uint256",
-      "name": "maturity",
-      "type": "uint256"
-    }],
-    "name": "deposit",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "payable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "borrowId",
-      "type": "uint256"
-    }],
-    "name": "getBorrow",
-    "outputs": [{
-      "components": [{
-        "components": [{
-          "internalType": "address",
-          "name": "erc721Token",
-          "type": "address"
-        }, {
-          "internalType": "uint256",
-          "name": "tokenId",
-          "type": "uint256"
-        }],
-        "internalType": "struct CollateralManager.Collateral",
-        "name": "collateral",
-        "type": "tuple"
-      }, {
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      }, {
-        "internalType": "address",
-        "name": "erc20Token",
-        "type": "address"
-      }, {
-        "internalType": "uint256",
-        "name": "borrowAmount",
-        "type": "uint256"
-      }, {
-        "internalType": "uint256",
-        "name": "repaymentAmount",
-        "type": "uint256"
-      }, {
-        "internalType": "uint256",
-        "name": "interestRate",
-        "type": "uint256"
-      }, {
-        "internalType": "uint256",
-        "name": "liquidationPrice",
-        "type": "uint256"
-      }, {
-        "internalType": "uint256",
-        "name": "maturity",
-        "type": "uint256"
-      }],
-      "internalType": "struct CollateralManager.Borrow",
-      "name": "",
-      "type": "tuple"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }],
-    "name": "getInterestRate",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "_erc721Token",
-      "type": "address"
-    }],
-    "name": "getLiquidationThreshold",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "user",
-      "type": "address"
-    }],
-    "name": "getUserBorrows",
-    "outputs": [{
-      "internalType": "uint256[]",
-      "name": "",
-      "type": "uint256[]"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "getWhitelist",
-    "outputs": [{
-      "internalType": "address[]",
-      "name": "",
-      "type": "address[]"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "name": "interestRates",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "name": "liquidationThresholds",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }, {
-      "internalType": "bytes",
-      "name": "",
-      "type": "bytes"
-    }],
-    "name": "onERC721Received",
-    "outputs": [{
-      "internalType": "bytes4",
-      "name": "",
-      "type": "bytes4"
-    }],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "internalType": "address payable",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "interestRate",
-      "type": "uint256"
-    }],
-    "name": "setInterestRate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "_erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "_threshold",
-      "type": "uint256"
-    }],
-    "name": "setLiquidationThreshold",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "erc721Token",
-      "type": "address"
-    }, {
-      "internalType": "bool",
-      "name": "isWhitelisted",
-      "type": "bool"
-    }],
-    "name": "updateWhitelist",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "userBorrows",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "whitelist",
-    "outputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "name": "whitelisted",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "_id",
-      "type": "uint256"
-    }, {
-      "internalType": "address",
-      "name": "_asset",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "_repaymentAmount",
-      "type": "uint256"
-    }],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }],
-  "bytecode": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550612653806100606000396000f3fe6080604052600436106101095760003560e01c8063876e264f11610095578063d01f63f511610064578063d01f63f5146103d3578063d3ea0f89146103fe578063d936547e1461043b578063dccda03d14610478578063e63697c8146104b557610109565b8063876e264f146102fe5780638da5cb5b1461032e578063b176e31114610359578063b696bdf91461039657610109565b8063338a1996116100dc578063338a1996146101e157806373e5515e1461021e57806378327438146102475780637b86e42c146102845780637ebd1b30146102c157610109565b80630d392cd91461010e5780630e30428d14610137578063150b7a0214610160578063191e9d7c1461019d575b600080fd5b34801561011a57600080fd5b5061013560048036038101906101309190611bc9565b6104de565b005b34801561014357600080fd5b5061015e60048036038101906101599190611c05565b610864565b005b34801561016c57600080fd5b5061018760048036038101906101829190611b4e565b61093a565b60405161019491906120ac565b60405180910390f35b3480156101a957600080fd5b506101c460048036038101906101bf9190611c41565b61094e565b6040516101d8989796959493929190612163565b60405180910390f35b3480156101ed57600080fd5b5061020860048036038101906102039190611a5f565b610a40565b604051610215919061206f565b60405180910390f35b34801561022a57600080fd5b5061024560048036038101906102409190611c05565b610ad7565b005b34801561025357600080fd5b5061026e60048036038101906102699190611a5f565b610bad565b60405161027b91906121e2565b60405180910390f35b34801561029057600080fd5b506102ab60048036038101906102a69190611a5f565b610bc5565b6040516102b891906121e2565b60405180910390f35b3480156102cd57600080fd5b506102e860048036038101906102e39190611c41565b610c0e565b6040516102f59190611f9b565b60405180910390f35b61031860048036038101906103139190611a88565b610c4d565b6040516103259190612091565b60405180910390f35b34801561033a57600080fd5b50610343610ff9565b6040516103509190611fb6565b60405180910390f35b34801561036557600080fd5b50610380600480360381019061037b9190611c41565b61101d565b60405161038d9190612147565b60405180910390f35b3480156103a257600080fd5b506103bd60048036038101906103b89190611c05565b61119d565b6040516103ca91906121e2565b60405180910390f35b3480156103df57600080fd5b506103e86111ce565b6040516103f5919061204d565b60405180910390f35b34801561040a57600080fd5b5061042560048036038101906104209190611a5f565b61125c565b60405161043291906121e2565b60405180910390f35b34801561044757600080fd5b50610462600480360381019061045d9190611a5f565b6112a5565b60405161046f9190612091565b60405180910390f35b34801561048457600080fd5b5061049f600480360381019061049a9190611a5f565b6112c5565b6040516104ac91906121e2565b60405180910390f35b3480156104c157600080fd5b506104dc60048036038101906104d79190611c6a565b6112dd565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461056c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161056390612127565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508015610631576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610860565b60005b60016007805490506106469190612307565b81101561085e578273ffffffffffffffffffffffffffffffffffffffff166007828154811061069e577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561084b57600760016007805490506106f99190612307565b81548110610730577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1660078281548110610795577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506007805480610815577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061085690612401565b915050610634565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108f2576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108e990612127565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154908060070154908060080154905088565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610acb57602002820191906000526020600020905b815481526020019060010190808311610ab7575b50505050509050919050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610b65576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b5c90612127565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610c1e57600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600660008973ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610cdb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610cd290612107565b60405180910390fd5b8773ffffffffffffffffffffffffffffffffffffffff166323b872dd8b308a6040518463ffffffff1660e01b8152600401610d1893929190611fd1565b600060405180830381600087803b158015610d3257600080fd5b505af1158015610d46573d6000803e3d6000fd5b505050506000610d5660016115fc565b90506000610d75610d668b610bc5565b8661160a90919063ffffffff16565b905060405180610100016040528060405180604001604052808d73ffffffffffffffffffffffffffffffffffffffff1681526020018c81525081526020018d73ffffffffffffffffffffffffffffffffffffffff1681526020018c73ffffffffffffffffffffffffffffffffffffffff168152602001898152602001888152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a0820151816006015560c0820151816007015560e08201518160080155905050600360008d73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610fa96001611620565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8c8b8b85604051610fde9493929190612008565b60405180910390a16001925050509998505050505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b611025611911565b6002600083815260200190815260200160002060405180610100016040529081600082016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200160018201548152505081526020016002820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020016003820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600482015481526020016005820154815260200160068201548152602001600782015481526020016008820154815250509050919050565b600360205281600052604060002081815481106111b957600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561125257602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019060010190808311611208575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206005015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146113a1576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401611398906120c7565b60405180910390fd5b8281146113e3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016113da906120e7565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556004820160009055600582016000905560068201600090556007820160009055600882016000905550506115468389611636565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161158393929190611fd1565b600060405180830381600087803b15801561159d57600080fd5b505af11580156115b1573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516115ea9493929190612008565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361161891906122d6565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506116889190612307565b81101561190c5781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611707577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156118f957600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506117a69190612307565b815481106117dd577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020828154811061185f577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806118e2577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b808061190490612401565b915050611639565b505050565b604051806101000160405280611925611988565b8152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600081526020016000815260200160008152602001600081525090565b6040518060400160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600081525090565b60006119cb6119c684612222565b6121fd565b9050828152602081018484840111156119e357600080fd5b6119ee8482856123c1565b509392505050565b600081359050611a05816125d8565b92915050565b600081359050611a1a816125ef565b92915050565b600082601f830112611a3157600080fd5b8135611a418482602086016119b8565b91505092915050565b600081359050611a5981612606565b92915050565b600060208284031215611a7157600080fd5b6000611a7f848285016119f6565b91505092915050565b60008060008060008060008060006101208a8c031215611aa757600080fd5b6000611ab58c828d016119f6565b9950506020611ac68c828d016119f6565b9850506040611ad78c828d016119f6565b9750506060611ae88c828d01611a4a565b9650506080611af98c828d01611a4a565b95505060a0611b0a8c828d01611a4a565b94505060c0611b1b8c828d01611a4a565b93505060e0611b2c8c828d01611a4a565b925050610100611b3e8c828d01611a4a565b9150509295985092959850929598565b60008060008060808587031215611b6457600080fd5b6000611b72878288016119f6565b9450506020611b83878288016119f6565b9350506040611b9487828801611a4a565b925050606085013567ffffffffffffffff811115611bb157600080fd5b611bbd87828801611a20565b91505092959194509250565b60008060408385031215611bdc57600080fd5b6000611bea858286016119f6565b9250506020611bfb85828601611a0b565b9150509250929050565b60008060408385031215611c1857600080fd5b6000611c26858286016119f6565b9250506020611c3785828601611a4a565b9150509250929050565b600060208284031215611c5357600080fd5b6000611c6184828501611a4a565b91505092915050565b600080600060608486031215611c7f57600080fd5b6000611c8d86828701611a4a565b9350506020611c9e868287016119f6565b9250506040611caf86828701611a4a565b9150509250925092565b6000611cc58383611cf8565b60208301905092915050565b6000611cdd8383611f7d565b60208301905092915050565b611cf28161234d565b82525050565b611d018161233b565b82525050565b611d108161233b565b82525050565b6000611d2182612273565b611d2b81856122a3565b9350611d3683612253565b8060005b83811015611d67578151611d4e8882611cb9565b9750611d5983612289565b925050600181019050611d3a565b5085935050505092915050565b6000611d7f8261227e565b611d8981856122b4565b9350611d9483612263565b8060005b83811015611dc5578151611dac8882611cd1565b9750611db783612296565b925050600181019050611d98565b5085935050505092915050565b611ddb8161235f565b82525050565b611dea8161236b565b82525050565b6000611dfd6024836122c5565b9150611e08826124e8565b604082019050919050565b6000611e206025836122c5565b9150611e2b82612537565b604082019050919050565b6000611e436013836122c5565b9150611e4e82612586565b602082019050919050565b6000611e66600a836122c5565b9150611e71826125af565b602082019050919050565b61012082016000820151611e936000850182611f1f565b506020820151611ea66040850182611cf8565b506040820151611eb96060850182611cf8565b506060820151611ecc6080850182611f7d565b506080820151611edf60a0850182611f7d565b5060a0820151611ef260c0850182611f7d565b5060c0820151611f0560e0850182611f7d565b5060e0820151611f19610100850182611f7d565b50505050565b604082016000820151611f356000850182611cf8565b506020820151611f486020850182611f7d565b50505050565b604082016000820151611f646000850182611cf8565b506020820151611f776020850182611f7d565b50505050565b611f86816123b7565b82525050565b611f95816123b7565b82525050565b6000602082019050611fb06000830184611d07565b92915050565b6000602082019050611fcb6000830184611ce9565b92915050565b6000606082019050611fe66000830186611d07565b611ff36020830185611d07565b6120006040830184611f8c565b949350505050565b600060808201905061201d6000830187611d07565b61202a6020830186611d07565b6120376040830185611f8c565b6120446060830184611f8c565b95945050505050565b600060208201905081810360008301526120678184611d16565b905092915050565b600060208201905081810360008301526120898184611d74565b905092915050565b60006020820190506120a66000830184611dd2565b92915050565b60006020820190506120c16000830184611de1565b92915050565b600060208201905081810360008301526120e081611df0565b9050919050565b6000602082019050818103600083015261210081611e13565b9050919050565b6000602082019050818103600083015261212081611e36565b9050919050565b6000602082019050818103600083015261214081611e59565b9050919050565b60006101208201905061215d6000830184611e7c565b92915050565b600061012082019050612179600083018b611f4e565b612186604083018a611d07565b6121936060830189611d07565b6121a06080830188611f8c565b6121ad60a0830187611f8c565b6121ba60c0830186611f8c565b6121c760e0830185611f8c565b6121d5610100830184611f8c565b9998505050505050505050565b60006020820190506121f76000830184611f8c565b92915050565b6000612207612218565b905061221382826123d0565b919050565b6000604051905090565b600067ffffffffffffffff82111561223d5761223c6124a8565b5b612246826124d7565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b60006122e1826123b7565b91506122ec836123b7565b9250826122fc576122fb612479565b5b828204905092915050565b6000612312826123b7565b915061231d836123b7565b9250828210156123305761232f61244a565b5b828203905092915050565b600061234682612397565b9050919050565b600061235882612397565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b6123d9826124d7565b810181811067ffffffffffffffff821117156123f8576123f76124a8565b5b80604052505050565b600061240c826123b7565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561243f5761243e61244a565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6125e18161233b565b81146125ec57600080fd5b50565b6125f88161235f565b811461260357600080fd5b50565b61260f816123b7565b811461261a57600080fd5b5056fea2646970667358221220663d41ca8d6874c6ae1bad944def9626e2fc4a0a71b7100a62b422e18995022764736f6c63430008040033",
-  "deployedBytecode": "0x6080604052600436106101095760003560e01c8063876e264f11610095578063d01f63f511610064578063d01f63f5146103d3578063d3ea0f89146103fe578063d936547e1461043b578063dccda03d14610478578063e63697c8146104b557610109565b8063876e264f146102fe5780638da5cb5b1461032e578063b176e31114610359578063b696bdf91461039657610109565b8063338a1996116100dc578063338a1996146101e157806373e5515e1461021e57806378327438146102475780637b86e42c146102845780637ebd1b30146102c157610109565b80630d392cd91461010e5780630e30428d14610137578063150b7a0214610160578063191e9d7c1461019d575b600080fd5b34801561011a57600080fd5b5061013560048036038101906101309190611bc9565b6104de565b005b34801561014357600080fd5b5061015e60048036038101906101599190611c05565b610864565b005b34801561016c57600080fd5b5061018760048036038101906101829190611b4e565b61093a565b60405161019491906120ac565b60405180910390f35b3480156101a957600080fd5b506101c460048036038101906101bf9190611c41565b61094e565b6040516101d8989796959493929190612163565b60405180910390f35b3480156101ed57600080fd5b5061020860048036038101906102039190611a5f565b610a40565b604051610215919061206f565b60405180910390f35b34801561022a57600080fd5b5061024560048036038101906102409190611c05565b610ad7565b005b34801561025357600080fd5b5061026e60048036038101906102699190611a5f565b610bad565b60405161027b91906121e2565b60405180910390f35b34801561029057600080fd5b506102ab60048036038101906102a69190611a5f565b610bc5565b6040516102b891906121e2565b60405180910390f35b3480156102cd57600080fd5b506102e860048036038101906102e39190611c41565b610c0e565b6040516102f59190611f9b565b60405180910390f35b61031860048036038101906103139190611a88565b610c4d565b6040516103259190612091565b60405180910390f35b34801561033a57600080fd5b50610343610ff9565b6040516103509190611fb6565b60405180910390f35b34801561036557600080fd5b50610380600480360381019061037b9190611c41565b61101d565b60405161038d9190612147565b60405180910390f35b3480156103a257600080fd5b506103bd60048036038101906103b89190611c05565b61119d565b6040516103ca91906121e2565b60405180910390f35b3480156103df57600080fd5b506103e86111ce565b6040516103f5919061204d565b60405180910390f35b34801561040a57600080fd5b5061042560048036038101906104209190611a5f565b61125c565b60405161043291906121e2565b60405180910390f35b34801561044757600080fd5b50610462600480360381019061045d9190611a5f565b6112a5565b60405161046f9190612091565b60405180910390f35b34801561048457600080fd5b5061049f600480360381019061049a9190611a5f565b6112c5565b6040516104ac91906121e2565b60405180910390f35b3480156104c157600080fd5b506104dc60048036038101906104d79190611c6a565b6112dd565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461056c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161056390612127565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508015610631576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610860565b60005b60016007805490506106469190612307565b81101561085e578273ffffffffffffffffffffffffffffffffffffffff166007828154811061069e577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561084b57600760016007805490506106f99190612307565b81548110610730577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1660078281548110610795577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506007805480610815577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061085690612401565b915050610634565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108f2576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108e990612127565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154908060070154908060080154905088565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610acb57602002820191906000526020600020905b815481526020019060010190808311610ab7575b50505050509050919050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610b65576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b5c90612127565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610c1e57600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600660008973ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610cdb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610cd290612107565b60405180910390fd5b8773ffffffffffffffffffffffffffffffffffffffff166323b872dd8b308a6040518463ffffffff1660e01b8152600401610d1893929190611fd1565b600060405180830381600087803b158015610d3257600080fd5b505af1158015610d46573d6000803e3d6000fd5b505050506000610d5660016115fc565b90506000610d75610d668b610bc5565b8661160a90919063ffffffff16565b905060405180610100016040528060405180604001604052808d73ffffffffffffffffffffffffffffffffffffffff1681526020018c81525081526020018d73ffffffffffffffffffffffffffffffffffffffff1681526020018c73ffffffffffffffffffffffffffffffffffffffff168152602001898152602001888152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a0820151816006015560c0820151816007015560e08201518160080155905050600360008d73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610fa96001611620565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8c8b8b85604051610fde9493929190612008565b60405180910390a16001925050509998505050505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b611025611911565b6002600083815260200190815260200160002060405180610100016040529081600082016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200160018201548152505081526020016002820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020016003820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600482015481526020016005820154815260200160068201548152602001600782015481526020016008820154815250509050919050565b600360205281600052604060002081815481106111b957600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561125257602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019060010190808311611208575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206005015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146113a1576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401611398906120c7565b60405180910390fd5b8281146113e3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016113da906120e7565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556004820160009055600582016000905560068201600090556007820160009055600882016000905550506115468389611636565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161158393929190611fd1565b600060405180830381600087803b15801561159d57600080fd5b505af11580156115b1573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516115ea9493929190612008565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361161891906122d6565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506116889190612307565b81101561190c5781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611707577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156118f957600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506117a69190612307565b815481106117dd577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020828154811061185f577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806118e2577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b808061190490612401565b915050611639565b505050565b604051806101000160405280611925611988565b8152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600081526020016000815260200160008152602001600081525090565b6040518060400160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600081525090565b60006119cb6119c684612222565b6121fd565b9050828152602081018484840111156119e357600080fd5b6119ee8482856123c1565b509392505050565b600081359050611a05816125d8565b92915050565b600081359050611a1a816125ef565b92915050565b600082601f830112611a3157600080fd5b8135611a418482602086016119b8565b91505092915050565b600081359050611a5981612606565b92915050565b600060208284031215611a7157600080fd5b6000611a7f848285016119f6565b91505092915050565b60008060008060008060008060006101208a8c031215611aa757600080fd5b6000611ab58c828d016119f6565b9950506020611ac68c828d016119f6565b9850506040611ad78c828d016119f6565b9750506060611ae88c828d01611a4a565b9650506080611af98c828d01611a4a565b95505060a0611b0a8c828d01611a4a565b94505060c0611b1b8c828d01611a4a565b93505060e0611b2c8c828d01611a4a565b925050610100611b3e8c828d01611a4a565b9150509295985092959850929598565b60008060008060808587031215611b6457600080fd5b6000611b72878288016119f6565b9450506020611b83878288016119f6565b9350506040611b9487828801611a4a565b925050606085013567ffffffffffffffff811115611bb157600080fd5b611bbd87828801611a20565b91505092959194509250565b60008060408385031215611bdc57600080fd5b6000611bea858286016119f6565b9250506020611bfb85828601611a0b565b9150509250929050565b60008060408385031215611c1857600080fd5b6000611c26858286016119f6565b9250506020611c3785828601611a4a565b9150509250929050565b600060208284031215611c5357600080fd5b6000611c6184828501611a4a565b91505092915050565b600080600060608486031215611c7f57600080fd5b6000611c8d86828701611a4a565b9350506020611c9e868287016119f6565b9250506040611caf86828701611a4a565b9150509250925092565b6000611cc58383611cf8565b60208301905092915050565b6000611cdd8383611f7d565b60208301905092915050565b611cf28161234d565b82525050565b611d018161233b565b82525050565b611d108161233b565b82525050565b6000611d2182612273565b611d2b81856122a3565b9350611d3683612253565b8060005b83811015611d67578151611d4e8882611cb9565b9750611d5983612289565b925050600181019050611d3a565b5085935050505092915050565b6000611d7f8261227e565b611d8981856122b4565b9350611d9483612263565b8060005b83811015611dc5578151611dac8882611cd1565b9750611db783612296565b925050600181019050611d98565b5085935050505092915050565b611ddb8161235f565b82525050565b611dea8161236b565b82525050565b6000611dfd6024836122c5565b9150611e08826124e8565b604082019050919050565b6000611e206025836122c5565b9150611e2b82612537565b604082019050919050565b6000611e436013836122c5565b9150611e4e82612586565b602082019050919050565b6000611e66600a836122c5565b9150611e71826125af565b602082019050919050565b61012082016000820151611e936000850182611f1f565b506020820151611ea66040850182611cf8565b506040820151611eb96060850182611cf8565b506060820151611ecc6080850182611f7d565b506080820151611edf60a0850182611f7d565b5060a0820151611ef260c0850182611f7d565b5060c0820151611f0560e0850182611f7d565b5060e0820151611f19610100850182611f7d565b50505050565b604082016000820151611f356000850182611cf8565b506020820151611f486020850182611f7d565b50505050565b604082016000820151611f646000850182611cf8565b506020820151611f776020850182611f7d565b50505050565b611f86816123b7565b82525050565b611f95816123b7565b82525050565b6000602082019050611fb06000830184611d07565b92915050565b6000602082019050611fcb6000830184611ce9565b92915050565b6000606082019050611fe66000830186611d07565b611ff36020830185611d07565b6120006040830184611f8c565b949350505050565b600060808201905061201d6000830187611d07565b61202a6020830186611d07565b6120376040830185611f8c565b6120446060830184611f8c565b95945050505050565b600060208201905081810360008301526120678184611d16565b905092915050565b600060208201905081810360008301526120898184611d74565b905092915050565b60006020820190506120a66000830184611dd2565b92915050565b60006020820190506120c16000830184611de1565b92915050565b600060208201905081810360008301526120e081611df0565b9050919050565b6000602082019050818103600083015261210081611e13565b9050919050565b6000602082019050818103600083015261212081611e36565b9050919050565b6000602082019050818103600083015261214081611e59565b9050919050565b60006101208201905061215d6000830184611e7c565b92915050565b600061012082019050612179600083018b611f4e565b612186604083018a611d07565b6121936060830189611d07565b6121a06080830188611f8c565b6121ad60a0830187611f8c565b6121ba60c0830186611f8c565b6121c760e0830185611f8c565b6121d5610100830184611f8c565b9998505050505050505050565b60006020820190506121f76000830184611f8c565b92915050565b6000612207612218565b905061221382826123d0565b919050565b6000604051905090565b600067ffffffffffffffff82111561223d5761223c6124a8565b5b612246826124d7565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b60006122e1826123b7565b91506122ec836123b7565b9250826122fc576122fb612479565b5b828204905092915050565b6000612312826123b7565b915061231d836123b7565b9250828210156123305761232f61244a565b5b828203905092915050565b600061234682612397565b9050919050565b600061235882612397565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b6123d9826124d7565b810181811067ffffffffffffffff821117156123f8576123f76124a8565b5b80604052505050565b600061240c826123b7565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561243f5761243e61244a565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6125e18161233b565b81146125ec57600080fd5b50565b6125f88161235f565b811461260357600080fd5b50565b61260f816123b7565b811461261a57600080fd5b5056fea2646970667358221220663d41ca8d6874c6ae1bad944def9626e2fc4a0a71b7100a62b422e18995022764736f6c63430008040033",
-  "linkReferences": {},
-  "deployedLinkReferences": {}
-};
-},{}],"hooks/useIsValidNetwork.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = require("react");
-
-var _core = require("@web3-react/core");
-
-var supportedCompNetworks = [1, 3, 4, 5, 42, 1337, 5777, 31337];
-
-function useIsValidNetwork() {
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      chainId = _useWeb3React.chainId;
-
-  var isValidCompNetwork = (0, _react.useMemo)(function () {
-    return supportedCompNetworks.includes(chainId);
-  }, [chainId]);
-  return {
-    isValidNetwork: isValidCompNetwork
-  };
-}
-
-var _default = useIsValidNetwork;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js"}],"AppContext.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.useAppContext = exports.AppContextProvider = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _App = _interopRequireDefault(require("./App"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var initialContext = {
-  debtTokenBalanceDAI: "--",
-  debtTokenBalanceETH: "--",
-  debtTokenBalanceUSDC: "--",
-  setDebtTokenBalance: function setDebtTokenBalance() {},
-  nTokenBalanceDAI: "--",
-  nTokenBalanceETH: "--",
-  nTokenBalanceUSDC: "--",
-  setNTokenBalance: function setNTokenBalance() {},
-  nTokenYieldDAI: "--",
-  nTokenYieldETH: "--",
-  nTokenYieldUSDC: "--",
-  setNTokenYield: function setNTokenYield() {},
-  userBorrows: {},
-  setUserBorrows: function setUserBorrows() {},
-  borrowDefaults: [],
-  setBorrowDefaults: function setBorrowDefaults() {},
-  imageDictPUNK: {},
-  imageDictBAYC: {},
-  imageDictBorrow: {},
-  setImageDict: function setImageDict() {},
-  whitelistNFT: [],
-  setWhitelistNFT: function setWhitelistNFT() {},
-  borrowProject: "--",
-  setBorrowProject: function setBorrowProject() {},
-  borrowNFT: "",
-  setBorrowNFT: function setBorrowNFT() {},
-  borrowForm: "--",
-  setBorrowForm: function setBorrowForm() {},
-  borrowFloorPrice: "--",
-  setBorrowFloorPrice: function setBorrowFloorPrice() {},
-  borrowCollRatio: "--",
-  setBorrowCollRatio: function setBorrowCollRatio() {},
-  borrowAPR: "--",
-  setBorrowAPR: function setBorrowAPR() {},
-  borrowToken: "ETH",
-  setBorrowToken: function setBorrowToken() {},
-  borrowAmount: "--",
-  setBorrowAmount: function setBorrowAmount() {},
-  borrowRepaymentAmount: "--",
-  setBorrowRepaymentAmount: function setBorrowRepaymentAmount() {},
-  borrowMaturity: 1,
-  setBorrowMaturity: function setBorrowMaturity() {},
-  aprPUNK: "--",
-  setAprPUNK: function setAprPUNK() {},
-  aprBAYC: "--",
-  setAprBAYC: function setAprBAYC() {},
-  txnStatus: "NOT_SUMBITTED",
-  setTxnStatus: function setTxnStatus() {}
-};
-
-var appReducer = function appReducer(state, _ref) {
-  var type = _ref.type,
-      payload = _ref.payload;
-
-  switch (type) {
-    case "SET_DEBTTOKEN_BALANCE_DAI":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        debtTokenBalanceDAI: payload
-      });
-
-    case "SET_DEBTTOKEN_BALANCE_ETH":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        debtTokenBalanceETH: payload
-      });
-
-    case "SET_DEBTTOKEN_BALANCE_USDC":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        debtTokenBalanceUSDC: payload
-      });
-
-    case "SET_NTOKEN_BALANCE_DAI":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        nTokenBalanceDAI: payload
-      });
-
-    case "SET_NTOKEN_BALANCE_ETH":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        nTokenBalanceETH: payload
-      });
-
-    case "SET_NTOKEN_BALANCE_USDC":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        nTokenBalanceUSDC: payload
-      });
-
-    case "SET_NTOKEN_YIELD_DAI":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        nTokenYieldDAI: payload
-      });
-
-    case "SET_NTOKEN_YIELD_ETH":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        nTokenYieldETH: payload
-      });
-
-    case "SET_NTOKEN_YIELD_USDC":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        nTokenYieldUSDC: payload
-      });
-
-    case "SET_USER_BORROWS":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        userBorrows: payload
-      });
-
-    case "SET_BORROW_DEFAULTS":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowDefaults: payload
-      });
-
-    case "SET_IMAGE_DICT_PUNK":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        imageDictPUNK: payload
-      });
-
-    case "SET_IMAGE_DICT_BAYC":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        imageDictBAYC: payload
-      });
-
-    case "SET_IMAGE_DICT_BORROW":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        imageDictBorrow: payload
-      });
-
-    case "SET_WHITELIST_NFT":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        whitelistNFT: payload
-      });
-
-    case "SET_BORROW_PROJECT":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowProject: payload
-      });
-
-    case "SET_BORROW_NFT":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowNFT: payload
-      });
-
-    case "SET_BORROW_FORM":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowForm: payload
-      });
-
-    case "SET_BORROW_FLOOR_PRICE":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowFloorPrice: payload
-      });
-
-    case "SET_BORROW_COLL_RATIO":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowCollRatio: payload
-      });
-
-    case "SET_BORROW_APR":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowAPR: payload
-      });
-
-    case "SET_BORROW_TOKEN":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowToken: payload
-      });
-
-    case "SET_BORROW_AMOUNT":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowAmount: payload
-      });
-
-    case "SET_BORROW_REPAYMENT_AMOUNT":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowRepaymentAmount: payload
-      });
-
-    case "SET_BORROW_MATURITY":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        borrowMaturity: payload
-      });
-
-    case "SET_APR_PUNK":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        aprPUNK: payload
-      });
-
-    case "SET_APR_BAYC":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        aprBAYC: payload
-      });
-
-    case "SET_TXN_STATUS":
-      return _objectSpread(_objectSpread({}, state), {}, {
-        txnStatus: payload
-      });
-
-    default:
-      return state;
-  }
-};
-
-var AppContext = /*#__PURE__*/(0, _react.createContext)(initialContext);
-
-var useAppContext = function useAppContext() {
-  return _react.default.useContext(AppContext);
-};
-
-exports.useAppContext = useAppContext;
-
-var AppContextProvider = function AppContextProvider(_ref2) {
-  var children = _ref2.children;
-
-  var _useReducer = (0, _react.useReducer)(appReducer, initialContext),
-      _useReducer2 = _slicedToArray(_useReducer, 2),
-      store = _useReducer2[0],
-      dispatch = _useReducer2[1];
-
-  var contextValue = {
-    debtTokenBalanceDAI: store.debtTokenBalanceDAI,
-    debtTokenBalanceETH: store.debtTokenBalanceETH,
-    debtTokenBalanceUSDC: store.debtTokenBalanceUSDC,
-    setDebtTokenBalance: function setDebtTokenBalance(ccy, balance) {
-      switch (ccy) {
-        case "DAI":
-          dispatch({
-            type: "SET_DEBTTOKEN_BALANCE_DAI",
-            payload: balance
-          });
-
-        case "ETH":
-          dispatch({
-            type: "SET_DEBTTOKEN_BALANCE_ETH",
-            payload: balance
-          });
-
-        case "USDC":
-          dispatch({
-            type: "SET_DEBTTOKEN_BALANCE_USDC",
-            payload: balance
-          });
-      }
-
-      ;
-    },
-    nTokenBalanceDAI: store.nTokenBalanceDAI,
-    nTokenBalanceETH: store.nTokenBalanceETH,
-    nTokenBalanceUSDC: store.nTokenBalanceUSDC,
-    setNTokenBalance: function setNTokenBalance(ccy, balance) {
-      switch (ccy) {
-        case "DAI":
-          dispatch({
-            type: "SET_NTOKEN_BALANCE_DAI",
-            payload: balance
-          });
-
-        case "ETH":
-          dispatch({
-            type: "SET_NTOKEN_BALANCE_ETH",
-            payload: balance
-          });
-
-        case "USDC":
-          dispatch({
-            type: "SET_NTOKEN_BALANCE_USDC",
-            payload: balance
-          });
-      }
-
-      ;
-    },
-    nTokenYieldDAI: store.nTokenYieldDAI,
-    nTokenYieldETH: store.nTokenYieldETH,
-    nTokenYieldUSDC: store.nTokenYieldUSDC,
-    setNTokenYield: function setNTokenYield(ccy, _yield) {
-      switch (ccy) {
-        case "DAI":
-          dispatch({
-            type: "SET_NTOKEN_YIELD_DAI",
-            payload: _yield
-          });
-
-        case "ETH":
-          dispatch({
-            type: "SET_NTOKEN_YIELD_ETH",
-            payload: _yield
-          });
-
-        case "USDC":
-          dispatch({
-            type: "SET_NTOKEN_YIELD_USDC",
-            payload: _yield
-          });
-      }
-
-      ;
-    },
-    userBorrows: store.userBorrows,
-    setUserBorrows: function setUserBorrows(userBorrows) {
-      dispatch({
-        type: "SET_USER_BORROWS",
-        payload: userBorrows
-      });
-    },
-    borrowDefaults: store.borrowDefaults,
-    setBorrowDefaults: function setBorrowDefaults(defaults) {
-      dispatch({
-        type: "SET_BORROW_DEFAULTS",
-        payload: defaults
-      });
-    },
-    imageDictPUNK: store.imageDictPUNK,
-    imageDictBAYC: store.imageDictBAYC,
-    imageDictBorrow: store.imageDictBorrow,
-    setImageDict: function setImageDict(symbol, imageDict) {
-      switch (symbol) {
-        case "PUNK":
-          dispatch({
-            type: "SET_IMAGE_DICT_PUNK",
-            payload: imageDict
-          });
-
-        case "BAYC":
-          dispatch({
-            type: "SET_IMAGE_DICT_BAYC",
-            payload: imageDict
-          });
-
-        case "BORROW":
-          dispatch({
-            type: "SET_IMAGE_DICT_BORROW",
-            payload: imageDict
-          });
-      }
-
-      ;
-    },
-    whitelistNFT: store.whitelistNFT,
-    setWhitelistNFT: function setWhitelistNFT(whitelist) {
-      dispatch({
-        type: "SET_WHITELIST_NFT",
-        payload: whitelist
-      });
-    },
-    borrowProject: store.borrowProject,
-    setBorrowProject: function setBorrowProject(projectSymbol) {
-      dispatch({
-        type: "SET_BORROW_PROJECT",
-        payload: projectSymbol
-      });
-    },
-    borrowNFT: store.borrowNFT,
-    setBorrowNFT: function setBorrowNFT(tokenId) {
-      dispatch({
-        type: "SET_BORROW_NFT",
-        payload: tokenId
-      });
-    },
-    borrowFloorPrice: store.borrowFloorPrice,
-    setBorrowFloorPrice: function setBorrowFloorPrice(price) {
-      dispatch({
-        type: "SET_BORROW_FLOOR_PRICE",
-        payload: price
-      });
-    },
-    borrowCollRatio: store.borrowCollRatio,
-    setBorrowCollRatio: function setBorrowCollRatio(collRatio) {
-      dispatch({
-        type: "SET_BORROW_COLL_RATIO",
-        payload: collRatio
-      });
-    },
-    borrowAPR: store.borrowAPR,
-    setBorrowAPR: function setBorrowAPR(apr) {
-      dispatch({
-        type: "SET_BORROW_APR",
-        payload: apr
-      });
-    },
-    borrowToken: store.borrowToken,
-    setBorrowToken: function setBorrowToken(token) {
-      dispatch({
-        type: "SET_BORROW_TOKEN",
-        payload: token
-      });
-    },
-    borrowAmount: store.borrowAmount,
-    setBorrowAmount: function setBorrowAmount(amount) {
-      dispatch({
-        type: "SET_BORROW_AMOUNT",
-        payload: amount
-      });
-    },
-    borrowRepaymentAmount: store.borrowRepaymentAmount,
-    setBorrowRepaymentAmount: function setBorrowRepaymentAmount(amount) {
-      dispatch({
-        type: "SET_BORROW_REPAYMENT_AMOUNT",
-        payload: amount
-      });
-    },
-    borrowMaturity: store.borrowMaturity,
-    setBorrowMaturity: function setBorrowMaturity(numWeeks) {
-      dispatch({
-        type: "SET_BORROW_MATURITY",
-        payload: numWeeks
-      });
-    },
-    aprPUNK: store.aprPUNK,
-    setAprPUNK: function setAprPUNK(apr) {
-      dispatch({
-        type: "SET_APR_PUNK",
-        payload: apr
-      });
-    },
-    aprBAYC: store.aprBAYC,
-    setAprBAYC: function setAprBAYC(apr) {
-      dispatch({
-        type: "SET_APR_BAYC",
-        payload: apr
-      });
-    },
-    txnStatus: store.txnStatus,
-    setTxnStatus: function setTxnStatus(status) {
-      dispatch({
-        type: "SET_TXN_STATUS",
-        payload: status
-      });
-    }
-  };
-  return /*#__PURE__*/_react.default.createElement(AppContext.Provider, {
-    value: contextValue
-  }, children);
-};
-
-exports.AppContextProvider = AppContextProvider;
-},{"react":"node_modules/react/index.js","./App":"App.jsx"}],"node_modules/@ethersproject/units/lib.esm/_version.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.version = void 0;
-const version = "units/5.5.0";
-exports.version = version;
-},{}],"node_modules/@ethersproject/units/lib.esm/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.commify = commify;
-exports.formatEther = formatEther;
-exports.formatUnits = formatUnits;
-exports.parseEther = parseEther;
-exports.parseUnits = parseUnits;
-
-var _bignumber = require("@ethersproject/bignumber");
-
-var _logger = require("@ethersproject/logger");
-
-var _version = require("./_version");
-
-const logger = new _logger.Logger(_version.version);
-const names = ["wei", "kwei", "mwei", "gwei", "szabo", "finney", "ether"]; // Some environments have issues with RegEx that contain back-tracking, so we cannot
-// use them.
-
-function commify(value) {
-  const comps = String(value).split(".");
-
-  if (comps.length > 2 || !comps[0].match(/^-?[0-9]*$/) || comps[1] && !comps[1].match(/^[0-9]*$/) || value === "." || value === "-.") {
-    logger.throwArgumentError("invalid value", "value", value);
-  } // Make sure we have at least one whole digit (0 if none)
-
-
-  let whole = comps[0];
-  let negative = "";
-
-  if (whole.substring(0, 1) === "-") {
-    negative = "-";
-    whole = whole.substring(1);
-  } // Make sure we have at least 1 whole digit with no leading zeros
-
-
-  while (whole.substring(0, 1) === "0") {
-    whole = whole.substring(1);
-  }
-
-  if (whole === "") {
-    whole = "0";
-  }
-
-  let suffix = "";
-
-  if (comps.length === 2) {
-    suffix = "." + (comps[1] || "0");
-  }
-
-  while (suffix.length > 2 && suffix[suffix.length - 1] === "0") {
-    suffix = suffix.substring(0, suffix.length - 1);
-  }
-
-  const formatted = [];
-
-  while (whole.length) {
-    if (whole.length <= 3) {
-      formatted.unshift(whole);
-      break;
-    } else {
-      const index = whole.length - 3;
-      formatted.unshift(whole.substring(index));
-      whole = whole.substring(0, index);
-    }
-  }
-
-  return negative + formatted.join(",") + suffix;
-}
-
-function formatUnits(value, unitName) {
-  if (typeof unitName === "string") {
-    const index = names.indexOf(unitName);
-
-    if (index !== -1) {
-      unitName = 3 * index;
-    }
-  }
-
-  return (0, _bignumber.formatFixed)(value, unitName != null ? unitName : 18);
-}
-
-function parseUnits(value, unitName) {
-  if (typeof value !== "string") {
-    logger.throwArgumentError("value must be a string", "value", value);
-  }
-
-  if (typeof unitName === "string") {
-    const index = names.indexOf(unitName);
-
-    if (index !== -1) {
-      unitName = 3 * index;
-    }
-  }
-
-  return (0, _bignumber.parseFixed)(value, unitName != null ? unitName : 18);
-}
-
-function formatEther(wei) {
-  return formatUnits(wei, 18);
-}
-
-function parseEther(ether) {
-  return parseUnits(ether, 18);
-}
-},{"@ethersproject/bignumber":"node_modules/@ethersproject/bignumber/lib.esm/index.js","@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","./_version":"node_modules/@ethersproject/units/lib.esm/_version.js"}],"hooks/useCollateralManager.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.useCollateralManager = exports.default = void 0;
-
-var _useContract = require("./useContract");
-
-var _CollateralManager = _interopRequireDefault(require("../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json"));
-
-var _core = require("@web3-react/core");
-
-var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
-
-var _AppContext = require("../AppContext");
-
-var _units = require("@ethersproject/units");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var useCollateralManager = function useCollateralManager() {
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      account = _useWeb3React.account;
-
-  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
-      isValidNetwork = _useIsValidNetwork.isValidNetwork;
-
-  var collateralManagerContractAddress = "0x276C216D241856199A83bf27b2286659e5b877D3";
-  var collateralManagerABI = _CollateralManager.default["abi"];
-  var collateralManagerContract = (0, _useContract.useContract)(collateralManagerContractAddress, collateralManagerABI); // NFT contract data (c&p from hooks/useNFT.js)
-
-  var nftContractAddressPUNK = "0x19cEcCd6942ad38562Ee10bAfd44776ceB67e923";
-  var nftContractAddressBAYC = "0xD42912755319665397FF090fBB63B1a31aE87Cee";
-  var nftContractAddress = {
-    "PUNK": nftContractAddressPUNK,
-    "BAYC": nftContractAddressBAYC
-  };
-  var nftContractAddressReverseLookup = {};
-  nftContractAddressReverseLookup[nftContractAddressPUNK] = "PUNK";
-  nftContractAddressReverseLookup[nftContractAddressBAYC] = "BAYC";
-
-  var _useAppContext = (0, _AppContext.useAppContext)(),
-      setWhitelistNFT = _useAppContext.setWhitelistNFT,
-      whitelistNFT = _useAppContext.whitelistNFT,
-      setAprPUNK = _useAppContext.setAprPUNK,
-      setAprBAYC = _useAppContext.setAprBAYC,
-      aprPUNK = _useAppContext.aprPUNK,
-      aprBAYC = _useAppContext.aprBAYC,
-      setBorrowAPR = _useAppContext.setBorrowAPR,
-      setUserBorrows = _useAppContext.setUserBorrows;
-
-  var fetchWhitelistNFT = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var whitelist;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return collateralManagerContract.getWhitelist();
-
-            case 2:
-              whitelist = _context.sent;
-              setWhitelistNFT(whitelist);
-              console.log(whitelist);
-
-            case 5:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function fetchWhitelistNFT() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  var fetchAPR = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var aprPUNK, aprBAYC;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return collateralManagerContract.getInterestRate(nftContractAddress["PUNK"]);
-
-            case 2:
-              aprPUNK = _context2.sent;
-              _context2.next = 5;
-              return collateralManagerContract.getInterestRate(nftContractAddress["BAYC"]);
-
-            case 5:
-              aprBAYC = _context2.sent;
-              setAprPUNK((0, _units.formatUnits)(aprPUNK, 0));
-              setAprBAYC((0, _units.formatUnits)(aprBAYC, 0));
-
-            case 8:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function fetchAPR() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  var fetchBorrowAPR = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(nftSymbol) {
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              if (nftSymbol == "PUNK") {
-                setBorrowAPR(aprPUNK);
-              } else if (nftSymbol == "BAYC") {
-                setBorrowAPR(aprBAYC);
-              }
-
-            case 1:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function fetchBorrowAPR(_x) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var formatBorrow = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(_borrow) {
-      var borrow;
-      return regeneratorRuntime.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              borrow = {};
-              borrow["erc20Token"] = _borrow["erc20Token"];
-              borrow["maturity"] = _borrow["maturity"].toNumber();
-              borrow["borrowAmount"] = (0, _units.formatUnits)(_borrow["borrowAmount"].toString(), 18);
-              borrow["repaymentAmount"] = (0, _units.formatUnits)(_borrow["repaymentAmount"].toString(), 18);
-              borrow["interestRate"] = _borrow["interestRate"].toString();
-              borrow["liquidationPrice"] = (0, _units.formatUnits)(_borrow["liquidationPrice"].toString(), 18);
-              borrow["nftSymbol"] = nftContractAddressReverseLookup[_borrow["collateral"][0]];
-              borrow["nftTokenId"] = _borrow["collateral"][1].toNumber();
-              return _context4.abrupt("return", borrow);
-
-            case 10:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4);
-    }));
-
-    return function formatBorrow(_x2) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-
-  var fetchUserBorrows = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-      var userBorrowIds, userBorrows, borrowId, borrow;
-      return regeneratorRuntime.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              _context5.next = 2;
-              return collateralManagerContract.getUserBorrows(account);
-
-            case 2:
-              userBorrowIds = _context5.sent;
-              userBorrows = {};
-              _context5.t0 = regeneratorRuntime.keys(userBorrowIds);
-
-            case 5:
-              if ((_context5.t1 = _context5.t0()).done) {
-                _context5.next = 15;
-                break;
-              }
-
-              borrowId = _context5.t1.value;
-              _context5.next = 9;
-              return collateralManagerContract.getBorrow(borrowId);
-
-            case 9:
-              borrow = _context5.sent;
-              _context5.next = 12;
-              return formatBorrow(borrow);
-
-            case 12:
-              userBorrows[borrowId] = _context5.sent;
-              _context5.next = 5;
-              break;
-
-            case 15:
-              console.log('userBorrows', userBorrows);
-              setUserBorrows(userBorrows);
-
-            case 17:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-
-    return function fetchUserBorrows() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
-  return {
-    fetchWhitelistNFT: fetchWhitelistNFT,
-    whitelistNFT: whitelistNFT,
-    fetchAPR: fetchAPR,
-    fetchBorrowAPR: fetchBorrowAPR,
-    collateralManagerContractAddress: collateralManagerContractAddress,
-    fetchUserBorrows: fetchUserBorrows
-  };
-};
-
-exports.useCollateralManager = useCollateralManager;
-var _default = useCollateralManager;
-exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js"}],"../v1-core/artifacts/contracts/NFT.sol/NFT.json":[function(require,module,exports) {
-module.exports = {
-  "_format": "hh-sol-artifact-1",
-  "contractName": "NFT",
-  "sourceName": "contracts/NFT.sol",
-  "abi": [{
-    "inputs": [{
-      "internalType": "string",
-      "name": "name",
-      "type": "string"
-    }, {
-      "internalType": "string",
-      "name": "symbol",
-      "type": "string"
-    }],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": true,
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "address",
-      "name": "approved",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "Approval",
-    "type": "event"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": true,
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "address",
-      "name": "operator",
-      "type": "address"
-    }, {
-      "indexed": false,
-      "internalType": "bool",
-      "name": "approved",
-      "type": "bool"
-    }],
-    "name": "ApprovalForAll",
-    "type": "event"
-  }, {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": true,
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "indexed": true,
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "Transfer",
-    "type": "event"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "approve",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }],
-    "name": "balanceOf",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "getApproved",
-    "outputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "owner",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "operator",
-      "type": "address"
-    }],
-    "name": "isApprovedForAll",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "mint",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "name",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "ownerOf",
-    "outputs": [{
-      "internalType": "address",
-      "name": "",
-      "type": "address"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "safeTransferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }, {
-      "internalType": "bytes",
-      "name": "_data",
-      "type": "bytes"
-    }],
-    "name": "safeTransferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "operator",
-      "type": "address"
-    }, {
-      "internalType": "bool",
-      "name": "approved",
-      "type": "bool"
-    }],
-    "name": "setApprovalForAll",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "bytes4",
-      "name": "interfaceId",
-      "type": "bytes4"
-    }],
-    "name": "supportsInterface",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "tokenURI",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "stateMutability": "view",
-    "type": "function"
-  }, {
-    "inputs": [{
-      "internalType": "address",
-      "name": "from",
-      "type": "address"
-    }, {
-      "internalType": "address",
-      "name": "to",
-      "type": "address"
-    }, {
-      "internalType": "uint256",
-      "name": "tokenId",
-      "type": "uint256"
-    }],
-    "name": "transferFrom",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }],
-  "bytecode": "0x60806040523480156200001157600080fd5b5060405162002a1a38038062002a1a833981810160405281019062000037919062000197565b818181600090805190602001906200005192919062000075565b5080600190805190602001906200006a92919062000075565b50505050506200037a565b82805462000083906200029f565b90600052602060002090601f016020900481019282620000a75760008555620000f3565b82601f10620000c257805160ff1916838001178555620000f3565b82800160010185558215620000f3579182015b82811115620000f2578251825591602001919060010190620000d5565b5b50905062000102919062000106565b5090565b5b808211156200012157600081600090555060010162000107565b5090565b60006200013c620001368462000233565b6200020a565b9050828152602081018484840111156200015557600080fd5b6200016284828562000269565b509392505050565b600082601f8301126200017c57600080fd5b81516200018e84826020860162000125565b91505092915050565b60008060408385031215620001ab57600080fd5b600083015167ffffffffffffffff811115620001c657600080fd5b620001d4858286016200016a565b925050602083015167ffffffffffffffff811115620001f257600080fd5b62000200858286016200016a565b9150509250929050565b60006200021662000229565b9050620002248282620002d5565b919050565b6000604051905090565b600067ffffffffffffffff8211156200025157620002506200033a565b5b6200025c8262000369565b9050602081019050919050565b60005b83811015620002895780820151818401526020810190506200026c565b8381111562000299576000848401525b50505050565b60006002820490506001821680620002b857607f821691505b60208210811415620002cf57620002ce6200030b565b5b50919050565b620002e08262000369565b810181811067ffffffffffffffff821117156200030257620003016200033a565b5b80604052505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b612690806200038a6000396000f3fe608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea264697066735822122021ae6fe6b6e88729ca6cf89abfb10ad7253e23aa3ae81af016035b578155d45f64736f6c63430008040033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea264697066735822122021ae6fe6b6e88729ca6cf89abfb10ad7253e23aa3ae81af016035b578155d45f64736f6c63430008040033",
-  "linkReferences": {},
-  "deployedLinkReferences": {}
-};
-},{}],"hooks/useNFT.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.useNFT = exports.default = void 0;
-
-var _useContract = require("./useContract");
-
-var _NFT = _interopRequireDefault(require("../../v1-core/artifacts/contracts/NFT.sol/NFT.json"));
-
-var _core = require("@web3-react/core");
-
-var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
-
-var _AppContext = require("../AppContext");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var useNFT = function useNFT() {
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      account = _useWeb3React.account;
-
-  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
-      isValidNetwork = _useIsValidNetwork.isValidNetwork;
-
-  var nftContractAddressPUNK = "0x19cEcCd6942ad38562Ee10bAfd44776ceB67e923";
-  var nftContractAddressBAYC = "0xD42912755319665397FF090fBB63B1a31aE87Cee";
-  var nftContractABI = _NFT.default["abi"];
-  var nftContractPUNK = (0, _useContract.useContract)(nftContractAddressPUNK, nftContractABI);
-  var nftContractBAYC = (0, _useContract.useContract)(nftContractAddressBAYC, nftContractABI);
-  var nftContract = {
-    "PUNK": nftContractPUNK,
-    "BAYC": nftContractBAYC
-  };
-
-  var _useAppContext = (0, _AppContext.useAppContext)(),
-      setImageDict = _useAppContext.setImageDict,
-      imageDictPUNK = _useAppContext.imageDictPUNK,
-      imageDictBAYC = _useAppContext.imageDictBAYC,
-      borrowProject = _useAppContext.borrowProject;
-
-  var nftAddressSymbolDict = {};
-  nftAddressSymbolDict[nftContractAddressPUNK] = "PUNK";
-  nftAddressSymbolDict[nftContractAddressBAYC] = "BAYC";
-
-  var fetchImagesPUNK = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var imageDict, tokenId, owner, paddedTokenId, imageURL;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              imageDict = {};
-              tokenId = 0;
-
-            case 2:
-              if (!(tokenId < 6)) {
-                _context.next = 10;
-                break;
-              }
-
-              _context.next = 5;
-              return nftContract["PUNK"].ownerOf(tokenId);
-
-            case 5:
-              owner = _context.sent;
-
-              if (owner == account) {
-                paddedTokenId = tokenId.toString().padStart(4, '0');
-                imageURL = "https://larvalabs.com/public/images/cryptopunks/punk".concat(paddedTokenId, ".png");
-                imageDict[tokenId] = imageURL;
-              }
-
-            case 7:
-              tokenId++;
-              _context.next = 2;
-              break;
-
-            case 10:
-              setImageDict("PUNK", imageDict);
-
-            case 11:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function fetchImagesPUNK() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  var fetchImagesBAYC = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var imageDict, tokenId, owner, response, data, imageIPFS, imageURL;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              imageDict = {};
-              tokenId = 0;
-
-            case 2:
-              if (!(tokenId < 6)) {
-                _context2.next = 19;
-                break;
-              }
-
-              _context2.next = 5;
-              return nftContract["BAYC"].ownerOf(tokenId);
-
-            case 5:
-              owner = _context2.sent;
-
-              if (!(owner == account)) {
-                _context2.next = 16;
-                break;
-              }
-
-              _context2.next = 9;
-              return fetch("https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/".concat(tokenId));
-
-            case 9:
-              response = _context2.sent;
-              _context2.next = 12;
-              return response.json();
-
-            case 12:
-              data = _context2.sent;
-              imageIPFS = data["image"];
-              imageURL = "https://ipfs.io/ipfs/".concat(imageIPFS.split("//")[1]);
-              imageDict[tokenId] = imageURL;
-
-            case 16:
-              tokenId++;
-              _context2.next = 2;
-              break;
-
-            case 19:
-              setImageDict("BAYC", imageDict);
-
-            case 20:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function fetchImagesBAYC() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  var fetchImagePUNK = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(tokenId) {
-      var paddedTokenId, imageURL;
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              paddedTokenId = tokenId.toString().padStart(4, '0');
-              imageURL = "https://larvalabs.com/public/images/cryptopunks/punk".concat(paddedTokenId, ".png");
-              return _context3.abrupt("return", imageURL);
-
-            case 3:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function fetchImagePUNK(_x) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var fetchImageBAYC = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(tokenId) {
-      var response, data, imageIPFS, imageURL;
-      return regeneratorRuntime.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.next = 2;
-              return fetch("https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/".concat(tokenId));
-
-            case 2:
-              response = _context4.sent;
-              _context4.next = 5;
-              return response.json();
-
-            case 5:
-              data = _context4.sent;
-              imageIPFS = data["image"];
-              imageURL = "https://ipfs.io/ipfs/".concat(imageIPFS.split("//")[1]);
-              return _context4.abrupt("return", imageURL);
-
-            case 9:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4);
-    }));
-
-    return function fetchImageBAYC(_x2) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-
-  var fetchImagesBorrow = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-      var imageDict;
-      return regeneratorRuntime.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              console.log('fetchImagesBorrow borrowProject', borrowProject);
-              imageDict = {};
-
-              if (borrowProject == "PUNK") {
-                imageDictPUNK, _readOnlyError("imageDict");
-              } else if (borrowProject == "BAYC") {
-                imageDictBAYC, _readOnlyError("imageDict");
-              }
-
-              setImageDict("BORROW", imageDict);
-
-            case 4:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-
-    return function fetchImagesBorrow() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
-  return {
-    fetchImagesPUNK: fetchImagesPUNK,
-    fetchImagesBAYC: fetchImagesBAYC,
-    fetchImagesBorrow: fetchImagesBorrow,
-    imageDictPUNK: imageDictPUNK,
-    imageDictBAYC: imageDictBAYC,
-    nftAddressSymbolDict: nftAddressSymbolDict,
-    nftContract: nftContract,
-    fetchImageBAYC: fetchImageBAYC,
-    fetchImagePUNK: fetchImagePUNK
-  };
-};
-
-exports.useNFT = useNFT;
-var _default = useNFT;
-exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/NFT.sol/NFT.json":"../v1-core/artifacts/contracts/NFT.sol/NFT.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js"}],"components/Borrow/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _core = require("@web3-react/core");
-
-var _AssetItem = _interopRequireDefault(require("../AssetItem"));
-
-var _ButtonRepay = _interopRequireDefault(require("../ButtonRepay"));
-
-var _TokenBorrow = _interopRequireDefault(require("../TokenBorrow"));
-
-require("./Borrow.css");
-
-var _useCollateralManager2 = _interopRequireDefault(require("../../hooks/useCollateralManager"));
-
-var _AppContext = require("../../AppContext");
-
-var _useNFT2 = _interopRequireDefault(require("../../hooks/useNFT"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function Borrow(props) {
-  var borrowId = props.borrowId;
-
-  var _useWeb3React = (0, _core.useWeb3React)(),
-      account = _useWeb3React.account;
-
-  var _useCollateralManager = (0, _useCollateralManager2.default)(),
-      fetchUserBorrows = _useCollateralManager.fetchUserBorrows;
-
-  var _useAppContext = (0, _AppContext.useAppContext)(),
-      userBorrows = _useAppContext.userBorrows;
-
-  var _useNFT = (0, _useNFT2.default)(),
-      fetchImageBAYC = _useNFT.fetchImageBAYC,
-      fetchImagePUNK = _useNFT.fetchImagePUNK;
-
-  var _useState = (0, _react.useState)(""),
-      _useState2 = _slicedToArray(_useState, 2),
-      imgUrl = _useState2[0],
-      setImgUrl = _useState2[1];
-
-  (0, _react.useEffect)(function () {
-    if (account) {
-      fetchUserBorrows();
-      userBorrows;
-
-      function fetchImgUrl() {
-        return _fetchImgUrl.apply(this, arguments);
-      }
-
-      function _fetchImgUrl() {
-        _fetchImgUrl = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-          var nftTokenId, _imgUrl, _imgUrl2;
-
-          return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return userBorrows[borrowId]["nftTokenId"];
-
-                case 2:
-                  nftTokenId = _context.sent;
-
-                  if (!(userBorrows[borrowId]["nftSymbol"] == "BAYC")) {
-                    _context.next = 10;
-                    break;
-                  }
-
-                  _context.next = 6;
-                  return fetchImageBAYC(nftTokenId);
-
-                case 6:
-                  _imgUrl = _context.sent;
-                  setImgUrl(_imgUrl);
-                  _context.next = 14;
-                  break;
-
-                case 10:
-                  _context.next = 12;
-                  return fetchImagePUNK(nftTokenId);
-
-                case 12:
-                  _imgUrl2 = _context.sent;
-                  setImgUrl(_imgUrl2);
-
-                case 14:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        }));
-        return _fetchImgUrl.apply(this, arguments);
-      }
-
-      fetchImgUrl();
-    }
-  }, [account]);
-  console.log('USER BORROWS', userBorrows);
-
-  var formatDate = function formatDate(timestamp) {
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var date = new Date(timestamp * 1000);
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var monthName = monthNames[monthIndex];
-    var year = date.getFullYear();
-    return "".concat(day, "-").concat(monthName, "-").concat(year);
-  };
-
-  var formatCountdown = function formatCountdown(timestamp) {
-    var countDownDate = new Date(timestamp * 1000);
-    var now = new Date().getTime();
-    var distance = countDownDate - now;
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
-    var minutes = Math.floor(distance % (1000 * 60 * 60) / (1000 * 60));
-    return "".concat(days, "d ").concat(hours, "h ").concat(minutes, "m");
-  };
-
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "borrow-6"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "overlap-group-13"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "rectangle-17"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "number valign-text-middle oxanium-normal-black-24px"
-  }, Number(userBorrows[borrowId]["borrowAmount"]).toFixed(1)), " ", /*#__PURE__*/_react.default.createElement("div", {
-    className: "text valign-text-middle oxanium-normal-black-25px"
-  }, Number(userBorrows[borrowId]["repaymentAmount"]).toFixed(4)), /*#__PURE__*/_react.default.createElement("div", {
-    className: "percent valign-text-middle oxanium-normal-black-25px"
-  }, Number(userBorrows[borrowId]["interestRate"]).toFixed(0)), /*#__PURE__*/_react.default.createElement(_AssetItem.default, {
-    nftSymbol: userBorrows[borrowId]["nftSymbol"],
-    nftTokenId: userBorrows[borrowId]["nftTokenId"],
-    imgUrl: imgUrl
-  }), /*#__PURE__*/_react.default.createElement(_ButtonRepay.default, null), /*#__PURE__*/_react.default.createElement("div", {
-    className: "x175-min-150 valign-text-middle oxanium-bold-black-20px"
-  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
-    className: "oxanium-bold-black-20px"
-  }, "175%", /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
-    className: "oxanium-normal-black-20px"
-  }, "Min. 150%"))), /*#__PURE__*/_react.default.createElement("div", {
-    className: "text-1 valign-text-middle oxanium-bold-black-20px"
-  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
-    className: "oxanium-bold-black-20px"
-  }, formatDate(userBorrows[borrowId]["maturity"]), /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
-    className: "oxanium-normal-black-20px"
-  }, formatCountdown(userBorrows[borrowId]["maturity"])))), /*#__PURE__*/_react.default.createElement(_TokenBorrow.default, null)));
-}
-
-var _default = Borrow;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../AssetItem":"components/AssetItem/index.jsx","../ButtonRepay":"components/ButtonRepay/index.jsx","../TokenBorrow":"components/TokenBorrow/index.jsx","./Borrow.css":"components/Borrow/Borrow.css","../../hooks/useCollateralManager":"hooks/useCollateralManager.js","../../AppContext":"AppContext.js","../../hooks/useNFT":"hooks/useNFT.js"}],"components/LendsHeader/LendsHeader.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/LendsHeader/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./LendsHeader.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function LendsHeader() {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "lends-header oxanium-normal-white-20px"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "your-lends valign-text-middle"
-  }, "Your Lends"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "current-balance valign-text-middle"
-  }, "Current Balance"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "apy valign-text-middle"
-  }, "APY"));
-}
-
-var _default = LendsHeader;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","./LendsHeader.css":"components/LendsHeader/LendsHeader.css"}],"components/TokenLend/TokenLend.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/TokenLend/index.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-require("./TokenLend.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function TokenLend(props) {
-  var token = props.token;
-  var tokenImage = {
-    "DAI": "/img/rectangle-25@2x.png",
-    "ETH": "/img/rectangle-27@2x.png",
-    "USDC": "/img/rectangle-22@2x.png"
-  };
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "token-lend"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    className: "rectangle-25",
-    src: tokenImage[token]
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "dai valign-text-middle oxanium-normal-black-24px"
-  }, token));
-}
-
-var _default = TokenLend;
-exports.default = _default;
-},{"react":"node_modules/react/index.js","./TokenLend.css":"components/TokenLend/TokenLend.css"}],"components/ButtonDeposit/ButtonDeposit.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpDeposit/PopUpDeposit.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","@ethersproject/contracts":"node_modules/@ethersproject/contracts/lib.esm/index.js","@ethersproject/constants":"node_modules/@ethersproject/constants/lib.esm/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js"}],"../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json":[function(require,module,exports) {
 module.exports = {
   "_format": "hh-sol-artifact-1",
   "contractName": "LendingPool",
@@ -61144,7 +56601,35 @@ module.exports = {
   "linkReferences": {},
   "deployedLinkReferences": {}
 };
-},{}],"../v1-core/artifacts/contracts/Ntoken.sol/NToken.json":[function(require,module,exports) {
+},{}],"hooks/useIsValidNetwork.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _core = require("@web3-react/core");
+
+var supportedCompNetworks = [1, 3, 4, 5, 42, 1337, 5777, 31337];
+
+function useIsValidNetwork() {
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      chainId = _useWeb3React.chainId;
+
+  var isValidCompNetwork = (0, _react.useMemo)(function () {
+    return supportedCompNetworks.includes(chainId);
+  }, [chainId]);
+  return {
+    isValidNetwork: isValidCompNetwork
+  };
+}
+
+var _default = useIsValidNetwork;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js"}],"../v1-core/artifacts/contracts/Ntoken.sol/NToken.json":[function(require,module,exports) {
 module.exports = {
   "_format": "hh-sol-artifact-1",
   "contractName": "NToken",
@@ -61779,7 +57264,124 @@ module.exports = {
   "linkReferences": {},
   "deployedLinkReferences": {}
 };
-},{}],"hooks/useNToken.js":[function(require,module,exports) {
+},{}],"node_modules/@ethersproject/units/lib.esm/_version.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.version = void 0;
+const version = "units/5.5.0";
+exports.version = version;
+},{}],"node_modules/@ethersproject/units/lib.esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.commify = commify;
+exports.formatEther = formatEther;
+exports.formatUnits = formatUnits;
+exports.parseEther = parseEther;
+exports.parseUnits = parseUnits;
+
+var _bignumber = require("@ethersproject/bignumber");
+
+var _logger = require("@ethersproject/logger");
+
+var _version = require("./_version");
+
+const logger = new _logger.Logger(_version.version);
+const names = ["wei", "kwei", "mwei", "gwei", "szabo", "finney", "ether"]; // Some environments have issues with RegEx that contain back-tracking, so we cannot
+// use them.
+
+function commify(value) {
+  const comps = String(value).split(".");
+
+  if (comps.length > 2 || !comps[0].match(/^-?[0-9]*$/) || comps[1] && !comps[1].match(/^[0-9]*$/) || value === "." || value === "-.") {
+    logger.throwArgumentError("invalid value", "value", value);
+  } // Make sure we have at least one whole digit (0 if none)
+
+
+  let whole = comps[0];
+  let negative = "";
+
+  if (whole.substring(0, 1) === "-") {
+    negative = "-";
+    whole = whole.substring(1);
+  } // Make sure we have at least 1 whole digit with no leading zeros
+
+
+  while (whole.substring(0, 1) === "0") {
+    whole = whole.substring(1);
+  }
+
+  if (whole === "") {
+    whole = "0";
+  }
+
+  let suffix = "";
+
+  if (comps.length === 2) {
+    suffix = "." + (comps[1] || "0");
+  }
+
+  while (suffix.length > 2 && suffix[suffix.length - 1] === "0") {
+    suffix = suffix.substring(0, suffix.length - 1);
+  }
+
+  const formatted = [];
+
+  while (whole.length) {
+    if (whole.length <= 3) {
+      formatted.unshift(whole);
+      break;
+    } else {
+      const index = whole.length - 3;
+      formatted.unshift(whole.substring(index));
+      whole = whole.substring(0, index);
+    }
+  }
+
+  return negative + formatted.join(",") + suffix;
+}
+
+function formatUnits(value, unitName) {
+  if (typeof unitName === "string") {
+    const index = names.indexOf(unitName);
+
+    if (index !== -1) {
+      unitName = 3 * index;
+    }
+  }
+
+  return (0, _bignumber.formatFixed)(value, unitName != null ? unitName : 18);
+}
+
+function parseUnits(value, unitName) {
+  if (typeof value !== "string") {
+    logger.throwArgumentError("value must be a string", "value", value);
+  }
+
+  if (typeof unitName === "string") {
+    const index = names.indexOf(unitName);
+
+    if (index !== -1) {
+      unitName = 3 * index;
+    }
+  }
+
+  return (0, _bignumber.parseFixed)(value, unitName != null ? unitName : 18);
+}
+
+function formatEther(wei) {
+  return formatUnits(wei, 18);
+}
+
+function parseEther(ether) {
+  return parseUnits(ether, 18);
+}
+},{"@ethersproject/bignumber":"node_modules/@ethersproject/bignumber/lib.esm/index.js","@ethersproject/logger":"node_modules/@ethersproject/logger/lib.esm/index.js","./_version":"node_modules/@ethersproject/units/lib.esm/_version.js"}],"hooks/useNToken.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61815,18 +57417,18 @@ var useNToken = function useNToken() {
       isValidNetwork = _useIsValidNetwork.isValidNetwork; // NTokens
 
 
-  var nTokenContractAddressDAI = "0x3aAde2dCD2Df6a8cAc689EE797591b2913658659"; // hardhat
+  var nTokenContractAddressDAI = "0x0165878A594ca255338adfa4d48449f69242Eb8F"; // hardhat
 
-  var nTokenContractAddressETH = "0xab16A69A5a8c12C732e0DEFF4BE56A70bb64c926"; // hardhat
+  var nTokenContractAddressETH = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"; // hardhat
 
-  var nTokenContractAddressUSDC = "0xE3011A37A904aB90C8881a99BD1F6E21401f1522"; // hardhat
+  var nTokenContractAddressUSDC = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"; // hardhat
   // AssetTokens
 
-  var assetTokenContractAddressDAI = "0x3155755b79aA083bd953911C92705B7aA82a18F9"; // hardhat
+  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // hardhat
 
-  var assetTokenContractAddressETH = "0x5bf5b11053e734690269C6B9D438F8C9d48F528A"; // hardhat
+  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"; // hardhat
 
-  var assetTokenContractAddressUSDC = "0xffa7CA1AEEEbBc30C874d32C7e22F052BbEa0429"; // hardhat
+  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"; // hardhat
 
   var assetTokenContractAddress = {
     "DAI": assetTokenContractAddressDAI,
@@ -62548,11 +58150,11 @@ var useDebtToken = function useDebtToken() {
       isValidNetwork = _useIsValidNetwork.isValidNetwork; // DebtTokens
 
 
-  var debtTokenContractAddressDAI = "0x2a810409872AfC346F9B5b26571Fd6eC42EA4849"; // hardhat
+  var debtTokenContractAddressDAI = "0x0B306BF915C4d645ff596e518fAf3F9669b97016"; // hardhat
 
-  var debtTokenContractAddressETH = "0xb9bEECD1A582768711dE1EE7B0A1d582D9d72a6C"; // hardhat
+  var debtTokenContractAddressETH = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1"; // hardhat
 
-  var debtTokenContractAddressUSDC = "0x8A93d247134d91e0de6f96547cB0204e5BE8e5D8"; // hardhat
+  var debtTokenContractAddressUSDC = "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE"; // hardhat
 
   var debtTokenABI = _DebtToken.default["abi"];
   var debtTokenContractDAI = (0, _useContract.useContract)(debtTokenContractAddressDAI, debtTokenABI);
@@ -62609,7 +58211,567 @@ var useDebtToken = function useDebtToken() {
 exports.useDebtToken = useDebtToken;
 var _default = useDebtToken;
 exports.default = _default;
-},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json":"../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json","./useIsValidNetwork":"hooks/useIsValidNetwork.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js","react":"node_modules/react/index.js"}],"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":[function(require,module,exports) {
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json":"../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json","./useIsValidNetwork":"hooks/useIsValidNetwork.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js","react":"node_modules/react/index.js"}],"../v1-core/artifacts/contracts/NFT.sol/NFT.json":[function(require,module,exports) {
+module.exports = {
+  "_format": "hh-sol-artifact-1",
+  "contractName": "NFT",
+  "sourceName": "contracts/NFT.sol",
+  "abi": [{
+    "inputs": [{
+      "internalType": "string",
+      "name": "name",
+      "type": "string"
+    }, {
+      "internalType": "string",
+      "name": "symbol",
+      "type": "string"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "approved",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "Approval",
+    "type": "event"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "operator",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "bool",
+      "name": "approved",
+      "type": "bool"
+    }],
+    "name": "ApprovalForAll",
+    "type": "event"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "Transfer",
+    "type": "event"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "approve",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }],
+    "name": "balanceOf",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "getApproved",
+    "outputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "operator",
+      "type": "address"
+    }],
+    "name": "isApprovedForAll",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "mint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "name",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "ownerOf",
+    "outputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "safeTransferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "internalType": "bytes",
+      "name": "_data",
+      "type": "bytes"
+    }],
+    "name": "safeTransferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "operator",
+      "type": "address"
+    }, {
+      "internalType": "bool",
+      "name": "approved",
+      "type": "bool"
+    }],
+    "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "bytes4",
+      "name": "interfaceId",
+      "type": "bytes4"
+    }],
+    "name": "supportsInterface",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "tokenURI",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }],
+    "name": "transferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }],
+  "bytecode": "0x60806040523480156200001157600080fd5b5060405162002a1a38038062002a1a833981810160405281019062000037919062000197565b818181600090805190602001906200005192919062000075565b5080600190805190602001906200006a92919062000075565b50505050506200037a565b82805462000083906200029f565b90600052602060002090601f016020900481019282620000a75760008555620000f3565b82601f10620000c257805160ff1916838001178555620000f3565b82800160010185558215620000f3579182015b82811115620000f2578251825591602001919060010190620000d5565b5b50905062000102919062000106565b5090565b5b808211156200012157600081600090555060010162000107565b5090565b60006200013c620001368462000233565b6200020a565b9050828152602081018484840111156200015557600080fd5b6200016284828562000269565b509392505050565b600082601f8301126200017c57600080fd5b81516200018e84826020860162000125565b91505092915050565b60008060408385031215620001ab57600080fd5b600083015167ffffffffffffffff811115620001c657600080fd5b620001d4858286016200016a565b925050602083015167ffffffffffffffff811115620001f257600080fd5b62000200858286016200016a565b9150509250929050565b60006200021662000229565b9050620002248282620002d5565b919050565b6000604051905090565b600067ffffffffffffffff8211156200025157620002506200033a565b5b6200025c8262000369565b9050602081019050919050565b60005b83811015620002895780820151818401526020810190506200026c565b8381111562000299576000848401525b50505050565b60006002820490506001821680620002b857607f821691505b60208210811415620002cf57620002ce6200030b565b5b50919050565b620002e08262000369565b810181811067ffffffffffffffff821117156200030257620003016200033a565b5b80604052505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b612690806200038a6000396000f3fe608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea264697066735822122021ae6fe6b6e88729ca6cf89abfb10ad7253e23aa3ae81af016035b578155d45f64736f6c63430008040033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100ea5760003560e01c80636352211e1161008c578063a22cb46511610066578063a22cb4651461025b578063b88d4fde14610277578063c87b56dd14610293578063e985e9c5146102c3576100ea565b80636352211e146101dd57806370a082311461020d57806395d89b411461023d576100ea565b8063095ea7b3116100c8578063095ea7b31461016d57806323b872dd1461018957806340c10f19146101a557806342842e0e146101c1576100ea565b806301ffc9a7146100ef57806306fdde031461011f578063081812fc1461013d575b600080fd5b61010960048036038101906101049190611892565b6102f3565b6040516101169190611c52565b60405180910390f35b6101276103d5565b6040516101349190611c6d565b60405180910390f35b610157600480360381019061015291906118e4565b610467565b6040516101649190611beb565b60405180910390f35b61018760048036038101906101829190611856565b6104ec565b005b6101a3600480360381019061019e9190611750565b610604565b005b6101bf60048036038101906101ba9190611856565b610664565b005b6101db60048036038101906101d69190611750565b610672565b005b6101f760048036038101906101f291906118e4565b610692565b6040516102049190611beb565b60405180910390f35b610227600480360381019061022291906116eb565b610744565b6040516102349190611e4f565b60405180910390f35b6102456107fc565b6040516102529190611c6d565b60405180910390f35b6102756004803603810190610270919061181a565b61088e565b005b610291600480360381019061028c919061179f565b610a0f565b005b6102ad60048036038101906102a891906118e4565b610a71565b6040516102ba9190611c6d565b60405180910390f35b6102dd60048036038101906102d89190611714565b610b18565b6040516102ea9190611c52565b60405180910390f35b60007f80ac58cd000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff191614806103be57507f5b5e139f000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916145b806103ce57506103cd82610bac565b5b9050919050565b6060600080546103e490612074565b80601f016020809104026020016040519081016040528092919081815260200182805461041090612074565b801561045d5780601f106104325761010080835404028352916020019161045d565b820191906000526020600020905b81548152906001019060200180831161044057829003601f168201915b5050505050905090565b600061047282610c16565b6104b1576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016104a890611daf565b60405180910390fd5b6004600083815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006104f782610692565b90508073ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff161415610568576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161055f90611e0f565b60405180910390fd5b8073ffffffffffffffffffffffffffffffffffffffff16610587610c82565b73ffffffffffffffffffffffffffffffffffffffff1614806105b657506105b5816105b0610c82565b610b18565b5b6105f5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016105ec90611d2f565b60405180910390fd5b6105ff8383610c8a565b505050565b61061561060f610c82565b82610d43565b610654576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161064b90611e2f565b60405180910390fd5b61065f838383610e21565b505050565b61066e828261107d565b5050565b61068d83838360405180602001604052806000815250610a0f565b505050565b6000806002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141561073b576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161073290611d6f565b60405180910390fd5b80915050919050565b60008073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156107b5576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016107ac90611d4f565b60405180910390fd5b600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60606001805461080b90612074565b80601f016020809104026020016040519081016040528092919081815260200182805461083790612074565b80156108845780601f1061085957610100808354040283529160200191610884565b820191906000526020600020905b81548152906001019060200180831161086757829003601f168201915b5050505050905090565b610896610c82565b73ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610904576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108fb90611cef565b60405180910390fd5b8060056000610911610c82565b73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508173ffffffffffffffffffffffffffffffffffffffff166109be610c82565b73ffffffffffffffffffffffffffffffffffffffff167f17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c3183604051610a039190611c52565b60405180910390a35050565b610a20610a1a610c82565b83610d43565b610a5f576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a5690611e2f565b60405180910390fd5b610a6b8484848461124b565b50505050565b6060610a7c82610c16565b610abb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ab290611def565b60405180910390fd5b6000610ac56112a7565b90506000815111610ae55760405180602001604052806000815250610b10565b80610aef846112be565b604051602001610b00929190611bc7565b6040516020818303038152906040525b915050919050565b6000600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16905092915050565b60007f01ffc9a7000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916827bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149050919050565b60008073ffffffffffffffffffffffffffffffffffffffff166002600084815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614159050919050565b600033905090565b816004600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16610cfd83610692565b73ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b92560405160405180910390a45050565b6000610d4e82610c16565b610d8d576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610d8490611d0f565b60405180910390fd5b6000610d9883610692565b90508073ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff161480610e0757508373ffffffffffffffffffffffffffffffffffffffff16610def84610467565b73ffffffffffffffffffffffffffffffffffffffff16145b80610e185750610e178185610b18565b5b91505092915050565b8273ffffffffffffffffffffffffffffffffffffffff16610e4182610692565b73ffffffffffffffffffffffffffffffffffffffff1614610e97576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8e90611dcf565b60405180910390fd5b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff161415610f07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610efe90611ccf565b60405180910390fd5b610f1283838361146b565b610f1d600082610c8a565b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610f6d9190611f8a565b925050819055506001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254610fc49190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a4505050565b600073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff1614156110ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016110e490611d8f565b60405180910390fd5b6110f681610c16565b15611136576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161112d90611caf565b60405180910390fd5b6111426000838361146b565b6001600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282546111929190611f03565b92505081905550816002600083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550808273ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef60405160405180910390a45050565b611256848484610e21565b61126284848484611470565b6112a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161129890611c8f565b60405180910390fd5b50505050565b606060405180602001604052806000815250905090565b60606000821415611306576040518060400160405280600181526020017f30000000000000000000000000000000000000000000000000000000000000008152509050611466565b600082905060005b60008214611338578080611321906120d7565b915050600a826113319190611f59565b915061130e565b60008167ffffffffffffffff81111561137a577f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6040519080825280601f01601f1916602001820160405280156113ac5781602001600182028036833780820191505090505b5090505b6000851461145f576001826113c59190611f8a565b9150600a856113d49190612120565b60306113e09190611f03565b60f81b81838151811061141c577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60200101907effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916908160001a905350600a856114589190611f59565b94506113b0565b8093505050505b919050565b505050565b60006114918473ffffffffffffffffffffffffffffffffffffffff16611607565b156115fa578373ffffffffffffffffffffffffffffffffffffffff1663150b7a026114ba610c82565b8786866040518563ffffffff1660e01b81526004016114dc9493929190611c06565b602060405180830381600087803b1580156114f657600080fd5b505af192505050801561152757506040513d601f19601f8201168201806040525081019061152491906118bb565b60015b6115aa573d8060008114611557576040519150601f19603f3d011682016040523d82523d6000602084013e61155c565b606091505b506000815114156115a2576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161159990611c8f565b60405180910390fd5b805181602001fd5b63150b7a0260e01b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916149150506115ff565b600190505b949350505050565b600080823b905060008111915050919050565b600061162d61162884611e8f565b611e6a565b90508281526020810184848401111561164557600080fd5b611650848285612032565b509392505050565b600081359050611667816125fe565b92915050565b60008135905061167c81612615565b92915050565b6000813590506116918161262c565b92915050565b6000815190506116a68161262c565b92915050565b600082601f8301126116bd57600080fd5b81356116cd84826020860161161a565b91505092915050565b6000813590506116e581612643565b92915050565b6000602082840312156116fd57600080fd5b600061170b84828501611658565b91505092915050565b6000806040838503121561172757600080fd5b600061173585828601611658565b925050602061174685828601611658565b9150509250929050565b60008060006060848603121561176557600080fd5b600061177386828701611658565b935050602061178486828701611658565b9250506040611795868287016116d6565b9150509250925092565b600080600080608085870312156117b557600080fd5b60006117c387828801611658565b94505060206117d487828801611658565b93505060406117e5878288016116d6565b925050606085013567ffffffffffffffff81111561180257600080fd5b61180e878288016116ac565b91505092959194509250565b6000806040838503121561182d57600080fd5b600061183b85828601611658565b925050602061184c8582860161166d565b9150509250929050565b6000806040838503121561186957600080fd5b600061187785828601611658565b9250506020611888858286016116d6565b9150509250929050565b6000602082840312156118a457600080fd5b60006118b284828501611682565b91505092915050565b6000602082840312156118cd57600080fd5b60006118db84828501611697565b91505092915050565b6000602082840312156118f657600080fd5b6000611904848285016116d6565b91505092915050565b61191681611fbe565b82525050565b61192581611fd0565b82525050565b600061193682611ec0565b6119408185611ed6565b9350611950818560208601612041565b6119598161220d565b840191505092915050565b600061196f82611ecb565b6119798185611ee7565b9350611989818560208601612041565b6119928161220d565b840191505092915050565b60006119a882611ecb565b6119b28185611ef8565b93506119c2818560208601612041565b80840191505092915050565b60006119db603283611ee7565b91506119e68261221e565b604082019050919050565b60006119fe601c83611ee7565b9150611a098261226d565b602082019050919050565b6000611a21602483611ee7565b9150611a2c82612296565b604082019050919050565b6000611a44601983611ee7565b9150611a4f826122e5565b602082019050919050565b6000611a67602c83611ee7565b9150611a728261230e565b604082019050919050565b6000611a8a603883611ee7565b9150611a958261235d565b604082019050919050565b6000611aad602a83611ee7565b9150611ab8826123ac565b604082019050919050565b6000611ad0602983611ee7565b9150611adb826123fb565b604082019050919050565b6000611af3602083611ee7565b9150611afe8261244a565b602082019050919050565b6000611b16602c83611ee7565b9150611b2182612473565b604082019050919050565b6000611b39602983611ee7565b9150611b44826124c2565b604082019050919050565b6000611b5c602f83611ee7565b9150611b6782612511565b604082019050919050565b6000611b7f602183611ee7565b9150611b8a82612560565b604082019050919050565b6000611ba2603183611ee7565b9150611bad826125af565b604082019050919050565b611bc181612028565b82525050565b6000611bd3828561199d565b9150611bdf828461199d565b91508190509392505050565b6000602082019050611c00600083018461190d565b92915050565b6000608082019050611c1b600083018761190d565b611c28602083018661190d565b611c356040830185611bb8565b8181036060830152611c47818461192b565b905095945050505050565b6000602082019050611c67600083018461191c565b92915050565b60006020820190508181036000830152611c878184611964565b905092915050565b60006020820190508181036000830152611ca8816119ce565b9050919050565b60006020820190508181036000830152611cc8816119f1565b9050919050565b60006020820190508181036000830152611ce881611a14565b9050919050565b60006020820190508181036000830152611d0881611a37565b9050919050565b60006020820190508181036000830152611d2881611a5a565b9050919050565b60006020820190508181036000830152611d4881611a7d565b9050919050565b60006020820190508181036000830152611d6881611aa0565b9050919050565b60006020820190508181036000830152611d8881611ac3565b9050919050565b60006020820190508181036000830152611da881611ae6565b9050919050565b60006020820190508181036000830152611dc881611b09565b9050919050565b60006020820190508181036000830152611de881611b2c565b9050919050565b60006020820190508181036000830152611e0881611b4f565b9050919050565b60006020820190508181036000830152611e2881611b72565b9050919050565b60006020820190508181036000830152611e4881611b95565b9050919050565b6000602082019050611e646000830184611bb8565b92915050565b6000611e74611e85565b9050611e8082826120a6565b919050565b6000604051905090565b600067ffffffffffffffff821115611eaa57611ea96121de565b5b611eb38261220d565b9050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600081905092915050565b6000611f0e82612028565b9150611f1983612028565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115611f4e57611f4d612151565b5b828201905092915050565b6000611f6482612028565b9150611f6f83612028565b925082611f7f57611f7e612180565b5b828204905092915050565b6000611f9582612028565b9150611fa083612028565b925082821015611fb357611fb2612151565b5b828203905092915050565b6000611fc982612008565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b60005b8381101561205f578082015181840152602081019050612044565b8381111561206e576000848401525b50505050565b6000600282049050600182168061208c57607f821691505b602082108114156120a05761209f6121af565b5b50919050565b6120af8261220d565b810181811067ffffffffffffffff821117156120ce576120cd6121de565b5b80604052505050565b60006120e282612028565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561211557612114612151565b5b600182019050919050565b600061212b82612028565b915061213683612028565b92508261214657612145612180565b5b828206905092915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f4552433732313a207472616e7366657220746f206e6f6e20455243373231526560008201527f63656976657220696d706c656d656e7465720000000000000000000000000000602082015250565b7f4552433732313a20746f6b656e20616c7265616479206d696e74656400000000600082015250565b7f4552433732313a207472616e7366657220746f20746865207a65726f2061646460008201527f7265737300000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f766520746f2063616c6c657200000000000000600082015250565b7f4552433732313a206f70657261746f7220717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76652063616c6c6572206973206e6f74206f7760008201527f6e6572206e6f7220617070726f76656420666f7220616c6c0000000000000000602082015250565b7f4552433732313a2062616c616e636520717565727920666f7220746865207a6560008201527f726f206164647265737300000000000000000000000000000000000000000000602082015250565b7f4552433732313a206f776e657220717565727920666f72206e6f6e657869737460008201527f656e7420746f6b656e0000000000000000000000000000000000000000000000602082015250565b7f4552433732313a206d696e7420746f20746865207a65726f2061646472657373600082015250565b7f4552433732313a20617070726f76656420717565727920666f72206e6f6e657860008201527f697374656e7420746f6b656e0000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e73666572206f6620746f6b656e2074686174206960008201527f73206e6f74206f776e0000000000000000000000000000000000000000000000602082015250565b7f4552433732314d657461646174613a2055524920717565727920666f72206e6f60008201527f6e6578697374656e7420746f6b656e0000000000000000000000000000000000602082015250565b7f4552433732313a20617070726f76616c20746f2063757272656e74206f776e6560008201527f7200000000000000000000000000000000000000000000000000000000000000602082015250565b7f4552433732313a207472616e736665722063616c6c6572206973206e6f74206f60008201527f776e6572206e6f7220617070726f766564000000000000000000000000000000602082015250565b61260781611fbe565b811461261257600080fd5b50565b61261e81611fd0565b811461262957600080fd5b50565b61263581611fdc565b811461264057600080fd5b50565b61264c81612028565b811461265757600080fd5b5056fea264697066735822122021ae6fe6b6e88729ca6cf89abfb10ad7253e23aa3ae81af016035b578155d45f64736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+};
+},{}],"hooks/useNFT.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useNFT = exports.default = void 0;
+
+var _useContract = require("./useContract");
+
+var _NFT = _interopRequireDefault(require("../../v1-core/artifacts/contracts/NFT.sol/NFT.json"));
+
+var _core = require("@web3-react/core");
+
+var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
+
+var _AppContext = require("../AppContext");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var useNFT = function useNFT() {
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
+      isValidNetwork = _useIsValidNetwork.isValidNetwork;
+
+  var nftContractAddressPUNK = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
+  var nftContractAddressBAYC = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
+  var nftContractABI = _NFT.default["abi"];
+  var nftContractPUNK = (0, _useContract.useContract)(nftContractAddressPUNK, nftContractABI);
+  var nftContractBAYC = (0, _useContract.useContract)(nftContractAddressBAYC, nftContractABI);
+  var nftContract = {
+    "PUNK": nftContractPUNK,
+    "BAYC": nftContractBAYC
+  };
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      setImageDict = _useAppContext.setImageDict,
+      imageDictPUNK = _useAppContext.imageDictPUNK,
+      imageDictBAYC = _useAppContext.imageDictBAYC,
+      borrowProject = _useAppContext.borrowProject;
+
+  var nftAddressSymbolDict = {};
+  nftAddressSymbolDict[nftContractAddressPUNK] = "PUNK";
+  nftAddressSymbolDict[nftContractAddressBAYC] = "BAYC";
+
+  var fetchImagesPUNK = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var imageDict, tokenId, owner, paddedTokenId, imageURL;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              imageDict = {};
+              tokenId = 0;
+
+            case 2:
+              if (!(tokenId < 6)) {
+                _context.next = 10;
+                break;
+              }
+
+              _context.next = 5;
+              return nftContract["PUNK"].ownerOf(tokenId);
+
+            case 5:
+              owner = _context.sent;
+
+              if (owner == account) {
+                paddedTokenId = tokenId.toString().padStart(4, '0');
+                imageURL = "https://larvalabs.com/public/images/cryptopunks/punk".concat(paddedTokenId, ".png");
+                imageDict[tokenId] = imageURL;
+              }
+
+            case 7:
+              tokenId++;
+              _context.next = 2;
+              break;
+
+            case 10:
+              setImageDict("PUNK", imageDict);
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchImagesPUNK() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var fetchImagesBAYC = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var imageDict, tokenId, owner, response, data, imageIPFS, imageURL;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              imageDict = {};
+              tokenId = 0;
+
+            case 2:
+              if (!(tokenId < 6)) {
+                _context2.next = 19;
+                break;
+              }
+
+              _context2.next = 5;
+              return nftContract["BAYC"].ownerOf(tokenId);
+
+            case 5:
+              owner = _context2.sent;
+
+              if (!(owner == account)) {
+                _context2.next = 16;
+                break;
+              }
+
+              _context2.next = 9;
+              return fetch("https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/".concat(tokenId));
+
+            case 9:
+              response = _context2.sent;
+              _context2.next = 12;
+              return response.json();
+
+            case 12:
+              data = _context2.sent;
+              imageIPFS = data["image"];
+              imageURL = "https://ipfs.io/ipfs/".concat(imageIPFS.split("//")[1]);
+              imageDict[tokenId] = imageURL;
+
+            case 16:
+              tokenId++;
+              _context2.next = 2;
+              break;
+
+            case 19:
+              setImageDict("BAYC", imageDict);
+
+            case 20:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function fetchImagesBAYC() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var fetchImagePUNK = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(tokenId) {
+      var paddedTokenId, imageURL;
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              paddedTokenId = tokenId.toString().padStart(4, '0');
+              imageURL = "https://larvalabs.com/public/images/cryptopunks/punk".concat(paddedTokenId, ".png");
+              return _context3.abrupt("return", imageURL);
+
+            case 3:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function fetchImagePUNK(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var fetchImageBAYC = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(tokenId) {
+      var response, data, imageIPFS, imageURL;
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return fetch("https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/".concat(tokenId));
+
+            case 2:
+              response = _context4.sent;
+              _context4.next = 5;
+              return response.json();
+
+            case 5:
+              data = _context4.sent;
+              imageIPFS = data["image"];
+              imageURL = "https://ipfs.io/ipfs/".concat(imageIPFS.split("//")[1]);
+              return _context4.abrupt("return", imageURL);
+
+            case 9:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function fetchImageBAYC(_x2) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var fetchImagesBorrow = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+      var imageDict;
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              console.log('fetchImagesBorrow borrowProject', borrowProject);
+              imageDict = {};
+
+              if (borrowProject == "PUNK") {
+                imageDictPUNK, _readOnlyError("imageDict");
+              } else if (borrowProject == "BAYC") {
+                imageDictBAYC, _readOnlyError("imageDict");
+              }
+
+              setImageDict("BORROW", imageDict);
+
+            case 4:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    return function fetchImagesBorrow() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  return {
+    fetchImagesPUNK: fetchImagesPUNK,
+    fetchImagesBAYC: fetchImagesBAYC,
+    fetchImagesBorrow: fetchImagesBorrow,
+    imageDictPUNK: imageDictPUNK,
+    imageDictBAYC: imageDictBAYC,
+    nftAddressSymbolDict: nftAddressSymbolDict,
+    nftContract: nftContract,
+    fetchImageBAYC: fetchImageBAYC,
+    fetchImagePUNK: fetchImagePUNK
+  };
+};
+
+exports.useNFT = useNFT;
+var _default = useNFT;
+exports.default = _default;
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/NFT.sol/NFT.json":"../v1-core/artifacts/contracts/NFT.sol/NFT.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js"}],"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":[function(require,module,exports) {
 module.exports = {
   "_format": "hh-sol-artifact-1",
   "contractName": "AssetToken",
@@ -62869,11 +59031,11 @@ var useAssetToken = function useAssetToken() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var assetTokenContractAddressDAI = "0x3155755b79aA083bd953911C92705B7aA82a18F9"; // hardhat
+  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // hardhat
 
-  var assetTokenContractAddressETH = "0x5bf5b11053e734690269C6B9D438F8C9d48F528A"; // hardhat
+  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"; // hardhat
 
-  var assetTokenContractAddressUSDC = "0xffa7CA1AEEEbBc30C874d32C7e22F052BbEa0429"; // hardhat
+  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"; // hardhat
 
   var assetTokenContractAddress = {
     "DAI": assetTokenContractAddressDAI,
@@ -62898,7 +59060,695 @@ var useAssetToken = function useAssetToken() {
 exports.useAssetToken = useAssetToken;
 var _default = useAssetToken;
 exports.default = _default;
-},{"@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json","../AppContext":"AppContext.js"}],"hooks/useLendingPool.js":[function(require,module,exports) {
+},{"@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json":"../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json","../AppContext":"AppContext.js"}],"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":[function(require,module,exports) {
+module.exports = {
+  "_format": "hh-sol-artifact-1",
+  "contractName": "CollateralManager",
+  "sourceName": "contracts/CollateralManager.sol",
+  "abi": [{
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "id",
+      "type": "uint256"
+    }],
+    "name": "DepositCollateral",
+    "type": "event"
+  }, {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "id",
+      "type": "uint256"
+    }],
+    "name": "WithdrawCollateral",
+    "type": "event"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "borrows",
+    "outputs": [{
+      "components": [{
+        "internalType": "address",
+        "name": "erc721Token",
+        "type": "address"
+      }, {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }],
+      "internalType": "struct CollateralManager.Collateral",
+      "name": "collateral",
+      "type": "tuple"
+    }, {
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "erc20Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "borrowAmount",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "repaymentAmount",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "interestRate",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "liquidationPrice",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "maturity",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "erc20Token",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "borrowAmount",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "repaymentAmount",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "interestRate",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "collateralIndexPrice",
+      "type": "uint256"
+    }, {
+      "internalType": "uint256",
+      "name": "maturity",
+      "type": "uint256"
+    }],
+    "name": "deposit",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "payable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "borrowId",
+      "type": "uint256"
+    }],
+    "name": "getBorrow",
+    "outputs": [{
+      "components": [{
+        "components": [{
+          "internalType": "address",
+          "name": "erc721Token",
+          "type": "address"
+        }, {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }],
+        "internalType": "struct CollateralManager.Collateral",
+        "name": "collateral",
+        "type": "tuple"
+      }, {
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      }, {
+        "internalType": "address",
+        "name": "erc20Token",
+        "type": "address"
+      }, {
+        "internalType": "uint256",
+        "name": "borrowAmount",
+        "type": "uint256"
+      }, {
+        "internalType": "uint256",
+        "name": "repaymentAmount",
+        "type": "uint256"
+      }, {
+        "internalType": "uint256",
+        "name": "interestRate",
+        "type": "uint256"
+      }, {
+        "internalType": "uint256",
+        "name": "liquidationPrice",
+        "type": "uint256"
+      }, {
+        "internalType": "uint256",
+        "name": "maturity",
+        "type": "uint256"
+      }],
+      "internalType": "struct CollateralManager.Borrow",
+      "name": "",
+      "type": "tuple"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }],
+    "name": "getInterestRate",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "_erc721Token",
+      "type": "address"
+    }],
+    "name": "getLiquidationThreshold",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "user",
+      "type": "address"
+    }],
+    "name": "getUserBorrows",
+    "outputs": [{
+      "internalType": "uint256[]",
+      "name": "",
+      "type": "uint256[]"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "getWhitelist",
+    "outputs": [{
+      "internalType": "address[]",
+      "name": "",
+      "type": "address[]"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "interestRates",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "liquidationThresholds",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }, {
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }, {
+      "internalType": "bytes",
+      "name": "",
+      "type": "bytes"
+    }],
+    "name": "onERC721Received",
+    "outputs": [{
+      "internalType": "bytes4",
+      "name": "",
+      "type": "bytes4"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "internalType": "address payable",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "interestRate",
+      "type": "uint256"
+    }],
+    "name": "setInterestRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "_erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "_threshold",
+      "type": "uint256"
+    }],
+    "name": "setLiquidationThreshold",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "erc721Token",
+      "type": "address"
+    }, {
+      "internalType": "bool",
+      "name": "isWhitelisted",
+      "type": "bool"
+    }],
+    "name": "updateWhitelist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "userBorrows",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "whitelist",
+    "outputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "whitelisted",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+  }, {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "_id",
+      "type": "uint256"
+    }, {
+      "internalType": "address",
+      "name": "_asset",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "_repaymentAmount",
+      "type": "uint256"
+    }],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }],
+  "bytecode": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550612653806100606000396000f3fe6080604052600436106101095760003560e01c8063876e264f11610095578063d01f63f511610064578063d01f63f5146103d3578063d3ea0f89146103fe578063d936547e1461043b578063dccda03d14610478578063e63697c8146104b557610109565b8063876e264f146102fe5780638da5cb5b1461032e578063b176e31114610359578063b696bdf91461039657610109565b8063338a1996116100dc578063338a1996146101e157806373e5515e1461021e57806378327438146102475780637b86e42c146102845780637ebd1b30146102c157610109565b80630d392cd91461010e5780630e30428d14610137578063150b7a0214610160578063191e9d7c1461019d575b600080fd5b34801561011a57600080fd5b5061013560048036038101906101309190611bc9565b6104de565b005b34801561014357600080fd5b5061015e60048036038101906101599190611c05565b610864565b005b34801561016c57600080fd5b5061018760048036038101906101829190611b4e565b61093a565b60405161019491906120ac565b60405180910390f35b3480156101a957600080fd5b506101c460048036038101906101bf9190611c41565b61094e565b6040516101d8989796959493929190612163565b60405180910390f35b3480156101ed57600080fd5b5061020860048036038101906102039190611a5f565b610a40565b604051610215919061206f565b60405180910390f35b34801561022a57600080fd5b5061024560048036038101906102409190611c05565b610ad7565b005b34801561025357600080fd5b5061026e60048036038101906102699190611a5f565b610bad565b60405161027b91906121e2565b60405180910390f35b34801561029057600080fd5b506102ab60048036038101906102a69190611a5f565b610bc5565b6040516102b891906121e2565b60405180910390f35b3480156102cd57600080fd5b506102e860048036038101906102e39190611c41565b610c0e565b6040516102f59190611f9b565b60405180910390f35b61031860048036038101906103139190611a88565b610c4d565b6040516103259190612091565b60405180910390f35b34801561033a57600080fd5b50610343610ff9565b6040516103509190611fb6565b60405180910390f35b34801561036557600080fd5b50610380600480360381019061037b9190611c41565b61101d565b60405161038d9190612147565b60405180910390f35b3480156103a257600080fd5b506103bd60048036038101906103b89190611c05565b61119d565b6040516103ca91906121e2565b60405180910390f35b3480156103df57600080fd5b506103e86111ce565b6040516103f5919061204d565b60405180910390f35b34801561040a57600080fd5b5061042560048036038101906104209190611a5f565b61125c565b60405161043291906121e2565b60405180910390f35b34801561044757600080fd5b50610462600480360381019061045d9190611a5f565b6112a5565b60405161046f9190612091565b60405180910390f35b34801561048457600080fd5b5061049f600480360381019061049a9190611a5f565b6112c5565b6040516104ac91906121e2565b60405180910390f35b3480156104c157600080fd5b506104dc60048036038101906104d79190611c6a565b6112dd565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461056c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161056390612127565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508015610631576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610860565b60005b60016007805490506106469190612307565b81101561085e578273ffffffffffffffffffffffffffffffffffffffff166007828154811061069e577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561084b57600760016007805490506106f99190612307565b81548110610730577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1660078281548110610795577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506007805480610815577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061085690612401565b915050610634565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108f2576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108e990612127565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154908060070154908060080154905088565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610acb57602002820191906000526020600020905b815481526020019060010190808311610ab7575b50505050509050919050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610b65576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b5c90612127565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610c1e57600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600660008973ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610cdb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610cd290612107565b60405180910390fd5b8773ffffffffffffffffffffffffffffffffffffffff166323b872dd8b308a6040518463ffffffff1660e01b8152600401610d1893929190611fd1565b600060405180830381600087803b158015610d3257600080fd5b505af1158015610d46573d6000803e3d6000fd5b505050506000610d5660016115fc565b90506000610d75610d668b610bc5565b8661160a90919063ffffffff16565b905060405180610100016040528060405180604001604052808d73ffffffffffffffffffffffffffffffffffffffff1681526020018c81525081526020018d73ffffffffffffffffffffffffffffffffffffffff1681526020018c73ffffffffffffffffffffffffffffffffffffffff168152602001898152602001888152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a0820151816006015560c0820151816007015560e08201518160080155905050600360008d73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610fa96001611620565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8c8b8b85604051610fde9493929190612008565b60405180910390a16001925050509998505050505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b611025611911565b6002600083815260200190815260200160002060405180610100016040529081600082016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200160018201548152505081526020016002820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020016003820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600482015481526020016005820154815260200160068201548152602001600782015481526020016008820154815250509050919050565b600360205281600052604060002081815481106111b957600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561125257602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019060010190808311611208575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206005015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146113a1576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401611398906120c7565b60405180910390fd5b8281146113e3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016113da906120e7565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556004820160009055600582016000905560068201600090556007820160009055600882016000905550506115468389611636565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161158393929190611fd1565b600060405180830381600087803b15801561159d57600080fd5b505af11580156115b1573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516115ea9493929190612008565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361161891906122d6565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506116889190612307565b81101561190c5781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611707577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156118f957600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506117a69190612307565b815481106117dd577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020828154811061185f577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806118e2577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b808061190490612401565b915050611639565b505050565b604051806101000160405280611925611988565b8152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600081526020016000815260200160008152602001600081525090565b6040518060400160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600081525090565b60006119cb6119c684612222565b6121fd565b9050828152602081018484840111156119e357600080fd5b6119ee8482856123c1565b509392505050565b600081359050611a05816125d8565b92915050565b600081359050611a1a816125ef565b92915050565b600082601f830112611a3157600080fd5b8135611a418482602086016119b8565b91505092915050565b600081359050611a5981612606565b92915050565b600060208284031215611a7157600080fd5b6000611a7f848285016119f6565b91505092915050565b60008060008060008060008060006101208a8c031215611aa757600080fd5b6000611ab58c828d016119f6565b9950506020611ac68c828d016119f6565b9850506040611ad78c828d016119f6565b9750506060611ae88c828d01611a4a565b9650506080611af98c828d01611a4a565b95505060a0611b0a8c828d01611a4a565b94505060c0611b1b8c828d01611a4a565b93505060e0611b2c8c828d01611a4a565b925050610100611b3e8c828d01611a4a565b9150509295985092959850929598565b60008060008060808587031215611b6457600080fd5b6000611b72878288016119f6565b9450506020611b83878288016119f6565b9350506040611b9487828801611a4a565b925050606085013567ffffffffffffffff811115611bb157600080fd5b611bbd87828801611a20565b91505092959194509250565b60008060408385031215611bdc57600080fd5b6000611bea858286016119f6565b9250506020611bfb85828601611a0b565b9150509250929050565b60008060408385031215611c1857600080fd5b6000611c26858286016119f6565b9250506020611c3785828601611a4a565b9150509250929050565b600060208284031215611c5357600080fd5b6000611c6184828501611a4a565b91505092915050565b600080600060608486031215611c7f57600080fd5b6000611c8d86828701611a4a565b9350506020611c9e868287016119f6565b9250506040611caf86828701611a4a565b9150509250925092565b6000611cc58383611cf8565b60208301905092915050565b6000611cdd8383611f7d565b60208301905092915050565b611cf28161234d565b82525050565b611d018161233b565b82525050565b611d108161233b565b82525050565b6000611d2182612273565b611d2b81856122a3565b9350611d3683612253565b8060005b83811015611d67578151611d4e8882611cb9565b9750611d5983612289565b925050600181019050611d3a565b5085935050505092915050565b6000611d7f8261227e565b611d8981856122b4565b9350611d9483612263565b8060005b83811015611dc5578151611dac8882611cd1565b9750611db783612296565b925050600181019050611d98565b5085935050505092915050565b611ddb8161235f565b82525050565b611dea8161236b565b82525050565b6000611dfd6024836122c5565b9150611e08826124e8565b604082019050919050565b6000611e206025836122c5565b9150611e2b82612537565b604082019050919050565b6000611e436013836122c5565b9150611e4e82612586565b602082019050919050565b6000611e66600a836122c5565b9150611e71826125af565b602082019050919050565b61012082016000820151611e936000850182611f1f565b506020820151611ea66040850182611cf8565b506040820151611eb96060850182611cf8565b506060820151611ecc6080850182611f7d565b506080820151611edf60a0850182611f7d565b5060a0820151611ef260c0850182611f7d565b5060c0820151611f0560e0850182611f7d565b5060e0820151611f19610100850182611f7d565b50505050565b604082016000820151611f356000850182611cf8565b506020820151611f486020850182611f7d565b50505050565b604082016000820151611f646000850182611cf8565b506020820151611f776020850182611f7d565b50505050565b611f86816123b7565b82525050565b611f95816123b7565b82525050565b6000602082019050611fb06000830184611d07565b92915050565b6000602082019050611fcb6000830184611ce9565b92915050565b6000606082019050611fe66000830186611d07565b611ff36020830185611d07565b6120006040830184611f8c565b949350505050565b600060808201905061201d6000830187611d07565b61202a6020830186611d07565b6120376040830185611f8c565b6120446060830184611f8c565b95945050505050565b600060208201905081810360008301526120678184611d16565b905092915050565b600060208201905081810360008301526120898184611d74565b905092915050565b60006020820190506120a66000830184611dd2565b92915050565b60006020820190506120c16000830184611de1565b92915050565b600060208201905081810360008301526120e081611df0565b9050919050565b6000602082019050818103600083015261210081611e13565b9050919050565b6000602082019050818103600083015261212081611e36565b9050919050565b6000602082019050818103600083015261214081611e59565b9050919050565b60006101208201905061215d6000830184611e7c565b92915050565b600061012082019050612179600083018b611f4e565b612186604083018a611d07565b6121936060830189611d07565b6121a06080830188611f8c565b6121ad60a0830187611f8c565b6121ba60c0830186611f8c565b6121c760e0830185611f8c565b6121d5610100830184611f8c565b9998505050505050505050565b60006020820190506121f76000830184611f8c565b92915050565b6000612207612218565b905061221382826123d0565b919050565b6000604051905090565b600067ffffffffffffffff82111561223d5761223c6124a8565b5b612246826124d7565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b60006122e1826123b7565b91506122ec836123b7565b9250826122fc576122fb612479565b5b828204905092915050565b6000612312826123b7565b915061231d836123b7565b9250828210156123305761232f61244a565b5b828203905092915050565b600061234682612397565b9050919050565b600061235882612397565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b6123d9826124d7565b810181811067ffffffffffffffff821117156123f8576123f76124a8565b5b80604052505050565b600061240c826123b7565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561243f5761243e61244a565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6125e18161233b565b81146125ec57600080fd5b50565b6125f88161235f565b811461260357600080fd5b50565b61260f816123b7565b811461261a57600080fd5b5056fea2646970667358221220663d41ca8d6874c6ae1bad944def9626e2fc4a0a71b7100a62b422e18995022764736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600436106101095760003560e01c8063876e264f11610095578063d01f63f511610064578063d01f63f5146103d3578063d3ea0f89146103fe578063d936547e1461043b578063dccda03d14610478578063e63697c8146104b557610109565b8063876e264f146102fe5780638da5cb5b1461032e578063b176e31114610359578063b696bdf91461039657610109565b8063338a1996116100dc578063338a1996146101e157806373e5515e1461021e57806378327438146102475780637b86e42c146102845780637ebd1b30146102c157610109565b80630d392cd91461010e5780630e30428d14610137578063150b7a0214610160578063191e9d7c1461019d575b600080fd5b34801561011a57600080fd5b5061013560048036038101906101309190611bc9565b6104de565b005b34801561014357600080fd5b5061015e60048036038101906101599190611c05565b610864565b005b34801561016c57600080fd5b5061018760048036038101906101829190611b4e565b61093a565b60405161019491906120ac565b60405180910390f35b3480156101a957600080fd5b506101c460048036038101906101bf9190611c41565b61094e565b6040516101d8989796959493929190612163565b60405180910390f35b3480156101ed57600080fd5b5061020860048036038101906102039190611a5f565b610a40565b604051610215919061206f565b60405180910390f35b34801561022a57600080fd5b5061024560048036038101906102409190611c05565b610ad7565b005b34801561025357600080fd5b5061026e60048036038101906102699190611a5f565b610bad565b60405161027b91906121e2565b60405180910390f35b34801561029057600080fd5b506102ab60048036038101906102a69190611a5f565b610bc5565b6040516102b891906121e2565b60405180910390f35b3480156102cd57600080fd5b506102e860048036038101906102e39190611c41565b610c0e565b6040516102f59190611f9b565b60405180910390f35b61031860048036038101906103139190611a88565b610c4d565b6040516103259190612091565b60405180910390f35b34801561033a57600080fd5b50610343610ff9565b6040516103509190611fb6565b60405180910390f35b34801561036557600080fd5b50610380600480360381019061037b9190611c41565b61101d565b60405161038d9190612147565b60405180910390f35b3480156103a257600080fd5b506103bd60048036038101906103b89190611c05565b61119d565b6040516103ca91906121e2565b60405180910390f35b3480156103df57600080fd5b506103e86111ce565b6040516103f5919061204d565b60405180910390f35b34801561040a57600080fd5b5061042560048036038101906104209190611a5f565b61125c565b60405161043291906121e2565b60405180910390f35b34801561044757600080fd5b50610462600480360381019061045d9190611a5f565b6112a5565b60405161046f9190612091565b60405180910390f35b34801561048457600080fd5b5061049f600480360381019061049a9190611a5f565b6112c5565b6040516104ac91906121e2565b60405180910390f35b3480156104c157600080fd5b506104dc60048036038101906104d79190611c6a565b6112dd565b005b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461056c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161056390612127565b60405180910390fd5b80600660008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055508015610631576007829080600181540180825580915050600190039060005260206000200160009091909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610860565b60005b60016007805490506106469190612307565b81101561085e578273ffffffffffffffffffffffffffffffffffffffff166007828154811061069e577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141561084b57600760016007805490506106f99190612307565b81548110610730577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1660078281548110610795577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506007805480610815577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b6001900381819060005260206000200160006101000a81549073ffffffffffffffffffffffffffffffffffffffff021916905590555b808061085690612401565b915050610634565b505b5050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146108f2576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016108e990612127565b60405180910390fd5b80600460008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b600063150b7a0260e01b9050949350505050565b6002602052806000526040600020600091509050806000016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600182015481525050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060040154908060050154908060060154908060070154908060080154905088565b6060600360008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805480602002602001604051908101604052809291908181526020018280548015610acb57602002820191906000526020600020905b815481526020019060010190808311610ab7575b50505050509050919050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610b65576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610b5c90612127565b60405180910390fd5b80600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055505050565b60046020528060005260406000206000915090505481565b6000600460008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60078181548110610c1e57600080fd5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600660008973ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16610cdb576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610cd290612107565b60405180910390fd5b8773ffffffffffffffffffffffffffffffffffffffff166323b872dd8b308a6040518463ffffffff1660e01b8152600401610d1893929190611fd1565b600060405180830381600087803b158015610d3257600080fd5b505af1158015610d46573d6000803e3d6000fd5b505050506000610d5660016115fc565b90506000610d75610d668b610bc5565b8661160a90919063ffffffff16565b905060405180610100016040528060405180604001604052808d73ffffffffffffffffffffffffffffffffffffffff1681526020018c81525081526020018d73ffffffffffffffffffffffffffffffffffffffff1681526020018c73ffffffffffffffffffffffffffffffffffffffff168152602001898152602001888152602001878152602001828152602001858152506002600084815260200190815260200160002060008201518160000160008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060208201518160010155505060208201518160020160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060408201518160030160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550606082015181600401556080820151816005015560a0820151816006015560c0820151816007015560e08201518160080155905050600360008d73ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020829080600181540180825580915050600190039060005260206000200160009091909190915055610fa96001611620565b7fac10d219b7928ad8d4e8185923b71b7e015ebf3f46ca669bab618fbb27d9a07f8c8b8b85604051610fde9493929190612008565b60405180910390a16001925050509998505050505050505050565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b611025611911565b6002600083815260200190815260200160002060405180610100016040529081600082016040518060400160405290816000820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200160018201548152505081526020016002820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020016003820160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001600482015481526020016005820154815260200160068201548152602001600782015481526020016008820154815250509050919050565b600360205281600052604060002081815481106111b957600080fd5b90600052602060002001600091509150505481565b6060600780548060200260200160405190810160405280929190818152602001828054801561125257602002820191906000526020600020905b8160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019060010190808311611208575b5050505050905090565b6000600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020549050919050565b60066020528060005260406000206000915054906101000a900460ff1681565b60056020528060005260406000206000915090505481565b60006002600085815260200190815260200160002060030160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690506000600260008681526020019081526020016000206005015490508373ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff16146113a1576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401611398906120c7565b60405180910390fd5b8281146113e3576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016113da906120e7565b60405180910390fd5b60006002600087815260200190815260200160002060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905060006002600088815260200190815260200160002060000160000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050600060026000898152602001908152602001600020600001600101549050600260008981526020019081526020016000206000808201600080820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff0219169055600182016000905550506002820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556003820160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690556004820160009055600582016000905560068201600090556007820160009055600882016000905550506115468389611636565b8173ffffffffffffffffffffffffffffffffffffffff166323b872dd3085846040518463ffffffff1660e01b815260040161158393929190611fd1565b600060405180830381600087803b15801561159d57600080fd5b505af11580156115b1573d6000803e3d6000fd5b505050507f7defc562b3eeddf62fd801e6b306167eef4078e7db2c676313406bffd53cbe3a8383838b6040516115ea9493929190612008565b60405180910390a15050505050505050565b600081600001549050919050565b6000818361161891906122d6565b905092915050565b6001816000016000828254019250508190555050565b60005b6001600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506116889190612307565b81101561190c5781600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208281548110611707577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020015414156118f957600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206001600360008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020805490506117a69190612307565b815481106117dd577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200154600360008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020828154811061185f577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b9060005260206000200181905550600360008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208054806118e2577f4e487b7100000000000000000000000000000000000000000000000000000000600052603160045260246000fd5b600190038181906000526020600020016000905590555b808061190490612401565b915050611639565b505050565b604051806101000160405280611925611988565b8152602001600073ffffffffffffffffffffffffffffffffffffffff168152602001600073ffffffffffffffffffffffffffffffffffffffff16815260200160008152602001600081526020016000815260200160008152602001600081525090565b6040518060400160405280600073ffffffffffffffffffffffffffffffffffffffff168152602001600081525090565b60006119cb6119c684612222565b6121fd565b9050828152602081018484840111156119e357600080fd5b6119ee8482856123c1565b509392505050565b600081359050611a05816125d8565b92915050565b600081359050611a1a816125ef565b92915050565b600082601f830112611a3157600080fd5b8135611a418482602086016119b8565b91505092915050565b600081359050611a5981612606565b92915050565b600060208284031215611a7157600080fd5b6000611a7f848285016119f6565b91505092915050565b60008060008060008060008060006101208a8c031215611aa757600080fd5b6000611ab58c828d016119f6565b9950506020611ac68c828d016119f6565b9850506040611ad78c828d016119f6565b9750506060611ae88c828d01611a4a565b9650506080611af98c828d01611a4a565b95505060a0611b0a8c828d01611a4a565b94505060c0611b1b8c828d01611a4a565b93505060e0611b2c8c828d01611a4a565b925050610100611b3e8c828d01611a4a565b9150509295985092959850929598565b60008060008060808587031215611b6457600080fd5b6000611b72878288016119f6565b9450506020611b83878288016119f6565b9350506040611b9487828801611a4a565b925050606085013567ffffffffffffffff811115611bb157600080fd5b611bbd87828801611a20565b91505092959194509250565b60008060408385031215611bdc57600080fd5b6000611bea858286016119f6565b9250506020611bfb85828601611a0b565b9150509250929050565b60008060408385031215611c1857600080fd5b6000611c26858286016119f6565b9250506020611c3785828601611a4a565b9150509250929050565b600060208284031215611c5357600080fd5b6000611c6184828501611a4a565b91505092915050565b600080600060608486031215611c7f57600080fd5b6000611c8d86828701611a4a565b9350506020611c9e868287016119f6565b9250506040611caf86828701611a4a565b9150509250925092565b6000611cc58383611cf8565b60208301905092915050565b6000611cdd8383611f7d565b60208301905092915050565b611cf28161234d565b82525050565b611d018161233b565b82525050565b611d108161233b565b82525050565b6000611d2182612273565b611d2b81856122a3565b9350611d3683612253565b8060005b83811015611d67578151611d4e8882611cb9565b9750611d5983612289565b925050600181019050611d3a565b5085935050505092915050565b6000611d7f8261227e565b611d8981856122b4565b9350611d9483612263565b8060005b83811015611dc5578151611dac8882611cd1565b9750611db783612296565b925050600181019050611d98565b5085935050505092915050565b611ddb8161235f565b82525050565b611dea8161236b565b82525050565b6000611dfd6024836122c5565b9150611e08826124e8565b604082019050919050565b6000611e206025836122c5565b9150611e2b82612537565b604082019050919050565b6000611e436013836122c5565b9150611e4e82612586565b602082019050919050565b6000611e66600a836122c5565b9150611e71826125af565b602082019050919050565b61012082016000820151611e936000850182611f1f565b506020820151611ea66040850182611cf8565b506040820151611eb96060850182611cf8565b506060820151611ecc6080850182611f7d565b506080820151611edf60a0850182611f7d565b5060a0820151611ef260c0850182611f7d565b5060c0820151611f0560e0850182611f7d565b5060e0820151611f19610100850182611f7d565b50505050565b604082016000820151611f356000850182611cf8565b506020820151611f486020850182611f7d565b50505050565b604082016000820151611f646000850182611cf8565b506020820151611f776020850182611f7d565b50505050565b611f86816123b7565b82525050565b611f95816123b7565b82525050565b6000602082019050611fb06000830184611d07565b92915050565b6000602082019050611fcb6000830184611ce9565b92915050565b6000606082019050611fe66000830186611d07565b611ff36020830185611d07565b6120006040830184611f8c565b949350505050565b600060808201905061201d6000830187611d07565b61202a6020830186611d07565b6120376040830185611f8c565b6120446060830184611f8c565b95945050505050565b600060208201905081810360008301526120678184611d16565b905092915050565b600060208201905081810360008301526120898184611d74565b905092915050565b60006020820190506120a66000830184611dd2565b92915050565b60006020820190506120c16000830184611de1565b92915050565b600060208201905081810360008301526120e081611df0565b9050919050565b6000602082019050818103600083015261210081611e13565b9050919050565b6000602082019050818103600083015261212081611e36565b9050919050565b6000602082019050818103600083015261214081611e59565b9050919050565b60006101208201905061215d6000830184611e7c565b92915050565b600061012082019050612179600083018b611f4e565b612186604083018a611d07565b6121936060830189611d07565b6121a06080830188611f8c565b6121ad60a0830187611f8c565b6121ba60c0830186611f8c565b6121c760e0830185611f8c565b6121d5610100830184611f8c565b9998505050505050505050565b60006020820190506121f76000830184611f8c565b92915050565b6000612207612218565b905061221382826123d0565b919050565b6000604051905090565b600067ffffffffffffffff82111561223d5761223c6124a8565b5b612246826124d7565b9050602081019050919050565b6000819050602082019050919050565b6000819050602082019050919050565b600081519050919050565b600081519050919050565b6000602082019050919050565b6000602082019050919050565b600082825260208201905092915050565b600082825260208201905092915050565b600082825260208201905092915050565b60006122e1826123b7565b91506122ec836123b7565b9250826122fc576122fb612479565b5b828204905092915050565b6000612312826123b7565b915061231d836123b7565b9250828210156123305761232f61244a565b5b828203905092915050565b600061234682612397565b9050919050565b600061235882612397565b9050919050565b60008115159050919050565b60007fffffffff0000000000000000000000000000000000000000000000000000000082169050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b82818337600083830152505050565b6123d9826124d7565b810181811067ffffffffffffffff821117156123f8576123f76124a8565b5b80604052505050565b600061240c826123b7565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82141561243f5761243e61244a565b5b600182019050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601260045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000601f19601f8301169050919050565b7f52657061796d656e7420617373657420646f65736e2774206d6174636820626f60008201527f72726f7700000000000000000000000000000000000000000000000000000000602082015250565b7f52657061796d656e7420616d6f756e7420646f65736e2774206d61746368206260008201527f6f72726f77000000000000000000000000000000000000000000000000000000602082015250565b7f4e4654206e6f742077686974656c697374656400000000000000000000000000600082015250565b7f4f4e4c595f4f574e455200000000000000000000000000000000000000000000600082015250565b6125e18161233b565b81146125ec57600080fd5b50565b6125f88161235f565b811461260357600080fd5b50565b61260f816123b7565b811461261a57600080fd5b5056fea2646970667358221220663d41ca8d6874c6ae1bad944def9626e2fc4a0a71b7100a62b422e18995022764736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+};
+},{}],"hooks/useCollateralManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useCollateralManager = exports.default = void 0;
+
+var _useContract = require("./useContract");
+
+var _CollateralManager = _interopRequireDefault(require("../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json"));
+
+var _core = require("@web3-react/core");
+
+var _useIsValidNetwork2 = _interopRequireDefault(require("./useIsValidNetwork"));
+
+var _AppContext = require("../AppContext");
+
+var _units = require("@ethersproject/units");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var useCollateralManager = function useCollateralManager() {
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
+      isValidNetwork = _useIsValidNetwork.isValidNetwork;
+
+  var collateralManagerContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  var collateralManagerABI = _CollateralManager.default["abi"];
+  var collateralManagerContract = (0, _useContract.useContract)(collateralManagerContractAddress, collateralManagerABI); // NFT contract data (c&p from hooks/useNFT.js)
+
+  var nftContractAddressPUNK = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
+  var nftContractAddressBAYC = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
+  var nftContractAddress = {
+    "PUNK": nftContractAddressPUNK,
+    "BAYC": nftContractAddressBAYC
+  };
+  var nftContractAddressReverseLookup = {};
+  nftContractAddressReverseLookup[nftContractAddressPUNK] = "PUNK";
+  nftContractAddressReverseLookup[nftContractAddressBAYC] = "BAYC";
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      setWhitelistNFT = _useAppContext.setWhitelistNFT,
+      whitelistNFT = _useAppContext.whitelistNFT,
+      setAprPUNK = _useAppContext.setAprPUNK,
+      setAprBAYC = _useAppContext.setAprBAYC,
+      aprPUNK = _useAppContext.aprPUNK,
+      aprBAYC = _useAppContext.aprBAYC,
+      setBorrowAPR = _useAppContext.setBorrowAPR,
+      setUserBorrows = _useAppContext.setUserBorrows;
+
+  var fetchWhitelistNFT = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var whitelist;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return collateralManagerContract.getWhitelist();
+
+            case 2:
+              whitelist = _context.sent;
+              setWhitelistNFT(whitelist);
+              console.log(whitelist);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function fetchWhitelistNFT() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var fetchAPR = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var aprPUNK, aprBAYC;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return collateralManagerContract.getInterestRate(nftContractAddress["PUNK"]);
+
+            case 2:
+              aprPUNK = _context2.sent;
+              _context2.next = 5;
+              return collateralManagerContract.getInterestRate(nftContractAddress["BAYC"]);
+
+            case 5:
+              aprBAYC = _context2.sent;
+              setAprPUNK((0, _units.formatUnits)(aprPUNK, 0));
+              setAprBAYC((0, _units.formatUnits)(aprBAYC, 0));
+
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function fetchAPR() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var fetchBorrowAPR = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(nftSymbol) {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (nftSymbol == "PUNK") {
+                setBorrowAPR(aprPUNK);
+              } else if (nftSymbol == "BAYC") {
+                setBorrowAPR(aprBAYC);
+              }
+
+            case 1:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function fetchBorrowAPR(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var formatBorrow = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(_borrow) {
+      var borrow;
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              borrow = {};
+              borrow["erc20Token"] = _borrow["erc20Token"];
+              borrow["maturity"] = _borrow["maturity"].toNumber();
+              borrow["borrowAmount"] = (0, _units.formatUnits)(_borrow["borrowAmount"].toString(), 18);
+              borrow["repaymentAmount"] = (0, _units.formatUnits)(_borrow["repaymentAmount"].toString(), 18);
+              borrow["interestRate"] = _borrow["interestRate"].toString();
+              borrow["liquidationPrice"] = (0, _units.formatUnits)(_borrow["liquidationPrice"].toString(), 18);
+              borrow["nftSymbol"] = nftContractAddressReverseLookup[_borrow["collateral"][0]];
+              borrow["nftTokenId"] = _borrow["collateral"][1].toNumber();
+              return _context4.abrupt("return", borrow);
+
+            case 10:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function formatBorrow(_x2) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var fetchUserBorrows = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+      var userBorrowIds, userBorrows, borrowId, borrow;
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.next = 2;
+              return collateralManagerContract.getUserBorrows(account);
+
+            case 2:
+              userBorrowIds = _context5.sent;
+              console.log('userBorrowIds', userBorrowIds);
+              userBorrows = {};
+              _context5.t0 = regeneratorRuntime.keys(userBorrowIds);
+
+            case 6:
+              if ((_context5.t1 = _context5.t0()).done) {
+                _context5.next = 17;
+                break;
+              }
+
+              borrowId = _context5.t1.value;
+              _context5.next = 10;
+              return collateralManagerContract.getBorrow(borrowId);
+
+            case 10:
+              borrow = _context5.sent;
+
+              if (!(borrow[1] != "0x0000000000000000000000000000000000000000")) {
+                _context5.next = 15;
+                break;
+              }
+
+              _context5.next = 14;
+              return formatBorrow(borrow);
+
+            case 14:
+              userBorrows[borrowId] = _context5.sent;
+
+            case 15:
+              _context5.next = 6;
+              break;
+
+            case 17:
+              console.log('userBorrows', userBorrows);
+              setUserBorrows(userBorrows);
+
+            case 19:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    return function fetchUserBorrows() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  return {
+    fetchWhitelistNFT: fetchWhitelistNFT,
+    whitelistNFT: whitelistNFT,
+    fetchAPR: fetchAPR,
+    fetchBorrowAPR: fetchBorrowAPR,
+    collateralManagerContractAddress: collateralManagerContractAddress,
+    fetchUserBorrows: fetchUserBorrows
+  };
+};
+
+exports.useCollateralManager = useCollateralManager;
+var _default = useCollateralManager;
+exports.default = _default;
+},{"./useContract":"hooks/useContract.js","../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json":"../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","./useIsValidNetwork":"hooks/useIsValidNetwork.js","../AppContext":"AppContext.js","@ethersproject/units":"node_modules/@ethersproject/units/lib.esm/index.js"}],"hooks/useLendingPool.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62941,7 +59791,7 @@ var useLendingPool = function useLendingPool() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var lendingPoolContractAddress = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
+  var lendingPoolContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   var lendingPoolABI = _LendingPool.default["abi"];
   var lendingPoolContract = (0, _useContract.useContract)(lendingPoolContractAddress, lendingPoolABI);
 
@@ -62967,6 +59817,13 @@ var useLendingPool = function useLendingPool() {
 
   var _useCollateralManager = (0, _useCollateralManager2.default)(),
       collateralManagerContractAddress = _useCollateralManager.collateralManagerContractAddress;
+
+  var assetTokenContractAddressSymbolLookup = {};
+  assetTokenContractAddressSymbolLookup["0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"] = "DAI"; //hardhat
+
+  assetTokenContractAddressSymbolLookup["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"] = "ETH"; //hardhat
+
+  assetTokenContractAddressSymbolLookup["0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"] = "USDC"; //hardhat
 
   function wait(seconds) {
     return new Promise(function (res) {
@@ -63137,58 +59994,122 @@ var useLendingPool = function useLendingPool() {
           switch (_context4.prev = _context4.next) {
             case 0:
               if (!(account && isValidNetwork)) {
-                _context4.next = 26;
+                _context4.next = 25;
                 break;
               }
 
               _context4.prev = 1;
-              console.log((0, _units.parseUnits)(tokenAmount, 18).toString());
               setTxnStatus("LOADING");
               nftTokenContract = nftContract[nftTokenSymbol];
-              _context4.next = 7;
+              _context4.next = 6;
               return nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
 
-            case 7:
+            case 6:
               setTxnStatus("LOADING");
               tokenContractAddress = assetTokenContractAddress[tokenSymbol];
-              _context4.next = 11;
+              _context4.next = 10;
               return lendingPoolContract.borrow(tokenContractAddress, (0, _units.parseUnits)(tokenAmount, 18), nftTokenContract.address, nftTokenId, interestRate, numWeeks);
 
-            case 11:
+            case 10:
               txn = _context4.sent;
-              _context4.next = 14;
+              _context4.next = 13;
               return txn.wait(1);
 
-            case 14:
-              _context4.next = 16;
+            case 13:
+              _context4.next = 15;
               return fetchDebtTokenBalance(tokenSymbol);
 
-            case 16:
+            case 15:
               setTxnStatus("COMPLETE");
-              _context4.next = 19;
+              _context4.next = 18;
               return wait(5);
 
-            case 19:
+            case 18:
               setTxnStatus("");
-              _context4.next = 26;
+              _context4.next = 25;
               break;
 
-            case 22:
-              _context4.prev = 22;
+            case 21:
+              _context4.prev = 21;
               _context4.t0 = _context4["catch"](1);
               setTxnStatus("ERROR");
               console.log('ERROR', _context4.t0);
 
-            case 26:
+            case 25:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 22]]);
+      }, _callee4, null, [[1, 21]]);
     }));
 
     return function borrow(_x5, _x6, _x7, _x8, _x9, _x10) {
       return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var repay = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(tokenAddress, tokenAmount, borrowId) {
+      var tokenSymbol, tokenContract, _nTokenContract, tokenContractAddress, txn;
+
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              if (!(account && isValidNetwork)) {
+                _context5.next = 27;
+                break;
+              }
+
+              _context5.prev = 1;
+              setTxnStatus("LOADING");
+              tokenSymbol = assetTokenContractAddressSymbolLookup[tokenAddress];
+              tokenContract = assetTokenContract[tokenSymbol];
+              _nTokenContract = nTokenContract[tokenSymbol];
+              _context5.next = 8;
+              return tokenContract.approve(_nTokenContract.address, (0, _units.parseUnits)(tokenAmount, 18));
+
+            case 8:
+              setTxnStatus("LOADING");
+              tokenContractAddress = assetTokenContractAddress[tokenSymbol];
+              _context5.next = 12;
+              return lendingPoolContract.repay(tokenContractAddress, (0, _units.parseUnits)(tokenAmount, 18), borrowId);
+
+            case 12:
+              txn = _context5.sent;
+              _context5.next = 15;
+              return txn.wait(1);
+
+            case 15:
+              _context5.next = 17;
+              return fetchDebtTokenBalance(tokenSymbol);
+
+            case 17:
+              setTxnStatus("COMPLETE");
+              _context5.next = 20;
+              return wait(5);
+
+            case 20:
+              setTxnStatus("");
+              _context5.next = 27;
+              break;
+
+            case 23:
+              _context5.prev = 23;
+              _context5.t0 = _context5["catch"](1);
+              setTxnStatus("ERROR");
+              console.log('ERROR', _context5.t0);
+
+            case 27:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 23]]);
+    }));
+
+    return function repay(_x11, _x12, _x13) {
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -63197,7 +60118,8 @@ var useLendingPool = function useLendingPool() {
     borrowFloorPrice: borrowFloorPrice,
     deposit: deposit,
     withdraw: withdraw,
-    borrow: borrow
+    borrow: borrow,
+    repay: repay
   };
 };
 
@@ -81419,7 +78341,3232 @@ var TransactionStatus = function TransactionStatus() {
 
 var _default = TransactionStatus;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","react-bootstrap":"node_modules/react-bootstrap/esm/index.js","../../AppContext":"AppContext.js","../../hooks/useTransaction":"hooks/useTransaction.js","./TransactionStatus.css":"components/TransactionStatus/TransactionStatus.css"}],"components/PopUpDeposit/index.jsx":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-bootstrap":"node_modules/react-bootstrap/esm/index.js","../../AppContext":"AppContext.js","../../hooks/useTransaction":"hooks/useTransaction.js","./TransactionStatus.css":"components/TransactionStatus/TransactionStatus.css"}],"components/PopUpNFT/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+require("./PopUpNFT.css");
+
+var _AppContext = require("../../AppContext");
+
+var _useLendingPool2 = _interopRequireDefault(require("../../hooks/useLendingPool"));
+
+var _TransactionStatus = _interopRequireDefault(require("../TransactionStatus"));
+
+var _useTransaction2 = _interopRequireDefault(require("../../hooks/useTransaction"));
+
+var _core = require("@web3-react/core");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function PopUpNFT(props) {
+  var value = props.value,
+      tokenAddress = props.tokenAddress,
+      borrowId = props.borrowId,
+      spanText = props.spanText,
+      spanText2 = props.spanText2,
+      nftAvatar = props.nftAvatar,
+      rectangle19 = props.rectangle19,
+      inputType = props.inputType,
+      inputPlaceholder = props.inputPlaceholder;
+
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useLendingPool = (0, _useLendingPool2.default)(),
+      repay = _useLendingPool.repay;
+
+  var _useTransaction = (0, _useTransaction2.default)(),
+      txnStatus = _useTransaction.txnStatus;
+
+  var handleRepaySubmit = function handleRepaySubmit() {
+    repay(tokenAddress, value, borrowId);
+  };
+
+  (0, _react.useEffect)(function () {
+    if (account) {
+      txnStatus;
+    }
+  }, [account]);
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "pop-up-nft"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "pop-up-text valign-text-middle oxanium-bold-web-orange-32px"
+  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
+    className: "oxanium-bold-web-orange-32px"
+  }, spanText, /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
+    className: "oxanium-extra-light-web-orange-24px"
+  }, spanText2))), /*#__PURE__*/_react.default.createElement(_TransactionStatus.default, null), /*#__PURE__*/_react.default.createElement("img", {
+    className: "nft-avatar",
+    src: nftAvatar
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "overlap-group1 border-1px-black"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "rectangle-19",
+    src: rectangle19
+  }), /*#__PURE__*/_react.default.createElement("input", {
+    align: "right",
+    className: "x19111-repay oxanium-normal-black-24px",
+    name: "19111",
+    value: value,
+    type: inputType,
+    readOnly: true
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    onClick: handleRepaySubmit,
+    className: "overlap-group"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    onClick: handleRepaySubmit,
+    className: "rectangle-47"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "repay valign-text-middle oxanium-normal-white-24px"
+  }, "Repay")));
+}
+
+var _default = PopUpNFT;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./PopUpNFT.css":"components/PopUpNFT/PopUpNFT.css","../../AppContext":"AppContext.js","../../hooks/useLendingPool":"hooks/useLendingPool.js","../TransactionStatus":"components/TransactionStatus/index.jsx","../../hooks/useTransaction":"hooks/useTransaction.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js"}],"components/PopUpNFTs/PopUpNFTs.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpNFTs/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _PopUpNFT = _interopRequireDefault(require("../PopUpNFT"));
+
+require("./PopUpNFTs.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function PopUpNFTs(props) {
+  var popUpNFTProps = props.popUpNFTProps,
+      borrowId = props.borrowId,
+      repaymentAmount = props.repaymentAmount,
+      tokenAddress = props.tokenAddress,
+      nftSymbol = props.nftSymbol,
+      nftTokenId = props.nftTokenId,
+      imgUrl = props.imgUrl;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "container-center-horizontal"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "popupnfts screen"
+  }, /*#__PURE__*/_react.default.createElement(_PopUpNFT.default, {
+    spanText: "Repay borrow.",
+    spanText2: "Repay borrow to retreive your NFT.",
+    nftAvatar: imgUrl,
+    rectangle19: "/img/rectangle-19@2x.png",
+    inputType: "text",
+    value: repaymentAmount,
+    tokenAddress: tokenAddress,
+    borrowId: borrowId,
+    repay: "Repay"
+  })));
+}
+
+var _default = PopUpNFTs;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","../PopUpNFT":"components/PopUpNFT/index.jsx","./PopUpNFTs.css":"components/PopUpNFTs/PopUpNFTs.css"}],"node_modules/events/events.js":[function(require,module,exports) {
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
+
+var R = typeof Reflect === 'object' ? Reflect : null;
+var ReflectApply = R && typeof R.apply === 'function' ? R.apply : function ReflectApply(target, receiver, args) {
+  return Function.prototype.apply.call(target, receiver, args);
+};
+var ReflectOwnKeys;
+
+if (R && typeof R.ownKeys === 'function') {
+  ReflectOwnKeys = R.ownKeys;
+} else if (Object.getOwnPropertySymbols) {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target));
+  };
+} else {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target);
+  };
+}
+
+function ProcessEmitWarning(warning) {
+  if (console && console.warn) console.warn(warning);
+}
+
+var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
+  return value !== value;
+};
+
+function EventEmitter() {
+  EventEmitter.init.call(this);
+}
+
+module.exports = EventEmitter;
+module.exports.once = once; // Backwards-compat with node 0.10.x
+
+EventEmitter.EventEmitter = EventEmitter;
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined; // By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+
+var defaultMaxListeners = 10;
+
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+}
+
+Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
+  enumerable: true,
+  get: function () {
+    return defaultMaxListeners;
+  },
+  set: function (arg) {
+    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
+      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
+    }
+
+    defaultMaxListeners = arg;
+  }
+});
+
+EventEmitter.init = function () {
+  if (this._events === undefined || this._events === Object.getPrototypeOf(this)._events) {
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+  }
+
+  this._maxListeners = this._maxListeners || undefined;
+}; // Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+
+
+EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
+    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
+  }
+
+  this._maxListeners = n;
+  return this;
+};
+
+function _getMaxListeners(that) {
+  if (that._maxListeners === undefined) return EventEmitter.defaultMaxListeners;
+  return that._maxListeners;
+}
+
+EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+  return _getMaxListeners(this);
+};
+
+EventEmitter.prototype.emit = function emit(type) {
+  var args = [];
+
+  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
+
+  var doError = type === 'error';
+  var events = this._events;
+  if (events !== undefined) doError = doError && events.error === undefined;else if (!doError) return false; // If there is no 'error' event listener then throw.
+
+  if (doError) {
+    var er;
+    if (args.length > 0) er = args[0];
+
+    if (er instanceof Error) {
+      // Note: The comments on the `throw` lines are intentional, they show
+      // up in Node's output if this results in an unhandled exception.
+      throw er; // Unhandled 'error' event
+    } // At least give some kind of context to the user
+
+
+    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
+    err.context = er;
+    throw err; // Unhandled 'error' event
+  }
+
+  var handler = events[type];
+  if (handler === undefined) return false;
+
+  if (typeof handler === 'function') {
+    ReflectApply(handler, this, args);
+  } else {
+    var len = handler.length;
+    var listeners = arrayClone(handler, len);
+
+    for (var i = 0; i < len; ++i) ReflectApply(listeners[i], this, args);
+  }
+
+  return true;
+};
+
+function _addListener(target, type, listener, prepend) {
+  var m;
+  var events;
+  var existing;
+  checkListener(listener);
+  events = target._events;
+
+  if (events === undefined) {
+    events = target._events = Object.create(null);
+    target._eventsCount = 0;
+  } else {
+    // To avoid recursion in the case that type === "newListener"! Before
+    // adding it to the listeners, first emit "newListener".
+    if (events.newListener !== undefined) {
+      target.emit('newListener', type, listener.listener ? listener.listener : listener); // Re-assign `events` because a newListener handler could have caused the
+      // this._events to be assigned to a new object
+
+      events = target._events;
+    }
+
+    existing = events[type];
+  }
+
+  if (existing === undefined) {
+    // Optimize the case of one listener. Don't need the extra array object.
+    existing = events[type] = listener;
+    ++target._eventsCount;
+  } else {
+    if (typeof existing === 'function') {
+      // Adding the second element, need to change to array.
+      existing = events[type] = prepend ? [listener, existing] : [existing, listener]; // If we've already got an array, just append.
+    } else if (prepend) {
+      existing.unshift(listener);
+    } else {
+      existing.push(listener);
+    } // Check for listener leak
+
+
+    m = _getMaxListeners(target);
+
+    if (m > 0 && existing.length > m && !existing.warned) {
+      existing.warned = true; // No error code for this since it is a Warning
+      // eslint-disable-next-line no-restricted-syntax
+
+      var w = new Error('Possible EventEmitter memory leak detected. ' + existing.length + ' ' + String(type) + ' listeners ' + 'added. Use emitter.setMaxListeners() to ' + 'increase limit');
+      w.name = 'MaxListenersExceededWarning';
+      w.emitter = target;
+      w.type = type;
+      w.count = existing.length;
+      ProcessEmitWarning(w);
+    }
+  }
+
+  return target;
+}
+
+EventEmitter.prototype.addListener = function addListener(type, listener) {
+  return _addListener(this, type, listener, false);
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.prependListener = function prependListener(type, listener) {
+  return _addListener(this, type, listener, true);
+};
+
+function onceWrapper() {
+  if (!this.fired) {
+    this.target.removeListener(this.type, this.wrapFn);
+    this.fired = true;
+    if (arguments.length === 0) return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
+  }
+}
+
+function _onceWrap(target, type, listener) {
+  var state = {
+    fired: false,
+    wrapFn: undefined,
+    target: target,
+    type: type,
+    listener: listener
+  };
+  var wrapped = onceWrapper.bind(state);
+  wrapped.listener = listener;
+  state.wrapFn = wrapped;
+  return wrapped;
+}
+
+EventEmitter.prototype.once = function once(type, listener) {
+  checkListener(listener);
+  this.on(type, _onceWrap(this, type, listener));
+  return this;
+};
+
+EventEmitter.prototype.prependOnceListener = function prependOnceListener(type, listener) {
+  checkListener(listener);
+  this.prependListener(type, _onceWrap(this, type, listener));
+  return this;
+}; // Emits a 'removeListener' event if and only if the listener was removed.
+
+
+EventEmitter.prototype.removeListener = function removeListener(type, listener) {
+  var list, events, position, i, originalListener;
+  checkListener(listener);
+  events = this._events;
+  if (events === undefined) return this;
+  list = events[type];
+  if (list === undefined) return this;
+
+  if (list === listener || list.listener === listener) {
+    if (--this._eventsCount === 0) this._events = Object.create(null);else {
+      delete events[type];
+      if (events.removeListener) this.emit('removeListener', type, list.listener || listener);
+    }
+  } else if (typeof list !== 'function') {
+    position = -1;
+
+    for (i = list.length - 1; i >= 0; i--) {
+      if (list[i] === listener || list[i].listener === listener) {
+        originalListener = list[i].listener;
+        position = i;
+        break;
+      }
+    }
+
+    if (position < 0) return this;
+    if (position === 0) list.shift();else {
+      spliceOne(list, position);
+    }
+    if (list.length === 1) events[type] = list[0];
+    if (events.removeListener !== undefined) this.emit('removeListener', type, originalListener || listener);
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+
+EventEmitter.prototype.removeAllListeners = function removeAllListeners(type) {
+  var listeners, events, i;
+  events = this._events;
+  if (events === undefined) return this; // not listening for removeListener, no need to emit
+
+  if (events.removeListener === undefined) {
+    if (arguments.length === 0) {
+      this._events = Object.create(null);
+      this._eventsCount = 0;
+    } else if (events[type] !== undefined) {
+      if (--this._eventsCount === 0) this._events = Object.create(null);else delete events[type];
+    }
+
+    return this;
+  } // emit removeListener for all listeners on all events
+
+
+  if (arguments.length === 0) {
+    var keys = Object.keys(events);
+    var key;
+
+    for (i = 0; i < keys.length; ++i) {
+      key = keys[i];
+      if (key === 'removeListener') continue;
+      this.removeAllListeners(key);
+    }
+
+    this.removeAllListeners('removeListener');
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+    return this;
+  }
+
+  listeners = events[type];
+
+  if (typeof listeners === 'function') {
+    this.removeListener(type, listeners);
+  } else if (listeners !== undefined) {
+    // LIFO order
+    for (i = listeners.length - 1; i >= 0; i--) {
+      this.removeListener(type, listeners[i]);
+    }
+  }
+
+  return this;
+};
+
+function _listeners(target, type, unwrap) {
+  var events = target._events;
+  if (events === undefined) return [];
+  var evlistener = events[type];
+  if (evlistener === undefined) return [];
+  if (typeof evlistener === 'function') return unwrap ? [evlistener.listener || evlistener] : [evlistener];
+  return unwrap ? unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
+}
+
+EventEmitter.prototype.listeners = function listeners(type) {
+  return _listeners(this, type, true);
+};
+
+EventEmitter.prototype.rawListeners = function rawListeners(type) {
+  return _listeners(this, type, false);
+};
+
+EventEmitter.listenerCount = function (emitter, type) {
+  if (typeof emitter.listenerCount === 'function') {
+    return emitter.listenerCount(type);
+  } else {
+    return listenerCount.call(emitter, type);
+  }
+};
+
+EventEmitter.prototype.listenerCount = listenerCount;
+
+function listenerCount(type) {
+  var events = this._events;
+
+  if (events !== undefined) {
+    var evlistener = events[type];
+
+    if (typeof evlistener === 'function') {
+      return 1;
+    } else if (evlistener !== undefined) {
+      return evlistener.length;
+    }
+  }
+
+  return 0;
+}
+
+EventEmitter.prototype.eventNames = function eventNames() {
+  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
+};
+
+function arrayClone(arr, n) {
+  var copy = new Array(n);
+
+  for (var i = 0; i < n; ++i) copy[i] = arr[i];
+
+  return copy;
+}
+
+function spliceOne(list, index) {
+  for (; index + 1 < list.length; index++) list[index] = list[index + 1];
+
+  list.pop();
+}
+
+function unwrapListeners(arr) {
+  var ret = new Array(arr.length);
+
+  for (var i = 0; i < ret.length; ++i) {
+    ret[i] = arr[i].listener || arr[i];
+  }
+
+  return ret;
+}
+
+function once(emitter, name) {
+  return new Promise(function (resolve, reject) {
+    function errorListener(err) {
+      emitter.removeListener(name, resolver);
+      reject(err);
+    }
+
+    function resolver() {
+      if (typeof emitter.removeListener === 'function') {
+        emitter.removeListener('error', errorListener);
+      }
+
+      resolve([].slice.call(arguments));
+    }
+
+    ;
+    eventTargetAgnosticAddListener(emitter, name, resolver, {
+      once: true
+    });
+
+    if (name !== 'error') {
+      addErrorHandlerIfEventEmitter(emitter, errorListener, {
+        once: true
+      });
+    }
+  });
+}
+
+function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
+  if (typeof emitter.on === 'function') {
+    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
+  }
+}
+
+function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
+  if (typeof emitter.on === 'function') {
+    if (flags.once) {
+      emitter.once(name, listener);
+    } else {
+      emitter.on(name, listener);
+    }
+  } else if (typeof emitter.addEventListener === 'function') {
+    // EventTarget does not have `error` event semantics like Node
+    // EventEmitters, we do not listen for `error` events here.
+    emitter.addEventListener(name, function wrapListener(arg) {
+      // IE does not have builtin `{ once: true }` support so we
+      // have to do it manually.
+      if (flags.once) {
+        emitter.removeEventListener(name, wrapListener);
+      }
+
+      listener(arg);
+    });
+  } else {
+    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
+  }
+}
+},{}],"node_modules/@web3-react/abstract-connector/dist/abstract-connector.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AbstractConnector = void 0;
+
+var _events = require("events");
+
+var _types = require("@web3-react/types");
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+var AbstractConnector = /*#__PURE__*/function (_EventEmitter) {
+  _inheritsLoose(AbstractConnector, _EventEmitter);
+
+  function AbstractConnector(_temp) {
+    var _this;
+
+    var _ref = _temp === void 0 ? {} : _temp,
+        supportedChainIds = _ref.supportedChainIds;
+
+    _this = _EventEmitter.call(this) || this;
+    _this.supportedChainIds = supportedChainIds;
+    return _this;
+  }
+
+  var _proto = AbstractConnector.prototype;
+
+  _proto.emitUpdate = function emitUpdate(update) {
+    if ("development" !== "production") {
+      console.log("Emitting '" + _types.ConnectorEvent.Update + "' with payload", update);
+    }
+
+    this.emit(_types.ConnectorEvent.Update, update);
+  };
+
+  _proto.emitError = function emitError(error) {
+    if ("development" !== "production") {
+      console.log("Emitting '" + _types.ConnectorEvent.Error + "' with payload", error);
+    }
+
+    this.emit(_types.ConnectorEvent.Error, error);
+  };
+
+  _proto.emitDeactivate = function emitDeactivate() {
+    if ("development" !== "production") {
+      console.log("Emitting '" + _types.ConnectorEvent.Deactivate + "'");
+    }
+
+    this.emit(_types.ConnectorEvent.Deactivate);
+  };
+
+  return AbstractConnector;
+}(_events.EventEmitter);
+
+exports.AbstractConnector = AbstractConnector;
+},{"events":"node_modules/events/events.js","@web3-react/types":"node_modules/@web3-react/types/dist/types.esm.js"}],"node_modules/@web3-react/injected-connector/dist/injected-connector.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UserRejectedRequestError = exports.NoEthereumProviderError = exports.InjectedConnector = void 0;
+
+var _abstractConnector = require("@web3-react/abstract-connector");
+
+var _tinyWarning = _interopRequireDefault(require("tiny-warning"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _construct(Parent, args, Class) {
+  if (isNativeReflectConstruct()) {
+    _construct = Reflect.construct;
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) _setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
+
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return _setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+} // A type of promise-like that resolves synchronously and supports only one observer
+
+
+var _iteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.iterator || (Symbol.iterator = /*#__PURE__*/Symbol("Symbol.iterator")) : "@@iterator"; // Asynchronously iterate through an object's values
+
+
+var _asyncIteratorSymbol = /*#__PURE__*/typeof Symbol !== "undefined" ? Symbol.asyncIterator || (Symbol.asyncIterator = /*#__PURE__*/Symbol("Symbol.asyncIterator")) : "@@asyncIterator"; // Asynchronously iterate on a value using it's async iterator if present, or its synchronous iterator if missing
+
+
+function _catch(body, recover) {
+  try {
+    var result = body();
+  } catch (e) {
+    return recover(e);
+  }
+
+  if (result && result.then) {
+    return result.then(void 0, recover);
+  }
+
+  return result;
+} // Asynchronously await a promise and pass the result to a finally continuation
+
+
+function parseSendReturn(sendReturn) {
+  return sendReturn.hasOwnProperty('result') ? sendReturn.result : sendReturn;
+}
+
+var NoEthereumProviderError = /*#__PURE__*/function (_Error) {
+  _inheritsLoose(NoEthereumProviderError, _Error);
+
+  function NoEthereumProviderError() {
+    var _this;
+
+    _this = _Error.call(this) || this;
+    _this.name = _this.constructor.name;
+    _this.message = 'No Ethereum provider was found on window.ethereum.';
+    return _this;
+  }
+
+  return NoEthereumProviderError;
+}( /*#__PURE__*/_wrapNativeSuper(Error));
+
+exports.NoEthereumProviderError = NoEthereumProviderError;
+
+var UserRejectedRequestError = /*#__PURE__*/function (_Error2) {
+  _inheritsLoose(UserRejectedRequestError, _Error2);
+
+  function UserRejectedRequestError() {
+    var _this2;
+
+    _this2 = _Error2.call(this) || this;
+    _this2.name = _this2.constructor.name;
+    _this2.message = 'The user rejected the request.';
+    return _this2;
+  }
+
+  return UserRejectedRequestError;
+}( /*#__PURE__*/_wrapNativeSuper(Error));
+
+exports.UserRejectedRequestError = UserRejectedRequestError;
+
+var InjectedConnector = /*#__PURE__*/function (_AbstractConnector) {
+  _inheritsLoose(InjectedConnector, _AbstractConnector);
+
+  function InjectedConnector(kwargs) {
+    var _this3;
+
+    _this3 = _AbstractConnector.call(this, kwargs) || this;
+    _this3.handleNetworkChanged = _this3.handleNetworkChanged.bind(_assertThisInitialized(_this3));
+    _this3.handleChainChanged = _this3.handleChainChanged.bind(_assertThisInitialized(_this3));
+    _this3.handleAccountsChanged = _this3.handleAccountsChanged.bind(_assertThisInitialized(_this3));
+    _this3.handleClose = _this3.handleClose.bind(_assertThisInitialized(_this3));
+    return _this3;
+  }
+
+  var _proto = InjectedConnector.prototype;
+
+  _proto.handleChainChanged = function handleChainChanged(chainId) {
+    if ("development" !== "production") {
+      console.log("Handling 'chainChanged' event with payload", chainId);
+    }
+
+    this.emitUpdate({
+      chainId: chainId,
+      provider: window.ethereum
+    });
+  };
+
+  _proto.handleAccountsChanged = function handleAccountsChanged(accounts) {
+    if ("development" !== "production") {
+      console.log("Handling 'accountsChanged' event with payload", accounts);
+    }
+
+    if (accounts.length === 0) {
+      this.emitDeactivate();
+    } else {
+      this.emitUpdate({
+        account: accounts[0]
+      });
+    }
+  };
+
+  _proto.handleClose = function handleClose(code, reason) {
+    if ("development" !== "production") {
+      console.log("Handling 'close' event with payload", code, reason);
+    }
+
+    this.emitDeactivate();
+  };
+
+  _proto.handleNetworkChanged = function handleNetworkChanged(networkId) {
+    if ("development" !== "production") {
+      console.log("Handling 'networkChanged' event with payload", networkId);
+    }
+
+    this.emitUpdate({
+      chainId: networkId,
+      provider: window.ethereum
+    });
+  };
+
+  _proto.activate = function activate() {
+    try {
+      var _temp5 = function _temp5(_result) {
+        if (_exit2) return _result;
+
+        function _temp2() {
+          return _extends({
+            provider: window.ethereum
+          }, account ? {
+            account: account
+          } : {});
+        }
+
+        var _temp = function () {
+          if (!account) {
+            // if enable is successful but doesn't return accounts, fall back to getAccount (not happy i have to do this...)
+            return Promise.resolve(window.ethereum.enable().then(function (sendReturn) {
+              return sendReturn && parseSendReturn(sendReturn)[0];
+            })).then(function (_window$ethereum$enab) {
+              account = _window$ethereum$enab;
+            });
+          }
+        }(); // if unsuccessful, try enable
+
+
+        return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+      };
+
+      var _exit2 = false;
+
+      var _this5 = this;
+
+      if (!window.ethereum) {
+        throw new NoEthereumProviderError();
+      }
+
+      if (window.ethereum.on) {
+        window.ethereum.on('chainChanged', _this5.handleChainChanged);
+        window.ethereum.on('accountsChanged', _this5.handleAccountsChanged);
+        window.ethereum.on('close', _this5.handleClose);
+        window.ethereum.on('networkChanged', _this5.handleNetworkChanged);
+      }
+
+      if (window.ethereum.isMetaMask) {
+        ;
+        window.ethereum.autoRefreshOnNetworkChange = false;
+      } // try to activate + get account via eth_requestAccounts
+
+
+      var account;
+
+      var _temp6 = _catch(function () {
+        return Promise.resolve(window.ethereum.send('eth_requestAccounts').then(function (sendReturn) {
+          return parseSendReturn(sendReturn)[0];
+        })).then(function (_window$ethereum$send) {
+          account = _window$ethereum$send;
+        });
+      }, function (error) {
+        if (error.code === 4001) {
+          throw new UserRejectedRequestError();
+        }
+
+        "development" !== "production" ? (0, _tinyWarning.default)(false, 'eth_requestAccounts was unsuccessful, falling back to enable') : void 0;
+      });
+
+      return Promise.resolve(_temp6 && _temp6.then ? _temp6.then(_temp5) : _temp5(_temp6));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  _proto.getProvider = function getProvider() {
+    try {
+      return Promise.resolve(window.ethereum);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  _proto.getChainId = function getChainId() {
+    try {
+      var _temp12 = function _temp12() {
+        function _temp9() {
+          if (!chainId) {
+            try {
+              chainId = parseSendReturn(window.ethereum.send({
+                method: 'net_version'
+              }));
+            } catch (_unused) {
+              "development" !== "production" ? (0, _tinyWarning.default)(false, 'net_version v2 was unsuccessful, falling back to manual matches and static properties') : void 0;
+            }
+          }
+
+          if (!chainId) {
+            if (window.ethereum.isDapper) {
+              chainId = parseSendReturn(window.ethereum.cachedResults.net_version);
+            } else {
+              chainId = window.ethereum.chainId || window.ethereum.netVersion || window.ethereum.networkVersion || window.ethereum._chainId;
+            }
+          }
+
+          return chainId;
+        }
+
+        var _temp8 = function () {
+          if (!chainId) {
+            var _temp14 = _catch(function () {
+              return Promise.resolve(window.ethereum.send('net_version').then(parseSendReturn)).then(function (_window$ethereum$send3) {
+                chainId = _window$ethereum$send3;
+              });
+            }, function () {
+              "development" !== "production" ? (0, _tinyWarning.default)(false, 'net_version was unsuccessful, falling back to net version v2') : void 0;
+            });
+
+            if (_temp14 && _temp14.then) return _temp14.then(function () {});
+          }
+        }();
+
+        return _temp8 && _temp8.then ? _temp8.then(_temp9) : _temp9(_temp8);
+      };
+
+      if (!window.ethereum) {
+        throw new NoEthereumProviderError();
+      }
+
+      var chainId;
+
+      var _temp13 = _catch(function () {
+        return Promise.resolve(window.ethereum.send('eth_chainId').then(parseSendReturn)).then(function (_window$ethereum$send2) {
+          chainId = _window$ethereum$send2;
+        });
+      }, function () {
+        "development" !== "production" ? (0, _tinyWarning.default)(false, 'eth_chainId was unsuccessful, falling back to net_version') : void 0;
+      });
+
+      return Promise.resolve(_temp13 && _temp13.then ? _temp13.then(_temp12) : _temp12(_temp13));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  _proto.getAccount = function getAccount() {
+    try {
+      var _temp20 = function _temp20() {
+        function _temp17() {
+          if (!account) {
+            account = parseSendReturn(window.ethereum.send({
+              method: 'eth_accounts'
+            }))[0];
+          }
+
+          return account;
+        }
+
+        var _temp16 = function () {
+          if (!account) {
+            var _temp22 = _catch(function () {
+              return Promise.resolve(window.ethereum.enable().then(function (sendReturn) {
+                return parseSendReturn(sendReturn)[0];
+              })).then(function (_window$ethereum$enab2) {
+                account = _window$ethereum$enab2;
+              });
+            }, function () {
+              "development" !== "production" ? (0, _tinyWarning.default)(false, 'enable was unsuccessful, falling back to eth_accounts v2') : void 0;
+            });
+
+            if (_temp22 && _temp22.then) return _temp22.then(function () {});
+          }
+        }();
+
+        return _temp16 && _temp16.then ? _temp16.then(_temp17) : _temp17(_temp16);
+      };
+
+      if (!window.ethereum) {
+        throw new NoEthereumProviderError();
+      }
+
+      var account;
+
+      var _temp21 = _catch(function () {
+        return Promise.resolve(window.ethereum.send('eth_accounts').then(function (sendReturn) {
+          return parseSendReturn(sendReturn)[0];
+        })).then(function (_window$ethereum$send4) {
+          account = _window$ethereum$send4;
+        });
+      }, function () {
+        "development" !== "production" ? (0, _tinyWarning.default)(false, 'eth_accounts was unsuccessful, falling back to enable') : void 0;
+      });
+
+      return Promise.resolve(_temp21 && _temp21.then ? _temp21.then(_temp20) : _temp20(_temp21));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  _proto.deactivate = function deactivate() {
+    if (window.ethereum && window.ethereum.removeListener) {
+      window.ethereum.removeListener('chainChanged', this.handleChainChanged);
+      window.ethereum.removeListener('accountsChanged', this.handleAccountsChanged);
+      window.ethereum.removeListener('close', this.handleClose);
+      window.ethereum.removeListener('networkChanged', this.handleNetworkChanged);
+    }
+  };
+
+  _proto.isAuthorized = function isAuthorized() {
+    try {
+      if (!window.ethereum) {
+        return Promise.resolve(false);
+      }
+
+      return Promise.resolve(_catch(function () {
+        return Promise.resolve(window.ethereum.send('eth_accounts').then(function (sendReturn) {
+          if (parseSendReturn(sendReturn).length > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }));
+      }, function () {
+        return false;
+      }));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  return InjectedConnector;
+}(_abstractConnector.AbstractConnector);
+
+exports.InjectedConnector = InjectedConnector;
+},{"@web3-react/abstract-connector":"node_modules/@web3-react/abstract-connector/dist/abstract-connector.esm.js","tiny-warning":"node_modules/tiny-warning/dist/tiny-warning.esm.js"}],"connectors.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.injected = void 0;
+
+var _injectedConnector = require("@web3-react/injected-connector");
+
+var injected = new _injectedConnector.InjectedConnector({
+  supportedChainIds: [1, 3, 4, 5, 42, 1337, 5777, 31337]
+});
+exports.injected = injected;
+},{"@web3-react/injected-connector":"node_modules/@web3-react/injected-connector/dist/injected-connector.esm.js"}],"node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
+var define;
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  define(IteratorPrototype, iteratorSymbol, function () {
+    return this;
+  });
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = GeneratorFunctionPrototype;
+  define(Gp, "constructor", GeneratorFunctionPrototype);
+  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction"
+  );
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      define(prototype, method, function(arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+    return this;
+  });
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList),
+      PromiseImpl
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  define(Gp, toStringTagSymbol, "Generator");
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  define(Gp, iteratorSymbol, function() {
+    return this;
+  });
+
+  define(Gp, "toString", function() {
+    return "[object Generator]";
+  });
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+  typeof module === "object" ? module.exports : {}
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, in modern engines
+  // we can explicitly access globalThis. In older engines we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  if (typeof globalThis === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
+}
+
+},{}],"components/Header/Header.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Header/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _core = require("@web3-react/core");
+
+var _connectors = require("../../connectors");
+
+require("regenerator-runtime/runtime");
+
+require("./Header.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function Header(props) {
+  var className = props.className;
+
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      active = _useWeb3React.active,
+      account = _useWeb3React.account,
+      activate = _useWeb3React.activate,
+      deactivate = _useWeb3React.deactivate;
+
+  console.log(active, account);
+
+  function connect() {
+    return _connect.apply(this, arguments);
+  }
+
+  function _connect() {
+    _connect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _context.next = 3;
+              return activate(_connectors.injected);
+
+            case 3:
+              _context.next = 8;
+              break;
+
+            case 5:
+              _context.prev = 5;
+              _context.t0 = _context["catch"](0);
+              console.log(_context.t0);
+
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 5]]);
+    }));
+    return _connect.apply(this, arguments);
+  }
+
+  function disconnect() {
+    return _disconnect.apply(this, arguments);
+  }
+
+  function _disconnect() {
+    _disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return deactivate(_connectors.injected);
+
+            case 3:
+              _context2.next = 8;
+              break;
+
+            case 5:
+              _context2.prev = 5;
+              _context2.t0 = _context2["catch"](0);
+              console.log(_context2.t0);
+
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 5]]);
+    }));
+    return _disconnect.apply(this, arguments);
+  }
+
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "header ".concat(className || "")
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/landing-page"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "logo"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "nf-tlend-logo-light-1",
+    src: "/img/nftlend-logo-light-1@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "nf-tlendxyz valign-text-middle oxanium-semi-bold-web-orange-36px"
+  }, "NFTlend.xyz"))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "navigation"
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/dashboard"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "nav-title dashboard-1 valign-text-middle oxanium-normal-white-22px"
+  }, "DASHBOARD")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/borrow"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "nav-title borrow valign-text-middle oxanium-normal-white-22px"
+  }, "BORROW")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/lend"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "nav-title place valign-text-middle oxanium-normal-white-22px"
+  }, "LEND")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/liquidate"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "nav-title liquidate valign-text-middle oxanium-normal-white-22px"
+  }, "LIQUIDATE")), active ? /*#__PURE__*/_react.default.createElement("button", {
+    onClick: disconnect,
+    className: "overlap-group-1"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "connect-wallet valign-text-middle oxanium-bold-white-22px"
+  }, account.substring(0, 6), "...", account.slice(-4))) : /*#__PURE__*/_react.default.createElement("button", {
+    onClick: connect,
+    className: "overlap-group-1"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "connect-wallet valign-text-middle oxanium-bold-white-22px"
+  }, "Connect Wallet"))));
+}
+
+var _default = Header;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../../connectors":"connectors.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./Header.css":"components/Header/Header.css"}],"components/Background/Background.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Background/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./Background.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Background(props) {
+  var className = props.className;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "background ".concat(className || "")
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "flex-col"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "bored-ape-logo-outline-1",
+    src: "/img/bored-ape-logo-outline-1@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("img", {
+    className: "punk-woman-outl-ovebg-preview-1",
+    src: "/img/punk-woman-outline-removebg-preview-1@2x.png"
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: "flex-col-1"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "punk-pipe-outli-ovebg-preview-1",
+    src: "/img/punk-pipe-outline-removebg-preview-1@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "overlap-group-7"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "coolcat-outline-ovebg-preview-1",
+    src: "/img/coolcat-outline-removebg-preview-1@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("img", {
+    className: "punk-ape-outlin-ovebg-preview-1",
+    src: "/img/punk-ape-outline-removebg-preview-1@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("img", {
+    className: "bbape-removebg-convert-image-2",
+    src: "/img/bb-ape-removebg-preview-convertimage-2@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("img", {
+    className: "loading-skull-noun-2",
+    src: "/img/loading-skull-noun-2@2x.png"
+  }))));
+}
+
+var _default = Background;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./Background.css":"components/Background/Background.css"}],"components/BorrowsHeader/BorrowsHeader.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/BorrowsHeader/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./BorrowsHeader.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function BorrowsHeader() {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrows-header oxanium-normal-white-20px"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "your-borrows valign-text-middle"
+  }, "Your Borrows"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrowed valign-text-middle"
+  }, "Borrowed"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "repayment valign-text-middle"
+  }, "Repayment"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "apr valign-text-middle"
+  }, "APR"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "collateral valign-text-middle"
+  }, "Collateral"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "coll-ratio valign-text-middle"
+  }, "Coll. Ratio"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "maturity valign-text-middle"
+  }, "Maturity"));
+}
+
+var _default = BorrowsHeader;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./BorrowsHeader.css":"components/BorrowsHeader/BorrowsHeader.css"}],"components/AssetItem/AssetItem.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/AssetItem/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+require("./AssetItem.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function AssetItem(props) {
+  var className = props.className,
+      nftSymbol = props.nftSymbol,
+      nftTokenId = props.nftTokenId,
+      imgUrl = props.imgUrl;
+  return /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    to: "/asset"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "asset-item-3 ".concat(className || "")
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "rectangle-18",
+    src: imgUrl
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "fidenza-157 valign-text-middle oxanium-semi-bold-black-20px"
+  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
+    className: "span-2 oxanium-semi-bold-black-20px"
+  }, nftSymbol, /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
+    className: "span-2 oxanium-normal-black-20px"
+  }, "#", nftTokenId)))));
+}
+
+var _default = AssetItem;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./AssetItem.css":"components/AssetItem/AssetItem.css"}],"components/ButtonRepay/ButtonRepay.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/reactjs-popup/dist/reactjs-popup.esm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.Popup = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactDom = _interopRequireDefault(require("react-dom"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var useOnEscape = function useOnEscape(handler, active) {
+  if (active === void 0) {
+    active = true;
+  }
+
+  (0, _react.useEffect)(function () {
+    if (!active) return;
+
+    var listener = function listener(event) {
+      // check if key is an Escape
+      if (event.key === 'Escape') handler(event);
+    };
+
+    document.addEventListener('keyup', listener);
+    return function () {
+      if (!active) return;
+      document.removeEventListener('keyup', listener);
+    };
+  }, [handler, active]);
+};
+
+var useRepositionOnResize = function useRepositionOnResize(handler, active) {
+  if (active === void 0) {
+    active = true;
+  }
+
+  (0, _react.useEffect)(function () {
+    if (!active) return;
+
+    var listener = function listener() {
+      handler();
+    };
+
+    window.addEventListener('resize', listener);
+    return function () {
+      if (!active) return;
+      window.removeEventListener('resize', listener);
+    };
+  }, [handler, active]);
+};
+
+var useOnClickOutside = function useOnClickOutside(ref, handler, active) {
+  if (active === void 0) {
+    active = true;
+  }
+
+  (0, _react.useEffect)(function () {
+    if (!active) return;
+
+    var listener = function listener(event) {
+      // Do nothing if clicking ref's element or descendent elements
+      var refs = Array.isArray(ref) ? ref : [ref];
+      var contains = false;
+      refs.forEach(function (r) {
+        if (!r.current || r.current.contains(event.target)) {
+          contains = true;
+          return;
+        }
+      });
+      event.stopPropagation();
+      if (!contains) handler(event);
+    };
+
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+    return function () {
+      if (!active) return;
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, [ref, handler, active]);
+}; // Make sure that user is not able TAB out of the Modal content on Open
+
+
+var useTabbing = function useTabbing(contentRef, active) {
+  if (active === void 0) {
+    active = true;
+  }
+
+  (0, _react.useEffect)(function () {
+    if (!active) return;
+
+    var listener = function listener(event) {
+      // check if key is an Tab
+      if (event.keyCode === 9) {
+        var _contentRef$current;
+
+        var els = contentRef === null || contentRef === void 0 ? void 0 : (_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
+        var focusableEls = Array.prototype.slice.call(els);
+
+        if (focusableEls.length === 1) {
+          event.preventDefault();
+          return;
+        }
+
+        var firstFocusableEl = focusableEls[0];
+        var lastFocusableEl = focusableEls[focusableEls.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstFocusableEl) {
+          event.preventDefault();
+          lastFocusableEl.focus();
+        } else if (document.activeElement === lastFocusableEl) {
+          event.preventDefault();
+          firstFocusableEl.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+    return function () {
+      if (!active) return;
+      document.removeEventListener('keydown', listener);
+    };
+  }, [contentRef, active]);
+};
+
+var useIsomorphicLayoutEffect = typeof window !== 'undefined' ? _react.useLayoutEffect : _react.useEffect;
+var Style = {
+  popupContent: {
+    tooltip: {
+      position: 'absolute',
+      zIndex: 999
+    },
+    modal: {
+      position: 'relative',
+      margin: 'auto'
+    }
+  },
+  popupArrow: {
+    height: '8px',
+    width: '16px',
+    position: 'absolute',
+    background: 'transparent',
+    color: '#FFF',
+    zIndex: -1
+  },
+  overlay: {
+    tooltip: {
+      position: 'fixed',
+      top: '0',
+      bottom: '0',
+      left: '0',
+      right: '0',
+      zIndex: 999
+    },
+    modal: {
+      position: 'fixed',
+      top: '0',
+      bottom: '0',
+      left: '0',
+      right: '0',
+      display: 'flex',
+      zIndex: 999
+    }
+  }
+};
+var POSITION_TYPES = ['top left', 'top center', 'top right', 'right top', 'right center', 'right bottom', 'bottom left', 'bottom center', 'bottom right', 'left top', 'left center', 'left bottom'];
+
+var getCoordinatesForPosition = function getCoordinatesForPosition(triggerBounding, ContentBounding, position, //PopupPosition | PopupPosition[],
+arrow, _ref) {
+  var offsetX = _ref.offsetX,
+      offsetY = _ref.offsetY;
+  var margin = arrow ? 8 : 0;
+  var args = position.split(' '); // the step N 1 : center the popup content => ok
+
+  var CenterTop = triggerBounding.top + triggerBounding.height / 2;
+  var CenterLeft = triggerBounding.left + triggerBounding.width / 2;
+  var height = ContentBounding.height,
+      width = ContentBounding.width;
+  var top = CenterTop - height / 2;
+  var left = CenterLeft - width / 2;
+  var transform = '';
+  var arrowTop = '0%';
+  var arrowLeft = '0%'; // the  step N 2 : => ok
+
+  switch (args[0]) {
+    case 'top':
+      top -= height / 2 + triggerBounding.height / 2 + margin;
+      transform = "rotate(180deg)  translateX(50%)";
+      arrowTop = '100%';
+      arrowLeft = '50%';
+      break;
+
+    case 'bottom':
+      top += height / 2 + triggerBounding.height / 2 + margin;
+      transform = "rotate(0deg) translateY(-100%) translateX(-50%)";
+      arrowLeft = '50%';
+      break;
+
+    case 'left':
+      left -= width / 2 + triggerBounding.width / 2 + margin;
+      transform = " rotate(90deg)  translateY(50%) translateX(-25%)";
+      arrowLeft = '100%';
+      arrowTop = '50%';
+      break;
+
+    case 'right':
+      left += width / 2 + triggerBounding.width / 2 + margin;
+      transform = "rotate(-90deg)  translateY(-150%) translateX(25%)";
+      arrowTop = '50%';
+      break;
+  }
+
+  switch (args[1]) {
+    case 'top':
+      top = triggerBounding.top;
+      arrowTop = triggerBounding.height / 2 + "px";
+      break;
+
+    case 'bottom':
+      top = triggerBounding.top - height + triggerBounding.height;
+      arrowTop = height - triggerBounding.height / 2 + "px";
+      break;
+
+    case 'left':
+      left = triggerBounding.left;
+      arrowLeft = triggerBounding.width / 2 + "px";
+      break;
+
+    case 'right':
+      left = triggerBounding.left - width + triggerBounding.width;
+      arrowLeft = width - triggerBounding.width / 2 + "px";
+      break;
+  }
+
+  top = args[0] === 'top' ? top - offsetY : top + offsetY;
+  left = args[0] === 'left' ? left - offsetX : left + offsetX;
+  return {
+    top: top,
+    left: left,
+    transform: transform,
+    arrowLeft: arrowLeft,
+    arrowTop: arrowTop
+  };
+};
+
+var getTooltipBoundary = function getTooltipBoundary(keepTooltipInside) {
+  // add viewport
+  var boundingBox = {
+    top: 0,
+    left: 0,
+
+    /* eslint-disable-next-line no-undef */
+    width: window.innerWidth,
+
+    /* eslint-disable-next-line no-undef */
+    height: window.innerHeight
+  };
+
+  if (typeof keepTooltipInside === 'string') {
+    /* eslint-disable-next-line no-undef */
+    var selector = document.querySelector(keepTooltipInside);
+
+    if ("development" !== 'production') {
+      if (selector === null) throw new Error(keepTooltipInside + " selector does not exist : keepTooltipInside must be a valid html selector 'class' or 'Id'  or a boolean value");
+    }
+
+    if (selector !== null) boundingBox = selector.getBoundingClientRect();
+  }
+
+  return boundingBox;
+};
+
+var calculatePosition = function calculatePosition(triggerBounding, ContentBounding, position, arrow, _ref2, keepTooltipInside) {
+  var offsetX = _ref2.offsetX,
+      offsetY = _ref2.offsetY;
+  var bestCoords = {
+    arrowLeft: '0%',
+    arrowTop: '0%',
+    left: 0,
+    top: 0,
+    transform: 'rotate(135deg)'
+  };
+  var i = 0;
+  var wrapperBox = getTooltipBoundary(keepTooltipInside);
+  var positions = Array.isArray(position) ? position : [position]; // keepTooltipInside would be activated if the  keepTooltipInside exist or the position is Array
+
+  if (keepTooltipInside || Array.isArray(position)) positions = [].concat(positions, POSITION_TYPES); // add viewPort for WarpperBox
+  // wrapperBox.top = wrapperBox.top + window.scrollY;
+  // wrapperBox.left = wrapperBox.left + window.scrollX;
+
+  while (i < positions.length) {
+    bestCoords = getCoordinatesForPosition(triggerBounding, ContentBounding, positions[i], arrow, {
+      offsetX: offsetX,
+      offsetY: offsetY
+    });
+    var contentBox = {
+      top: bestCoords.top,
+      left: bestCoords.left,
+      width: ContentBounding.width,
+      height: ContentBounding.height
+    };
+
+    if (contentBox.top <= wrapperBox.top || contentBox.left <= wrapperBox.left || contentBox.top + contentBox.height >= wrapperBox.top + wrapperBox.height || contentBox.left + contentBox.width >= wrapperBox.left + wrapperBox.width) {
+      i++;
+    } else {
+      break;
+    }
+  }
+
+  return bestCoords;
+};
+
+var popupIdCounter = 0;
+
+var getRootPopup = function getRootPopup() {
+  var PopupRoot = document.getElementById('popup-root');
+
+  if (PopupRoot === null) {
+    PopupRoot = document.createElement('div');
+    PopupRoot.setAttribute('id', 'popup-root');
+    document.body.appendChild(PopupRoot);
+  }
+
+  return PopupRoot;
+};
+
+var Popup = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
+  var _ref$trigger = _ref.trigger,
+      trigger = _ref$trigger === void 0 ? null : _ref$trigger,
+      _ref$onOpen = _ref.onOpen,
+      onOpen = _ref$onOpen === void 0 ? function () {} : _ref$onOpen,
+      _ref$onClose = _ref.onClose,
+      onClose = _ref$onClose === void 0 ? function () {} : _ref$onClose,
+      _ref$defaultOpen = _ref.defaultOpen,
+      defaultOpen = _ref$defaultOpen === void 0 ? false : _ref$defaultOpen,
+      _ref$open = _ref.open,
+      open = _ref$open === void 0 ? undefined : _ref$open,
+      _ref$disabled = _ref.disabled,
+      disabled = _ref$disabled === void 0 ? false : _ref$disabled,
+      _ref$nested = _ref.nested,
+      nested = _ref$nested === void 0 ? false : _ref$nested,
+      _ref$closeOnDocumentC = _ref.closeOnDocumentClick,
+      closeOnDocumentClick = _ref$closeOnDocumentC === void 0 ? true : _ref$closeOnDocumentC,
+      _ref$repositionOnResi = _ref.repositionOnResize,
+      repositionOnResize = _ref$repositionOnResi === void 0 ? true : _ref$repositionOnResi,
+      _ref$closeOnEscape = _ref.closeOnEscape,
+      closeOnEscape = _ref$closeOnEscape === void 0 ? true : _ref$closeOnEscape,
+      _ref$on = _ref.on,
+      on = _ref$on === void 0 ? ['click'] : _ref$on,
+      _ref$contentStyle = _ref.contentStyle,
+      contentStyle = _ref$contentStyle === void 0 ? {} : _ref$contentStyle,
+      _ref$arrowStyle = _ref.arrowStyle,
+      arrowStyle = _ref$arrowStyle === void 0 ? {} : _ref$arrowStyle,
+      _ref$overlayStyle = _ref.overlayStyle,
+      overlayStyle = _ref$overlayStyle === void 0 ? {} : _ref$overlayStyle,
+      _ref$className = _ref.className,
+      className = _ref$className === void 0 ? '' : _ref$className,
+      _ref$position = _ref.position,
+      position = _ref$position === void 0 ? 'bottom center' : _ref$position,
+      _ref$modal = _ref.modal,
+      modal = _ref$modal === void 0 ? false : _ref$modal,
+      _ref$lockScroll = _ref.lockScroll,
+      lockScroll = _ref$lockScroll === void 0 ? false : _ref$lockScroll,
+      _ref$arrow = _ref.arrow,
+      arrow = _ref$arrow === void 0 ? true : _ref$arrow,
+      _ref$offsetX = _ref.offsetX,
+      offsetX = _ref$offsetX === void 0 ? 0 : _ref$offsetX,
+      _ref$offsetY = _ref.offsetY,
+      offsetY = _ref$offsetY === void 0 ? 0 : _ref$offsetY,
+      _ref$mouseEnterDelay = _ref.mouseEnterDelay,
+      mouseEnterDelay = _ref$mouseEnterDelay === void 0 ? 100 : _ref$mouseEnterDelay,
+      _ref$mouseLeaveDelay = _ref.mouseLeaveDelay,
+      mouseLeaveDelay = _ref$mouseLeaveDelay === void 0 ? 100 : _ref$mouseLeaveDelay,
+      _ref$keepTooltipInsid = _ref.keepTooltipInside,
+      keepTooltipInside = _ref$keepTooltipInsid === void 0 ? false : _ref$keepTooltipInsid,
+      children = _ref.children;
+
+  var _useState = (0, _react.useState)(open || defaultOpen),
+      isOpen = _useState[0],
+      setIsOpen = _useState[1];
+
+  var triggerRef = (0, _react.useRef)(null);
+  var contentRef = (0, _react.useRef)(null);
+  var arrowRef = (0, _react.useRef)(null);
+  var focusedElBeforeOpen = (0, _react.useRef)(null);
+  var popupId = (0, _react.useRef)("popup-" + ++popupIdCounter);
+  var isModal = modal ? true : !trigger;
+  var timeOut = (0, _react.useRef)(0);
+  useIsomorphicLayoutEffect(function () {
+    if (isOpen) {
+      focusedElBeforeOpen.current = document.activeElement;
+      setPosition();
+      focusContentOnOpen(); // for accessibility
+
+      lockScrolll();
+    } else {
+      resetScroll();
+    }
+
+    return function () {
+      clearTimeout(timeOut.current);
+    };
+  }, [isOpen]); // for uncontrolled popup we need to sync isOpen with open prop
+
+  (0, _react.useEffect)(function () {
+    if (typeof open === 'boolean') {
+      if (open) openPopup();else closePopup();
+    }
+  }, [open, disabled]);
+
+  var openPopup = function openPopup(event) {
+    if (isOpen || disabled) return;
+    setIsOpen(true);
+    setTimeout(function () {
+      return onOpen(event);
+    }, 0);
+  };
+
+  var closePopup = function closePopup(event) {
+    var _focusedElBeforeOpen$;
+
+    if (!isOpen || disabled) return;
+    setIsOpen(false);
+    if (isModal) (_focusedElBeforeOpen$ = focusedElBeforeOpen.current) === null || _focusedElBeforeOpen$ === void 0 ? void 0 : _focusedElBeforeOpen$.focus();
+    setTimeout(function () {
+      return onClose(event);
+    }, 0);
+  };
+
+  var togglePopup = function togglePopup(event) {
+    event === null || event === void 0 ? void 0 : event.stopPropagation();
+    if (!isOpen) openPopup(event);else closePopup(event);
+  };
+
+  var onMouseEnter = function onMouseEnter(event) {
+    clearTimeout(timeOut.current);
+    timeOut.current = setTimeout(function () {
+      return openPopup(event);
+    }, mouseEnterDelay);
+  };
+
+  var onContextMenu = function onContextMenu(event) {
+    event === null || event === void 0 ? void 0 : event.preventDefault();
+    togglePopup();
+  };
+
+  var onMouseLeave = function onMouseLeave(event) {
+    clearTimeout(timeOut.current);
+    timeOut.current = setTimeout(function () {
+      return closePopup(event);
+    }, mouseLeaveDelay);
+  };
+
+  var lockScrolll = function lockScrolll() {
+    if (isModal && lockScroll) document.getElementsByTagName('body')[0].style.overflow = 'hidden'; // migrate to document.body
+  };
+
+  var resetScroll = function resetScroll() {
+    if (isModal && lockScroll) document.getElementsByTagName('body')[0].style.overflow = 'auto';
+  };
+
+  var focusContentOnOpen = function focusContentOnOpen() {
+    var _contentRef$current;
+
+    var focusableEls = contentRef === null || contentRef === void 0 ? void 0 : (_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]');
+    var firstEl = Array.prototype.slice.call(focusableEls)[0];
+    firstEl === null || firstEl === void 0 ? void 0 : firstEl.focus();
+  };
+
+  (0, _react.useImperativeHandle)(ref, function () {
+    return {
+      open: function open() {
+        openPopup();
+      },
+      close: function close() {
+        closePopup();
+      },
+      toggle: function toggle() {
+        togglePopup();
+      }
+    };
+  }); // set Position
+
+  var setPosition = function setPosition() {
+    if (isModal || !isOpen) return;
+    if (!(triggerRef === null || triggerRef === void 0 ? void 0 : triggerRef.current) || !(triggerRef === null || triggerRef === void 0 ? void 0 : triggerRef.current) || !(contentRef === null || contentRef === void 0 ? void 0 : contentRef.current)) return; /// show error as one of ref is undefined
+
+    var trigger = triggerRef.current.getBoundingClientRect();
+    var content = contentRef.current.getBoundingClientRect();
+    var cords = calculatePosition(trigger, content, position, arrow, {
+      offsetX: offsetX,
+      offsetY: offsetY
+    }, keepTooltipInside);
+    contentRef.current.style.top = cords.top + window.scrollY + "px";
+    contentRef.current.style.left = cords.left + window.scrollX + "px";
+
+    if (arrow && !!arrowRef.current) {
+      var _arrowStyle$top, _arrowStyle$left;
+
+      arrowRef.current.style.transform = cords.transform;
+      arrowRef.current.style.setProperty('-ms-transform', cords.transform);
+      arrowRef.current.style.setProperty('-webkit-transform', cords.transform);
+      arrowRef.current.style.top = ((_arrowStyle$top = arrowStyle.top) === null || _arrowStyle$top === void 0 ? void 0 : _arrowStyle$top.toString()) || cords.arrowTop;
+      arrowRef.current.style.left = ((_arrowStyle$left = arrowStyle.left) === null || _arrowStyle$left === void 0 ? void 0 : _arrowStyle$left.toString()) || cords.arrowLeft;
+    }
+  }; // hooks
+
+
+  useOnEscape(closePopup, closeOnEscape); // can be optimized if we disabled for hover
+
+  useTabbing(contentRef, isOpen && isModal);
+  useRepositionOnResize(setPosition, repositionOnResize);
+  useOnClickOutside(!!trigger ? [contentRef, triggerRef] : [contentRef], closePopup, closeOnDocumentClick && !nested); // we need to add a ne
+  // render the trigger element and add events
+
+  var renderTrigger = function renderTrigger() {
+    var triggerProps = {
+      key: 'T',
+      ref: triggerRef,
+      'aria-describedby': popupId.current
+    };
+    var onAsArray = Array.isArray(on) ? on : [on];
+
+    for (var i = 0, len = onAsArray.length; i < len; i++) {
+      switch (onAsArray[i]) {
+        case 'click':
+          triggerProps.onClick = togglePopup;
+          break;
+
+        case 'right-click':
+          triggerProps.onContextMenu = onContextMenu;
+          break;
+
+        case 'hover':
+          triggerProps.onMouseEnter = onMouseEnter;
+          triggerProps.onMouseLeave = onMouseLeave;
+          break;
+
+        case 'focus':
+          triggerProps.onFocus = onMouseEnter;
+          triggerProps.onBlur = onMouseLeave;
+          break;
+      }
+    }
+
+    if (typeof trigger === 'function') {
+      var comp = trigger(isOpen);
+      return !!trigger && _react.default.cloneElement(comp, triggerProps);
+    }
+
+    return !!trigger && _react.default.cloneElement(trigger, triggerProps);
+  };
+
+  var addWarperAction = function addWarperAction() {
+    var popupContentStyle = isModal ? Style.popupContent.modal : Style.popupContent.tooltip;
+    var childrenElementProps = {
+      className: "popup-content " + (className !== '' ? className.split(' ').map(function (c) {
+        return c + "-content";
+      }).join(' ') : ''),
+      style: _extends({}, popupContentStyle, contentStyle, {
+        pointerEvents: 'auto'
+      }),
+      ref: contentRef,
+      onClick: function onClick(e) {
+        e.stopPropagation();
+      }
+    };
+
+    if (!modal && on.indexOf('hover') >= 0) {
+      childrenElementProps.onMouseEnter = onMouseEnter;
+      childrenElementProps.onMouseLeave = onMouseLeave;
+    }
+
+    return childrenElementProps;
+  };
+
+  var renderContent = function renderContent() {
+    return _react.default.createElement("div", Object.assign({}, addWarperAction(), {
+      key: "C",
+      role: isModal ? 'dialog' : 'tooltip',
+      id: popupId.current
+    }), arrow && !isModal && _react.default.createElement("div", {
+      ref: arrowRef,
+      style: Style.popupArrow
+    }, _react.default.createElement("svg", {
+      "data-testid": "arrow",
+      className: "popup-arrow " + (className !== '' ? className.split(' ').map(function (c) {
+        return c + "-arrow";
+      }).join(' ') : ''),
+      viewBox: "0 0 32 16",
+      style: _extends({
+        position: 'absolute'
+      }, arrowStyle)
+    }, _react.default.createElement("path", {
+      d: "M16 0l16 16H0z",
+      fill: "currentcolor"
+    }))), children && typeof children === 'function' ? children(closePopup, isOpen) : children);
+  };
+
+  var overlay = !(on.indexOf('hover') >= 0);
+  var ovStyle = isModal ? Style.overlay.modal : Style.overlay.tooltip;
+  var content = [overlay && _react.default.createElement("div", {
+    key: "O",
+    "data-testid": "overlay",
+    "data-popup": isModal ? 'modal' : 'tooltip',
+    className: "popup-overlay " + (className !== '' ? className.split(' ').map(function (c) {
+      return c + "-overlay";
+    }).join(' ') : ''),
+    style: _extends({}, ovStyle, overlayStyle, {
+      pointerEvents: closeOnDocumentClick && nested || isModal ? 'auto' : 'none'
+    }),
+    onClick: closeOnDocumentClick && nested ? closePopup : undefined,
+    tabIndex: -1
+  }, isModal && renderContent()), !isModal && renderContent()];
+  return _react.default.createElement(_react.default.Fragment, null, renderTrigger(), isOpen && _reactDom.default.createPortal(content, getRootPopup()));
+});
+exports.Popup = Popup;
+var _default = Popup;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js"}],"components/ButtonRepay/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+require("./ButtonRepay.css");
+
+var _PopUpNFTs = _interopRequireDefault(require("../PopUpNFTs"));
+
+var _reactjsPopup = _interopRequireDefault(require("reactjs-popup"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function ButtonRepay(props) {
+  var _React$createElement;
+
+  var borrowId = props.borrowId,
+      repaymentAmount = props.repaymentAmount,
+      tokenAddress = props.tokenAddress,
+      nftSymbol = props.nftSymbol,
+      nftTokenId = props.nftTokenId,
+      imgUrl = props.imgUrl;
+  return /*#__PURE__*/_react.default.createElement(_reactjsPopup.default, (_React$createElement = {
+    modal: true,
+    trigger: /*#__PURE__*/_react.default.createElement("div", {
+      className: "button-repay"
+    }, /*#__PURE__*/_react.default.createElement("button", {
+      className: "overlap-group-14"
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      className: "rectangle-11"
+    }), /*#__PURE__*/_react.default.createElement("div", {
+      className: "repay-1 valign-text-middle oxanium-normal-white-20px"
+    }, "Repay")))
+  }, _defineProperty(_React$createElement, "modal", true), _defineProperty(_React$createElement, "nested", true), _React$createElement), /*#__PURE__*/_react.default.createElement(_PopUpNFTs.default, {
+    borrowId: borrowId,
+    repaymentAmount: repaymentAmount,
+    tokenAddress: tokenAddress,
+    nftSymbol: nftSymbol,
+    nftTokenId: nftTokenId,
+    imgUrl: imgUrl
+  }));
+}
+
+var _default = ButtonRepay;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./ButtonRepay.css":"components/ButtonRepay/ButtonRepay.css","../PopUpNFTs":"components/PopUpNFTs/index.jsx","reactjs-popup":"node_modules/reactjs-popup/dist/reactjs-popup.esm.js"}],"components/TokenBorrow/TokenBorrow.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/TokenBorrow/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./TokenBorrow.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function TokenBorrow(props) {
+  var className = props.className;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "token-borrow-3 ".concat(className || "")
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "rectangle-19-1",
+    src: "/img/rectangle-19@2x.png"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "place-6 valign-text-middle oxanium-normal-black-24px"
+  }, "ETH"));
+}
+
+var _default = TokenBorrow;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./TokenBorrow.css":"components/TokenBorrow/TokenBorrow.css"}],"components/Borrow/Borrow.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Borrow/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _core = require("@web3-react/core");
+
+var _AssetItem = _interopRequireDefault(require("../AssetItem"));
+
+var _ButtonRepay = _interopRequireDefault(require("../ButtonRepay"));
+
+var _TokenBorrow = _interopRequireDefault(require("../TokenBorrow"));
+
+require("./Borrow.css");
+
+var _useCollateralManager2 = _interopRequireDefault(require("../../hooks/useCollateralManager"));
+
+var _AppContext = require("../../AppContext");
+
+var _useNFT2 = _interopRequireDefault(require("../../hooks/useNFT"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function Borrow(props) {
+  var borrowId = props.borrowId;
+
+  var _useWeb3React = (0, _core.useWeb3React)(),
+      account = _useWeb3React.account;
+
+  var _useCollateralManager = (0, _useCollateralManager2.default)(),
+      fetchUserBorrows = _useCollateralManager.fetchUserBorrows;
+
+  var _useAppContext = (0, _AppContext.useAppContext)(),
+      userBorrows = _useAppContext.userBorrows;
+
+  var _useNFT = (0, _useNFT2.default)(),
+      fetchImageBAYC = _useNFT.fetchImageBAYC,
+      fetchImagePUNK = _useNFT.fetchImagePUNK;
+
+  var _useState = (0, _react.useState)(""),
+      _useState2 = _slicedToArray(_useState, 2),
+      imgUrl = _useState2[0],
+      setImgUrl = _useState2[1];
+
+  (0, _react.useEffect)(function () {
+    if (account) {
+      fetchUserBorrows();
+      userBorrows;
+
+      function fetchImgUrl() {
+        return _fetchImgUrl.apply(this, arguments);
+      }
+
+      function _fetchImgUrl() {
+        _fetchImgUrl = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+          var nftTokenId, _imgUrl, _imgUrl2;
+
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return userBorrows[borrowId]["nftTokenId"];
+
+                case 2:
+                  nftTokenId = _context.sent;
+
+                  if (!(userBorrows[borrowId]["nftSymbol"] == "BAYC")) {
+                    _context.next = 10;
+                    break;
+                  }
+
+                  _context.next = 6;
+                  return fetchImageBAYC(nftTokenId);
+
+                case 6:
+                  _imgUrl = _context.sent;
+                  setImgUrl(_imgUrl);
+                  _context.next = 14;
+                  break;
+
+                case 10:
+                  _context.next = 12;
+                  return fetchImagePUNK(nftTokenId);
+
+                case 12:
+                  _imgUrl2 = _context.sent;
+                  setImgUrl(_imgUrl2);
+
+                case 14:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+        return _fetchImgUrl.apply(this, arguments);
+      }
+
+      fetchImgUrl();
+    }
+  }, [account]);
+
+  var formatDate = function formatDate(timestamp) {
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var date = new Date(timestamp * 1000);
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var monthName = monthNames[monthIndex];
+    var year = date.getFullYear();
+    return "".concat(day, "-").concat(monthName, "-").concat(year);
+  };
+
+  var formatCountdown = function formatCountdown(timestamp) {
+    var countDownDate = new Date(timestamp * 1000);
+    var now = new Date().getTime();
+    var distance = countDownDate - now;
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+    var minutes = Math.floor(distance % (1000 * 60 * 60) / (1000 * 60));
+    return "".concat(days, "d ").concat(hours, "h ").concat(minutes, "m");
+  };
+
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "borrow-6"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "overlap-group-13"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "rectangle-17"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "number valign-text-middle oxanium-normal-black-24px"
+  }, Number(userBorrows[borrowId]["borrowAmount"]).toFixed(1)), " ", /*#__PURE__*/_react.default.createElement("div", {
+    className: "text valign-text-middle oxanium-normal-black-25px"
+  }, Number(userBorrows[borrowId]["repaymentAmount"]).toFixed(4)), /*#__PURE__*/_react.default.createElement("div", {
+    className: "percent valign-text-middle oxanium-normal-black-25px"
+  }, Number(userBorrows[borrowId]["interestRate"]).toFixed(0)), /*#__PURE__*/_react.default.createElement(_AssetItem.default, {
+    nftSymbol: userBorrows[borrowId]["nftSymbol"],
+    nftTokenId: userBorrows[borrowId]["nftTokenId"],
+    imgUrl: imgUrl
+  }), /*#__PURE__*/_react.default.createElement(_ButtonRepay.default, {
+    borrowId: borrowId,
+    repaymentAmount: userBorrows[borrowId]["repaymentAmount"],
+    nftSymbol: userBorrows[borrowId]["nftSymbol"],
+    nftTokenId: userBorrows[borrowId]["nftTokenId"],
+    imgUrl: imgUrl,
+    tokenAddress: userBorrows[borrowId]["erc20Token"]
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "x175-min-150 valign-text-middle oxanium-bold-black-20px"
+  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
+    className: "oxanium-bold-black-20px"
+  }, "175%", /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
+    className: "oxanium-normal-black-20px"
+  }, "Min. 150%"))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "text-1 valign-text-middle oxanium-bold-black-20px"
+  }, /*#__PURE__*/_react.default.createElement("span", null, /*#__PURE__*/_react.default.createElement("span", {
+    className: "oxanium-bold-black-20px"
+  }, formatDate(userBorrows[borrowId]["maturity"]), /*#__PURE__*/_react.default.createElement("br", null)), /*#__PURE__*/_react.default.createElement("span", {
+    className: "oxanium-normal-black-20px"
+  }, formatCountdown(userBorrows[borrowId]["maturity"])))), /*#__PURE__*/_react.default.createElement(_TokenBorrow.default, null)));
+}
+
+var _default = Borrow;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../AssetItem":"components/AssetItem/index.jsx","../ButtonRepay":"components/ButtonRepay/index.jsx","../TokenBorrow":"components/TokenBorrow/index.jsx","./Borrow.css":"components/Borrow/Borrow.css","../../hooks/useCollateralManager":"hooks/useCollateralManager.js","../../AppContext":"AppContext.js","../../hooks/useNFT":"hooks/useNFT.js"}],"components/LendsHeader/LendsHeader.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/LendsHeader/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./LendsHeader.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function LendsHeader() {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "lends-header oxanium-normal-white-20px"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "your-lends valign-text-middle"
+  }, "Your Lends"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "current-balance valign-text-middle"
+  }, "Current Balance"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "apy valign-text-middle"
+  }, "APY"));
+}
+
+var _default = LendsHeader;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./LendsHeader.css":"components/LendsHeader/LendsHeader.css"}],"components/TokenLend/TokenLend.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/TokenLend/index.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./TokenLend.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function TokenLend(props) {
+  var token = props.token;
+  var tokenImage = {
+    "DAI": "/img/rectangle-25@2x.png",
+    "ETH": "/img/rectangle-27@2x.png",
+    "USDC": "/img/rectangle-22@2x.png"
+  };
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "token-lend"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    className: "rectangle-25",
+    src: tokenImage[token]
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "dai valign-text-middle oxanium-normal-black-24px"
+  }, token));
+}
+
+var _default = TokenLend;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","./TokenLend.css":"components/TokenLend/TokenLend.css"}],"components/ButtonDeposit/ButtonDeposit.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpDeposit/PopUpDeposit.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/PopUpDeposit/index.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

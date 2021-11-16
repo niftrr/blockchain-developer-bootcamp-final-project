@@ -3,7 +3,14 @@ import PopUpNFT from "../PopUpNFT";
 import "./PopUpNFTs.css";
 
 function PopUpNFTs(props) {
-  const { popUpNFTProps } = props;
+  const { 
+    popUpNFTProps,
+    borrowId, 
+    repaymentAmount,
+    tokenAddress,
+    nftSymbol,
+    nftTokenId, 
+    imgUrl } = props;
 
   return (
     <div className="container-center-horizontal">
@@ -11,10 +18,12 @@ function PopUpNFTs(props) {
         <PopUpNFT
           spanText="Repay borrow."
           spanText2="Repay borrow to retreive your NFT."
-          nftAvatar="/img/nft-avatar@2x.png"
+          nftAvatar={imgUrl}
           rectangle19="/img/rectangle-19@2x.png"
           inputType="text"
-          inputPlaceholder="0.0000"
+          value={repaymentAmount}
+          tokenAddress={tokenAddress}
+          borrowId={borrowId}
           repay="Repay"
         />
       </div>

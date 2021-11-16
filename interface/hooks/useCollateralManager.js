@@ -8,13 +8,13 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useCollateralManager = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const collateralManagerContractAddress = "0x276C216D241856199A83bf27b2286659e5b877D3";
+    const collateralManagerContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
     const collateralManagerABI = CollateralManagerData["abi"];
     const collateralManagerContract = useContract(collateralManagerContractAddress, collateralManagerABI);
 
     // NFT contract data (c&p from hooks/useNFT.js)
-    const nftContractAddressPUNK = "0x19cEcCd6942ad38562Ee10bAfd44776ceB67e923";
-    const nftContractAddressBAYC = "0xD42912755319665397FF090fBB63B1a31aE87Cee";
+    const nftContractAddressPUNK = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
+    const nftContractAddressBAYC = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
     const nftContractAddress = {
         "PUNK": nftContractAddressPUNK,
         "BAYC": nftContractAddressBAYC
@@ -69,10 +69,14 @@ export const useCollateralManager = () => {
 
     const fetchUserBorrows = async () => {
         const userBorrowIds = await collateralManagerContract.getUserBorrows(account);
+        console.log('userBorrowIds', userBorrowIds);
         const userBorrows = {};
         for (var borrowId in userBorrowIds) {
             let borrow = await collateralManagerContract.getBorrow(borrowId);
-            userBorrows[borrowId] = await formatBorrow(borrow);
+            // Exclude null addresses. TODO: check SC for an alternative to this patch.
+            if (borrow[1] != "0x0000000000000000000000000000000000000000") { 
+                userBorrows[borrowId] = await formatBorrow(borrow);
+            } 
         }
         console.log('userBorrows', userBorrows);
         setUserBorrows(userBorrows);

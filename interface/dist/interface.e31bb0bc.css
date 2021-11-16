@@ -237,6 +237,7 @@ html {
   margin-top: 38px;
   object-fit: cover;
   width: 220px;
+  background-color: #638596;
 }
 
 .overlap-group1 {
@@ -256,14 +257,14 @@ html {
   width: 50px;
 }
 
-.x19111 {
+.x19111-repay {
   background-color: transparent;
   border: 0;
   height: 41px;
   letter-spacing: 0;
   margin-left: 20px;
   padding: 0;
-  width: 118px;
+  width: 229px;
 }
 
 .x19111::placeholder {
@@ -304,7 +305,16 @@ html {
 .repay:active {
   background-color: var(--web-orange);
 }
-
+.transaction-status {
+    color: var(--white);
+    font-family: var(--font-family-oxanium);
+    font-size: var(--font-size-m);
+    font-style: normal;
+    font-weight: 200;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
 .popupnfts {
   align-items: flex-start;
   display: flex;
@@ -683,7 +693,6 @@ html {
 .repay-1:active {
   background-color: var(--blue-zodiac);
 }
-
 .token-borrow-3 {
   align-items: center;
   display: flex;
@@ -792,8 +801,6 @@ html {
   top: 1px;
   width: 123px;
 }
-
-
 .lends-header,
 .lends-header-1 {
   align-items: flex-start;
@@ -1024,16 +1031,6 @@ html {
   background-color: var(--web-orange);
 }
 
-.transaction-status {
-    color: var(--white);
-    font-family: var(--font-family-oxanium);
-    font-size: var(--font-size-m);
-    font-style: normal;
-    font-weight: 200;
-    align-items: center;
-    display: flex;
-    width: 100%;
-}
 .popuptokens {
   align-items: flex-start;
   background-color: #000000bf;

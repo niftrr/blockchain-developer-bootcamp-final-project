@@ -13,7 +13,7 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useLendingPool = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const lendingPoolContractAddress = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
+    const lendingPoolContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
@@ -23,6 +23,12 @@ export const useLendingPool = () => {
     const { assetTokenContract, assetTokenContractAddress } = useAssetToken();
     const { nftContract } = useNFT();
     const { collateralManagerContractAddress } = useCollateralManager();
+
+    const assetTokenContractAddressSymbolLookup = {};
+    assetTokenContractAddressSymbolLookup["0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"] = "DAI"; //hardhat
+    assetTokenContractAddressSymbolLookup["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"] = "ETH"; //hardhat
+    assetTokenContractAddressSymbolLookup["0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"] = "USDC"; //hardhat
+            
 
     function wait(seconds) {
         return new Promise( res => setTimeout(res, seconds*1000) );
@@ -85,7 +91,6 @@ export const useLendingPool = () => {
         numWeeks) => {
         if (account && isValidNetwork) {
             try {
-                console.log(parseUnits(tokenAmount, 18).toString());
                 setTxnStatus("LOADING");
                 const nftTokenContract = nftContract[nftTokenSymbol];
                 await nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
@@ -110,12 +115,43 @@ export const useLendingPool = () => {
         }
     };
 
+    const repay = async (
+        tokenAddress, 
+        tokenAmount,
+        borrowId) => {        
+        if (account && isValidNetwork) {
+            try {
+                setTxnStatus("LOADING");
+                const tokenSymbol = assetTokenContractAddressSymbolLookup[tokenAddress];           
+                const tokenContract = assetTokenContract[tokenSymbol];
+                const _nTokenContract = nTokenContract[tokenSymbol];
+                await tokenContract.approve(_nTokenContract.address, parseUnits(tokenAmount, 18));
+                setTxnStatus("LOADING");
+                const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
+                const txn = await lendingPoolContract.repay(
+                    tokenContractAddress, 
+                    parseUnits(tokenAmount, 18),
+                    borrowId); // TODO: remove hard-coded decimals
+                
+                await txn.wait(1);
+                await fetchDebtTokenBalance(tokenSymbol);
+                setTxnStatus("COMPLETE");
+                await wait(5);
+                setTxnStatus("");
+            } catch (error) {
+                setTxnStatus("ERROR");
+                console.log('ERROR', error);
+            }
+        }
+    };
+
     return {
         fetchBorrowFloorPrice,
         borrowFloorPrice,
         deposit,
         withdraw,
-        borrow
+        borrow,
+        repay
     }
 };
 

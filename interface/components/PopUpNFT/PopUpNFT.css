@@ -21,6 +21,7 @@
   margin-top: 38px;
   object-fit: cover;
   width: 220px;
+  background-color: #638596;
 }
 
 .overlap-group1 {
@@ -40,14 +41,14 @@
   width: 50px;
 }
 
-.x19111 {
+.x19111-repay {
   background-color: transparent;
   border: 0;
   height: 41px;
   letter-spacing: 0;
   margin-left: 20px;
   padding: 0;
-  width: 118px;
+  width: 229px;
 }
 
 .x19111::placeholder {

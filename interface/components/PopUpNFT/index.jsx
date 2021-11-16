@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./PopUpNFT.css";
+import { useAppContext } from "../../AppContext";
+import useLendingPool from "../../hooks/useLendingPool";
+import TransactionStatus from "../TransactionStatus";
+import useTransaction from "../../hooks/useTransaction";
+import { useWeb3React } from "@web3-react/core";
 
 function PopUpNFT(props) {
-  const { spanText, spanText2, nftAvatar, rectangle19, inputType, inputPlaceholder, repay } = props;
+  const { value, tokenAddress, borrowId, spanText, spanText2, nftAvatar, rectangle19, inputType, inputPlaceholder } = props;
+  const { account } = useWeb3React();
+  const { repay } = useLendingPool();
+  const { txnStatus } = useTransaction();
+
+  const handleRepaySubmit = () => {
+    repay(tokenAddress, value, borrowId);
+  }
+
+  useEffect(() => {
+    if (account) {
+      txnStatus
+    }    
+  }, [account]);
 
   return (
     <div className="pop-up-nft">
@@ -12,19 +30,22 @@ function PopUpNFT(props) {
           <span className="oxanium-extra-light-web-orange-24px">{spanText2}</span>
         </span>
       </div>
+      <TransactionStatus />
       <img className="nft-avatar" src={nftAvatar} />
       <div className="overlap-group1 border-1px-black">
         <img className="rectangle-19" src={rectangle19} />
         <input
-          className="x19111 oxanium-normal-black-24px"
+          align="right"
+          className="x19111-repay oxanium-normal-black-24px"
           name="19111"
-          placeholder={inputPlaceholder}
+          value={value}
           type={inputType}
+          readOnly
         />
       </div>
-      <div className="overlap-group">
-        <div className="rectangle-47"></div>
-        <div className="repay valign-text-middle oxanium-normal-white-24px">{repay}</div>
+      <div onClick={handleRepaySubmit} className="overlap-group">
+        <button onClick={handleRepaySubmit} className="rectangle-47"></button>
+        <div className="repay valign-text-middle oxanium-normal-white-24px">Repay</div>
       </div>
     </div>
   );
