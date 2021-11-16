@@ -52,11 +52,13 @@ export const useLendingPool = () => {
                 await txn.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                await wait(5);
+                await wait(10);
                 setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
+                await wait(10);
+                setTxnStatus("");
             }
         }
     };
@@ -73,11 +75,13 @@ export const useLendingPool = () => {
                 await txn.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                await wait(5);
+                await wait(10);
                 setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
+                await wait(10);
+                setTxnStatus("");
             }
         }
     };
@@ -106,11 +110,13 @@ export const useLendingPool = () => {
                 await txn.wait(1);
                 await fetchDebtTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                await wait(5);
+                await wait(10);
                 setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
+                await wait(10);
+                setTxnStatus("");
             }
         }
     };
@@ -136,11 +142,13 @@ export const useLendingPool = () => {
                 await txn.wait(1);
                 await fetchDebtTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
-                await wait(5);
+                await wait(10);
                 setTxnStatus("");
             } catch (error) {
                 setTxnStatus("ERROR");
                 console.log('ERROR', error);
+                await wait(10);
+                setTxnStatus("");
             }
         }
     };

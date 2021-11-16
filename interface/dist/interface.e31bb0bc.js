@@ -59927,7 +59927,7 @@ var useLendingPool = function useLendingPool() {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (!(account && isValidNetwork)) {
-                _context2.next = 25;
+                _context2.next = 28;
                 break;
               }
 
@@ -59956,11 +59956,11 @@ var useLendingPool = function useLendingPool() {
             case 15:
               setTxnStatus("COMPLETE");
               _context2.next = 18;
-              return wait(5);
+              return wait(10);
 
             case 18:
               setTxnStatus("");
-              _context2.next = 25;
+              _context2.next = 28;
               break;
 
             case 21:
@@ -59968,8 +59968,13 @@ var useLendingPool = function useLendingPool() {
               _context2.t0 = _context2["catch"](1);
               setTxnStatus("ERROR");
               console.log('ERROR', _context2.t0);
+              _context2.next = 27;
+              return wait(10);
 
-            case 25:
+            case 27:
+              setTxnStatus("");
+
+            case 28:
             case "end":
               return _context2.stop();
           }
@@ -59991,7 +59996,7 @@ var useLendingPool = function useLendingPool() {
           switch (_context3.prev = _context3.next) {
             case 0:
               if (!(account && isValidNetwork)) {
-                _context3.next = 25;
+                _context3.next = 28;
                 break;
               }
 
@@ -60020,11 +60025,11 @@ var useLendingPool = function useLendingPool() {
             case 15:
               setTxnStatus("COMPLETE");
               _context3.next = 18;
-              return wait(5);
+              return wait(10);
 
             case 18:
               setTxnStatus("");
-              _context3.next = 25;
+              _context3.next = 28;
               break;
 
             case 21:
@@ -60032,8 +60037,13 @@ var useLendingPool = function useLendingPool() {
               _context3.t0 = _context3["catch"](1);
               setTxnStatus("ERROR");
               console.log('ERROR', _context3.t0);
+              _context3.next = 27;
+              return wait(10);
 
-            case 25:
+            case 27:
+              setTxnStatus("");
+
+            case 28:
             case "end":
               return _context3.stop();
           }
@@ -60054,7 +60064,7 @@ var useLendingPool = function useLendingPool() {
           switch (_context4.prev = _context4.next) {
             case 0:
               if (!(account && isValidNetwork)) {
-                _context4.next = 25;
+                _context4.next = 28;
                 break;
               }
 
@@ -60082,11 +60092,11 @@ var useLendingPool = function useLendingPool() {
             case 15:
               setTxnStatus("COMPLETE");
               _context4.next = 18;
-              return wait(5);
+              return wait(10);
 
             case 18:
               setTxnStatus("");
-              _context4.next = 25;
+              _context4.next = 28;
               break;
 
             case 21:
@@ -60094,8 +60104,13 @@ var useLendingPool = function useLendingPool() {
               _context4.t0 = _context4["catch"](1);
               setTxnStatus("ERROR");
               console.log('ERROR', _context4.t0);
+              _context4.next = 27;
+              return wait(10);
 
-            case 25:
+            case 27:
+              setTxnStatus("");
+
+            case 28:
             case "end":
               return _context4.stop();
           }
@@ -60117,7 +60132,7 @@ var useLendingPool = function useLendingPool() {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!(account && isValidNetwork)) {
-                _context5.next = 27;
+                _context5.next = 30;
                 break;
               }
 
@@ -60147,11 +60162,11 @@ var useLendingPool = function useLendingPool() {
             case 17:
               setTxnStatus("COMPLETE");
               _context5.next = 20;
-              return wait(5);
+              return wait(10);
 
             case 20:
               setTxnStatus("");
-              _context5.next = 27;
+              _context5.next = 30;
               break;
 
             case 23:
@@ -60159,8 +60174,13 @@ var useLendingPool = function useLendingPool() {
               _context5.t0 = _context5["catch"](1);
               setTxnStatus("ERROR");
               console.log('ERROR', _context5.t0);
+              _context5.next = 29;
+              return wait(10);
 
-            case 27:
+            case 29:
+              setTxnStatus("");
+
+            case 30:
             case "end":
               return _context5.stop();
           }
