@@ -57403,19 +57403,13 @@ var useNToken = function useNToken() {
       isValidNetwork = _useIsValidNetwork.isValidNetwork; // NTokens
 
 
-  var nTokenContractAddressDAI = "0x0165878A594ca255338adfa4d48449f69242Eb8F"; // hardhat
+  var nTokenContractAddressDAI = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
+  var nTokenContractAddressETH = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+  var nTokenContractAddressUSDC = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"; // AssetTokens
 
-  var nTokenContractAddressETH = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"; // hardhat
-
-  var nTokenContractAddressUSDC = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"; // hardhat
-  // AssetTokens
-
-  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // hardhat
-
-  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"; // hardhat
-
-  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"; // hardhat
-
+  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
   var assetTokenContractAddress = {
     "DAI": assetTokenContractAddressDAI,
     "ETH": assetTokenContractAddressETH,
@@ -58184,12 +58178,9 @@ var useDebtToken = function useDebtToken() {
       isValidNetwork = _useIsValidNetwork.isValidNetwork; // DebtTokens
 
 
-  var debtTokenContractAddressDAI = "0x0B306BF915C4d645ff596e518fAf3F9669b97016"; // hardhat
-
-  var debtTokenContractAddressETH = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1"; // hardhat
-
-  var debtTokenContractAddressUSDC = "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE"; // hardhat
-
+  var debtTokenContractAddressDAI = "0x0B306BF915C4d645ff596e518fAf3F9669b97016";
+  var debtTokenContractAddressETH = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1";
+  var debtTokenContractAddressUSDC = "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE";
   var debtTokenABI = _DebtToken.default["abi"];
   var debtTokenContractDAI = (0, _useContract.useContract)(debtTokenContractAddressDAI, debtTokenABI);
   var debtTokenContractETH = (0, _useContract.useContract)(debtTokenContractAddressETH, debtTokenABI);
@@ -59091,12 +59082,9 @@ var useAssetToken = function useAssetToken() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // hardhat
-
-  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"; // hardhat
-
-  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"; // hardhat
-
+  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
+  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
   var assetTokenContractAddress = {
     "DAI": assetTokenContractAddressDAI,
     "ETH": assetTokenContractAddressETH,
@@ -59879,11 +59867,10 @@ var useLendingPool = function useLendingPool() {
       collateralManagerContractAddress = _useCollateralManager.collateralManagerContractAddress;
 
   var assetTokenContractAddressSymbolLookup = {};
-  assetTokenContractAddressSymbolLookup["0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"] = "DAI"; //hardhat
-
-  assetTokenContractAddressSymbolLookup["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"] = "ETH"; //hardhat
-
-  assetTokenContractAddressSymbolLookup["0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"] = "USDC"; //hardhat
+  assetTokenContractAddressSymbolLookup["0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"] = "DAI";
+  assetTokenContractAddressSymbolLookup["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"] = "ETH";
+  assetTokenContractAddressSymbolLookup["0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"] = "USDC";
+  console.log('==>', "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
 
   function wait(seconds) {
     return new Promise(function (res) {
@@ -99621,7 +99608,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58424" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54812" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

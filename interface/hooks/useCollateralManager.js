@@ -8,13 +8,13 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useCollateralManager = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const collateralManagerContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    const collateralManagerContractAddress = process.env.REACT_APP_COLLATERAL_MANAGER_CONTRACT_ADDRESS;
     const collateralManagerABI = CollateralManagerData["abi"];
     const collateralManagerContract = useContract(collateralManagerContractAddress, collateralManagerABI);
 
     // NFT contract data (c&p from hooks/useNFT.js)
-    const nftContractAddressPUNK = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
-    const nftContractAddressBAYC = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
+    const nftContractAddressPUNK = process.env.REACT_APP_NFT_PUNK_CONTRACT_ADDRESS;
+    const nftContractAddressBAYC = process.env.REACT_APP_NFT_BAYC_CONTRACT_ADDRESS;
     const nftContractAddress = {
         "PUNK": nftContractAddressPUNK,
         "BAYC": nftContractAddressBAYC

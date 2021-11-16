@@ -13,7 +13,7 @@ import { formatUnits, parseUnits } from "@ethersproject/units";
 export const useLendingPool = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
-    const lendingPoolContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    const lendingPoolContractAddress = process.env.REACT_APP_LENDING_POOL_CONTRACT_ADDRESS;
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
@@ -25,10 +25,11 @@ export const useLendingPool = () => {
     const { collateralManagerContractAddress } = useCollateralManager();
 
     const assetTokenContractAddressSymbolLookup = {};
-    assetTokenContractAddressSymbolLookup["0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"] = "DAI"; //hardhat
-    assetTokenContractAddressSymbolLookup["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"] = "ETH"; //hardhat
-    assetTokenContractAddressSymbolLookup["0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"] = "USDC"; //hardhat
+    assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS] = "DAI"; 
+    assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS] = "ETH"; 
+    assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS] = "USDC"; 
             
+    console.log('==>', process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS)
 
     function wait(seconds) {
         return new Promise( res => setTimeout(res, seconds*1000) );
