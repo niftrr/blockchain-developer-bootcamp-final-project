@@ -34190,17 +34190,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var initialContext = {
   debtTokenBalanceDAI: "--",
+  setDebtTokenBalanceDAI: function setDebtTokenBalanceDAI() {},
   debtTokenBalanceETH: "--",
+  setDebtTokenBalanceETH: function setDebtTokenBalanceETH() {},
   debtTokenBalanceUSDC: "--",
-  setDebtTokenBalance: function setDebtTokenBalance() {},
+  setDebtTokenBalanceUSDC: function setDebtTokenBalanceUSDC() {},
   nTokenBalanceDAI: "--",
+  setNTokenBalanceDAI: function setNTokenBalanceDAI() {},
   nTokenBalanceETH: "--",
+  setNTokenBalanceETH: function setNTokenBalanceETH() {},
   nTokenBalanceUSDC: "--",
-  setNTokenBalance: function setNTokenBalance() {},
+  setNTokenBalanceUSDC: function setNTokenBalanceUSDC() {},
   nTokenYieldDAI: "--",
+  setNTokenYieldDAI: function setNTokenYieldDAI() {},
   nTokenYieldETH: "--",
+  setNTokenYieldETH: function setNTokenYieldETH() {},
   nTokenYieldUSDC: "--",
-  setNTokenYield: function setNTokenYield() {},
+  setNTokenYieldUSDC: function setNTokenYieldUSDC() {},
   userBorrows: {},
   setUserBorrows: function setUserBorrows() {},
   borrowDefaults: [],
@@ -34407,82 +34413,67 @@ var AppContextProvider = function AppContextProvider(_ref2) {
 
   var contextValue = {
     debtTokenBalanceDAI: store.debtTokenBalanceDAI,
+    setDebtTokenBalanceDAI: function setDebtTokenBalanceDAI(balance) {
+      dispatch({
+        type: "SET_DEBTTOKEN_BALANCE_DAI",
+        payload: balance
+      });
+    },
     debtTokenBalanceETH: store.debtTokenBalanceETH,
+    setDebtTokenBalanceETH: function setDebtTokenBalanceETH(balance) {
+      dispatch({
+        type: "SET_DEBTTOKEN_BALANCE_ETH",
+        payload: balance
+      });
+    },
     debtTokenBalanceUSDC: store.debtTokenBalanceUSDC,
-    setDebtTokenBalance: function setDebtTokenBalance(ccy, balance) {
-      switch (ccy) {
-        case "DAI":
-          dispatch({
-            type: "SET_DEBTTOKEN_BALANCE_DAI",
-            payload: balance
-          });
-
-        case "ETH":
-          dispatch({
-            type: "SET_DEBTTOKEN_BALANCE_ETH",
-            payload: balance
-          });
-
-        case "USDC":
-          dispatch({
-            type: "SET_DEBTTOKEN_BALANCE_USDC",
-            payload: balance
-          });
-      }
-
-      ;
+    setDebtTokenBalanceUSDC: function setDebtTokenBalanceUSDC(balance) {
+      dispatch({
+        type: "SET_DEBTTOKEN_BALANCE_USDC",
+        payload: balance
+      });
     },
     nTokenBalanceDAI: store.nTokenBalanceDAI,
+    setNTokenBalanceDAI: function setNTokenBalanceDAI(balance) {
+      dispatch({
+        type: "SET_NTOKEN_BALANCE_DAI",
+        payload: balance
+      });
+    },
     nTokenBalanceETH: store.nTokenBalanceETH,
+    setNTokenBalanceETH: function setNTokenBalanceETH(balance) {
+      dispatch({
+        type: "SET_NTOKEN_BALANCE_ETH",
+        payload: balance
+      });
+    },
     nTokenBalanceUSDC: store.nTokenBalanceUSDC,
-    setNTokenBalance: function setNTokenBalance(ccy, balance) {
-      switch (ccy) {
-        case "DAI":
-          dispatch({
-            type: "SET_NTOKEN_BALANCE_DAI",
-            payload: balance
-          });
-
-        case "ETH":
-          dispatch({
-            type: "SET_NTOKEN_BALANCE_ETH",
-            payload: balance
-          });
-
-        case "USDC":
-          dispatch({
-            type: "SET_NTOKEN_BALANCE_USDC",
-            payload: balance
-          });
-      }
-
-      ;
+    setNTokenBalanceUSDC: function setNTokenBalanceUSDC(balance) {
+      dispatch({
+        type: "SET_NTOKEN_BALANCE_USDC",
+        payload: balance
+      });
     },
     nTokenYieldDAI: store.nTokenYieldDAI,
+    setNTokenYieldDAI: function setNTokenYieldDAI(_yield) {
+      dispatch({
+        type: "SET_NTOKEN_YIELD_DAI",
+        payload: _yield
+      });
+    },
     nTokenYieldETH: store.nTokenYieldETH,
+    setNTokenYieldETH: function setNTokenYieldETH(_yield) {
+      dispatch({
+        type: "SET_NTOKEN_YIELD_ETH",
+        payload: _yield
+      });
+    },
     nTokenYieldUSDC: store.nTokenYieldUSDC,
-    setNTokenYield: function setNTokenYield(ccy, _yield) {
-      switch (ccy) {
-        case "DAI":
-          dispatch({
-            type: "SET_NTOKEN_YIELD_DAI",
-            payload: _yield
-          });
-
-        case "ETH":
-          dispatch({
-            type: "SET_NTOKEN_YIELD_ETH",
-            payload: _yield
-          });
-
-        case "USDC":
-          dispatch({
-            type: "SET_NTOKEN_YIELD_USDC",
-            payload: _yield
-          });
-      }
-
-      ;
+    setNTokenYieldUSDC: function setNTokenYieldUSDC(_yield) {
+      dispatch({
+        type: "SET_NTOKEN_YIELD_USDC",
+        payload: _yield
+      });
     },
     userBorrows: store.userBorrows,
     setUserBorrows: function setUserBorrows(userBorrows) {
@@ -34499,30 +34490,25 @@ var AppContextProvider = function AppContextProvider(_ref2) {
       });
     },
     imageDictPUNK: store.imageDictPUNK,
+    setImageDictPUNK: function setImageDictPUNK(imageDict) {
+      dispatch({
+        type: "SET_IMAGE_DICT_PUNK",
+        payload: imageDict
+      });
+    },
     imageDictBAYC: store.imageDictBAYC,
+    setImageDictBAYC: function setImageDictBAYC(imageDict) {
+      dispatch({
+        type: "SET_IMAGE_DICT_BAYC",
+        payload: imageDict
+      });
+    },
     imageDictBorrow: store.imageDictBorrow,
-    setImageDict: function setImageDict(symbol, imageDict) {
-      switch (symbol) {
-        case "PUNK":
-          dispatch({
-            type: "SET_IMAGE_DICT_PUNK",
-            payload: imageDict
-          });
-
-        case "BAYC":
-          dispatch({
-            type: "SET_IMAGE_DICT_BAYC",
-            payload: imageDict
-          });
-
-        case "BORROW":
-          dispatch({
-            type: "SET_IMAGE_DICT_BORROW",
-            payload: imageDict
-          });
-      }
-
-      ;
+    setImageDictBorrow: function setImageDictBorrow(imageDict) {
+      dispatch({
+        type: "SET_IMAGE_DICT_BORROW",
+        payload: imageDict
+      });
     },
     whitelistNFT: store.whitelistNFT,
     setWhitelistNFT: function setWhitelistNFT(whitelist) {
@@ -57446,8 +57432,12 @@ var useNToken = function useNToken() {
   };
 
   var _useAppContext = (0, _AppContext.useAppContext)(),
-      setNTokenBalance = _useAppContext.setNTokenBalance,
-      setNTokenYield = _useAppContext.setNTokenYield,
+      setNTokenBalanceDAI = _useAppContext.setNTokenBalanceDAI,
+      setNTokenBalanceETH = _useAppContext.setNTokenBalanceETH,
+      setNTokenBalanceUSDC = _useAppContext.setNTokenBalanceUSDC,
+      setNTokenYieldDAI = _useAppContext.setNTokenYieldDAI,
+      setNTokenYieldETH = _useAppContext.setNTokenYieldETH,
+      setNTokenYieldUSDC = _useAppContext.setNTokenYieldUSDC,
       setTxnStatus = _useAppContext.setTxnStatus,
       nTokenBalanceDAI = _useAppContext.nTokenBalanceDAI,
       nTokenBalanceETH = _useAppContext.nTokenBalanceETH,
@@ -57458,19 +57448,41 @@ var useNToken = function useNToken() {
 
   var fetchNTokenBalance = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(ccy) {
-      var nTokenBalance;
+      var _nTokenBalanceDAI, _nTokenBalanceETH, _nTokenBalanceUSDC;
+
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return nTokenContract[ccy].balanceOf(account);
+              _context.t0 = ccy;
+              _context.next = _context.t0 === "DAI" ? 3 : _context.t0 === "ETH" ? 7 : _context.t0 === "USDC" ? 11 : 15;
+              break;
 
-            case 2:
-              nTokenBalance = _context.sent;
-              setNTokenBalance(ccy, (0, _units.formatUnits)(nTokenBalance, 18));
+            case 3:
+              _context.next = 5;
+              return nTokenContractDAI.balanceOf(account);
 
-            case 4:
+            case 5:
+              _nTokenBalanceDAI = _context.sent;
+              setNTokenBalanceDAI((0, _units.formatUnits)(_nTokenBalanceDAI, 18));
+
+            case 7:
+              _context.next = 9;
+              return nTokenContractETH.balanceOf(account);
+
+            case 9:
+              _nTokenBalanceETH = _context.sent;
+              setNTokenBalanceETH((0, _units.formatUnits)(_nTokenBalanceETH, 18));
+
+            case 11:
+              _context.next = 13;
+              return nTokenContractUSDC.balanceOf(account);
+
+            case 13:
+              _nTokenBalanceUSDC = _context.sent;
+              setNTokenBalanceUSDC((0, _units.formatUnits)(_nTokenBalanceUSDC, 18));
+
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -57485,19 +57497,41 @@ var useNToken = function useNToken() {
 
   var fetchNTokenYield = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(ccy) {
-      var nTokenYield;
+      var _nTokenYieldDAI, _nTokenYieldETH, _nTokenYieldUSDC;
+
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
-              return nTokenContract[ccy].getCurrentAPY();
+              _context2.t0 = ccy;
+              _context2.next = _context2.t0 === "DAI" ? 3 : _context2.t0 === "ETH" ? 7 : _context2.t0 === "USDC" ? 11 : 15;
+              break;
 
-            case 2:
-              nTokenYield = _context2.sent;
-              setNTokenYield(ccy, (0, _units.formatUnits)(nTokenYield, 18));
+            case 3:
+              _context2.next = 5;
+              return nTokenContractDAI.getCurrentAPY();
 
-            case 4:
+            case 5:
+              _nTokenYieldDAI = _context2.sent;
+              setNTokenYieldDAI((0, _units.formatUnits)(_nTokenYieldDAI, 18));
+
+            case 7:
+              _context2.next = 9;
+              return nTokenContractETH.getCurrentAPY();
+
+            case 9:
+              _nTokenYieldETH = _context2.sent;
+              setNTokenYieldETH((0, _units.formatUnits)(_nTokenYieldETH, 18));
+
+            case 11:
+              _context2.next = 13;
+              return nTokenContractUSDC.getCurrentAPY();
+
+            case 13:
+              _nTokenYieldUSDC = _context2.sent;
+              setNTokenYieldUSDC((0, _units.formatUnits)(_nTokenYieldUSDC, 18));
+
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -58167,26 +58201,50 @@ var useDebtToken = function useDebtToken() {
   };
 
   var _useAppContext = (0, _AppContext.useAppContext)(),
-      setDebtTokenBalance = _useAppContext.setDebtTokenBalance,
+      setDebtTokenBalanceDAI = _useAppContext.setDebtTokenBalanceDAI,
+      setDebtTokenBalanceETH = _useAppContext.setDebtTokenBalanceETH,
+      setDebtTokenBalanceUSDC = _useAppContext.setDebtTokenBalanceUSDC,
       debtTokenBalanceDAI = _useAppContext.debtTokenBalanceDAI,
       debtTokenBalanceETH = _useAppContext.debtTokenBalanceETH,
       debtTokenBalanceUSDC = _useAppContext.debtTokenBalanceUSDC;
 
   var fetchDebtTokenBalance = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(ccy) {
-      var debtTokenBalance;
+      var _debtTokenBalanceDAI, _debtTokenBalanceETH, _debtTokenBalanceUSDC;
+
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return debtTokenContract[ccy].balanceOf(account);
+              _context.t0 = ccy;
+              _context.next = _context.t0 === "DAI" ? 3 : _context.t0 === "ETH" ? 7 : _context.t0 === "USDC" ? 11 : 15;
+              break;
 
-            case 2:
-              debtTokenBalance = _context.sent;
-              setDebtTokenBalance(ccy, (0, _units.formatUnits)(debtTokenBalance, 18));
+            case 3:
+              _context.next = 5;
+              return debtTokenContractDAI.balanceOf(account);
 
-            case 4:
+            case 5:
+              _debtTokenBalanceDAI = _context.sent;
+              setDebtTokenBalanceDAI((0, _units.formatUnits)(_debtTokenBalanceDAI, 18));
+
+            case 7:
+              _context.next = 9;
+              return debtTokenContractETH.balanceOf(account);
+
+            case 9:
+              _debtTokenBalanceETH = _context.sent;
+              setDebtTokenBalanceETH((0, _units.formatUnits)(_debtTokenBalanceETH, 18));
+
+            case 11:
+              _context.next = 13;
+              return debtTokenContractUSDC.balanceOf(account);
+
+            case 13:
+              _debtTokenBalanceUSDC = _context.sent;
+              setDebtTokenBalanceUSDC((0, _units.formatUnits)(_debtTokenBalanceUSDC, 18));
+
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -58546,7 +58604,9 @@ var useNFT = function useNFT() {
   };
 
   var _useAppContext = (0, _AppContext.useAppContext)(),
-      setImageDict = _useAppContext.setImageDict,
+      setImageDictPUNK = _useAppContext.setImageDictPUNK,
+      setImageDictBAYC = _useAppContext.setImageDictBAYC,
+      setImageDictBorrow = _useAppContext.setImageDictBorrow,
       imageDictPUNK = _useAppContext.imageDictPUNK,
       imageDictBAYC = _useAppContext.imageDictBAYC,
       borrowProject = _useAppContext.borrowProject;
@@ -58589,7 +58649,7 @@ var useNFT = function useNFT() {
               break;
 
             case 10:
-              setImageDict("PUNK", imageDict);
+              setImageDictPUNK(imageDict);
 
             case 11:
             case "end":
@@ -58651,7 +58711,7 @@ var useNFT = function useNFT() {
               break;
 
             case 19:
-              setImageDict("BAYC", imageDict);
+              setImageDictBAYC(imageDict);
 
             case 20:
             case "end":
@@ -58740,7 +58800,7 @@ var useNFT = function useNFT() {
                 imageDictBAYC, _readOnlyError("imageDict");
               }
 
-              setImageDict("BORROW", imageDict);
+              setImageDictBorrow(imageDict);
 
             case 4:
             case "end":
@@ -99541,7 +99601,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58492" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58424" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

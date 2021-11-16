@@ -24,14 +24,26 @@ export const useDebtToken = () => {
         "USDC": debtTokenContractUSDC
     }
     const {
-        setDebtTokenBalance, 
+        setDebtTokenBalanceDAI,
+        setDebtTokenBalanceETH,
+        setDebtTokenBalanceUSDC, 
         debtTokenBalanceDAI, 
         debtTokenBalanceETH, 
         debtTokenBalanceUSDC} = useAppContext();
 
     const fetchDebtTokenBalance = async (ccy) => {
-        const debtTokenBalance = await debtTokenContract[ccy].balanceOf(account);
-        setDebtTokenBalance(ccy, formatUnits(debtTokenBalance, 18));
+        
+        switch(ccy) {
+            case "DAI":
+                const debtTokenBalanceDAI = await debtTokenContractDAI.balanceOf(account);
+                setDebtTokenBalanceDAI(formatUnits(debtTokenBalanceDAI, 18));
+            case "ETH":
+                const debtTokenBalanceETH = await debtTokenContractETH.balanceOf(account);
+                setDebtTokenBalanceETH(formatUnits(debtTokenBalanceETH, 18));
+            case "USDC":
+                const debtTokenBalanceUSDC = await debtTokenContractUSDC.balanceOf(account);
+                setDebtTokenBalanceUSDC(formatUnits(debtTokenBalanceUSDC, 18));
+        }
     };
 
     return {

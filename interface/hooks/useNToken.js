@@ -31,18 +31,37 @@ export const useNToken = () => {
         "ETH": nTokenContractETH,
         "USDC": nTokenContractUSDC
     }
-    const {setNTokenBalance, setNTokenYield, setTxnStatus, 
+    const {setNTokenBalanceDAI, setNTokenBalanceETH, setNTokenBalanceUSDC, 
+        setNTokenYieldDAI, setNTokenYieldETH, setNTokenYieldUSDC, setTxnStatus, 
         nTokenBalanceDAI, nTokenBalanceETH, nTokenBalanceUSDC,
         nTokenYieldDAI, nTokenYieldETH, nTokenYieldUSDC} = useAppContext();
 
     const fetchNTokenBalance = async (ccy) => {
-        const nTokenBalance = await nTokenContract[ccy].balanceOf(account);
-        setNTokenBalance(ccy, formatUnits(nTokenBalance, 18));
+        switch(ccy) {
+            case "DAI":
+                const nTokenBalanceDAI = await nTokenContractDAI.balanceOf(account);
+                setNTokenBalanceDAI(formatUnits(nTokenBalanceDAI, 18));
+            case "ETH": 
+                const nTokenBalanceETH = await nTokenContractETH.balanceOf(account);
+                setNTokenBalanceETH(formatUnits(nTokenBalanceETH, 18));
+            case "USDC":
+                const nTokenBalanceUSDC = await nTokenContractUSDC.balanceOf(account);
+                setNTokenBalanceUSDC(formatUnits(nTokenBalanceUSDC, 18));
+        }
     };
 
     const fetchNTokenYield = async (ccy) => {
-        const nTokenYield = await nTokenContract[ccy].getCurrentAPY();
-        setNTokenYield(ccy, formatUnits(nTokenYield, 18));
+        switch(ccy) {
+            case "DAI":
+                const nTokenYieldDAI = await nTokenContractDAI.getCurrentAPY();
+                setNTokenYieldDAI(formatUnits(nTokenYieldDAI, 18));
+            case "ETH": 
+                const nTokenYieldETH = await nTokenContractETH.getCurrentAPY();
+                setNTokenYieldETH(formatUnits(nTokenYieldETH, 18));
+            case "USDC":
+                const nTokenYieldUSDC = await nTokenContractUSDC.getCurrentAPY();
+                setNTokenYieldUSDC(formatUnits(nTokenYieldUSDC, 18));
+        }
     };
 
     return {

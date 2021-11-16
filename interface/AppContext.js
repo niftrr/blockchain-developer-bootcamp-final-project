@@ -3,17 +3,23 @@ import App from "./App";
 
 const initialContext = {
     debtTokenBalanceDAI: "--",
+    setDebtTokenBalanceDAI: () => {},
     debtTokenBalanceETH: "--",
+    setDebtTokenBalanceETH: () => {},
     debtTokenBalanceUSDC: "--",
-    setDebtTokenBalance: () => {},
+    setDebtTokenBalanceUSDC: () => {},
     nTokenBalanceDAI: "--",
+    setNTokenBalanceDAI: () => {},
     nTokenBalanceETH: "--",
+    setNTokenBalanceETH: () => {},
     nTokenBalanceUSDC: "--",
-    setNTokenBalance: () => {},
+    setNTokenBalanceUSDC: () => {},
     nTokenYieldDAI: "--",
+    setNTokenYieldDAI: () => {},
     nTokenYieldETH: "--",
+    setNTokenYieldETH: () => {},
     nTokenYieldUSDC: "--",
-    setNTokenYield: () => {},
+    setNTokenYieldUSDC: () => {},
     userBorrows: {},
     setUserBorrows: () => {},
     borrowDefaults: [],
@@ -233,118 +239,114 @@ export const AppContextProvider = ({ children }) => {
 
     const contextValue = {
       debtTokenBalanceDAI: store.debtTokenBalanceDAI,
+      setDebtTokenBalanceDAI: (balance) => {
+        dispatch({ type: "SET_DEBTTOKEN_BALANCE_DAI", payload: balance});
+      },
       debtTokenBalanceETH: store.debtTokenBalanceETH,
+      setDebtTokenBalanceETH: (balance) => {
+        dispatch({ type: "SET_DEBTTOKEN_BALANCE_ETH", payload: balance});
+      },
       debtTokenBalanceUSDC: store.debtTokenBalanceUSDC,
-      setDebtTokenBalance: (ccy, balance) => {
-        switch(ccy) {
-          case "DAI":
-            dispatch({ type: "SET_DEBTTOKEN_BALANCE_DAI", payload: balance});
-          case "ETH":
-            dispatch({ type: "SET_DEBTTOKEN_BALANCE_ETH", payload: balance});
-          case "USDC":
-            dispatch({ type: "SET_DEBTTOKEN_BALANCE_USDC", payload: balance});
-        };
+      setDebtTokenBalanceUSDC: (balance) => {
+        dispatch({ type: "SET_DEBTTOKEN_BALANCE_USDC", payload: balance});
       },
       nTokenBalanceDAI: store.nTokenBalanceDAI,
-        nTokenBalanceETH: store.nTokenBalanceETH,
-        nTokenBalanceUSDC: store.nTokenBalanceUSDC,
-        setNTokenBalance: (ccy, balance) => {
-          switch(ccy) {
-            case "DAI":
-              dispatch({ type: "SET_NTOKEN_BALANCE_DAI", payload: balance});
-            case "ETH":
-              dispatch({ type: "SET_NTOKEN_BALANCE_ETH", payload: balance});
-            case "USDC":
-              dispatch({ type: "SET_NTOKEN_BALANCE_USDC", payload: balance});
-          };
-        },
-        nTokenYieldDAI: store.nTokenYieldDAI,
-        nTokenYieldETH: store.nTokenYieldETH,
-        nTokenYieldUSDC: store.nTokenYieldUSDC,
-        setNTokenYield: (ccy, _yield) => {
-          switch(ccy) {
-            case "DAI":
-              dispatch({ type: "SET_NTOKEN_YIELD_DAI", payload: _yield});
-            case "ETH":
-              dispatch({ type: "SET_NTOKEN_YIELD_ETH", payload: _yield});
-            case "USDC":
-              dispatch({ type: "SET_NTOKEN_YIELD_USDC", payload: _yield});
-          };
-        },
-        userBorrows: store.userBorrows,
-        setUserBorrows: (userBorrows) => {
-          dispatch({ type: "SET_USER_BORROWS", payload: userBorrows});
-        },
-        borrowDefaults: store.borrowDefaults,
-        setBorrowDefaults: (defaults) => {
-          dispatch({ type: "SET_BORROW_DEFAULTS", payload: defaults});
-        },
-        imageDictPUNK: store.imageDictPUNK,
-        imageDictBAYC: store.imageDictBAYC,
-        imageDictBorrow: store.imageDictBorrow,
-        setImageDict: (symbol, imageDict) => {
-          switch(symbol) {
-            case "PUNK":
-              dispatch({ type: "SET_IMAGE_DICT_PUNK", payload: imageDict});
-            case "BAYC":
-              dispatch({ type: "SET_IMAGE_DICT_BAYC", payload: imageDict});
-            case "BORROW":
-              dispatch({ type: "SET_IMAGE_DICT_BORROW", payload: imageDict});
-          };
-        },
-        whitelistNFT: store.whitelistNFT,
-        setWhitelistNFT: (whitelist) => {
-          dispatch({ type: "SET_WHITELIST_NFT", payload: whitelist});
-        },
-        borrowProject: store.borrowProject,
-        setBorrowProject: (projectSymbol) => {
-          dispatch({ type: "SET_BORROW_PROJECT", payload: projectSymbol});
-        },
-        borrowNFT: store.borrowNFT,
-        setBorrowNFT: (tokenId) => {
-          dispatch({ type: "SET_BORROW_NFT", payload: tokenId});
-        },
-        borrowFloorPrice: store.borrowFloorPrice,
-        setBorrowFloorPrice: (price) => {
-          dispatch({ type: "SET_BORROW_FLOOR_PRICE", payload: price});
-        },
-        borrowCollRatio: store.borrowCollRatio,
-        setBorrowCollRatio: (collRatio) => {
-          dispatch({ type: "SET_BORROW_COLL_RATIO", payload: collRatio});
-        },
-        borrowAPR: store.borrowAPR,
-        setBorrowAPR: (apr) => {
-          dispatch({ type: "SET_BORROW_APR", payload: apr});
-        },
-        borrowToken: store.borrowToken,
-        setBorrowToken: (token) => {
-          dispatch({ type: "SET_BORROW_TOKEN", payload: token});
-        },
-        borrowAmount: store.borrowAmount,
-        setBorrowAmount: (amount) => {
-          dispatch({ type: "SET_BORROW_AMOUNT", payload: amount});
-        },
-        borrowRepaymentAmount: store.borrowRepaymentAmount,
-        setBorrowRepaymentAmount: (amount) => {
-          dispatch({ type: "SET_BORROW_REPAYMENT_AMOUNT", payload: amount});
-        },
-        borrowMaturity: store.borrowMaturity,
-        setBorrowMaturity: (numWeeks) => {
-          dispatch({ type: "SET_BORROW_MATURITY", payload: numWeeks});
-        },
-        aprPUNK: store.aprPUNK,
-        setAprPUNK: (apr) => {
-          dispatch({ type: "SET_APR_PUNK", payload: apr});
-        },
-        aprBAYC: store.aprBAYC,
-        setAprBAYC: (apr) => {
-          dispatch({ type: "SET_APR_BAYC", payload: apr});
-        },
-        txnStatus: store.txnStatus,
-        setTxnStatus: (status) => {
-          dispatch({ type: "SET_TXN_STATUS", payload: status });
-        },
-    };
+      setNTokenBalanceDAI: (balance) => {
+        dispatch({ type: "SET_NTOKEN_BALANCE_DAI", payload: balance});
+      },
+      nTokenBalanceETH: store.nTokenBalanceETH,
+      setNTokenBalanceETH: (balance) => {
+        dispatch({ type: "SET_NTOKEN_BALANCE_ETH", payload: balance});
+      },
+      nTokenBalanceUSDC: store.nTokenBalanceUSDC,
+      setNTokenBalanceUSDC: (balance) => {
+        dispatch({ type: "SET_NTOKEN_BALANCE_USDC", payload: balance});
+      },
+      nTokenYieldDAI: store.nTokenYieldDAI,
+      setNTokenYieldDAI: (_yield) => {
+        dispatch({ type: "SET_NTOKEN_YIELD_DAI", payload: _yield});
+      },
+      nTokenYieldETH: store.nTokenYieldETH,
+      setNTokenYieldETH: (_yield) => {
+        dispatch({ type: "SET_NTOKEN_YIELD_ETH", payload: _yield});
+      },
+      nTokenYieldUSDC: store.nTokenYieldUSDC,
+      setNTokenYieldUSDC: (_yield) => {
+        dispatch({ type: "SET_NTOKEN_YIELD_USDC", payload: _yield});
+      },
+      userBorrows: store.userBorrows,
+      setUserBorrows: (userBorrows) => {
+        dispatch({ type: "SET_USER_BORROWS", payload: userBorrows});
+      },
+      borrowDefaults: store.borrowDefaults,
+      setBorrowDefaults: (defaults) => {
+        dispatch({ type: "SET_BORROW_DEFAULTS", payload: defaults});
+      },
+      imageDictPUNK: store.imageDictPUNK,
+      setImageDictPUNK: (imageDict) => {
+        dispatch({ type: "SET_IMAGE_DICT_PUNK", payload: imageDict});
+      },
+      imageDictBAYC: store.imageDictBAYC,
+      setImageDictBAYC: (imageDict) => {
+        dispatch({ type: "SET_IMAGE_DICT_BAYC", payload: imageDict});
+      },
+      imageDictBorrow: store.imageDictBorrow,
+      setImageDictBorrow: (imageDict) => {
+        dispatch({ type: "SET_IMAGE_DICT_BORROW", payload: imageDict});
+      },
+      whitelistNFT: store.whitelistNFT,
+      setWhitelistNFT: (whitelist) => {
+        dispatch({ type: "SET_WHITELIST_NFT", payload: whitelist});
+      },
+      borrowProject: store.borrowProject,
+      setBorrowProject: (projectSymbol) => {
+        dispatch({ type: "SET_BORROW_PROJECT", payload: projectSymbol});
+      },
+      borrowNFT: store.borrowNFT,
+      setBorrowNFT: (tokenId) => {
+        dispatch({ type: "SET_BORROW_NFT", payload: tokenId});
+      },
+      borrowFloorPrice: store.borrowFloorPrice,
+      setBorrowFloorPrice: (price) => {
+        dispatch({ type: "SET_BORROW_FLOOR_PRICE", payload: price});
+      },
+      borrowCollRatio: store.borrowCollRatio,
+      setBorrowCollRatio: (collRatio) => {
+        dispatch({ type: "SET_BORROW_COLL_RATIO", payload: collRatio});
+      },
+      borrowAPR: store.borrowAPR,
+      setBorrowAPR: (apr) => {
+        dispatch({ type: "SET_BORROW_APR", payload: apr});
+      },
+      borrowToken: store.borrowToken,
+      setBorrowToken: (token) => {
+        dispatch({ type: "SET_BORROW_TOKEN", payload: token});
+      },
+      borrowAmount: store.borrowAmount,
+      setBorrowAmount: (amount) => {
+        dispatch({ type: "SET_BORROW_AMOUNT", payload: amount});
+      },
+      borrowRepaymentAmount: store.borrowRepaymentAmount,
+      setBorrowRepaymentAmount: (amount) => {
+        dispatch({ type: "SET_BORROW_REPAYMENT_AMOUNT", payload: amount});
+      },
+      borrowMaturity: store.borrowMaturity,
+      setBorrowMaturity: (numWeeks) => {
+        dispatch({ type: "SET_BORROW_MATURITY", payload: numWeeks});
+      },
+      aprPUNK: store.aprPUNK,
+      setAprPUNK: (apr) => {
+        dispatch({ type: "SET_APR_PUNK", payload: apr});
+      },
+      aprBAYC: store.aprBAYC,
+      setAprBAYC: (apr) => {
+        dispatch({ type: "SET_APR_BAYC", payload: apr});
+      },
+      txnStatus: store.txnStatus,
+      setTxnStatus: (status) => {
+        dispatch({ type: "SET_TXN_STATUS", payload: status });
+      },
+  };
 
     return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };

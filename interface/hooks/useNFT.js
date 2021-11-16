@@ -16,7 +16,7 @@ export const useNFT = () => {
         "PUNK": nftContractPUNK,
         "BAYC": nftContractBAYC
     }
-    const { setImageDict, imageDictPUNK, imageDictBAYC,
+    const { setImageDictPUNK, setImageDictBAYC, setImageDictBorrow, imageDictPUNK, imageDictBAYC,
         borrowProject } = useAppContext();
 
     const nftAddressSymbolDict = {}
@@ -33,7 +33,7 @@ export const useNFT = () => {
                 imageDict[tokenId] = imageURL;
             }
         }
-        setImageDict("PUNK", imageDict);
+        setImageDictPUNK(imageDict);
     }
 
     const fetchImagesBAYC = async () => {
@@ -48,7 +48,7 @@ export const useNFT = () => {
                 imageDict[tokenId] = imageURL;
             }
         }
-        setImageDict("BAYC", imageDict);
+        setImageDictBAYC(imageDict);
     }
 
     const fetchImagePUNK = async (tokenId) => {
@@ -74,7 +74,7 @@ export const useNFT = () => {
         else if (borrowProject == "BAYC") {
             imageDict = imageDictBAYC;
         }
-        setImageDict("BORROW", imageDict);
+        setImageDictBorrow(imageDict);
     }
 
     return {
