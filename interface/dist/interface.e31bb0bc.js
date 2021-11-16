@@ -57403,13 +57403,13 @@ var useNToken = function useNToken() {
       isValidNetwork = _useIsValidNetwork.isValidNetwork; // NTokens
 
 
-  var nTokenContractAddressDAI = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
-  var nTokenContractAddressETH = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
-  var nTokenContractAddressUSDC = "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"; // AssetTokens
+  var nTokenContractAddressDAI = "0x49fd2BE640DB2910c2fAb69bB8531Ab6E76127ff";
+  var nTokenContractAddressETH = "0x4631BCAbD6dF18D94796344963cB60d44a4136b6";
+  var nTokenContractAddressUSDC = "0x86A2EE8FAf9A840F7a2c64CA3d51209F9A02081D"; // AssetTokens
 
-  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
-  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+  var assetTokenContractAddressDAI = "0x367761085BF3C12e5DA2Df99AC6E1a824612b8fb";
+  var assetTokenContractAddressETH = "0x4C2F7092C2aE51D986bEFEe378e50BD4dB99C901";
+  var assetTokenContractAddressUSDC = "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9";
   var assetTokenContractAddress = {
     "DAI": assetTokenContractAddressDAI,
     "ETH": assetTokenContractAddressETH,
@@ -58178,9 +58178,9 @@ var useDebtToken = function useDebtToken() {
       isValidNetwork = _useIsValidNetwork.isValidNetwork; // DebtTokens
 
 
-  var debtTokenContractAddressDAI = "0x0B306BF915C4d645ff596e518fAf3F9669b97016";
-  var debtTokenContractAddressETH = "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1";
-  var debtTokenContractAddressUSDC = "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE";
+  var debtTokenContractAddressDAI = "0x5067457698Fd6Fa1C6964e416b3f42713513B3dD";
+  var debtTokenContractAddressETH = "0x18E317A7D70d8fBf8e6E893616b52390EbBdb629";
+  var debtTokenContractAddressUSDC = "0x4b6aB5F819A515382B0dEB6935D793817bB4af28";
   var debtTokenABI = _DebtToken.default["abi"];
   var debtTokenContractDAI = (0, _useContract.useContract)(debtTokenContractAddressDAI, debtTokenABI);
   var debtTokenContractETH = (0, _useContract.useContract)(debtTokenContractAddressETH, debtTokenABI);
@@ -58584,8 +58584,8 @@ var useNFT = function useNFT() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var nftContractAddressPUNK = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
-  var nftContractAddressBAYC = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
+  var nftContractAddressPUNK = "0xA7c59f010700930003b33aB25a7a0679C860f29c";
+  var nftContractAddressBAYC = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
   var nftContractABI = _NFT.default["abi"];
   var nftContractPUNK = (0, _useContract.useContract)(nftContractAddressPUNK, nftContractABI);
   var nftContractBAYC = (0, _useContract.useContract)(nftContractAddressBAYC, nftContractABI);
@@ -59082,9 +59082,9 @@ var useAssetToken = function useAssetToken() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var assetTokenContractAddressDAI = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
-  var assetTokenContractAddressETH = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9";
-  var assetTokenContractAddressUSDC = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+  var assetTokenContractAddressDAI = "0x367761085BF3C12e5DA2Df99AC6E1a824612b8fb";
+  var assetTokenContractAddressETH = "0x4C2F7092C2aE51D986bEFEe378e50BD4dB99C901";
+  var assetTokenContractAddressUSDC = "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9";
   var assetTokenContractAddress = {
     "DAI": assetTokenContractAddressDAI,
     "ETH": assetTokenContractAddressETH,
@@ -59581,12 +59581,12 @@ var useCollateralManager = function useCollateralManager() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var collateralManagerContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  var collateralManagerContractAddress = "0xC9a43158891282A2B1475592D5719c001986Aaec";
   var collateralManagerABI = _CollateralManager.default["abi"];
   var collateralManagerContract = (0, _useContract.useContract)(collateralManagerContractAddress, collateralManagerABI); // NFT contract data (c&p from hooks/useNFT.js)
 
-  var nftContractAddressPUNK = "0x09635F643e140090A9A8Dcd712eD6285858ceBef";
-  var nftContractAddressBAYC = "0xc5a5C42992dECbae36851359345FE25997F5C42d";
+  var nftContractAddressPUNK = "0xA7c59f010700930003b33aB25a7a0679C860f29c";
+  var nftContractAddressBAYC = "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c";
   var nftContractAddress = {
     "PUNK": nftContractAddressPUNK,
     "BAYC": nftContractAddressBAYC
@@ -59839,7 +59839,7 @@ var useLendingPool = function useLendingPool() {
   var _useIsValidNetwork = (0, _useIsValidNetwork2.default)(),
       isValidNetwork = _useIsValidNetwork.isValidNetwork;
 
-  var lendingPoolContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  var lendingPoolContractAddress = "0x46b142DD1E924FAb83eCc3c08e4D46E82f005e0E";
   var lendingPoolABI = _LendingPool.default["abi"];
   var lendingPoolContract = (0, _useContract.useContract)(lendingPoolContractAddress, lendingPoolABI);
 
@@ -59867,10 +59867,10 @@ var useLendingPool = function useLendingPool() {
       collateralManagerContractAddress = _useCollateralManager.collateralManagerContractAddress;
 
   var assetTokenContractAddressSymbolLookup = {};
-  assetTokenContractAddressSymbolLookup["0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"] = "DAI";
-  assetTokenContractAddressSymbolLookup["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"] = "ETH";
-  assetTokenContractAddressSymbolLookup["0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"] = "USDC";
-  console.log('==>', "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+  assetTokenContractAddressSymbolLookup["0x367761085BF3C12e5DA2Df99AC6E1a824612b8fb"] = "DAI";
+  assetTokenContractAddressSymbolLookup["0x4C2F7092C2aE51D986bEFEe378e50BD4dB99C901"] = "ETH";
+  assetTokenContractAddressSymbolLookup["0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9"] = "USDC";
+  console.log('==>', "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9");
 
   function wait(seconds) {
     return new Promise(function (res) {
@@ -99608,7 +99608,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54812" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53480" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

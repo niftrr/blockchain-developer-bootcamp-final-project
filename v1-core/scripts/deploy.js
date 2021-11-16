@@ -4,6 +4,16 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const fs = require("fs");
+const envFile = "../interface/.env";
+let fileData = "";
+  
+async function writeContractAddressesToInterfaceEnv(fileData) {
+  fs.writeFile(envFile, fileData, (err) => {
+    // In case of a error throw err.
+    if (err) throw err;
+  });
+}
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -26,12 +36,14 @@ async function main() {
   const lendingPool = await LendingPool.deploy();
   await lendingPool.deployed();
   console.log("LendingPool deployed to:", lendingPool.address);
+  fileData += `REACT_APP_LENDING_POOL_CONTRACT_ADDRESS=${lendingPool.address}\n`;
 
   // Get and deploy CollateralManager contract
   const CollateralManager = await hre.ethers.getContractFactory('CollateralManager');
   const collateralManager = await CollateralManager.deploy();
   await collateralManager.deployed();
   console.log("CollateralManager deployed to:", collateralManager.address);
+  fileData += `REACT_APP_COLLATERAL_MANAGER_CONTRACT_ADDRESS=${collateralManager.address}\n`;
 
   // Link CollateralManager to LendingPool
   await lendingPool.setCollateralManagerAddress(collateralManager.address);
@@ -46,14 +58,17 @@ async function main() {
   assetTokenDAI = await AssetToken.deploy('DAI Token', 'DAI', assetTokenSupply);
   await assetTokenDAI.deployed();
   console.log("assetTokenDAI deployed to:", assetTokenDAI.address);
+  fileData += `REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS=${assetTokenDAI.address}\n`;
   // ETH:
   assetTokenETH = await AssetToken.deploy('ETH Token', 'ETH', assetTokenSupply);
   await assetTokenETH.deployed();
   console.log("assetTokenETH deployed to:", assetTokenETH.address);
+  fileData += `REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS=${assetTokenETH.address}\n`;
   // USDC:
   assetTokenUSDC = await AssetToken.deploy('USDC Token', 'USDC', assetTokenSupply);
   await assetTokenUSDC.deployed();
   console.log("assetTokenUSDC deployed to:", assetTokenUSDC.address);
+  fileData += `REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS=${assetTokenUSDC.address}\n`;
 
   // Get and deploy nToken contracts
   NToken = await hre.ethers.getContractFactory('NToken');
@@ -61,14 +76,17 @@ async function main() {
   nTokenDAI = await NToken.deploy('DAI nToken', 'nDAI');
   await nTokenDAI.deployed();
   console.log("nTokenDAI deployed to:", nTokenDAI.address);
+  fileData += `REACT_APP_N_TOKEN_DAI_CONTRACT_ADDRESS=${nTokenDAI.address}\n`;
   // ETH:
   nTokenETH = await NToken.deploy('ETH nToken', 'nETH');
   await nTokenETH.deployed();
   console.log("nTokenETH deployed to:", nTokenETH.address);
+  fileData += `REACT_APP_N_TOKEN_ETH_CONTRACT_ADDRESS=${nTokenETH.address}\n`;
   // USDC:
   nTokenUSDC = await NToken.deploy('USDC nToken', 'nUSDC');
   await nTokenUSDC.deployed();
   console.log("nTokenUSDC deployed to:", nTokenUSDC.address);
+  fileData += `REACT_APP_N_TOKEN_USDC_CONTRACT_ADDRESS=${nTokenUSDC.address}\n`;
 
   // Asign nToken minter/burner roles to LendingPool
   // DAI:
@@ -87,14 +105,17 @@ async function main() {
   debtTokenDAI = await DebtToken.deploy('DAI debtToken', 'debtDAI');
   await debtTokenDAI.deployed();  
   console.log("debtTokenDAI deployed to:", debtTokenDAI.address);
+  fileData += `REACT_APP_DEBT_TOKEN_DAI_CONTRACT_ADDRESS=${debtTokenDAI.address}\n`;
   // ETH:
   debtTokenETH = await DebtToken.deploy('ETH debtToken', 'debtETH');
   await debtTokenETH.deployed();  
   console.log("debtTokenETH deployed to:", debtTokenETH.address);
+  fileData += `REACT_APP_DEBT_TOKEN_ETH_CONTRACT_ADDRESS=${debtTokenETH.address}\n`;
   // USDC:
   debtTokenUSDC = await DebtToken.deploy('USDC debtToken', 'debtUSDC');
   await debtTokenUSDC.deployed();  
   console.log("debtTokenUSDC deployed to:", debtTokenUSDC.address);
+  fileData += `REACT_APP_DEBT_TOKEN_USDC_CONTRACT_ADDRESS=${debtTokenUSDC.address}\n`;
 
   // Asign debtToken minter/burning roles to LendingPool
   // DAI:
@@ -122,10 +143,12 @@ async function main() {
   nftPUNK = await NFT.deploy('Cryptopunks', 'PUNK');
   await nftPUNK.deployed();
   console.log("NFT PUNK deployed to:", nftPUNK.address);
+  fileData += `REACT_APP_NFT_PUNK_CONTRACT_ADDRESS=${nftPUNK.address}\n`;
   // BAYC:
   nftBAYC = await NFT.deploy('Bored Ape Yacht Club', 'BAYC');
   await nftBAYC.deployed();
   console.log("NFT BAYC deployed to:", nftBAYC.address);
+  fileData += `REACT_APP_NFT_BAYC_CONTRACT_ADDRESS=${nftBAYC.address}`;
 
   // Set NFT liquidation thresholds
   collateralManager.setLiquidationThreshold(nftPUNK.address, 150); // in percent
@@ -173,6 +196,9 @@ async function main() {
   await mint("BAYC", 1, 3);
   await mint("BAYC", 2, 4);
   await mint("BAYC", 2, 5); 
+
+  // Writes fileData to interface ../interface/.env 
+  await writeContractAddressesToInterfaceEnv(fileData);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
