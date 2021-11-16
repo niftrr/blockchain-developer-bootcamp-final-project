@@ -82192,6 +82192,8 @@ require("./Dashboard.css");
 
 var _useCollateralManager2 = _interopRequireDefault(require("../../hooks/useCollateralManager"));
 
+var _useTransaction2 = _interopRequireDefault(require("../../hooks/useTransaction"));
+
 var _AppContext = require("../../AppContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -82212,13 +82214,16 @@ function Dashboard(props) {
   var _useAppContext = (0, _AppContext.useAppContext)(),
       userBorrows = _useAppContext.userBorrows;
 
+  var _useTransaction = (0, _useTransaction2.default)(),
+      txnStatus = _useTransaction.txnStatus;
+
   (0, _react.useEffect)(function () {
     if (account) {
       fetchUserBorrows();
       userBorrows;
       console.log('user borrows');
     }
-  }, [account]);
+  }, [account, txnStatus]);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container-center-horizontal"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -82241,7 +82246,7 @@ function Dashboard(props) {
 
 var _default = Dashboard;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../Header":"components/Header/index.jsx","../Background":"components/Background/index.jsx","../BorrowsHeader":"components/BorrowsHeader/index.jsx","../Borrow":"components/Borrow/index.jsx","../Lends":"components/Lends/index.jsx","./Dashboard.css":"components/Dashboard/Dashboard.css","../../hooks/useCollateralManager":"hooks/useCollateralManager.js","../../AppContext":"AppContext.js"}],"components/BorrowDataValues/BorrowDataValues.css":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","@web3-react/core":"node_modules/@web3-react/core/dist/core.esm.js","../Header":"components/Header/index.jsx","../Background":"components/Background/index.jsx","../BorrowsHeader":"components/BorrowsHeader/index.jsx","../Borrow":"components/Borrow/index.jsx","../Lends":"components/Lends/index.jsx","./Dashboard.css":"components/Dashboard/Dashboard.css","../../hooks/useCollateralManager":"hooks/useCollateralManager.js","../../hooks/useTransaction":"hooks/useTransaction.js","../../AppContext":"AppContext.js"}],"components/BorrowDataValues/BorrowDataValues.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);

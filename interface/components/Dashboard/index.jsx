@@ -7,6 +7,7 @@ import Borrow from "../Borrow";
 import Lends from "../Lends";
 import "./Dashboard.css";
 import useCollateralManager from "../../hooks/useCollateralManager";
+import useTransaction from "../../hooks/useTransaction";
 import { useAppContext } from "../../AppContext";
 
 function Dashboard(props) {
@@ -14,6 +15,7 @@ function Dashboard(props) {
   const { account } = useWeb3React();
   const { fetchUserBorrows } = useCollateralManager();
   const { userBorrows } = useAppContext();
+  const { txnStatus } = useTransaction();
 
   useEffect(() => {
     if (account) {
@@ -21,7 +23,7 @@ function Dashboard(props) {
       userBorrows;
       console.log('user borrows');
     }  
-  }, [account]);
+  }, [account, txnStatus]);
 
   return (
     <div className="container-center-horizontal">
