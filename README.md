@@ -77,3 +77,7 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 1. Follow the instructions as per [interface/README.md](interface/README.md).
 1. Copy the smart contract addresses from the protocol and copy these over to [interface/hooks/](interface/hooks/).
+
+## Licensing
+
+The primary license for NFTlend V1 Core is the Business Source License 1.1 (`BUSL-1.1`), see [`LICENSE`](./LICENSE)
