@@ -26,7 +26,6 @@ function PopUp(props) {
   }, [account]);
 
   const handleWithdrawSubmit = () => {
-    console.log('handleWithdrawSubmit called');
     withdraw(token, withdrawAmount);
   }
 

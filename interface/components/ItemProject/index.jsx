@@ -16,20 +16,9 @@ function ItemProject(props) {
   }
 
   const handleChange = (nftSymbol) => {
-    console.log('ItemPoject handleChange');
     setBorrowProject(nftSymbol);
-    // if (nftSymbol == "PUNK") {
-    //   setImageDictBorrow(imageDictPUNK);
-    // } 
-    // else if (nftSymbol == "BAYC") {
-    //   setImageDictBorrow(imageDictBAYC);
-    // }
     setImagesBorrow(nftSymbol);
   }
-
-  console.log('ItemProject nftSymbol', nftSymbol);
-  console.log('ItemProject borrowProject', borrowProject);
-  console.log('ItemProject imageDictBorrow', imageDictBorrow);
 
   return (
     <div className={`item-project ${className || ""}`}>

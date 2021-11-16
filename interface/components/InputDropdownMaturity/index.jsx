@@ -8,7 +8,6 @@ function InputDropdown(props) {
 
   const handleBorrowMaturityInput = (value) => {
     setBorrowMaturity(value);
-    console.log('handleBorrowMaturityInput', value);
   }
 
   return (

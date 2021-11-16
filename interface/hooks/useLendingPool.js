@@ -29,8 +29,6 @@ export const useLendingPool = () => {
     assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS] = "ETH"; 
     assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS] = "USDC"; 
             
-    console.log('==>', process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS)
-
     function wait(seconds) {
         return new Promise( res => setTimeout(res, seconds*1000) );
     }
@@ -38,7 +36,6 @@ export const useLendingPool = () => {
     const fetchBorrowFloorPrice = async () => {
         const price = await lendingPoolContract._mockOracle();
         setBorrowFloorPrice(formatUnits(price, 0));
-        console.log('fetchBorrowFloorPrice', price);
     };
 
     const deposit = async (tokenSymbol, amount) => {

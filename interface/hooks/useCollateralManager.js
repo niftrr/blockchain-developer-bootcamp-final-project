@@ -36,7 +36,6 @@ export const useCollateralManager = () => {
     const fetchWhitelistNFT = async () => {
         const whitelist = await collateralManagerContract.getWhitelist();
         setWhitelistNFT(whitelist);
-        console.log(whitelist);
     }
 
     const fetchAPR = async () => {
@@ -69,7 +68,6 @@ export const useCollateralManager = () => {
 
     const fetchUserBorrows = async () => {
         const userBorrowIds = await collateralManagerContract.getUserBorrows(account);
-        console.log('userBorrowIds', userBorrowIds);
         const userBorrows = {};
         for (var borrowId in userBorrowIds) {
             let borrow = await collateralManagerContract.getBorrow(borrowId);
@@ -78,7 +76,6 @@ export const useCollateralManager = () => {
                 userBorrows[borrowId] = await formatBorrow(borrow);
             } 
         }
-        console.log('userBorrows', userBorrows);
         setUserBorrows(userBorrows);
     }
 

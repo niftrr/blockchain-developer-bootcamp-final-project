@@ -35,7 +35,6 @@ function PopUpBorrow() {
   }, [account, imageDictBorrow]);
 
   const handleBorrowSubmit = () => {
-    console.log('handleBorrowSubmit called');
     borrow(
       borrowToken, 
       borrowAmount, 

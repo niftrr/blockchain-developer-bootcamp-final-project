@@ -8,7 +8,6 @@ function InputDropdown(props) {
 
   const handleBorrowTokenInput = (value) => {
     setBorrowToken(value);
-    console.log('handleBorrowTokenInput', value);
   }
 
   return (

@@ -59612,9 +59612,8 @@ var useCollateralManager = function useCollateralManager() {
             case 2:
               whitelist = _context.sent;
               setWhitelistNFT(whitelist);
-              console.log(whitelist);
 
-            case 5:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -59728,43 +59727,41 @@ var useCollateralManager = function useCollateralManager() {
 
             case 2:
               userBorrowIds = _context5.sent;
-              console.log('userBorrowIds', userBorrowIds);
               userBorrows = {};
               _context5.t0 = regeneratorRuntime.keys(userBorrowIds);
 
-            case 6:
+            case 5:
               if ((_context5.t1 = _context5.t0()).done) {
-                _context5.next = 17;
+                _context5.next = 16;
                 break;
               }
 
               borrowId = _context5.t1.value;
-              _context5.next = 10;
+              _context5.next = 9;
               return collateralManagerContract.getBorrow(borrowId);
 
-            case 10:
+            case 9:
               borrow = _context5.sent;
 
               if (!(borrow[1] != "0x0000000000000000000000000000000000000000")) {
-                _context5.next = 15;
+                _context5.next = 14;
                 break;
               }
 
-              _context5.next = 14;
+              _context5.next = 13;
               return formatBorrow(borrow);
 
-            case 14:
+            case 13:
               userBorrows[borrowId] = _context5.sent;
 
-            case 15:
-              _context5.next = 6;
+            case 14:
+              _context5.next = 5;
               break;
 
-            case 17:
-              console.log('userBorrows', userBorrows);
+            case 16:
               setUserBorrows(userBorrows);
 
-            case 19:
+            case 17:
             case "end":
               return _context5.stop();
           }
@@ -59864,7 +59861,6 @@ var useLendingPool = function useLendingPool() {
   assetTokenContractAddressSymbolLookup["0x367761085BF3C12e5DA2Df99AC6E1a824612b8fb"] = "DAI";
   assetTokenContractAddressSymbolLookup["0x4C2F7092C2aE51D986bEFEe378e50BD4dB99C901"] = "ETH";
   assetTokenContractAddressSymbolLookup["0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9"] = "USDC";
-  console.log('==>', "0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9");
 
   function wait(seconds) {
     return new Promise(function (res) {
@@ -59885,9 +59881,8 @@ var useLendingPool = function useLendingPool() {
             case 2:
               price = _context.sent;
               setBorrowFloorPrice((0, _units.formatUnits)(price, 0));
-              console.log('fetchBorrowFloorPrice', price);
 
-            case 5:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -80363,8 +80358,6 @@ function Header(props) {
       activate = _useWeb3React.activate,
       deactivate = _useWeb3React.deactivate;
 
-  console.log(active, account);
-
   function connect() {
     return _connect.apply(this, arguments);
   }
@@ -81900,7 +81893,6 @@ function PopUp(props) {
   }, [account]);
 
   var handleWithdrawSubmit = function handleWithdrawSubmit() {
-    console.log('handleWithdrawSubmit called');
     withdraw(token, withdrawAmount);
   };
 
@@ -82387,7 +82379,6 @@ function PopUpBorrow() {
   }, [account, imageDictBorrow]);
 
   var handleBorrowSubmit = function handleBorrowSubmit() {
-    console.log('handleBorrowSubmit called');
     borrow(borrowToken, borrowAmount, borrowProject, borrowNFT, borrowAPR, borrowMaturity);
   };
 
@@ -82682,20 +82673,10 @@ function ItemProject(props) {
   };
 
   var handleChange = function handleChange(nftSymbol) {
-    console.log('ItemPoject handleChange');
-    setBorrowProject(nftSymbol); // if (nftSymbol == "PUNK") {
-    //   setImageDictBorrow(imageDictPUNK);
-    // } 
-    // else if (nftSymbol == "BAYC") {
-    //   setImageDictBorrow(imageDictBAYC);
-    // }
-
+    setBorrowProject(nftSymbol);
     setImagesBorrow(nftSymbol);
   };
 
-  console.log('ItemProject nftSymbol', nftSymbol);
-  console.log('ItemProject borrowProject', borrowProject);
-  console.log('ItemProject imageDictBorrow', imageDictBorrow);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "item-project ".concat(className || "")
   }, /*#__PURE__*/_react.default.createElement("input", {
@@ -82794,8 +82775,6 @@ function ItemNFT(props) {
     } else {
       setBorrowNFT(tokenId);
     }
-
-    console.log('setting borrowNFT to', tokenId);
   };
 
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
@@ -82868,7 +82847,6 @@ function InputDropdown(props) {
 
   var handleBorrowMaturityInput = function handleBorrowMaturityInput(value) {
     setBorrowMaturity(value);
-    console.log('handleBorrowMaturityInput', value);
   };
 
   return /*#__PURE__*/_react.default.createElement("select", {
@@ -82957,7 +82935,6 @@ function InputDropdown(props) {
 
   var handleBorrowTokenInput = function handleBorrowTokenInput(value) {
     setBorrowToken(value);
-    console.log('handleBorrowTokenInput', value);
   };
 
   return /*#__PURE__*/_react.default.createElement("select", {
@@ -99638,7 +99615,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59173" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61360" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

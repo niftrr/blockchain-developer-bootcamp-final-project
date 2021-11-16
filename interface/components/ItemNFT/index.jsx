@@ -39,7 +39,6 @@ function ItemNFT(props) {
     } else {
       setBorrowNFT(tokenId);
     }
-    console.log('setting borrowNFT to', tokenId);
   }
 
   return (

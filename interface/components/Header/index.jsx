@@ -9,8 +9,6 @@ function Header(props) {
   const { className } = props;
   const { active, account, activate, deactivate } = useWeb3React()
 
-  console.log(active, account)
-
   async function connect() {
     try {
       await activate(injected)
