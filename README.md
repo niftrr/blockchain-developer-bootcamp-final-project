@@ -68,15 +68,8 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 ## Instructions
 
-### Protocol
-
 1. Follow the instructions as per [v1-core/README.md](v1-core/README.md).
-1. Make note of the smart contract addressed logged to console.
-
-### User Interface
-
-1. Follow the instructions as per [interface/README.md](interface/README.md).
-1. Copy the smart contract addresses from the protocol and copy these over to [interface/hooks/](interface/hooks/).
+2. Follow the instructions as per [interface/README.md](interface/README.md).
 
 ## Licensing
 
