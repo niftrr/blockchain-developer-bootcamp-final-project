@@ -56,14 +56,23 @@ contract DebtToken is ERC20Pausable, IDebtToken, AccessControl {
 
     /// @notice Burn unsupported.
     /// @dev Overrides the ERC20 `burn` function to make unsupported.
-    function burn(uint256 amount) public virtual override {
+    function burn(uint256 amount) public virtual override onlyLendingPool {
         amount;
         revert('BURN_NOT_SUPPORTED');
     }
 
     /// @notice Approve unsupported.
     /// @dev Overrides the ERC20 `approve` function to make unsupported.
-    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+    function approve(
+        address spender, 
+        uint256 amount
+    ) 
+        public 
+        virtual 
+        override 
+        onlyLendingPool 
+        returns (bool) 
+    {
         spender;
         amount;
         revert('APPROVE_NOT_SUPPORTED');
@@ -71,7 +80,16 @@ contract DebtToken is ERC20Pausable, IDebtToken, AccessControl {
 
     /// @notice Transfer unsupported.
     /// @dev Overrides the ERC20 `transfer` function to make unsupported.
-    function transfer(address to, address asset, uint256 amount) public virtual override {
+    function transfer(
+        address to, 
+        address asset, 
+        uint256 amount
+    ) 
+        public 
+        virtual 
+        override 
+        onlyLendingPool 
+    {
         to;
         asset;
         amount;
@@ -80,7 +98,17 @@ contract DebtToken is ERC20Pausable, IDebtToken, AccessControl {
 
     /// @notice TransferFrom unsupported.
     /// @dev Overrides the ERC20 `transferFrom` function to make unsupported.
-    function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
+    function transferFrom(
+        address from, 
+        address to, 
+        uint256 amount
+    ) 
+        public 
+        virtual 
+        override 
+        onlyLendingPool
+        returns (bool) 
+    {
         from;
         to;
         amount;
