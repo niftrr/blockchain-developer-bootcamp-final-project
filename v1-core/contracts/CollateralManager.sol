@@ -52,7 +52,7 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     mapping(address => uint256[]) public userBorrows;
     mapping(address => uint256) public liquidationThresholds;
     mapping(address => uint256) public interestRates;
-    mapping(address => bool) public whitelisted;
+    mapping(address => bool) private whitelisted;
     
     /// @notice Emitted when collateral is deposited to open a Borrow position.
     /// @param borrower The borrower account.
@@ -94,54 +94,6 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         _;
     }
 
-    /// @notice Sets the interest rate APY for a given ERC721 token.
-    /// @param erc721Token The ERC721 token for which to set the interest rate.
-    /// @param interestRate The (new) interest rate APY to set for the project.
-    /// @dev Mapping used to keep track of interest rates, set per NFT project.
-    function setInterestRate(address erc721Token, uint256 interestRate) public onlyConfigurator {
-        interestRates[erc721Token] = interestRate;
-    }
-
-    /// @notice Gets the interest rate APY for a given ERC721 token.
-    /// @param erc721Token The ERC721 token for which to get the interest rate.
-    /// @dev Retrieves the NFT project interest rate back from the mapping.
-    /// @return Interest rate APR to 18 decimal places.
-    function getInterestRate(address erc721Token) public view returns (uint256) {
-        return interestRates[erc721Token];
-    }
-
-    /// @notice Updates the NFT project whitelist with a given ERC721 token.
-    /// @param erc721Token The ERC721 token.
-    /// @param isWhitelisted The boolean for whether to set as whitelisted.
-    /// @dev Both the whitelisted mapping a whitelist array are updated.
-    function updateWhitelist(address erc721Token, bool isWhitelisted) public onlyConfigurator {
-        whitelisted[erc721Token] = isWhitelisted;
-        if (isWhitelisted) {
-            whitelist.push(erc721Token);
-        } else {
-            for (uint i = 0; i < whitelist.length-1; i++){
-                if (whitelist[i] == erc721Token) {
-                    whitelist[i] = whitelist[whitelist.length-1];
-                    whitelist.pop();
-                }
-            }
-        }
-    }
-
-    /// @notice Retrieves an array of whitelisted NFT projects.
-    /// @dev Returns a dynamic array.
-    /// @return The NFT project whitelist as an array.
-    function getWhitelist() public view returns (address[] memory) {
-        return whitelist;
-    }
-
-    /// @notice For the receiving of ERC721 tokens to this contract address.
-    /// @dev An ERC721 `safeTransferFrom` will revert unless this Solidity selector is returned.
-    /// @return Always returns `IERC721Receiver.onERC721Received.selector`.
-    function onERC721Received(address, address, uint256, bytes memory) public virtual override returns (bytes4) {
-        return this.onERC721Received.selector;
-    }
-
     /// @notice To deposit an ERC721 token in escrow and create a borrow position.
     /// @param borrower The borrower account.
     /// @param erc20Token The ERC20 token to be borrowed.
@@ -165,7 +117,7 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         uint256 collateralFloorPrice,
         uint256 maturity
     ) 
-        public
+        external
         payable 
         onlyLendingPool
         returns (bool)
@@ -208,7 +160,7 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     /// @param _asset The ERC20 token to be repaid.
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower. 
-    function withdraw(uint256 _id, address _asset, uint256 _repaymentAmount) public onlyLendingPool {
+    function withdraw(uint256 _id, address _asset, uint256 _repaymentAmount) external onlyLendingPool {
         address borrowAsset = borrows[_id].erc20Token;
         uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
         require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
@@ -229,20 +181,45 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         );
     }
 
+    /// @notice Sets the interest rate APY for a given ERC721 token.
+    /// @param erc721Token The ERC721 token for which to set the interest rate.
+    /// @param interestRate The (new) interest rate APY to set for the project.
+    /// @dev Mapping used to keep track of interest rates, set per NFT project.
+    function setInterestRate(address erc721Token, uint256 interestRate) external onlyConfigurator {
+        interestRates[erc721Token] = interestRate;
+    }
+
     /// @notice Sets the liquidation threshold for a given ERC721 token.
     /// @param _erc721Token The ERC721 token.
     /// @param _threshold The minimum collateralization theshold as an 18 decimal percentage.
     /// @dev Mapping used to keep track of liquidation thresholds, set per NFT project.
-    function setLiquidationThreshold(address _erc721Token, uint256 _threshold) public onlyConfigurator {
+    function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external onlyConfigurator {
         liquidationThresholds[_erc721Token] = _threshold;
     }
 
-    /// @notice Gets the liquidation threshold for a given ERC721 token.
-    /// @param _erc721Token The ERC721 token.
-    /// @dev Retrieves the NFT project liquidation threshold from the mapping.
-    /// @return Returns the liquidation threshold as an 18 decimal percentage.
-    function getLiquidationThreshold(address _erc721Token) public view returns (uint256) {
-        return liquidationThresholds[_erc721Token];
+    /// @notice Updates the NFT project whitelist with a given ERC721 token.
+    /// @param erc721Token The ERC721 token.
+    /// @param isWhitelisted The boolean for whether to set as whitelisted.
+    /// @dev Both the whitelisted mapping a whitelist array are updated.
+    function updateWhitelist(address erc721Token, bool isWhitelisted) external onlyConfigurator {
+        whitelisted[erc721Token] = isWhitelisted;
+        if (isWhitelisted) {
+            whitelist.push(erc721Token);
+        } else {
+            for (uint i = 0; i < whitelist.length-1; i++){
+                if (whitelist[i] == erc721Token) {
+                    whitelist[i] = whitelist[whitelist.length-1];
+                    whitelist.pop();
+                }
+            }
+        }
+    }
+
+    /// @notice For the receiving of ERC721 tokens to this contract address.
+    /// @dev An ERC721 `safeTransferFrom` will revert unless this Solidity selector is returned.
+    /// @return Always returns `IERC721Receiver.onERC721Received.selector`.
+    function onERC721Received(address, address, uint256, bytes memory) public virtual override returns (bytes4) {
+        return this.onERC721Received.selector;
     }
 
     /// @notice Gets a list of borrow ids for a given user account.
@@ -258,5 +235,28 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     /// @return Returns the Borrow for a given id.
     function getBorrow(uint256 borrowId) public view returns (Borrow memory) {
         return borrows[borrowId];
+    }
+
+    /// @notice Gets the interest rate APY for a given ERC721 token.
+    /// @param erc721Token The ERC721 token for which to get the interest rate.
+    /// @dev Retrieves the NFT project interest rate back from the mapping.
+    /// @return Interest rate APR to 18 decimal places.
+    function getInterestRate(address erc721Token) public view returns (uint256) {
+        return interestRates[erc721Token];
+    }
+
+    /// @notice Gets the liquidation threshold for a given ERC721 token.
+    /// @param _erc721Token The ERC721 token.
+    /// @dev Retrieves the NFT project liquidation threshold from the mapping.
+    /// @return Returns the liquidation threshold as an 18 decimal percentage.
+    function getLiquidationThreshold(address _erc721Token) public view returns (uint256) {
+        return liquidationThresholds[_erc721Token];
+    }
+
+    /// @notice Retrieves an array of whitelisted NFT projects.
+    /// @dev Returns a dynamic array.
+    /// @return The NFT project whitelist as an array.
+    function getWhitelist() public view returns (address[] memory) {
+        return whitelist;
     }
 }
