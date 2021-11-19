@@ -9,6 +9,7 @@ import { ICollateralManager } from "./ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
+import { OracleTokenPrice } from './OracleTokenPrice.sol';
 import "hardhat/console.sol";
 
 contract LendingPool is LendingPoolStorage {
@@ -16,6 +17,7 @@ contract LendingPool is LendingPoolStorage {
 
     address public owner;
     address public collateralManagerAddress;
+    address public oracleTokenPriceAddress;
 
     struct Reserve {
         address nTokenAddress;
@@ -25,6 +27,8 @@ contract LendingPool is LendingPoolStorage {
 
     mapping(address => Reserve) public reserves;
     mapping(address => uint256) public interestRates;
+    mapping(address => string) public openseaCollection;
+    mapping(address => string) public pricePairs;
 
     event InitReserve(address asset, address nTokenAddress, address debtTokenAddress);
     event Deposit(address asset, uint256 amount, address lender);
@@ -82,8 +86,25 @@ contract LendingPool is LendingPoolStorage {
         emit Withdraw(asset, amount, msg.sender);
     }
 
-    function _mockOracle() public pure returns (uint256) {
+    function _mockFloorOracle() public pure returns (uint256) {
         return 60.0;
+    }
+
+    function getFloorPriceMock(address collateral) public view returns (uint256) {
+        string memory collection = openseaCollection[collateral];
+        uint256 floorPrice = _mockFloorOracle();
+        return floorPrice;
+    }
+
+    function getFloorPrice(address collateral, address asset) public returns (uint256) {
+        uint256 floorPrice = getFloorPriceMock(collateral);
+        string memory pricePair = pricePairs[asset];
+        if (keccak256(abi.encodePacked(pricePair))!=keccak256(abi.encodePacked(""))) {
+            (int price, uint8 decimal) = OracleTokenPrice(oracleTokenPriceAddress).getLatestPriceMock(pricePair);
+            uint256 price_ = uint256(price);
+            floorPrice = floorPrice.mul(price_).div(decimal);
+        }
+        return floorPrice;
     }
     
     function getLiquidationThreshold(address collateral) public returns (bool, uint256) {
@@ -102,7 +123,8 @@ contract LendingPool is LendingPoolStorage {
         uint256 numWeeks) public 
     {
         uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
-        uint256 collateralIndexPrice = _mockOracle();
+        // uint256 collateralFloorPrice = _mockOracle();
+        uint256 collateralFloorPrice = getFloorPrice(collateral, asset);
         uint maturity = block.timestamp + numWeeks * 1 weeks;
 
         ICollateralManager(collateralManagerAddress).deposit(
@@ -113,11 +135,10 @@ contract LendingPool is LendingPoolStorage {
             amount,
             repaymentAmount, 
             interestRate,
-            collateralIndexPrice, 
+            collateralFloorPrice, 
             maturity);
 
         // require(success, 'DEPOSIT_UNSUCCESSFUL');
-
         Reserve memory reserve = reserves[asset]; 
         IDebtToken(reserve.debtTokenAddress).mint(msg.sender, repaymentAmount);
         INToken(reserve.nTokenAddress).reserveTransfer(msg.sender, asset, amount);
@@ -159,5 +180,13 @@ contract LendingPool is LendingPoolStorage {
 
     function getCollateralManagerAddress() public view returns (address) {
         return collateralManagerAddress;
+    }
+
+    function setOracleTokenPriceAddress(address _oracleTokenPriceAddress) public onlyOwner {
+        oracleTokenPriceAddress = _oracleTokenPriceAddress;
+    }
+
+    function getOracleTokenPriceAddress() public view returns (address) {
+        return oracleTokenPriceAddress;
     }
 }

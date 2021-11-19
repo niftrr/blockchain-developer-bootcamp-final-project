@@ -28,6 +28,11 @@ beforeEach(async function() {
     bob_tokenId = 1;
 
     // Get and deploy LendingPool
+    OracleTokenPrice = await ethers.getContractFactory('OracleTokenPrice');
+    hhOracleTokenPrice = await OracleTokenPrice.deploy();
+    hhOracleTokenPriceAddress = await hhOracleTokenPrice.resolvedAddress;
+
+    // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
     hhLendingPool = await LendingPool.deploy();
     await hhLendingPool.deployed();
@@ -139,6 +144,14 @@ async function repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
         repaymentAmount,
         borrowId);
 }
+
+describe('OracleTokenPrice', function() {
+
+    it('ETH/USD', async function () {
+        let latestPrice = (await hhOracleTokenPrice.getLatestPriceMock("ETHUSD")).toString();
+        expect(latestPrice).to.equal('400000000000,8');
+    })
+})
 
 describe('AssetToken', function() {
 
