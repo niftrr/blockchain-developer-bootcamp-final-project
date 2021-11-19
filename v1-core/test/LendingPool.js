@@ -27,6 +27,9 @@ beforeEach(async function() {
     alice_tokenId = 0;
     bob_tokenId = 1;
 
+    // Get Signers
+    [owner, alice, bob] = await ethers.getSigners();
+
     // Get and deploy LendingPool
     OracleTokenPrice = await ethers.getContractFactory('OracleTokenPrice');
     hhOracleTokenPrice = await OracleTokenPrice.deploy();
@@ -40,7 +43,10 @@ beforeEach(async function() {
 
     // Get and deploy CollateralManager
     CollateralManager = await ethers.getContractFactory('CollateralManager');
-    hhCollateralManager = await CollateralManager.deploy();
+    hhCollateralManager = await CollateralManager.deploy(
+        owner.address,
+        hhLendingPoolAddress
+        );
     await hhCollateralManager.deployed();
     hhCollateralManagerAddress = await hhCollateralManager.resolvedAddress;
 
@@ -84,9 +90,6 @@ beforeEach(async function() {
 
     // Set NFT liquidation threshold
     hhCollateralManager.setLiquidationThreshold(hhNFT.address, 150); // in percent
-
-    // Get Signers
-    [owner, alice, bob] = await ethers.getSigners();
 
     // Transfer funds to alice and bob
     await hhAssetToken.transfer(alice.address, hhAssetTokenInitialBalance.toString());
