@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
-import { INToken } from './INToken.sol';
+import { INToken } from './interfaces/INToken.sol';
 
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 

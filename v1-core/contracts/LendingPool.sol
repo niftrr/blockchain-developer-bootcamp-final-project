@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INToken } from "./INToken.sol";
-import { IDebtToken } from "./IDebtToken.sol";
-import { ICollateralManager } from "./ICollateralManager.sol";
+import { INToken } from "./interfaces/INToken.sol";
+import { IDebtToken } from "./interfaces/IDebtToken.sol";
+import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';

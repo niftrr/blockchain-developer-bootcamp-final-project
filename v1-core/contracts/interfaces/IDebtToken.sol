@@ -5,22 +5,13 @@ pragma solidity ^0.8.0;
 interface IDebtToken {
     function mint(address account, uint256 amount) external;
 
+    function burnFrom(address account, uint256 amount) external;
+
     function burn(uint256 amount) external;
 
-    function burnFrom(address account, uint256 amount) external;
+    function transfer(address asset, address to, uint256 amount) external;
 
     function pause() external;
 
     function unpause() external;
-
-    function setAdmin(address to) external;
-
-    function setMinter(address to) external;
-
-    function setBurner(address to) external;
-
-    function setPauser(address to) external;
-
-    function transfer(address asset, address to, uint256 amount) external;
-
 }
