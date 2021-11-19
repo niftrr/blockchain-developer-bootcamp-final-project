@@ -25,12 +25,19 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     
     Counters.Counter private counter;
 
+    enum State { 
+        Active,
+        Repaid,
+        Liquidated
+    }
+    
     struct Collateral {
         address erc721Token;
         uint256 tokenId;
     }
 
     struct Borrow {
+        State state;
         Collateral collateral;
         address borrower;
         address erc20Token;
@@ -170,6 +177,7 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         uint256 liquidationPrice = collateralFloorPrice.div(getLiquidationThreshold(erc721Token));
 
         borrows[id] = Borrow({
+            state: State.Active,
             collateral: Collateral({
                 erc721Token: erc721Token,
                 tokenId: tokenId
@@ -209,10 +217,9 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         address borrower = borrows[_id].borrower;
         address erc721Token = borrows[_id].collateral.erc721Token;
         uint256 tokenId = borrows[_id].collateral.tokenId;
-        delete(borrows[_id]);
-        removeUserBorrow(borrower, _id);
-        
         IERC721(erc721Token).transferFrom(address(this), borrower, tokenId);
+
+        borrows[_id].state = State.Repaid;
         
         emit WithdrawCollateral(
             borrower,
@@ -246,22 +253,9 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         return userBorrows[user];
     }
 
-    /// @notice Removes a user borrow.
-    /// @param user The user account.
-    /// @param borrowId The id of the borrow to be removed.
-    /// @dev Removes the borrow from the array of user borrows from the userBorrow mapping.
-    function removeUserBorrow(address user, uint256 borrowId) internal {
-        for (uint i = 0; i<userBorrows[user].length-1; i++){
-            if (userBorrows[user][i] == borrowId) {
-                userBorrows[user][i] = userBorrows[user][userBorrows[user].length-1];
-                userBorrows[user].pop();
-            }
-        }
-    }
-
-    /// @notice Gets an array of all borrow ids.
-    /// @dev Uses a mapping.
-    /// @return Returns an array of all borrow ids.
+    /// @notice Retreives the Borrow for a given id.
+    /// @dev Uses a mapping and returns a struct.
+    /// @return Returns the Borrow for a given id.
     function getBorrow(uint256 borrowId) public view returns (Borrow memory) {
         return borrows[borrowId];
     }
