@@ -9,19 +9,11 @@ interface INToken is IERC20 {
 
     function burnFrom(address account, uint256 amount) external;
 
-    function pause() external;
-
-    function unpause() external;
-
-    function setAdmin(address to) external;
-
-    function setMinter(address to) external;
-
-    function setBurner(address to) external;
-
-    function setPauser(address to) external;
-
     function reserveTransfer(address asset, address to, uint256 amount) external;
 
     function reserveTransferFrom(address asset, address from, uint256 amount) external;
+
+    function pause() external;
+
+    function unpause() external;
 }

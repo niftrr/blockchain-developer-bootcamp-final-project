@@ -63,15 +63,17 @@ beforeEach(async function() {
     // Get and deploy nToken
     NToken = await ethers.getContractFactory('NToken');
     hhNToken = await NToken.deploy(
+        owner.address, // NOTE: Using the owner as standin for the Configurator
+        hhLendingPoolAddress,
         'Dai nToken', 
         'nDAI');
     await hhNToken.deployed();
 
     // -- Assign minter role to LendingPool
-    await hhNToken.setMinter(hhLendingPoolAddress);
+    // await hhNToken.setMinter(hhLendingPoolAddress);
 
     // -- Assign burner role to LendingPool
-    await hhNToken.setBurner(hhLendingPoolAddress);
+    // await hhNToken.setBurner(hhLendingPoolAddress);
 
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
