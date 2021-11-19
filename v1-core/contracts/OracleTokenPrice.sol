@@ -3,6 +3,10 @@ pragma solidity ^0.8.0;
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
+/// @title Oracle Token Price contract for the NFTlend protocol.
+/// @author Niftrr
+/// @notice Makes off-chain token price feeds available to our contracts.
+/// @dev Debt tokens are non-transferable and so diverge from the ERC20 standard.
 contract OracleTokenPrice {
 
     AggregatorV3Interface internal priceFeedETHUSD;
@@ -40,9 +44,10 @@ contract OracleTokenPrice {
         decimals["USDCUSD"] = 8;
     }
 
-    /**
-     * Returns mock of the latest price with the number of decimal places
-     */
+    /// @notice Gets a mock of the the latest price for a given pricePair.
+    /// @param pricePair The pricePair, e.g. ETHUSD.
+    /// @dev Mock used for local development.
+    /// @return Returns a mock of the latest price and number of decimal places.
     function getLatestPriceMock(string memory pricePair) public view returns (int, uint8) {
         int price;
         uint8 decimal;
@@ -65,9 +70,10 @@ contract OracleTokenPrice {
         return (price, decimal);
     }
 
-    /**
-     * Returns the latest price with the number of decimal places
-     */
+    /// @notice Gets the the latest price for a given pricePair.
+    /// @param pricePair The pricePair, e.g. ETHUSD.
+    /// @dev Chainlink returns int price, to be converted to uint downstream.
+    /// @return Returns the latest price and number of decimal places.
     function getLatestPrice(string memory pricePair) public view returns (int, uint8) {
         require(pricePairs[pricePair], "Unexpected pricePair");
         int price;
