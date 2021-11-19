@@ -84,7 +84,7 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
         address asset, 
         uint256 amount
     ) 
-        public 
+        external 
         virtual 
         override 
         onlyLendingPool 
@@ -105,7 +105,7 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
         address asset, 
         uint256 amount
     ) 
-        public 
+        external 
         virtual 
         override 
         onlyLendingPool 
