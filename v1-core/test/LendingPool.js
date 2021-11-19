@@ -37,14 +37,16 @@ beforeEach(async function() {
 
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
-    hhLendingPool = await LendingPool.deploy();
+    hhLendingPool = await LendingPool.deploy(
+        owner.address // NOTE: Using the owner as standin for the Configurator
+    );
     await hhLendingPool.deployed();
     hhLendingPoolAddress = await hhLendingPool.resolvedAddress;
 
     // Get and deploy CollateralManager
     CollateralManager = await ethers.getContractFactory('CollateralManager');
     hhCollateralManager = await CollateralManager.deploy(
-        owner.address,
+        owner.address, // NOTE: Using the owner as standin for the Configurator
         hhLendingPoolAddress
         );
     await hhCollateralManager.deployed();
