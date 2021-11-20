@@ -307,13 +307,13 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
 
     /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
     /// @dev Functions paused via modifiers using Pausable contract.
-    function Pause() external onlyConfigurator {
+    function pause() external onlyConfigurator {
         _pause();
     }
 
     /// @notice Unauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
     /// @dev Functions unpaused via modifiers using Pausable contract.
-    function Unpause() external onlyConfigurator {
+    function unpause() external onlyConfigurator {
         _unpause();
     }
 }

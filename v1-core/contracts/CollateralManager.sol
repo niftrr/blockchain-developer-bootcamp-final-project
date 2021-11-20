@@ -272,13 +272,13 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
 
     /// @notice Pauses the contract deposit and withdraw functions.
     /// @dev Functions paused via modifiers using Pausable contract.
-    function Pause() external onlyConfigurator {
+    function pause() external onlyConfigurator {
         _pause();
     }
 
     /// @notice Unpauses the contract deposit and withdraw functions.
     /// @dev Functions unpaused via modifiers using Pausable contract.
-    function Unpause() external onlyConfigurator {
+    function unpause() external onlyConfigurator {
         _unpause();
     }
 }
