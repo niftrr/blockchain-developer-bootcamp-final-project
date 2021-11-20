@@ -2,10 +2,12 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
 import "hardhat/console.sol";
@@ -14,7 +16,7 @@ import "hardhat/console.sol";
 /// @author Niftrr
 /// @notice Allows for the deposit/withdraw of collateral to open/close a borrow position
 /// @dev Currently in development
-contract CollateralManager is IERC721Receiver, AccessControl {
+contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
 
@@ -79,18 +81,17 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     );
 
     constructor(address configurator, address lendingPool) {
-        // Grant the configurator and lendingPool roles
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _setupRole(LENDING_POOL_ROLE, lendingPool);
     }
 
     modifier onlyConfigurator() {
-        require(hasRole(CONFIGURATOR_ROLE, msg.sender), "Caller is not the Configurator");
+        require(hasRole(CONFIGURATOR_ROLE, _msgSender()), "Caller is not the Configurator");
         _;
     }
 
     modifier onlyLendingPool() {
-        require(hasRole(LENDING_POOL_ROLE, msg.sender), "Caller is not the Lending Pool");
+        require(hasRole(LENDING_POOL_ROLE, _msgSender()), "Caller is not the Lending Pool");
         _;
     }
 
@@ -120,6 +121,7 @@ contract CollateralManager is IERC721Receiver, AccessControl {
         external
         payable 
         onlyLendingPool
+        whenNotPaused
         returns (bool)
     {
         require(whitelisted[erc721Token], "NFT not whitelisted");
@@ -160,7 +162,15 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     /// @param _asset The ERC20 token to be repaid.
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower. 
-    function withdraw(uint256 _id, address _asset, uint256 _repaymentAmount) external onlyLendingPool {
+    function withdraw(
+        uint256 _id, 
+        address _asset, 
+        uint256 _repaymentAmount
+    ) 
+        external 
+        onlyLendingPool 
+        whenNotPaused 
+    {
         address borrowAsset = borrows[_id].erc20Token;
         uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
         require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
@@ -258,5 +268,17 @@ contract CollateralManager is IERC721Receiver, AccessControl {
     /// @return The NFT project whitelist as an array.
     function getWhitelist() public view returns (address[] memory) {
         return whitelist;
+    }
+
+    /// @notice Pauses the contract deposit and withdraw functions.
+    /// @dev Functions paused via modifiers using Pausable contract.
+    function Pause() external onlyConfigurator {
+        _pause();
+    }
+
+    /// @notice Unpauses the contract deposit and withdraw functions.
+    /// @dev Functions unpaused via modifiers using Pausable contract.
+    function Unpause() external onlyConfigurator {
+        _unpause();
     }
 }
