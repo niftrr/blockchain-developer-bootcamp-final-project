@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INToken } from "./interfaces/INToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
@@ -17,7 +18,7 @@ import "hardhat/console.sol";
 /// @author Niftrr
 /// @notice Allows for the borrow/repay of loans and deposit/withdraw of assets.
 /// @dev This is our protocol's point of access.
-contract LendingPool is LendingPoolStorage, AccessControl {
+contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
     using SafeMath for uint256;  
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
@@ -117,7 +118,7 @@ contract LendingPool is LendingPoolStorage, AccessControl {
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Deposits assets into the LP in exchange for nTokens at a 1:1 ratio.  
-    function deposit(address asset, uint256 amount) public {
+    function deposit(address asset, uint256 amount) public whenNotPaused {
         Reserve memory reserve = reserves[asset];     
         address nToken = reserve.nTokenAddress; 
         IERC20(asset).transferFrom(msg.sender, nToken, amount);
@@ -129,7 +130,7 @@ contract LendingPool is LendingPoolStorage, AccessControl {
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Withdraws assets from the LP by exchanging nTokens at a 1:1 ratio. 
-    function withdraw(address asset, uint256 amount) public {
+    function withdraw(address asset, uint256 amount) public whenNotPaused {
         Reserve memory reserve = reserves[asset];       
 
         address nToken = reserve.nTokenAddress;
@@ -160,6 +161,7 @@ contract LendingPool is LendingPoolStorage, AccessControl {
         uint256 numWeeks
     ) 
         public 
+        whenNotPaused
     {
         uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
         // uint256 collateralFloorPrice = _mockOracle();
@@ -196,6 +198,7 @@ contract LendingPool is LendingPoolStorage, AccessControl {
         uint256 borrowId
     ) 
         public 
+        whenNotPaused
     {
         Reserve memory reserve = reserves[asset]; 
         INToken(reserve.nTokenAddress).reserveTransferFrom(msg.sender, asset, repaymentAmount);  
@@ -300,5 +303,17 @@ contract LendingPool is LendingPoolStorage, AccessControl {
             abi.encodeWithSignature("getLiquidationThreshold(address)", "call getLiquidationThreshold", collateral)
         );
         return (success, abi.decode(data, (uint256)));
+    }
+
+    /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
+    /// @dev Functions paused via modifiers using Pausable contract.
+    function Pause() external onlyConfigurator {
+        _pause();
+    }
+
+    /// @notice Unauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
+    /// @dev Functions unpaused via modifiers using Pausable contract.
+    function Unpause() external onlyConfigurator {
+        _unpause();
     }
 }
