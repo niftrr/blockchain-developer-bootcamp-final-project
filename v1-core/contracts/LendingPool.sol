@@ -26,7 +26,12 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
     address public collateralManagerAddress;
     address public oracleTokenPriceAddress;
 
+    enum Status {
+        Active,
+        Paused
+    }
     struct Reserve {
+        Status status;
         address nTokenAddress;
         address debtTokenAddress;
         uint128 currentInterestRate;
@@ -107,6 +112,7 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         onlyConfigurator 
     {
         Reserve memory reserve;
+        reserve.status = Status.Active;
         reserve.nTokenAddress = nTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
         reserves[asset] = reserve;
@@ -114,12 +120,29 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         emit InitReserve(asset, reserves[asset].nTokenAddress, reserves[asset].debtTokenAddress);
     }
 
+    /// @notice Pauses the specified asset reserve
+    /// @param asset The ERC20, reserve asset token.
+    /// @dev To pause functions for a single reserve instead of the whole contract.
+    function pauseReserve(address asset) external onlyConfigurator {
+        Reserve memory reserve = reserves[asset]; 
+        reserve.status = Status.Paused;
+    }
+
+    /// @notice Unpauses the specified asset reserve
+    /// @param asset The ERC20, reserve asset token.
+    /// @dev To unpause functions for a single reserve instead of the whole contract.
+    function unpauseReserve(address asset) external onlyConfigurator {
+        Reserve memory reserve = reserves[asset]; 
+        reserve.status = Status.Active;  
+    }
+
     /// @notice Deposit assets into the lending pool.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Deposits assets into the LP in exchange for nTokens at a 1:1 ratio.  
     function deposit(address asset, uint256 amount) public whenNotPaused {
-        Reserve memory reserve = reserves[asset];     
+        Reserve memory reserve = reserves[asset];  
+        require(reserve.status == Status.Active);   
         address nToken = reserve.nTokenAddress; 
         IERC20(asset).transferFrom(msg.sender, nToken, amount);
         INToken(nToken).mint(msg.sender, amount);
@@ -131,7 +154,8 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
     /// @param amount The amount of ERC20 tokens.
     /// @dev Withdraws assets from the LP by exchanging nTokens at a 1:1 ratio. 
     function withdraw(address asset, uint256 amount) public whenNotPaused {
-        Reserve memory reserve = reserves[asset];       
+        Reserve memory reserve = reserves[asset];  
+        require(reserve.status == Status.Active);        
 
         address nToken = reserve.nTokenAddress;
 
@@ -163,6 +187,8 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         public 
         whenNotPaused
     {
+        Reserve memory reserve = reserves[asset]; 
+        require(reserve.status == Status.Active);   
         uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
         // uint256 collateralFloorPrice = _mockOracle();
         uint256 collateralFloorPrice = getFloorPrice(collateral, asset);
@@ -180,7 +206,6 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
             maturity);
 
         // require(success, 'DEPOSIT_UNSUCCESSFUL');
-        Reserve memory reserve = reserves[asset]; 
         IDebtToken(reserve.debtTokenAddress).mint(msg.sender, repaymentAmount);
         INToken(reserve.nTokenAddress).reserveTransfer(msg.sender, asset, amount);
 
@@ -201,6 +226,7 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         whenNotPaused
     {
         Reserve memory reserve = reserves[asset]; 
+        require(reserve.status == Status.Active);   
         INToken(reserve.nTokenAddress).reserveTransferFrom(msg.sender, asset, repaymentAmount);  
 
         ICollateralManager(collateralManagerAddress).withdraw(
