@@ -11,6 +11,8 @@ import { DataTypes } from './libraries/DataTypes.sol';
 import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { OracleTokenPrice } from './OracleTokenPrice.sol';
+
+import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "hardhat/console.sol";
 
@@ -18,7 +20,7 @@ import "hardhat/console.sol";
 /// @author Niftrr
 /// @notice Allows for the borrow/repay of loans and deposit/withdraw of assets.
 /// @dev This is our protocol's point of access.
-contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
+contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     using SafeMath for uint256;  
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
@@ -27,8 +29,10 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
     address public oracleTokenPriceAddress;
 
     enum Status {
-        Active,
-        Paused
+        Active, // Able to perform all reserve operations.
+        Frozen, // Only able to `withdraw`, `repay` and `liquidate`. Not `borrow` or `deposit`
+        Paused, // Not able to perform any reserve operation.
+        Protected // Only able to `withdraw` and `repay`. Not `borrow`, `deposit` or `liquidate`.
     }
     struct Reserve {
         Status status;
@@ -94,7 +98,25 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
     }
 
     modifier onlyConfigurator() {
-        require(hasRole(CONFIGURATOR_ROLE, msg.sender), "Caller is not the Configurator");
+        require(hasRole(CONFIGURATOR_ROLE, _msgSender()), "Caller is not the Configurator");
+        _;
+    }
+
+    modifier whenReserveActive(address asset) {
+        Reserve memory reserve = reserves[asset];  
+        require(reserve.status == Status.Active, "Reserve is not active.");  
+        _;
+    }
+
+    modifier whenReserveNotPaused(address asset) {
+        Reserve memory reserve = reserves[asset];  
+        require(reserve.status != Status.Paused, "Reserve is paused.");  
+        _;
+    }
+
+    modifier whenReserveNotProtected(address asset) {
+        Reserve memory reserve = reserves[asset];  
+        require(reserve.status != Status.Protected, "Reserve is protected.");  
         _;
     }
 
@@ -102,80 +124,56 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
     /// @param asset The ERC20, reserve asset token.
     /// @param nTokenAddress The derivative nToken address.
     /// @param debtTokenAddress The derivative debtToken address.
-    /// @dev Protocol to be updated to support native ETH as well as ERC20.    
+    /// @dev Calls internal `_initReserve` function if modifiers are succeeded.    
     function initReserve(
         address asset,
         address nTokenAddress,
         address debtTokenAddress
     ) 
-        public 
+        external 
         onlyConfigurator 
     {
-        Reserve memory reserve;
-        reserve.status = Status.Active;
-        reserve.nTokenAddress = nTokenAddress;
-        reserve.debtTokenAddress = debtTokenAddress;
-        reserves[asset] = reserve;
-
-        emit InitReserve(asset, reserves[asset].nTokenAddress, reserves[asset].debtTokenAddress);
-    }
-
-    /// @notice Pauses the specified asset reserve
-    /// @param asset The ERC20, reserve asset token.
-    /// @dev To pause functions for a single reserve instead of the whole contract.
-    function pauseReserve(address asset) external onlyConfigurator {
-        Reserve memory reserve = reserves[asset]; 
-        reserve.status = Status.Paused;
-    }
-
-    /// @notice Unpauses the specified asset reserve
-    /// @param asset The ERC20, reserve asset token.
-    /// @dev To unpause functions for a single reserve instead of the whole contract.
-    function unpauseReserve(address asset) external onlyConfigurator {
-        Reserve memory reserve = reserves[asset]; 
-        reserve.status = Status.Active;  
+        _initReserve(asset, nTokenAddress, debtTokenAddress);
     }
 
     /// @notice Deposit assets into the lending pool.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
-    /// @dev Deposits assets into the LP in exchange for nTokens at a 1:1 ratio.  
-    function deposit(address asset, uint256 amount) public whenNotPaused {
-        Reserve memory reserve = reserves[asset];  
-        require(reserve.status == Status.Active);   
-        address nToken = reserve.nTokenAddress; 
-        IERC20(asset).transferFrom(msg.sender, nToken, amount);
-        INToken(nToken).mint(msg.sender, amount);
-        emit Deposit(asset, amount, msg.sender);
+    /// @dev Calls internal `_deposit` function if modifiers are succeeded.  
+    function deposit(
+        address asset, 
+        uint256 amount
+    ) 
+        external 
+        whenNotPaused 
+        whenReserveActive(asset)
+    {
+        _deposit(asset, amount);
     }
 
     /// @notice Withdraw assets from the lending pool.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
-    /// @dev Withdraws assets from the LP by exchanging nTokens at a 1:1 ratio. 
-    function withdraw(address asset, uint256 amount) public whenNotPaused {
-        Reserve memory reserve = reserves[asset];  
-        require(reserve.status == Status.Active);        
-
-        address nToken = reserve.nTokenAddress;
-
-        uint256 nTokenBalance = INToken(nToken).balanceOf(msg.sender);
-        require(nTokenBalance >= amount, "Insufficient nToken balance");
-
-        INToken(nToken).burnFrom(msg.sender, amount);
-        INToken(nToken).reserveTransfer(msg.sender, asset, amount);
-        
-        emit Withdraw(asset, amount, msg.sender);
+    /// @dev Calls internal `_withdraw` function if modifiers are succeeded. 
+    function withdraw(
+        address asset, 
+        uint256 amount
+    ) 
+        external 
+        whenNotPaused 
+        whenReserveNotPaused(asset)
+    {
+        _withdraw(asset, amount);
     }
 
-    /// @notice To create a borrow position.
+    /// @notice External function to create a borrow position.
     /// @param asset The ERC20 token to be borrowed.
     /// @param amount The amount of ERC20 tokens to be borrowed.
     /// @param collateral The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited. 
     /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
     /// @param numWeeks The number of weeks until the borrow maturity.
-    /// @dev Deposits collateral in CM before minting debtTokens and finally loaning assets. 
+    /// @dev Calls internal `_borrow` function if modifiers are succeeded. 
     function borrow(
         address asset, 
         uint256 amount, 
@@ -184,59 +182,79 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         uint256 interestRate,
         uint256 numWeeks
     ) 
-        public 
+        external 
         whenNotPaused
+        whenReserveActive(asset)
     {
-        Reserve memory reserve = reserves[asset]; 
-        require(reserve.status == Status.Active);   
-        uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
-        // uint256 collateralFloorPrice = _mockOracle();
-        uint256 collateralFloorPrice = getFloorPrice(collateral, asset);
-        uint maturity = block.timestamp + numWeeks * 1 weeks;
-
-        ICollateralManager(collateralManagerAddress).deposit(
-            msg.sender, 
+        _borrow(
             asset, 
+            amount, 
             collateral, 
-            tokenId, 
-            amount,
-            repaymentAmount, 
+            tokenId,
             interestRate,
-            collateralFloorPrice, 
-            maturity);
-
-        // require(success, 'DEPOSIT_UNSUCCESSFUL');
-        IDebtToken(reserve.debtTokenAddress).mint(msg.sender, repaymentAmount);
-        INToken(reserve.nTokenAddress).reserveTransfer(msg.sender, asset, amount);
-
-        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, msg.sender);
+            numWeeks
+        );
     }
 
     /// @notice To repay a borrow position.
     /// @param asset The ERC20 token to be borrowed.
     /// @param repaymentAmount The amount of ERC20 tokens to be repaid.
     /// @param borrowId The unique identifier of the borrow.
-    /// @dev Transfers assets back to the reserve before burning debtTokens and returning collateral. 
+    /// @dev Calls internal `_repay` function if modifiers are succeeded.  
     function repay(
         address asset,
         uint256 repaymentAmount,
         uint256 borrowId
     ) 
-        public 
+        external 
         whenNotPaused
+        whenReserveNotPaused(asset)
     {
-        Reserve memory reserve = reserves[asset]; 
-        require(reserve.status == Status.Active);   
-        INToken(reserve.nTokenAddress).reserveTransferFrom(msg.sender, asset, repaymentAmount);  
+        _repay(asset, repaymentAmount, borrowId);
+    }
 
-        ICollateralManager(collateralManagerAddress).withdraw(
-            borrowId, 
-            asset, 
-            repaymentAmount);
+    /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
+    /// @dev Functions paused via modifiers using Pausable contract.
+    function pause() external onlyConfigurator {
+        _pause();
+    }
 
-        IDebtToken(reserve.debtTokenAddress).burnFrom(msg.sender, repaymentAmount);
+    /// @notice Unauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
+    /// @dev Functions unpaused via modifiers using Pausable contract.
+    function unpause() external onlyConfigurator {
+        _unpause();
+    }
 
-        emit Repay(borrowId, asset, repaymentAmount, msg.sender);
+    /// @notice Freezes the specified asset reserve
+    /// @param asset The ERC20, reserve asset token.
+    /// @dev To freeze deposit and borrow functions for a single reserve.
+    function freezeReserve(address asset) external onlyConfigurator {
+        Reserve storage reserve = reserves[asset]; 
+        reserve.status = Status.Frozen;
+    }
+
+    /// @notice Pauses the specified asset reserve
+    /// @param asset The ERC20, reserve asset token.
+    /// @dev To pause functions for a single reserve instead of the whole contract.
+    function pauseReserve(address asset) external onlyConfigurator {
+        Reserve storage reserve = reserves[asset]; 
+        reserve.status = Status.Paused;
+    }
+
+    /// @notice Protects the specified asset reserve
+    /// @param asset The ERC20, reserve asset token.
+    /// @dev Functions `withdraw` and `repay` are active, not `liquidate`, `deposit` or `borrow`.
+    function protectReserve(address asset) external onlyConfigurator {
+        Reserve storage reserve = reserves[asset]; 
+        reserve.status = Status.Protected;
+    }
+
+    /// @notice Activate the specified asset reserve
+    /// @param asset The ERC20, reserve asset token.
+    /// @dev To activate all functions for a single reserve.
+    function activateReserve(address asset) external onlyConfigurator {
+        Reserve storage reserve = reserves[asset]; 
+        reserve.status = Status.Active;  
     }
 
     /// @notice Get user borrows.
@@ -261,13 +279,6 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         collateralManagerAddress = _collateralManagerAddress;
     }
 
-    /// @notice Get the Collateral Manager contract address.
-    /// @dev Uses a state variable.
-    /// @return Returns the Collateral Manager contract address.
-    function getCollateralManagerAddress() public view returns (address) {
-        return collateralManagerAddress;
-    }
-
     /// @notice Set the Token Price oracle contract address.
     /// @param _oracleTokenPriceAddress The Token Price oracle address.
     /// @dev Uses a state variable.
@@ -278,30 +289,6 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         onlyConfigurator 
     {
         oracleTokenPriceAddress = _oracleTokenPriceAddress;
-    }
-
-    /// @notice Get the Token Price oracle contract address.
-    /// @dev Uses a state variable.
-    /// @return Returns the Token price oracle contract address.
-    function getOracleTokenPriceAddress() public view returns (address) {
-        return oracleTokenPriceAddress;
-    }
-
-    /// @notice Mock Oracle for NFT fLoor prices (WIP1).
-    /// @dev To be removed once chainlink nodes are hosting our external adapter.
-    /// @return Always returns 60. 
-    function _mockFloorOracle() public pure returns (uint256) {
-        return 60.0;
-    }
-
-    /// @notice Mock Oracle for NFT fLoor prices (WIP2).
-    /// @param collateral ERC721 token address.
-    /// @dev To be removed once chainlink nodes are hosting our external adapter.
-    /// @return Always returns 60. 
-    function getFloorPriceMock(address collateral) public view returns (uint256) {
-        string memory collection = openseaCollection[collateral];
-        uint256 floorPrice = _mockFloorOracle();
-        return floorPrice;
     }
 
     /// @notice Gets the NFT floor price in terms of the asset provided (WIP3)
@@ -331,15 +318,160 @@ contract LendingPool is LendingPoolStorage, AccessControl, Pausable {
         return (success, abi.decode(data, (uint256)));
     }
 
-    /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
-    /// @dev Functions paused via modifiers using Pausable contract.
-    function pause() external onlyConfigurator {
-        _pause();
+    /// @notice Get the Token Price oracle contract address.
+    /// @dev Uses a state variable.
+    /// @return Returns the Token price oracle contract address.
+    function getOracleTokenPriceAddress() public view returns (address) {
+        return oracleTokenPriceAddress;
     }
 
-    /// @notice Unauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
-    /// @dev Functions unpaused via modifiers using Pausable contract.
-    function unpause() external onlyConfigurator {
-        _unpause();
+    /// @notice Mock Oracle for NFT fLoor prices (WIP2).
+    /// @param collateral ERC721 token address.
+    /// @dev To be removed once chainlink nodes are hosting our external adapter.
+    /// @return Always returns 60. 
+    function getFloorPriceMock(address collateral) public view returns (uint256) {
+        string memory collection = openseaCollection[collateral];
+        uint256 floorPrice = _mockFloorOracle();
+        return floorPrice;
+    }
+
+    /// @notice Get the Collateral Manager contract address.
+    /// @dev Uses a state variable.
+    /// @return Returns the Collateral Manager contract address.
+    function getCollateralManagerAddress() public view returns (address) {
+        return collateralManagerAddress;
+    }
+
+    /// @notice Mock Oracle for NFT fLoor prices (WIP1).
+    /// @dev To be removed once chainlink nodes are hosting our external adapter.
+    /// @return Always returns 60. 
+    function _mockFloorOracle() public pure returns (uint256) {
+        return 60.0;
+    }
+
+    /// @notice Private function to initialize a reserve.
+    /// @param asset The ERC20, reserve asset token.
+    /// @param nTokenAddress The derivative nToken address.
+    /// @param debtTokenAddress The derivative debtToken address.
+    /// @dev Protocol to be updated to support native ETH as well as ERC20.    
+    function _initReserve(
+        address asset,
+        address nTokenAddress,
+        address debtTokenAddress
+    ) 
+        private
+    {
+        Reserve memory reserve;
+        reserve.status = Status.Active;
+        reserve.nTokenAddress = nTokenAddress;
+        reserve.debtTokenAddress = debtTokenAddress;
+        reserves[asset] = reserve;
+
+        emit InitReserve(asset, reserves[asset].nTokenAddress, reserves[asset].debtTokenAddress);
+    }
+
+    /// @notice Private function to deposit assets into the lending pool.
+    /// @param asset The ERC20 address of the asset.
+    /// @param amount The amount of ERC20 tokens.
+    /// @dev Deposits assets into the LP in exchange for nTokens at a 1:1 ratio.  
+    function _deposit(
+        address asset, 
+        uint256 amount
+    ) 
+        private 
+    {
+        Reserve memory reserve = reserves[asset];  
+        address nToken = reserve.nTokenAddress; 
+        IERC20(asset).transferFrom(_msgSender(), nToken, amount);
+        INToken(nToken).mint(_msgSender(), amount);
+
+        emit Deposit(asset, amount, _msgSender());
+    }
+
+    /// @notice Private function to withdraw assets from the lending pool.
+    /// @param asset The ERC20 address of the asset.
+    /// @param amount The amount of ERC20 tokens.
+    /// @dev Withdraws assets from the LP by exchanging nTokens at a 1:1 ratio. 
+    function _withdraw(
+        address asset, 
+        uint256 amount
+    ) 
+        private 
+    {
+        Reserve memory reserve = reserves[asset];        
+        address nToken = reserve.nTokenAddress;
+        uint256 nTokenBalance = INToken(nToken).balanceOf(_msgSender());
+        require(nTokenBalance >= amount, "Insufficient nToken balance");
+        INToken(nToken).burnFrom(_msgSender(), amount);
+        INToken(nToken).reserveTransfer(_msgSender(), asset, amount);
+        
+        emit Withdraw(asset, amount, _msgSender());
+    }
+
+    /// @notice Private function to create a borrow position.
+    /// @param asset The ERC20 token to be borrowed.
+    /// @param amount The amount of ERC20 tokens to be borrowed.
+    /// @param collateral The ERC721 token to be used as collateral.
+    /// @param tokenId The tokenId of the ERC721 token to be deposited. 
+    /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
+    /// @param numWeeks The number of weeks until the borrow maturity.
+    /// @dev Deposits collateral in CM before minting debtTokens and finally loaning assets. 
+    function _borrow(
+        address asset, 
+        uint256 amount, 
+        address collateral, 
+        uint256 tokenId,
+        uint256 interestRate,
+        uint256 numWeeks
+    ) 
+        private
+    {
+        Reserve memory reserve = reserves[asset];  
+        uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
+        // uint256 collateralFloorPrice = _mockOracle();
+        uint256 collateralFloorPrice = getFloorPrice(collateral, asset);
+        uint maturity = block.timestamp + numWeeks * 1 weeks;
+
+        ICollateralManager(collateralManagerAddress).deposit(
+            _msgSender(), 
+            asset, 
+            collateral, 
+            tokenId, 
+            amount,
+            repaymentAmount, 
+            interestRate,
+            collateralFloorPrice, 
+            maturity);
+
+        // require(success, 'DEPOSIT_UNSUCCESSFUL');
+        IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), repaymentAmount);
+        INToken(reserve.nTokenAddress).reserveTransfer(_msgSender(), asset, amount);
+
+        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, _msgSender());
+    }
+
+    /// @notice Private function to repay a borrow position.
+    /// @param asset The ERC20 token to be borrowed.
+    /// @param repaymentAmount The amount of ERC20 tokens to be repaid.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @dev Transfers assets back to the reserve before burning debtTokens and returning collateral. 
+    function _repay(
+        address asset,
+        uint256 repaymentAmount,
+        uint256 borrowId
+    ) 
+        private 
+    {
+        Reserve memory reserve = reserves[asset]; 
+        INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
+
+        ICollateralManager(collateralManagerAddress).withdraw(
+            borrowId, 
+            asset, 
+            repaymentAmount);
+
+        IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);
+
+        emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
 }
