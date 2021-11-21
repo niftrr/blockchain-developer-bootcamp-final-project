@@ -10,7 +10,7 @@ import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
-import { OracleTokenPrice } from './OracleTokenPrice.sol';
+import { TokenPriceOracle } from './TokenPriceOracle.sol';
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
@@ -26,7 +26,9 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
 
     address public collateralManagerAddress;
-    address public oracleTokenPriceAddress;
+    address public tokenPriceOracleAddress;
+
+    bool private isCollateralManagerConnected = false;
 
     enum Status {
         Active, // Able to perform all reserve operations.
@@ -90,6 +92,42 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         address asset, 
         uint256 repaymentAmount, 
         address borrower
+    );
+
+    /// @notice Emitted when the asset reserve is frozen.
+    /// @param asset The reserve asset.
+    event ReserveFrozen(
+        address asset
+    );
+
+    /// @notice Emitted when the asset reserve is paused.
+    /// @param asset The reserve asset.
+    event ReservePaused(
+        address asset
+    );
+
+    /// @notice Emitted when the asset reserve is protected.
+    /// @param asset The reserve asset.
+    event ReserveProtected(
+        address asset
+    );
+
+    /// @notice Emitted when the asset reserve is activated.
+    /// @param asset The reserve asset.
+    event ReserveActivated(
+        address asset
+    );
+
+    /// @notice Emitted when the collateral manager is connected.
+    /// @param collateralManagerAddress The collateral manager address.
+    event CollateralManagerConnected(
+        address collateralManagerAddress
+    );
+
+    /// @notice Emitted when the token price oracle is connected.
+    /// @param tokenPriceOracleAddress The token price oracle address.
+    event TokenPriceOracleConnected(
+        address tokenPriceOracleAddress
     );
 
     constructor(address configurator) {
@@ -231,6 +269,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     function freezeReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
         reserve.status = Status.Frozen;
+
+        emit ReserveFrozen(asset);
     }
 
     /// @notice Pauses the specified asset reserve
@@ -239,14 +279,18 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     function pauseReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
         reserve.status = Status.Paused;
+
+        emit ReservePaused(asset);
     }
 
     /// @notice Protects the specified asset reserve
     /// @param asset The ERC20, reserve asset token.
-    /// @dev Functions `withdraw` and `repay` are active, not `liquidate`, `deposit` or `borrow`.
+    /// @dev Desactivates functions `liquidate`, `deposit` and `borrow`.
     function protectReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
         reserve.status = Status.Protected;
+
+        emit ReserveProtected(asset);
     }
 
     /// @notice Activate the specified asset reserve
@@ -255,40 +299,48 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     function activateReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
         reserve.status = Status.Active;  
+
+        emit ReserveActivated(asset);
     }
 
     /// @notice Get user borrows.
     /// @param user The user account.
     /// @dev Delegate call to the CM contract to retreive data.
     /// @return Returns an array of the user borrow ids.
-    function _getUserBorrows(address user) public returns (uint256[] memory) {
+    function getUserBorrows(address user) public returns (uint256[] memory) {
         (bool success , bytes memory data) = collateralManagerAddress.delegatecall(
             abi.encodeWithSignature("getUserBorrows(address)", user)); 
         return abi.decode(data, (uint256[])); 
     }
 
-    /// @notice Set the Collateral Manager contract address.
+    /// @notice Initialize the Collateral Manager contract address.
     /// @param _collateralManagerAddress The Collateral Manager contract address.
     /// @dev Uses a state varaible.
-    function setCollateralManagerAddress(
+    function connectCollateralManager(
         address _collateralManagerAddress
     ) 
         public 
         onlyConfigurator 
     {
+        require(!isCollateralManagerConnected, "Collateral Manager already connected");
+        isCollateralManagerConnected = true;
         collateralManagerAddress = _collateralManagerAddress;
+
+        emit CollateralManagerConnected(collateralManagerAddress);
     }
 
-    /// @notice Set the Token Price oracle contract address.
-    /// @param _oracleTokenPriceAddress The Token Price oracle address.
+    /// @notice Connect the Token Price Oracle contract by setting the address.
+    /// @param _tokenPriceOracleAddress The Token Price Oracle address.
     /// @dev Uses a state variable.
-    function setOracleTokenPriceAddress(
-        address _oracleTokenPriceAddress
+    function connectTokenPriceOracle(
+        address _tokenPriceOracleAddress
     ) 
         public 
         onlyConfigurator 
     {
-        oracleTokenPriceAddress = _oracleTokenPriceAddress;
+        tokenPriceOracleAddress = _tokenPriceOracleAddress;
+
+        emit TokenPriceOracleConnected(tokenPriceOracleAddress);
     }
 
     /// @notice Gets the NFT floor price in terms of the asset provided (WIP3)
@@ -300,7 +352,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         uint256 floorPrice = getFloorPriceMock(collateral);
         string memory pricePair = pricePairs[asset];
         if (keccak256(abi.encodePacked(pricePair))!=keccak256(abi.encodePacked(""))) {
-            (int price, uint8 decimal) = OracleTokenPrice(oracleTokenPriceAddress).getLatestPriceMock(pricePair);
+            (int price, uint8 decimal) = TokenPriceOracle(tokenPriceOracleAddress).getLatestPriceMock(pricePair);
             uint256 price_ = uint256(price);
             floorPrice = floorPrice.mul(price_).div(decimal);
         }
@@ -321,8 +373,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @notice Get the Token Price oracle contract address.
     /// @dev Uses a state variable.
     /// @return Returns the Token price oracle contract address.
-    function getOracleTokenPriceAddress() public view returns (address) {
-        return oracleTokenPriceAddress;
+    function gettokenPriceOracleAddress() public view returns (address) {
+        return tokenPriceOracleAddress;
     }
 
     /// @notice Mock Oracle for NFT fLoor prices (WIP2).
@@ -345,7 +397,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @notice Mock Oracle for NFT fLoor prices (WIP1).
     /// @dev To be removed once chainlink nodes are hosting our external adapter.
     /// @return Always returns 60. 
-    function _mockFloorOracle() public pure returns (uint256) {
+    function _mockFloorOracle() internal pure returns (uint256) {
         return 60.0;
     }
 

@@ -7,7 +7,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 /// @author Niftrr
 /// @notice Makes off-chain token price feeds available to our contracts.
 /// @dev Debt tokens are non-transferable and so diverge from the ERC20 standard.
-contract OracleTokenPrice {
+contract TokenPriceOracle {
 
     AggregatorV3Interface internal priceFeedETHUSD;
     AggregatorV3Interface internal priceFeedDAIUSD;

@@ -7,6 +7,9 @@ let hhLendingPoolAddress;
 let CollateralManager;
 let hhCollateralManager;
 let hhCollateralManagerAddress;
+let TokenPriceOracle;
+let hhTokenPriceOracle;
+let hhTokenPriceOracleAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
@@ -30,10 +33,10 @@ beforeEach(async function() {
     // Get Signers
     [owner, alice, bob] = await ethers.getSigners();
 
-    // Get and deploy LendingPool
-    OracleTokenPrice = await ethers.getContractFactory('OracleTokenPrice');
-    hhOracleTokenPrice = await OracleTokenPrice.deploy();
-    hhOracleTokenPriceAddress = await hhOracleTokenPrice.resolvedAddress;
+    // Get and deploy OraceTokenPrice
+    TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
+    hhTokenPriceOracle = await TokenPriceOracle.deploy();
+    hhTokenPriceOracleAddress = await hhTokenPriceOracle.resolvedAddress;
 
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
@@ -53,7 +56,7 @@ beforeEach(async function() {
     hhCollateralManagerAddress = await hhCollateralManager.resolvedAddress;
 
     // Link CollateralManager to LendingPool
-    await hhLendingPool.setCollateralManagerAddress(hhCollateralManagerAddress);
+    await hhLendingPool.connectCollateralManager(hhCollateralManagerAddress);
 
     // Get and deploy Asset Token
     AssetToken = await ethers.getContractFactory('AssetToken');
@@ -126,7 +129,7 @@ async function initReserve() {
 
 async function deposit(signer, assetToken, tokenAmount) {
     // Approve transferFrom lendingPool 
-    await assetToken.connect(alice).approve(hhLendingPoolAddress, tokenAmount);
+    await assetToken.connect(signer).approve(hhLendingPoolAddress, tokenAmount);
     // Deposit in hhNToken contract reserve
     return hhLendingPool.connect(signer).deposit(assetToken.address, tokenAmount)
 }
@@ -159,10 +162,10 @@ async function repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
         borrowId);
 }
 
-describe('OracleTokenPrice', function() {
+describe('TokenPriceOracle', function() {
 
     it('ETH/USD', async function () {
-        let latestPrice = (await hhOracleTokenPrice.getLatestPriceMock("ETHUSD")).toString();
+        let latestPrice = (await hhTokenPriceOracle.getLatestPriceMock("ETHUSD")).toString();
         expect(latestPrice).to.equal('400000000000,8');
     })
 })
