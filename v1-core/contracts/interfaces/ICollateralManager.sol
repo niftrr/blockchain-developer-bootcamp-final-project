@@ -3,19 +3,9 @@ pragma solidity ^0.8.0;
 
 interface ICollateralManager {
 
-    event DepositCollateral(
-        address borrower,
-        address erc721Token, 
-        uint256 tokenId, 
-        uint256 id
-    );
+    function pause() external;
 
-    event WithdrawCollateral(
-        address borrower,
-        address erc721Token, 
-        uint256 tokenId, 
-        uint256 id
-    );
+    function unpause() external;
    
     function deposit(
         address borrower,
@@ -26,11 +16,15 @@ interface ICollateralManager {
         uint256 repaymentAmount,
         uint256 interestRate,
         uint256 liquidationPrice,
-        uint256 maturity) external payable;
+        uint256 maturity) external;
 
     function withdraw (uint256 _id, address asset, uint256 repaymentAmount) external;
 
+    function setInterestRate(address _erc721Token, uint256 interestRate) external;
+    
     function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external;
+
+    function updateWhitelist(address _erc721Token, bool isWhitelisted) external;
 
     function getLiquidationThreshold(address _erc721Token) external view;
 

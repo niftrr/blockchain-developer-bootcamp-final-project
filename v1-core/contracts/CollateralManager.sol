@@ -80,6 +80,30 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 id
     );
 
+    /// @notice Emitted when the interest rate is set for a given NFT project.
+    /// @param erc721Token The ERC721 token for the NFT project.
+    /// @param interestRate The 18 decimal interest rate.
+    event SetInterestRate(
+        address erc721Token,
+        uint256 interestRate
+    );
+
+    /// @notice Emitted when the liquidation threshold is set for a given NFT project.
+    /// @param erc721Token The ERC721 token for the NFT project.
+    /// @param liquidationThreshold The 18 decimal liquidationThreshold percentage.
+    event SetLiquidationThreshold(
+        address erc721Token, 
+        uint256 liquidationThreshold
+    );
+
+    /// @notice Emitted when the an NFT project whitelist status is updated.
+    /// @param erc721Token The ERC721 token for the NFT project.
+    /// @param isWhitelisted Boolean for if the project is whitelisted.
+    event Whitelisted(
+        address erc721Token,
+        bool isWhitelisted
+    );
+
     constructor(address configurator, address lendingPool) {
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _setupRole(LENDING_POOL_ROLE, lendingPool);
@@ -92,6 +116,11 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
 
     modifier onlyLendingPool() {
         require(hasRole(LENDING_POOL_ROLE, _msgSender()), "Caller is not the Lending Pool");
+        _;
+    }
+
+    modifier whenBorrowActive(uint256 _id) {
+        require(borrows[_id].state == State.Active, "Borrow is not active");
         _;
     }
 
@@ -118,8 +147,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 collateralFloorPrice,
         uint256 maturity
     ) 
-        external
-        payable 
+        external 
         onlyLendingPool
         whenNotPaused
         returns (bool)
@@ -170,6 +198,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         external 
         onlyLendingPool 
         whenNotPaused 
+        whenBorrowActive(_id)
     {
         address borrowAsset = borrows[_id].erc20Token;
         uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
@@ -196,7 +225,10 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param interestRate The (new) interest rate APY to set for the project.
     /// @dev Mapping used to keep track of interest rates, set per NFT project.
     function setInterestRate(address erc721Token, uint256 interestRate) external onlyConfigurator {
+        console.log('here too');
         interestRates[erc721Token] = interestRate;
+
+        emit SetInterestRate(erc721Token, interestRate);
     }
 
     /// @notice Sets the liquidation threshold for a given ERC721 token.
@@ -205,6 +237,8 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @dev Mapping used to keep track of liquidation thresholds, set per NFT project.
     function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external onlyConfigurator {
         liquidationThresholds[_erc721Token] = _threshold;
+
+        emit SetLiquidationThreshold(_erc721Token, _threshold);
     }
 
     /// @notice Updates the NFT project whitelist with a given ERC721 token.
@@ -223,6 +257,8 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
                 }
             }
         }
+
+        emit Whitelisted(erc721Token, isWhitelisted);
     }
 
     /// @notice For the receiving of ERC721 tokens to this contract address.

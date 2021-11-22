@@ -90,21 +90,19 @@ beforeEach(async function() {
         'debtDAI'
     );
     await hhDebtToken.deployed();  
+
+    // Get and deploy NFT
+    NFT = await ethers.getContractFactory('NFT');
+    hhNFT = await NFT.deploy('Punk NFT', 'PUNK');
+    await hhNFT.deployed();
 });
 
-async function initReserve() {
-    return hhLendingPool.initReserve(
-        hhAssetToken.address, 
-        hhNToken.address,
-        hhDebtToken.address)
-}
+/* 
+    -------------------------------------------------------------------------------------------
+    LENDING POOL 
+    ===========================================================================================
 
-// async function deposit(signer, assetToken, tokenAmount) {
-//     // Approve transferFrom lendingPool 
-//     await assetToken.connect(signer).approve(hhLendingPoolAddress, tokenAmount);
-//     // Deposit in hhNToken contract reserve
-//     return hhLendingPool.connect(signer).deposit(assetToken.address, tokenAmount)
-// }
+ */
 
 describe('Configurator >> LendingPool >> pause()', function() {
 
@@ -314,38 +312,55 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
 })
 
 describe('Configurator >> LendingPool >> connectCollateralManager()', function() {
-
+    
     it('should set the Collateral Manager address when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
             .connectLendingPoolCollateralManager(
-                hhCollateralManager.address
             ))
             .to.emit(hhLendingPool, "CollateralManagerConnected")
     });
 
     it('should revert when called for a second time', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+
         hhConfigurator
             .connect(emergencyAdmin)
             .connectLendingPoolCollateralManager(
-                hhCollateralManager.address
             )
         
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
             .connectLendingPoolCollateralManager(
-                hhCollateralManager.address
             ))
             .to.be.revertedWith("Collateral Manager already connected");
     });
 
     it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+
         await expect(
             hhConfigurator.connect(admin)
             .connectLendingPoolCollateralManager(
-                hhCollateralManager.address
             ))
             .to.be.revertedWith("Caller is not emergency admin.");
     });
@@ -354,6 +369,13 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
 describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() {
 
     it('should set the Token Price Oracle address when caller is emergencyAdmin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
@@ -364,6 +386,13 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
     });
 
     it('should revert when caller is not emergencyAdmin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+            .connect(admin)
+            .connectCollateralManager(
+                hhCollateralManagerAddress
+            )
+    
         await expect(
             hhConfigurator
             .connect(admin)
@@ -371,5 +400,196 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
                 hhCollateralManager.address
             ))
             .to.be.revertedWith("Caller is not emergency admin.");
+    });
+})
+/* 
+    -------------------------------------------------------------------------------------------
+    COLLATERAL MANAGER 
+    ===========================================================================================
+
+ */
+describe('Configurator >> CollateralManager >> setInterestRate()', function() {
+
+    it('should set the interest rate when caller is admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        const interestRate = ethers.utils.parseUnits('0.22', 18);
+        await expect(
+            hhConfigurator
+            .connect(admin)
+            .setCollateralManagerInterestRate(
+                hhNFT.address,
+                interestRate
+            ))
+            .to.emit(hhCollateralManager, "SetInterestRate")
+            .withArgs(
+                hhNFT.address,
+                interestRate        
+            )
+    });
+
+    it('should revert when caller is not admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        const interestRate = ethers.utils.parseUnits('0.22', 18);
+        await expect(
+            hhConfigurator
+            .connect(alice)
+            .setCollateralManagerInterestRate(
+                hhNFT.address,
+                interestRate
+            ))
+            .to.be.revertedWith("Caller is not admin.");
+    });
+})
+
+describe('Configurator >> CollateralManager >> setLiquidationThreshold()', function() {
+
+    it('should set the liquidation threshold when caller is admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        const liquidationThreshold = ethers.utils.parseUnits('1.5', 18);
+        await expect(
+            hhConfigurator
+            .connect(admin)
+            .setCollateralManagerLiquidationThreshold(
+                hhNFT.address,
+                liquidationThreshold
+            ))
+            .to.emit(hhCollateralManager, "SetLiquidationThreshold")
+            .withArgs(
+                hhNFT.address,
+                liquidationThreshold    
+            )
+    });
+
+    it('should revert when caller is not admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        const liquidationThreshold = ethers.utils.parseUnits('1.5', 18);
+        await expect(
+            hhConfigurator
+            .connect(alice)
+            .setCollateralManagerLiquidationThreshold(
+                hhNFT.address,
+                liquidationThreshold
+            ))
+            .to.be.revertedWith("Caller is not admin.");
+    });
+})
+
+describe('Configurator >> CollateralManager >> updateWhitelist()', function() {
+
+    it('should set the liquidation threshold when caller is admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+
+        const isWhitelisted = true;
+
+        await expect(
+            hhConfigurator
+            .connect(admin)
+            .updateCollateralManagerWhitelist(
+                hhNFT.address,
+                isWhitelisted
+            ))
+            .to.emit(hhCollateralManager, "Whitelisted")
+            .withArgs(
+                hhNFT.address,
+                isWhitelisted    
+            )
+    });
+
+    it('should revert when caller is not admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        const isWhitelisted = true;
+        await expect(
+            hhConfigurator
+            .connect(alice)
+            .updateCollateralManagerWhitelist(
+                hhNFT.address,
+                isWhitelisted
+            ))
+            .to.be.revertedWith("Caller is not admin.");
+    });
+})
+
+describe('Configurator >> CollateralManager >> pause()', function() {
+
+    it('should pause when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(emergencyAdmin).pauseCollateralManager()
+        ).to.emit(hhCollateralManager, "Paused")
+    });
+
+    it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(admin).pauseCollateralManager()
+        ).to.be.revertedWith("Caller is not emergency admin.");
+    });
+})
+
+describe('Configurator >> CollateralManager >> unpause()', function() {
+
+    it('should unpause when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        hhConfigurator.connect(emergencyAdmin).pauseCollateralManager()
+        await expect(
+            hhConfigurator.connect(emergencyAdmin).unpauseCollateralManager()
+        ).to.emit(hhCollateralManager, "Unpaused")
+    });
+
+    it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(admin).unpauseCollateralManager()
+        ).to.be.revertedWith("Caller is not emergency admin.");
     });
 })

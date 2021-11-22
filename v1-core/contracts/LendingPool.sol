@@ -30,14 +30,14 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
 
     bool private isCollateralManagerConnected = false;
 
-    enum Status {
+    enum State {
         Active, // Able to perform all reserve operations.
         Frozen, // Only able to `withdraw`, `repay` and `liquidate`. Not `borrow` or `deposit`
         Paused, // Not able to perform any reserve operation.
         Protected // Only able to `withdraw` and `repay`. Not `borrow`, `deposit` or `liquidate`.
     }
     struct Reserve {
-        Status status;
+        State state;
         address nTokenAddress;
         address debtTokenAddress;
         uint128 currentInterestRate;
@@ -142,19 +142,19 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
 
     modifier whenReserveActive(address asset) {
         Reserve memory reserve = reserves[asset];  
-        require(reserve.status == Status.Active, "Reserve is not active.");  
+        require(reserve.state == State.Active, "Reserve is not active.");  
         _;
     }
 
     modifier whenReserveNotPaused(address asset) {
         Reserve memory reserve = reserves[asset];  
-        require(reserve.status != Status.Paused, "Reserve is paused.");  
+        require(reserve.state != State.Paused, "Reserve is paused.");  
         _;
     }
 
     modifier whenReserveNotProtected(address asset) {
         Reserve memory reserve = reserves[asset];  
-        require(reserve.status != Status.Protected, "Reserve is protected.");  
+        require(reserve.state != State.Protected, "Reserve is protected.");  
         _;
     }
 
@@ -268,7 +268,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @dev To freeze deposit and borrow functions for a single reserve.
     function freezeReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
-        reserve.status = Status.Frozen;
+        reserve.state = State.Frozen;
 
         emit ReserveFrozen(asset);
     }
@@ -278,7 +278,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @dev To pause functions for a single reserve instead of the whole contract.
     function pauseReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
-        reserve.status = Status.Paused;
+        reserve.state = State.Paused;
 
         emit ReservePaused(asset);
     }
@@ -288,7 +288,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @dev Desactivates functions `liquidate`, `deposit` and `borrow`.
     function protectReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
-        reserve.status = Status.Protected;
+        reserve.state = State.Protected;
 
         emit ReserveProtected(asset);
     }
@@ -298,7 +298,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @dev To activate all functions for a single reserve.
     function activateReserve(address asset) external onlyConfigurator {
         Reserve storage reserve = reserves[asset]; 
-        reserve.status = Status.Active;  
+        reserve.state = State.Active;  
 
         emit ReserveActivated(asset);
     }
@@ -414,7 +414,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         private
     {
         Reserve memory reserve;
-        reserve.status = Status.Active;
+        reserve.state = State.Active;
         reserve.nTokenAddress = nTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
         reserves[asset] = reserve;

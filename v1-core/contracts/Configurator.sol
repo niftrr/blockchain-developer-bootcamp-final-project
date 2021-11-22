@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPool } from "./interfaces/ILendingPool.sol";
+import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 
 import "hardhat/console.sol";
 
@@ -16,6 +17,7 @@ contract Configurator is Context, AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     
     address public lendingPoolAddress;
+    address public collateralManagerAddress;
 
     constructor(address emergencyAdmin, address admin) {
         _setupRole(EMERGENCY_ADMIN_ROLE, emergencyAdmin);
@@ -32,8 +34,18 @@ contract Configurator is Context, AccessControl {
         _;
     }
 
+    modifier whenLendingPoolConnected {
+        require(lendingPoolAddress != address(0), "LendingPool not connected");
+        _;
+    }
+
+    modifier whenCollateralManagerConnected {
+        require(collateralManagerAddress != address(0), "CollateralManager not connected");
+        _;
+    }
+
     /// @notice Connects the Lending Pool contract by setting the address.
-    /// @param _lendingPoolAddress The lending pool address.
+    /// @param _lendingPoolAddress The lending pool contract address.
     /// @dev Sets the lendingPoolAddress variable.
     function connectLendingPool(address _lendingPoolAddress) public onlyAdmin {
         lendingPoolAddress = _lendingPoolAddress;
@@ -47,13 +59,21 @@ contract Configurator is Context, AccessControl {
 
     /// @notice Pauses all Lending Pool contract functions.
     /// @dev Functions paused via Pausable contract modifier.
-    function pauseLendingPool() public onlyEmergencyAdmin {
+    function pauseLendingPool() 
+        public 
+        onlyEmergencyAdmin
+        whenLendingPoolConnected
+    {
         ILendingPool(lendingPoolAddress).pause();
     }
 
     /// @notice Unpauses all Lending Pool contract functions.
     /// @dev Functions unpaused via Pausable contract modifier.
-    function unpauseLendingPool() public onlyEmergencyAdmin {
+    function unpauseLendingPool()
+        public 
+        onlyEmergencyAdmin 
+        whenLendingPoolConnected
+    {
         ILendingPool(lendingPoolAddress).unpause();
     }
 
@@ -67,7 +87,9 @@ contract Configurator is Context, AccessControl {
         address nTokenAddress,
         address debtTokenAddress
     )
-        public onlyAdmin 
+        public
+        onlyAdmin
+        whenLendingPoolConnected 
     {
         ILendingPool(lendingPoolAddress).initReserve(
             asset, 
@@ -79,42 +101,65 @@ contract Configurator is Context, AccessControl {
     /// @notice Freezes the specified Lending Pool asset reserve
     /// @param asset The ERC20, reserve asset token.
     /// @dev To freeze Lending Pool deposit and borrow functions for a single reserve.
-    function freezeLendingPoolReserve(address asset) public onlyEmergencyAdmin {
+    function freezeLendingPoolReserve(
+        address asset
+    ) 
+        public 
+        onlyEmergencyAdmin
+        whenLendingPoolConnected
+    {
         ILendingPool(lendingPoolAddress).freezeReserve(asset);
     }
 
     /// @notice Pauses the specified Lending Pool asset reserve
     /// @param asset The ERC20, reserve asset token.
     /// @dev To pause Lending Pool functions for a single reserve instead of the whole contract.
-    function pauseLendingPoolReserve(address asset) public onlyEmergencyAdmin {
+    function pauseLendingPoolReserve(
+        address asset
+    ) 
+        public 
+        onlyEmergencyAdmin 
+        whenLendingPoolConnected
+    {
         ILendingPool(lendingPoolAddress).pauseReserve(asset);
     }
 
     /// @notice Protects the specified Lending Pool asset reserve
     /// @param asset The ERC20, reserve asset token.
     /// @dev Deactivates Lending Pool functions `liquidate`, `deposit` and `borrow`.
-    function protectLendingPoolReserve(address asset) public onlyEmergencyAdmin {
+    function protectLendingPoolReserve(
+        address asset
+    ) 
+        public
+        onlyEmergencyAdmin 
+        whenLendingPoolConnected
+    {
         ILendingPool(lendingPoolAddress).protectReserve(asset);
     }
 
     /// @notice Activate the specified Lending Pool asset reserve
     /// @param asset The ERC20, reserve asset token.
     /// @dev To activate all functions for a single Lending Pool reserve.
-    function activateLendingPoolReserve(address asset) public onlyEmergencyAdmin {
+    function activateLendingPoolReserve(
+        address asset
+    ) 
+        public 
+        onlyEmergencyAdmin
+        whenLendingPoolConnected 
+    {
         ILendingPool(lendingPoolAddress).activateReserve(asset);
     }
 
     /// @notice Connects the Lending Pool to the Collateral Manager by setting the address.
-    /// @param _collateralManagerAddress The Collateral Manager contract address.
-    /// @dev This can be set only once and is protected by a modifier.
-    function connectLendingPoolCollateralManager(
-        address _collateralManagerAddress
-    ) 
+    /// @dev This can be set only once. Should be run only after `connectCollateralManager`.
+    function connectLendingPoolCollateralManager() 
         public
         onlyEmergencyAdmin
+        whenLendingPoolConnected
+        whenCollateralManagerConnected
     {
         ILendingPool(lendingPoolAddress).connectCollateralManager(
-            _collateralManagerAddress
+            collateralManagerAddress
         );
     }
 
@@ -126,10 +171,76 @@ contract Configurator is Context, AccessControl {
     ) 
         public
         onlyEmergencyAdmin
+        whenLendingPoolConnected
     {
         ILendingPool(lendingPoolAddress).connectTokenPriceOracle(
             tokenPriceOracleAddress
         );
+    }
+
+    /// @notice Connects the Collateral Manager contract by setting the address.
+    /// @param _collateralManagerAddress The collateral manager contract address.
+    /// @dev Sets the collateralManager variable.
+    function connectCollateralManager(address _collateralManagerAddress) public onlyAdmin {
+        collateralManagerAddress = _collateralManagerAddress;
+    }
+
+    
+    function setCollateralManagerInterestRate(
+        address erc721token,
+        uint256 interestRate
+    )
+        public
+        onlyAdmin
+        whenCollateralManagerConnected
+    {
+        ICollateralManager(collateralManagerAddress).setInterestRate(
+            erc721token,
+            interestRate  
+        );
+    }
+
+    function setCollateralManagerLiquidationThreshold(
+        address _erc721Token,
+        uint256 _threshold
+    ) 
+        public
+        onlyAdmin
+        whenCollateralManagerConnected
+    {
+        ICollateralManager(collateralManagerAddress).setLiquidationThreshold(
+            _erc721Token, 
+            _threshold);
+    }
+
+    function updateCollateralManagerWhitelist(
+        address erc721Token,
+        bool isWhitelisted
+    ) 
+        public
+        onlyAdmin
+        whenCollateralManagerConnected
+    {
+        ICollateralManager(collateralManagerAddress).updateWhitelist(
+            erc721Token,
+            isWhitelisted
+        );
+    }
+
+    function pauseCollateralManager() 
+        public 
+        onlyEmergencyAdmin
+        whenCollateralManagerConnected
+    {
+        ICollateralManager(collateralManagerAddress).pause();
+    }
+
+    function unpauseCollateralManager() 
+        public 
+        onlyEmergencyAdmin
+        whenCollateralManagerConnected
+    {
+        ICollateralManager(collateralManagerAddress).unpause();
     }
 
 }
