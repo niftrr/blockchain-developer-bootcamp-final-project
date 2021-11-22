@@ -18,11 +18,19 @@ interface ICollateralManager {
         uint256 repaymentAmount,
         uint256 interestRate,
         uint256 liquidationPrice,
-        uint256 maturity) external;
+        uint256 maturity
+    ) 
+        external;
 
-    function withdraw (uint256 _id, address asset, uint256 repaymentAmount) external;
+    function withdraw(uint256 _id, address asset, uint256 repaymentAmount) external;
 
-    function liquidate(uint256 _id, address asset, uint256 repaymentAmount, address liquidator) external;
+    function retrieve(
+        uint256 _id, 
+        address asset, 
+        uint256 repaymentAmount, 
+        address liquidator
+    ) 
+        external;
     
     function setInterestRate(address _erc721Token, uint256 interestRate) external;
     
@@ -35,17 +43,4 @@ interface ICollateralManager {
     function getUserBorrows(address user) external view;
 
     function getBorrow(uint256 borrowId) external returns (DataTypes.Borrow memory);
-
-    function getBorrowPieces(uint256 borrowId) external returns (   
-        uint state,
-        address erc721Token, 
-        uint256 tokenId,
-        address borrower, 
-        address erc20Token,
-        uint256 borrowAmount,
-        uint256 repaymentAmount,
-        uint256 interestRate,
-        uint256 liquidationPrice,
-        uint256 maturity
-    ) ;
 }

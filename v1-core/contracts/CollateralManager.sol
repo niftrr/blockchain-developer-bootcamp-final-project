@@ -125,8 +125,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
     /// @param collateralFloorPrice The current floor price of the ERC721 token.
     /// @param maturity The borrow maturity timestamp.
-    /// @dev Transfers the ERC721 to this contract address for escrow and creates a borrow. 
-    /// @return Returns true if succeeded.
+    /// @dev Calls internal `_deposit` function if modifiers are succeeded.  
     function deposit(
         address borrower,
         address erc20Token,
@@ -141,46 +140,25 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         external 
         onlyLendingPool
         whenNotPaused
-        returns (bool)
     {
-        require(whitelisted[erc721Token], "NFT not whitelisted");
-        IERC721(erc721Token).transferFrom(borrower, address(this), tokenId);
-
-        uint256 id = counter.current();
-        uint256 liquidationPrice = collateralFloorPrice.div(getLiquidationThreshold(erc721Token));
-
-        borrows[id] = DataTypes.Borrow({
-            status: DataTypes.BorrowStatus.Active,
-            collateral: DataTypes.Collateral({
-                erc721Token: erc721Token,
-                tokenId: tokenId
-            }),
-            borrower: borrower,
-            erc20Token: erc20Token,
-            borrowAmount: borrowAmount,
-            repaymentAmount: repaymentAmount,
-            interestRate: interestRate,
-            liquidationPrice: liquidationPrice,
-            maturity: maturity
-        });
-
-        userBorrows[borrower].push(id);
-        counter.increment();
-
-        emit DepositCollateral(
+        _deposit(
             borrower,
-            erc721Token,
-            tokenId,
-            id
+            erc20Token,
+            erc721Token, 
+            tokenId, 
+            borrowAmount,
+            repaymentAmount,
+            interestRate,
+            collateralFloorPrice,
+            maturity
         );
-        return true;
     }
 
     /// @notice To withdraw an ERC721 token from escrow and removes a borrow position.
     /// @param _id The borrower id.
     /// @param _asset The ERC20 token to be repaid.
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
-    /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower. 
+    /// @dev Calls internal `_withdraw` function if modifiers are succeeded. 
     function withdraw(
         uint256 _id, 
         address _asset, 
@@ -191,33 +169,20 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         whenNotPaused 
         whenBorrowActive(_id)
     {
-        address borrowAsset = borrows[_id].erc20Token;
-        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
-        require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
-        require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
-
-        address borrower = borrows[_id].borrower;
-        address erc721Token = borrows[_id].collateral.erc721Token;
-        uint256 tokenId = borrows[_id].collateral.tokenId;
-        IERC721(erc721Token).transferFrom(address(this), borrower, tokenId);
-
-        borrows[_id].status = DataTypes.BorrowStatus.Repaid;
-        
-        emit WithdrawCollateral(
-            borrower,
-            erc721Token,
-            tokenId,
-            _id
+        _withdraw(
+            _id, 
+            _asset, 
+            _repaymentAmount
         );
     }
 
-    /// @notice To liquidate a borrow position and retreive the ERC721 token collateral.
+    /// @notice To retrieve the ERC721 token collateral for a borrow position liquidator.
     /// @param _id The borrower id.
     /// @param _asset The ERC20 token to be repaid.
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @param _liquidator The liquidator.
-    /// @dev Removes a borrow and transfers the ERC721 from escrow to the liquidator. 
-    function liquidate(
+    /// @dev Calls internal `_retrieve` function if modifiers are succeeded. 
+    function retrieve(
         uint256 _id, 
         address _asset, 
         uint256 _repaymentAmount, 
@@ -228,26 +193,25 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         whenNotPaused 
         whenBorrowActive(_id)
     {
-        address borrowAsset = borrows[_id].erc20Token;
-        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
-        require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
-        require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
-
-        console.log('CM');
-
-        address erc721Token = borrows[_id].collateral.erc721Token;
-        uint256 tokenId = borrows[_id].collateral.tokenId;
-        IERC721(erc721Token).transferFrom(address(this), _liquidator, tokenId);
-
-        borrows[_id].status = DataTypes.BorrowStatus.Liquidated;
-        
-        emit LiquidateCollateral(
-            _liquidator,
-            erc721Token,
-            tokenId,
-            _id
+        _retrieve(
+            _id, 
+            _asset, 
+            _repaymentAmount, 
+            _liquidator 
         );
     } 
+
+    /// @notice Pauses the contract deposit and withdraw functions.
+    /// @dev Functions paused via modifiers using Pausable contract.
+    function pause() external onlyConfigurator {
+        _pause();
+    }
+
+    /// @notice Unpauses the contract deposit and withdraw functions.
+    /// @dev Functions unpaused via modifiers using Pausable contract.
+    function unpause() external onlyConfigurator {
+        _unpause();
+    }
 
     /// @notice Sets the interest rate APY for a given ERC721 token.
     /// @param erc721Token The ERC721 token for which to set the interest rate.
@@ -335,15 +299,124 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         return whitelist;
     }
 
-    /// @notice Pauses the contract deposit and withdraw functions.
-    /// @dev Functions paused via modifiers using Pausable contract.
-    function pause() external onlyConfigurator {
-        _pause();
+    /// @notice Private function to deposit ERC721 token in escrow and create a borrow.
+    /// @param borrower The borrower account.
+    /// @param erc20Token The ERC20 token to be borrowed.
+    /// @param erc721Token The ERC721 token to be used as collateral.
+    /// @param tokenId The tokenId of the ERC721 token to be deposited.
+    /// @param borrowAmount The amount of ERC20 tokens to be borrowed.
+    /// @param repaymentAmount The amount of ERC20 tokens to be repaid. 
+    /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
+    /// @param collateralFloorPrice The current floor price of the ERC721 token.
+    /// @param maturity The borrow maturity timestamp.
+    /// @dev Transfers the ERC721 to this contract address for escrow and creates a borrow. 
+    function _deposit(
+        address borrower,
+        address erc20Token,
+        address erc721Token, 
+        uint256 tokenId, 
+        uint256 borrowAmount,
+        uint256 repaymentAmount,
+        uint256 interestRate,
+        uint256 collateralFloorPrice,
+        uint256 maturity
+    ) 
+        private 
+    {
+        require(whitelisted[erc721Token], "NFT not whitelisted");
+        IERC721(erc721Token).transferFrom(borrower, address(this), tokenId);
+
+        uint256 id = counter.current();
+        uint256 liquidationPrice = collateralFloorPrice.div(getLiquidationThreshold(erc721Token));
+
+        borrows[id] = DataTypes.Borrow({
+            status: DataTypes.BorrowStatus.Active,
+            collateral: DataTypes.Collateral({
+                erc721Token: erc721Token,
+                tokenId: tokenId
+            }),
+            borrower: borrower,
+            erc20Token: erc20Token,
+            borrowAmount: borrowAmount,
+            repaymentAmount: repaymentAmount,
+            interestRate: interestRate,
+            liquidationPrice: liquidationPrice,
+            maturity: maturity
+        });
+
+        userBorrows[borrower].push(id);
+        counter.increment();
+
+        emit DepositCollateral(
+            borrower,
+            erc721Token,
+            tokenId,
+            id
+        );
+    }    
+
+    /// @notice Private function to withdraw ERC721 token from escrow and remove a borrow.
+    /// @param _id The borrower id.
+    /// @param _asset The ERC20 token to be repaid.
+    /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
+    /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower. 
+    function _withdraw(
+        uint256 _id, 
+        address _asset, 
+        uint256 _repaymentAmount
+    ) 
+        private
+    {
+        address borrowAsset = borrows[_id].erc20Token;
+        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
+        require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
+        require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
+
+        address borrower = borrows[_id].borrower;
+        address erc721Token = borrows[_id].collateral.erc721Token;
+        uint256 tokenId = borrows[_id].collateral.tokenId;
+        IERC721(erc721Token).transferFrom(address(this), borrower, tokenId);
+
+        borrows[_id].status = DataTypes.BorrowStatus.Repaid;
+        
+        emit WithdrawCollateral(
+            borrower,
+            erc721Token,
+            tokenId,
+            _id
+        );
     }
 
-    /// @notice Unpauses the contract deposit and withdraw functions.
-    /// @dev Functions unpaused via modifiers using Pausable contract.
-    function unpause() external onlyConfigurator {
-        _unpause();
-    }
+    /// @notice Private function to retrieve the collateral for a borrow liquidator.
+    /// @param _id The borrower id.
+    /// @param _asset The ERC20 token to be repaid.
+    /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
+    /// @param _liquidator The liquidator.
+    /// @dev Removes a borrow and transfers the ERC721 from escrow to the liquidator. 
+    function _retrieve(
+        uint256 _id, 
+        address _asset, 
+        uint256 _repaymentAmount, 
+        address _liquidator
+    )
+        private
+    {
+        address borrowAsset = borrows[_id].erc20Token;
+        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
+        require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
+        require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
+
+        address erc721Token = borrows[_id].collateral.erc721Token;
+        uint256 tokenId = borrows[_id].collateral.tokenId;
+        IERC721(erc721Token).transferFrom(address(this), _liquidator, tokenId);
+
+        borrows[_id].status = DataTypes.BorrowStatus.Liquidated;
+        
+        emit LiquidateCollateral(
+            _liquidator,
+            erc721Token,
+            tokenId,
+            _id
+        );
+    } 
 }

@@ -552,7 +552,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         IERC20(asset).transferFrom(_msgSender(), borrower, reimbursementAmount);
         IDebtToken(reserve.debtTokenAddress).burnFrom(borrower, repaymentAmount);
         
-        ICollateralManager(collateralManagerAddress).liquidate(
+        ICollateralManager(collateralManagerAddress).retrieve(
             borrowId, 
             asset, 
             repaymentAmount,
