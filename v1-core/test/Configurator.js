@@ -75,7 +75,7 @@ beforeEach(async function() {
     // Get and deploy nToken
     NToken = await ethers.getContractFactory('NToken');
     hhNToken = await NToken.deploy(
-        admin.address, // NOTE: Using the owner as standin for the Configurator
+        hhConfiguratorAddress,
         hhLendingPoolAddress,
         'Dai nToken', 
         'nDAI');
@@ -84,7 +84,7 @@ beforeEach(async function() {
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
     hhDebtToken = await DebtToken.deploy(
-        admin.address, // NOTE: Using the owner as standin for the Configurator
+        hhConfiguratorAddress,
         hhLendingPoolAddress,
         'Dai debtToken', 
         'debtDAI'
@@ -590,6 +590,136 @@ describe('Configurator >> CollateralManager >> unpause()', function() {
         )
         await expect(
             hhConfigurator.connect(admin).unpauseCollateralManager()
+        ).to.be.revertedWith("Caller is not emergency admin.");
+    });
+})
+
+describe('Configurator >> NToken >> pause()', function() {
+
+    it('should pause when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(emergencyAdmin).pauseNToken(
+                hhNToken.address
+            )
+        ).to.emit(hhNToken, "Paused")
+    });
+
+    it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(admin).pauseNToken(
+                hhNToken.address
+            )
+        ).to.be.revertedWith("Caller is not emergency admin.");
+    });
+})
+
+describe('Configurator >> NToken >> unpause()', function() {
+
+    it('should unpause when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        hhConfigurator.connect(emergencyAdmin).pauseNToken(
+            hhNToken.address
+        )
+        await expect(
+            hhConfigurator.connect(emergencyAdmin).unpauseNToken(
+                hhNToken.address
+            )
+        ).to.emit(hhNToken, "Unpaused")
+    });
+
+    it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(admin).unpauseNToken(
+                hhNToken.address
+            )
+        ).to.be.revertedWith("Caller is not emergency admin.");
+    });
+})
+
+describe('Configurator >> DebtToken >> pause()', function() {
+
+    it('should pause when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(emergencyAdmin).pauseDebtToken(
+                hhDebtToken.address
+            )
+        ).to.emit(hhDebtToken, "Paused")
+    });
+
+    it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(admin).pauseDebtToken(
+                hhDebtToken.address
+            )
+        ).to.be.revertedWith("Caller is not emergency admin.");
+    });
+})
+
+describe('Configurator >> DebtToken >> unpause()', function() {
+
+    it('should unpause when caller is emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        hhConfigurator.connect(emergencyAdmin).pauseDebtToken(
+            hhDebtToken.address
+        )
+        await expect(
+            hhConfigurator.connect(emergencyAdmin).unpauseDebtToken(
+                hhDebtToken.address
+            )
+        ).to.emit(hhDebtToken, "Unpaused")
+    });
+
+    it('should revert when caller is not emergency admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        await expect(
+            hhConfigurator.connect(admin).unpauseDebtToken(
+                hhDebtToken.address
+            )
         ).to.be.revertedWith("Caller is not emergency admin.");
     });
 })

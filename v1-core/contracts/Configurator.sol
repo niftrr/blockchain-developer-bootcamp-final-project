@@ -5,6 +5,8 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPool } from "./interfaces/ILendingPool.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
+import { INToken } from "./interfaces/INToken.sol";
+import { IDebtToken } from "./interfaces/IDebtToken.sol";
 
 import "hardhat/console.sol";
 
@@ -241,6 +243,42 @@ contract Configurator is Context, AccessControl {
         whenCollateralManagerConnected
     {
         ICollateralManager(collateralManagerAddress).unpause();
+    }
+
+    function pauseNToken(
+        address nTokenAddress
+    ) 
+        public 
+        onlyEmergencyAdmin
+    {
+        INToken(nTokenAddress).pause();
+    }
+
+    function unpauseNToken(
+        address nTokenAddress
+    ) 
+        public 
+        onlyEmergencyAdmin
+    {
+        INToken(nTokenAddress).unpause();
+    }
+
+    function pauseDebtToken(
+        address debtTokenAddress
+    ) 
+        public 
+        onlyEmergencyAdmin
+    {
+        IDebtToken(debtTokenAddress).pause();
+    }
+
+    function unpauseDebtToken(
+        address debtTokenAddress
+    ) 
+        public 
+        onlyEmergencyAdmin
+    {
+        IDebtToken(debtTokenAddress).unpause();
     }
 
 }
