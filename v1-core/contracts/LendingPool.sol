@@ -12,6 +12,8 @@ import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { TokenPriceOracle } from './TokenPriceOracle.sol';
 
+import { DataTypes } from "./libraries/DataTypes.sol";
+
 import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "hardhat/console.sol";
@@ -24,29 +26,6 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     using SafeMath for uint256;  
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
-
-    address public collateralManagerAddress;
-    address public tokenPriceOracleAddress;
-
-    bool private isCollateralManagerConnected = false;
-
-    enum State {
-        Active, // Able to perform all reserve operations.
-        Frozen, // Only able to `withdraw`, `repay` and `liquidate`. Not `borrow` or `deposit`
-        Paused, // Not able to perform any reserve operation.
-        Protected // Only able to `withdraw` and `repay`. Not `borrow`, `deposit` or `liquidate`.
-    }
-    struct Reserve {
-        State state;
-        address nTokenAddress;
-        address debtTokenAddress;
-        uint128 currentInterestRate;
-    }
-
-    mapping(address => Reserve) public reserves;
-    mapping(address => uint256) public interestRates;
-    mapping(address => string) public openseaCollection;
-    mapping(address => string) public pricePairs;
 
     /// @notice Emitted when a new reserve is initialized.
     /// @param asset The ERC20, reserve asset address.
@@ -94,6 +73,18 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         address borrower
     );
 
+    /// @notice Emitted when a borrow is liquidated.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @param asset The ERC20 address of the borrowed asset.
+    /// @param liquidationAmount The amount of ERC20 tokens to be spent for liquidation.
+    /// @param liquidator The liquidator account.
+    event Liquidate(
+        uint256 borrowId, 
+        address asset, 
+        uint256 liquidationAmount, 
+        address liquidator
+    );
+
     /// @notice Emitted when the asset reserve is frozen.
     /// @param asset The reserve asset.
     event ReserveFrozen(
@@ -133,6 +124,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     constructor(address configurator) {
         // Grant the configurator role
         _setupRole(CONFIGURATOR_ROLE, configurator);
+        interestFee = 5; // 5%
+        liquidationFee = 5; //5%
     }
 
     modifier onlyConfigurator() {
@@ -141,20 +134,20 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     }
 
     modifier whenReserveActive(address asset) {
-        Reserve memory reserve = reserves[asset];  
-        require(reserve.state == State.Active, "Reserve is not active.");  
+        DataTypes.Reserve memory reserve = reserves[asset];  
+        require(reserve.status == DataTypes.ReserveStatus.Active, "Reserve is not active.");  
         _;
     }
 
     modifier whenReserveNotPaused(address asset) {
-        Reserve memory reserve = reserves[asset];  
-        require(reserve.state != State.Paused, "Reserve is paused.");  
+        DataTypes.Reserve memory reserve = reserves[asset];  
+        require(reserve.status != DataTypes.ReserveStatus.Paused, "Reserve is paused.");  
         _;
     }
 
     modifier whenReserveNotProtected(address asset) {
-        Reserve memory reserve = reserves[asset];  
-        require(reserve.state != State.Protected, "Reserve is protected.");  
+        DataTypes.Reserve memory reserve = reserves[asset];  
+        require(reserve.status != DataTypes.ReserveStatus.Protected, "Reserve is protected.");  
         _;
     }
 
@@ -251,6 +244,24 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         _repay(asset, repaymentAmount, borrowId);
     }
 
+    /// @notice To liquidate a borrow position.
+    /// @param asset The ERC20 token to be borrowed.
+    /// @param liquidationAmount The amount of ERC20 tokens to be paid.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @dev Calls internal `_liquidate` function if modifiers are succeeded.   
+    function liquidate(
+        address asset,
+        uint256 liquidationAmount,
+        uint256 borrowId
+    )
+        external 
+        whenNotPaused
+        whenReserveNotPaused(asset)
+        whenReserveNotProtected(asset)
+    {
+        _liquidate(asset, liquidationAmount, borrowId);
+    }
+
     /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
     /// @dev Functions paused via modifiers using Pausable contract.
     function pause() external onlyConfigurator {
@@ -267,8 +278,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @param asset The ERC20, reserve asset token.
     /// @dev To freeze deposit and borrow functions for a single reserve.
     function freezeReserve(address asset) external onlyConfigurator {
-        Reserve storage reserve = reserves[asset]; 
-        reserve.state = State.Frozen;
+        DataTypes.Reserve storage reserve = reserves[asset]; 
+        reserve.status = DataTypes.ReserveStatus.Frozen;
 
         emit ReserveFrozen(asset);
     }
@@ -277,8 +288,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @param asset The ERC20, reserve asset token.
     /// @dev To pause functions for a single reserve instead of the whole contract.
     function pauseReserve(address asset) external onlyConfigurator {
-        Reserve storage reserve = reserves[asset]; 
-        reserve.state = State.Paused;
+        DataTypes.Reserve storage reserve = reserves[asset]; 
+        reserve.status = DataTypes.ReserveStatus.Paused;
 
         emit ReservePaused(asset);
     }
@@ -287,8 +298,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @param asset The ERC20, reserve asset token.
     /// @dev Desactivates functions `liquidate`, `deposit` and `borrow`.
     function protectReserve(address asset) external onlyConfigurator {
-        Reserve storage reserve = reserves[asset]; 
-        reserve.state = State.Protected;
+        DataTypes.Reserve storage reserve = reserves[asset]; 
+        reserve.status = DataTypes.ReserveStatus.Protected;
 
         emit ReserveProtected(asset);
     }
@@ -297,8 +308,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @param asset The ERC20, reserve asset token.
     /// @dev To activate all functions for a single reserve.
     function activateReserve(address asset) external onlyConfigurator {
-        Reserve storage reserve = reserves[asset]; 
-        reserve.state = State.Active;  
+        DataTypes.Reserve storage reserve = reserves[asset]; 
+        reserve.status = DataTypes.ReserveStatus.Active;  
 
         emit ReserveActivated(asset);
     }
@@ -308,7 +319,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @dev Delegate call to the CM contract to retreive data.
     /// @return Returns an array of the user borrow ids.
     function getUserBorrows(address user) public returns (uint256[] memory) {
-        (bool success , bytes memory data) = collateralManagerAddress.delegatecall(
+        (,bytes memory data) = collateralManagerAddress.delegatecall(
             abi.encodeWithSignature("getUserBorrows(address)", user)); 
         return abi.decode(data, (uint256[])); 
     }
@@ -348,8 +359,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @param asset The ERC20 token price the NFT in.
     /// @dev This is also a WIP as calls getLatestPriceMock and getFloorPriceMock.
     /// @return Returns the floorPrice of the NFT project in terms of the asset provided. 
-    function getFloorPrice(address collateral, address asset) public returns (uint256) {
-        uint256 floorPrice = getFloorPriceMock(collateral);
+    function getFloorPrice(address collateral, address asset) public view returns (uint256) {
+        uint256 floorPrice = 60; //getFloorPriceMock(collateral); TODO: connect Oracle
         string memory pricePair = pricePairs[asset];
         if (keccak256(abi.encodePacked(pricePair))!=keccak256(abi.encodePacked(""))) {
             (int price, uint8 decimal) = TokenPriceOracle(tokenPriceOracleAddress).getLatestPriceMock(pricePair);
@@ -370,21 +381,11 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
         return (success, abi.decode(data, (uint256)));
     }
 
-    /// @notice Get the Token Price oracle contract address.
+    /// @notice Get the Token Price Oracle contract address.
     /// @dev Uses a state variable.
     /// @return Returns the Token price oracle contract address.
-    function gettokenPriceOracleAddress() public view returns (address) {
+    function getTokenPriceOracleAddress() public view returns (address) {
         return tokenPriceOracleAddress;
-    }
-
-    /// @notice Mock Oracle for NFT fLoor prices (WIP2).
-    /// @param collateral ERC721 token address.
-    /// @dev To be removed once chainlink nodes are hosting our external adapter.
-    /// @return Always returns 60. 
-    function getFloorPriceMock(address collateral) public view returns (uint256) {
-        string memory collection = openseaCollection[collateral];
-        uint256 floorPrice = _mockFloorOracle();
-        return floorPrice;
     }
 
     /// @notice Get the Collateral Manager contract address.
@@ -392,13 +393,6 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     /// @return Returns the Collateral Manager contract address.
     function getCollateralManagerAddress() public view returns (address) {
         return collateralManagerAddress;
-    }
-
-    /// @notice Mock Oracle for NFT fLoor prices (WIP1).
-    /// @dev To be removed once chainlink nodes are hosting our external adapter.
-    /// @return Always returns 60. 
-    function _mockFloorOracle() internal pure returns (uint256) {
-        return 60.0;
     }
 
     /// @notice Private function to initialize a reserve.
@@ -413,8 +407,8 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     ) 
         private
     {
-        Reserve memory reserve;
-        reserve.state = State.Active;
+        DataTypes.Reserve memory reserve;
+        reserve.status = DataTypes.ReserveStatus.Active;
         reserve.nTokenAddress = nTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
         reserves[asset] = reserve;
@@ -432,7 +426,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     ) 
         private 
     {
-        Reserve memory reserve = reserves[asset];  
+        DataTypes.Reserve memory reserve = reserves[asset];  
         address nToken = reserve.nTokenAddress; 
         IERC20(asset).transferFrom(_msgSender(), nToken, amount);
         INToken(nToken).mint(_msgSender(), amount);
@@ -450,7 +444,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     ) 
         private 
     {
-        Reserve memory reserve = reserves[asset];        
+        DataTypes.Reserve memory reserve = reserves[asset];        
         address nToken = reserve.nTokenAddress;
         uint256 nTokenBalance = INToken(nToken).balanceOf(_msgSender());
         require(nTokenBalance >= amount, "Insufficient nToken balance");
@@ -478,7 +472,7 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     ) 
         private
     {
-        Reserve memory reserve = reserves[asset];  
+        DataTypes.Reserve memory reserve = reserves[asset];  
         uint256 repaymentAmount = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52));
         // uint256 collateralFloorPrice = _mockOracle();
         uint256 collateralFloorPrice = getFloorPrice(collateral, asset);
@@ -514,16 +508,57 @@ contract LendingPool is Context, LendingPoolStorage, AccessControl, Pausable {
     ) 
         private 
     {
-        Reserve memory reserve = reserves[asset]; 
+        DataTypes.Reserve memory reserve = reserves[asset]; 
         INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
 
         ICollateralManager(collateralManagerAddress).withdraw(
             borrowId, 
             asset, 
-            repaymentAmount);
+            repaymentAmount
+        );
 
         IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
+    }
+
+    /// @notice Private function to liquidate a borrow position.
+    /// @param asset The ERC20 token to be borrowed.
+    /// @param liquidationAmount The amount of ERC20 tokens to be paid.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @dev Transfers assets back to the reserve before burning debtTokens and retreiving collateral for the liquidator. 
+    function _liquidate(
+        address asset,
+        uint256 liquidationAmount,
+        uint256 borrowId
+    ) 
+        private
+    {
+        DataTypes.Reserve memory reserve = reserves[asset];  
+        DataTypes.Borrow memory borrowItem = ICollateralManager(
+            collateralManagerAddress
+        ).getBorrow(borrowId);
+
+        address borrower = borrowItem.borrower;
+        uint256 repaymentAmount = borrowItem.repaymentAmount;
+
+        IERC20(asset).transferFrom(_msgSender(), reserve.nTokenAddress, repaymentAmount);
+
+        uint256 remainder = liquidationAmount.sub(repaymentAmount);
+        uint256 feeAmount = remainder.mul(liquidationFee).div(100);
+        uint256 reimbursementAmount = remainder.sub(feeAmount);
+
+        IERC20(asset).transferFrom(_msgSender(), address(this), feeAmount);
+        IERC20(asset).transferFrom(_msgSender(), borrower, reimbursementAmount);
+        IDebtToken(reserve.debtTokenAddress).burnFrom(borrower, repaymentAmount);
+        
+        ICollateralManager(collateralManagerAddress).liquidate(
+            borrowId, 
+            asset, 
+            repaymentAmount,
+            _msgSender()
+        );
+
+        emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
     }
 }

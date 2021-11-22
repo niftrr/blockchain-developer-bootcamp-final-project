@@ -30,6 +30,13 @@ interface ILendingPool {
     ) 
         external;
 
+    function liquidate(
+        address asset,
+        uint256 liquidationAmount, 
+        uint256 borrowId
+    ) 
+        external;
+
     function pause() external;
 
     function unpause() external;

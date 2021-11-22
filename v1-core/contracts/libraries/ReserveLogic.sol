@@ -18,7 +18,7 @@ library ReserveLogic {
     // using ReserveLogic for DataTypes.ReserveData;
 
     function init(
-        DataTypes.ReserveData storage reserve,
+        DataTypes.Reserve storage reserve,
         address nTokenAddress,
         address debtTokenAddress
     ) external {
@@ -26,7 +26,7 @@ library ReserveLogic {
         reserve.debtTokenAddress = debtTokenAddress;
     }
 
-    function updateState(DataTypes.ReserveData storage reserve) internal {
+    function updateState(DataTypes.Reserve storage reserve) internal {
         // TODO
     }
 }

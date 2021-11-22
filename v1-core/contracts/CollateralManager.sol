@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
+
+import { DataTypes } from './libraries/DataTypes.sol';
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
 import "hardhat/console.sol";
@@ -27,30 +29,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     
     Counters.Counter private counter;
 
-    enum State { 
-        Active,
-        Repaid,
-        Liquidated
-    }
-    
-    struct Collateral {
-        address erc721Token;
-        uint256 tokenId;
-    }
-
-    struct Borrow {
-        State state;
-        Collateral collateral;
-        address borrower;
-        address erc20Token;
-        uint256 borrowAmount;
-        uint256 repaymentAmount;
-        uint256 interestRate;
-        uint256 liquidationPrice;
-        uint256 maturity;
-    }
-
-    mapping(uint256 => Borrow) public borrows;
+    mapping(uint256 => DataTypes.Borrow) public borrows;
     mapping(address => uint256[]) public userBorrows;
     mapping(address => uint256) public liquidationThresholds;
     mapping(address => uint256) public interestRates;
@@ -75,6 +54,18 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param id The unique identifier for the Borrow.
     event WithdrawCollateral(
         address borrower,
+        address erc721Token, 
+        uint256 tokenId, 
+        uint256 id
+    );
+
+    /// @notice Emitted when collateral is liquidated to close a Borrow position.
+    /// @param liquidator The liquidator account.
+    /// @param erc721Token The ERC721 token for the NFT project.
+    /// @param tokenId The unique identifier for the NFT project item.
+    /// @param id The unique identifier for the Borrow.
+    event LiquidateCollateral(
+        address liquidator,
         address erc721Token, 
         uint256 tokenId, 
         uint256 id
@@ -120,7 +111,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     }
 
     modifier whenBorrowActive(uint256 _id) {
-        require(borrows[_id].state == State.Active, "Borrow is not active");
+        require(borrows[_id].status == DataTypes.BorrowStatus.Active, "Borrow is not active");
         _;
     }
 
@@ -158,9 +149,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 id = counter.current();
         uint256 liquidationPrice = collateralFloorPrice.div(getLiquidationThreshold(erc721Token));
 
-        borrows[id] = Borrow({
-            state: State.Active,
-            collateral: Collateral({
+        borrows[id] = DataTypes.Borrow({
+            status: DataTypes.BorrowStatus.Active,
+            collateral: DataTypes.Collateral({
                 erc721Token: erc721Token,
                 tokenId: tokenId
             }),
@@ -210,7 +201,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 tokenId = borrows[_id].collateral.tokenId;
         IERC721(erc721Token).transferFrom(address(this), borrower, tokenId);
 
-        borrows[_id].state = State.Repaid;
+        borrows[_id].status = DataTypes.BorrowStatus.Repaid;
         
         emit WithdrawCollateral(
             borrower,
@@ -219,6 +210,44 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
             _id
         );
     }
+
+    /// @notice To liquidate a borrow position and retreive the ERC721 token collateral.
+    /// @param _id The borrower id.
+    /// @param _asset The ERC20 token to be repaid.
+    /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
+    /// @param _liquidator The liquidator.
+    /// @dev Removes a borrow and transfers the ERC721 from escrow to the liquidator. 
+    function liquidate(
+        uint256 _id, 
+        address _asset, 
+        uint256 _repaymentAmount, 
+        address _liquidator
+    )
+        public 
+        onlyLendingPool
+        whenNotPaused 
+        whenBorrowActive(_id)
+    {
+        address borrowAsset = borrows[_id].erc20Token;
+        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
+        require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
+        require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
+
+        console.log('CM');
+
+        address erc721Token = borrows[_id].collateral.erc721Token;
+        uint256 tokenId = borrows[_id].collateral.tokenId;
+        IERC721(erc721Token).transferFrom(address(this), _liquidator, tokenId);
+
+        borrows[_id].status = DataTypes.BorrowStatus.Liquidated;
+        
+        emit LiquidateCollateral(
+            _liquidator,
+            erc721Token,
+            tokenId,
+            _id
+        );
+    } 
 
     /// @notice Sets the interest rate APY for a given ERC721 token.
     /// @param erc721Token The ERC721 token for which to set the interest rate.
@@ -279,7 +308,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @notice Retreives the Borrow for a given id.
     /// @dev Uses a mapping and returns a struct.
     /// @return Returns the Borrow for a given id.
-    function getBorrow(uint256 borrowId) public view returns (Borrow memory) {
+    function getBorrow(uint256 borrowId) public view returns (DataTypes.Borrow memory) {
         return borrows[borrowId];
     }
 
