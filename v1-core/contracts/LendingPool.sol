@@ -8,7 +8,6 @@ import { INToken } from "./interfaces/INToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
-import { ReserveLogic } from './libraries/ReserveLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { TokenPriceOracle } from './TokenPriceOracle.sol';
 

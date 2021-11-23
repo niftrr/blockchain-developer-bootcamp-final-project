@@ -113,8 +113,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
         public 
         virtual 
         override 
-        onlyLendingPool 
-        whenNotPaused
     {
         to;
         asset;
@@ -132,8 +130,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
         public 
         virtual 
         override 
-        onlyLendingPool
-        whenNotPaused
         returns (bool) 
     {
         from;

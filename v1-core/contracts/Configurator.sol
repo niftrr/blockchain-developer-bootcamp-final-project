@@ -156,7 +156,7 @@ contract Configurator is Context, AccessControl {
     /// @dev This can be set only once. Should be run only after `connectCollateralManager`.
     function connectLendingPoolCollateralManager() 
         public
-        onlyEmergencyAdmin
+        onlyAdmin
         whenLendingPoolConnected
         whenCollateralManagerConnected
     {
@@ -172,7 +172,7 @@ contract Configurator is Context, AccessControl {
         address tokenPriceOracleAddress
     ) 
         public
-        onlyEmergencyAdmin
+        onlyAdmin
         whenLendingPoolConnected
     {
         ILendingPool(lendingPoolAddress).connectTokenPriceOracle(

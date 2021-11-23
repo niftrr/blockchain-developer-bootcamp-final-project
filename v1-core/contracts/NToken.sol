@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
 /// @author Niftrr
 /// @notice Allows for the tracking of asset positions for purpose the yield accrual.
 /// @dev NTokens follow the ERC20 standard in that they can be transferred and traded elsewhere.
-contract NToken is Context, INToken, AccessControl, ERC20Pausable {
+contract NToken is Context, ERC20Pausable, INToken, AccessControl {
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
 
