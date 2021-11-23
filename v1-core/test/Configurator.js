@@ -313,7 +313,7 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
 
 describe('Configurator >> LendingPool >> connectCollateralManager()', function() {
     
-    it('should set the Collateral Manager address when caller is emergency admin', async function () {
+    it('should set the Collateral Manager address when caller is admin', async function () {
         // Connect CollateralManager in Configurator
         hhConfigurator
         .connect(admin)
@@ -323,7 +323,7 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
         
         await expect(
             hhConfigurator
-            .connect(emergencyAdmin)
+            .connect(admin)
             .connectLendingPoolCollateralManager(
             ))
             .to.emit(hhLendingPool, "CollateralManagerConnected")
@@ -338,19 +338,19 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
         )
 
         hhConfigurator
-            .connect(emergencyAdmin)
+            .connect(admin)
             .connectLendingPoolCollateralManager(
             )
         
         await expect(
             hhConfigurator
-            .connect(emergencyAdmin)
+            .connect(admin)
             .connectLendingPoolCollateralManager(
             ))
             .to.be.revertedWith("Collateral Manager already connected");
     });
 
-    it('should revert when caller is not emergency admin', async function () {
+    it('should revert when caller is not admin', async function () {
         // Connect CollateralManager in Configurator
         hhConfigurator
         .connect(admin)
@@ -359,16 +359,16 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
         )
 
         await expect(
-            hhConfigurator.connect(admin)
+            hhConfigurator.connect(alice)
             .connectLendingPoolCollateralManager(
             ))
-            .to.be.revertedWith("Caller is not emergency admin.");
+            .to.be.revertedWith("Caller is not admin.");
     });
 })
 
 describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() {
 
-    it('should set the Token Price Oracle address when caller is emergencyAdmin', async function () {
+    it('should set the Token Price Oracle address when caller is admin', async function () {
         // Connect CollateralManager in Configurator
         hhConfigurator
         .connect(admin)
@@ -378,14 +378,14 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
 
         await expect(
             hhConfigurator
-            .connect(emergencyAdmin)
+            .connect(admin)
             .connectLendingPoolTokenPriceOracle(
                 hhCollateralManager.address
             ))
             .to.emit(hhLendingPool, "TokenPriceOracleConnected")
     });
 
-    it('should revert when caller is not emergencyAdmin', async function () {
+    it('should revert when caller is not admin', async function () {
         // Connect CollateralManager in Configurator
         hhConfigurator
             .connect(admin)
@@ -395,11 +395,11 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
     
         await expect(
             hhConfigurator
-            .connect(admin)
+            .connect(alice)
             .connectLendingPoolTokenPriceOracle(
                 hhCollateralManager.address
             ))
-            .to.be.revertedWith("Caller is not emergency admin.");
+            .to.be.revertedWith("Caller is not admin.");
     });
 })
 /* 
