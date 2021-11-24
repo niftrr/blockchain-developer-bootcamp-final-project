@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: BUSL-1.1
-pragma solidity ^0.8.0;
+pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
@@ -16,7 +17,7 @@ import "hardhat/console.sol";
 /// @author Niftrr
 /// @notice Allows for the deposit/withdraw of collateral to open/close a borrow position
 /// @dev Currently in development
-contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable {
+contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
 
@@ -24,14 +25,14 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
 
     address[] public whitelist;
-    
-    Counters.Counter private counter;
 
     mapping(uint256 => DataTypes.Borrow) public borrows;
     mapping(address => uint256[]) public userBorrows;
     mapping(address => uint256) public liquidationThresholds;
     mapping(address => uint256) public interestRates;
     mapping(address => bool) private whitelisted;
+
+    Counters.Counter private counter;
     
     /// @notice Emitted when collateral is deposited to open a Borrow position.
     /// @param borrower The borrower account.
@@ -124,6 +125,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param collateralFloorPrice The current floor price of the ERC721 token.
     /// @param maturity The borrow maturity timestamp.
     /// @dev Calls internal `_deposit` function if modifiers are succeeded.  
+    /// @return Boolean for success
     function deposit(
         address borrower,
         address erc20Token,
@@ -136,10 +138,12 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 maturity
     ) 
         external 
+        nonReentrant
         onlyLendingPool
         whenNotPaused
+        returns (bool)
     {
-        _deposit(
+        bool success = _deposit(
             borrower,
             erc20Token,
             erc721Token, 
@@ -150,6 +154,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
             collateralFloorPrice,
             maturity
         );
+        return success;
     }
 
     /// @notice To withdraw an ERC721 token from escrow and removes a borrow position.
@@ -163,15 +168,19 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 _repaymentAmount
     ) 
         external 
+        nonReentrant
         onlyLendingPool 
         whenNotPaused 
         whenBorrowActive(_id)
+        returns (bool)
     {
-        _withdraw(
+        bool success = _withdraw(
             _id, 
             _asset, 
             _repaymentAmount
         );
+
+        return success;
     }
 
     /// @notice To retrieve the ERC721 token collateral for a borrow position liquidator.
@@ -180,6 +189,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @param _liquidator The liquidator.
     /// @dev Calls internal `_retrieve` function if modifiers are succeeded. 
+    /// @return Boolean for success.
     function retrieve(
         uint256 _id, 
         address _asset, 
@@ -187,16 +197,20 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         address _liquidator
     )
         public 
+        nonReentrant
         onlyLendingPool
         whenNotPaused 
         whenBorrowActive(_id)
+        returns (bool)
     {
-        _retrieve(
+        bool success = _retrieve(
             _id, 
             _asset, 
             _repaymentAmount, 
             _liquidator 
         );
+
+        return success;
     } 
 
     /// @notice Pauses the contract deposit and withdraw functions.
@@ -308,6 +322,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param collateralFloorPrice The current floor price of the ERC721 token.
     /// @param maturity The borrow maturity timestamp.
     /// @dev Transfers the ERC721 to this contract address for escrow and creates a borrow. 
+    /// @return Boolean for success.
     function _deposit(
         address borrower,
         address erc20Token,
@@ -320,9 +335,14 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         uint256 maturity
     ) 
         private 
+        returns (bool)
     {
+        address newOwner;
         require(whitelisted[erc721Token], "NFT not whitelisted");
+        
         IERC721(erc721Token).transferFrom(borrower, address(this), tokenId);
+        newOwner = IERC721(erc721Token).ownerOf(tokenId);
+        require(newOwner == address(this), "UNSUCCESSFUL_TRANSFER");
 
         uint256 id = counter.current();
         uint256 liquidationPrice = collateralFloorPrice.div(getLiquidationThreshold(erc721Token));
@@ -351,20 +371,25 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
             tokenId,
             id
         );
+
+        return true;
     }    
 
     /// @notice Private function to withdraw ERC721 token from escrow and remove a borrow.
     /// @param _id The borrower id.
     /// @param _asset The ERC20 token to be repaid.
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
-    /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower. 
+    /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower.
+    /// @return Boolean for success. 
     function _withdraw(
         uint256 _id, 
         address _asset, 
         uint256 _repaymentAmount
     ) 
         private
+        returns (bool)
     {
+        address newOwner;
         address borrowAsset = borrows[_id].erc20Token;
         uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
         require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
@@ -373,7 +398,10 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         address borrower = borrows[_id].borrower;
         address erc721Token = borrows[_id].collateral.erc721Token;
         uint256 tokenId = borrows[_id].collateral.tokenId;
+
         IERC721(erc721Token).transferFrom(address(this), borrower, tokenId);
+        newOwner = IERC721(erc721Token).ownerOf(tokenId);
+        require(newOwner == borrower, "UNSUCCESSFUL_TRANSFER");
 
         borrows[_id].status = DataTypes.BorrowStatus.Repaid;
         
@@ -383,6 +411,8 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
             tokenId,
             _id
         );
+
+        return true;
     }
 
     /// @notice Private function to retrieve the collateral for a borrow liquidator.
@@ -391,6 +421,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @param _liquidator The liquidator.
     /// @dev Removes a borrow and transfers the ERC721 from escrow to the liquidator. 
+    /// @return Boolean for success.
     function _retrieve(
         uint256 _id, 
         address _asset, 
@@ -398,7 +429,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
         address _liquidator
     )
         private
+        returns (bool)
     {
+        address newOwner;
         address borrowAsset = borrows[_id].erc20Token;
         uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
         require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
@@ -406,7 +439,10 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
 
         address erc721Token = borrows[_id].collateral.erc721Token;
         uint256 tokenId = borrows[_id].collateral.tokenId;
+
         IERC721(erc721Token).transferFrom(address(this), _liquidator, tokenId);
+        newOwner = IERC721(erc721Token).ownerOf(tokenId);
+        require(newOwner == _liquidator, "UNSUCCESSFUL_TRANSFER");
 
         borrows[_id].status = DataTypes.BorrowStatus.Liquidated;
         
@@ -416,5 +452,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable 
             tokenId,
             _id
         );
+
+        return true;
     } 
 }

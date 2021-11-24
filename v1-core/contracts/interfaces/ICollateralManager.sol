@@ -20,9 +20,16 @@ interface ICollateralManager {
         uint256 liquidationPrice,
         uint256 maturity
     ) 
-        external;
+        external 
+        returns (bool success);
 
-    function withdraw(uint256 _id, address asset, uint256 repaymentAmount) external;
+    function withdraw(
+        uint256 _id, 
+        address asset, 
+        uint256 repaymentAmount
+    ) 
+        external
+        returns (bool success);
 
     function retrieve(
         uint256 _id, 
@@ -30,7 +37,8 @@ interface ICollateralManager {
         uint256 repaymentAmount, 
         address liquidator
     ) 
-        external;
+        external
+        returns (bool success);
     
     function setInterestRate(address _erc721Token, uint256 interestRate) external;
     

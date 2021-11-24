@@ -44,7 +44,7 @@ The `Configurator` and `LendingPool` contracts use interfaces to call and update
 
 ## Inheritance,  Interfaces and Libraries
 
-`Context`, `AccessControl` and `Pausable` contracts inherited from OpenZeppelin. 
+`Context`, `AccessControl`, `Pausable` and `ReentrancyGuard` contracts inherited from OpenZeppelin. 
 * `Context` used to enable meta-transactions sent by a trusted forwarder.
 * `AccessControl` used to set role-based access control.
 * `Pausable` used to enable the pause / unpause of contracts.
@@ -62,7 +62,7 @@ The `Configurator` and `LendingPool` contracts use interfaces to call and update
 
 ### `LendingPool`
 
-* Inherits: `Context`, `LendingPoolStorage`, `AcessControl` and `Pausable`.
+* Inherits: `Context`, `LendingPoolStorage`, `AcessControl`, `Pausable` and `ReentrancyGuard`.
 * Uses interfaces: `IERC20`, `INToken`, `IDebtToken`, `ICollateralManager`
 * Uses library: `DataTypes` 
 

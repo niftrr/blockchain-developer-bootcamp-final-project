@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BUSL-1.1
-pragma solidity ^0.8.0;
+pragma solidity 0.8.9;
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
@@ -48,9 +48,10 @@ contract TokenPriceOracle {
     /// @param pricePair The pricePair, e.g. ETHUSD.
     /// @dev Mock used for local development.
     /// @return Returns a mock of the latest price and number of decimal places.
-    function getLatestPriceMock(string memory pricePair) public view returns (int, uint8) {
+    function getLatestPriceMock(string memory pricePair) public view returns (bool, int, uint8) {
         int price;
         uint8 decimal;
+        bool success = true;
         if (keccak256(abi.encodePacked(pricePair))==keccak256(abi.encodePacked("ETHUSD"))) {
             price = 400000000000;    
             decimal = decimals["ETHUSD"];
@@ -67,7 +68,7 @@ contract TokenPriceOracle {
             price = 2500000000000000;   
             decimal = decimals["USDCETH"];
         }
-        return (price, decimal);
+        return (success, price, decimal);
     }
 
     /// @notice Gets the the latest price for a given pricePair.

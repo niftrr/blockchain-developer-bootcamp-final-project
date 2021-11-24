@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: BUSL-1.1
-pragma solidity ^0.8.0;
+pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -10,7 +11,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
 /// @author Niftrr
 /// @notice Allows for the tracking of debt for the purposes of APY calculations.
 /// @dev Debt tokens are non-transferable and so diverge from the ERC20 standard.
-contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
+contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, ReentrancyGuard {
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
 
@@ -40,6 +41,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
     /// @param to The account.
     /// @param amount The amount of debt tokens.
     /// @dev Calls the underlying ERC20 `_mint` function.
+    /// @return Boolean for execution success.
     function mint(
         address to, 
         uint256 amount
@@ -47,16 +49,20 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
         public 
         virtual 
         override 
+        nonReentrant
         onlyLendingPool 
         whenNotPaused 
+        returns (bool)
     {
         _mint(to, amount);
+        return true;
     }
 
     /// @notice Burns an amount of debt tokens from a given account.
     /// @param account The account.
     /// @param amount The amount of debt tokens.
     /// @dev Calls the underlying ERC20 `_burn` function.
+    /// @return Boolean for execution success.
     function burnFrom(
         address account,
         uint256 amount
@@ -64,10 +70,13 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
         public 
         virtual 
         override 
+        nonReentrant
         onlyLendingPool
         whenNotPaused 
+        returns (bool)
     {
         _burn(account, amount);
+        return true;
     }
 
     /// @notice Burn unsupported.
@@ -77,9 +86,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
     ) 
         public 
         virtual 
-        override 
-        onlyLendingPool 
-        whenNotPaused 
+        override   
     {
         amount;
         revert('BURN_NOT_SUPPORTED');
@@ -87,6 +94,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
 
     /// @notice Approve unsupported.
     /// @dev Overrides the ERC20 `approve` function to make unsupported.
+    /// @return Boolean for execution success.
     function approve(
         address spender, 
         uint256 amount
@@ -94,8 +102,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
         public 
         virtual 
         override 
-        onlyLendingPool 
-        whenNotPaused
         returns (bool) 
     {
         spender;
@@ -122,6 +128,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl {
 
     /// @notice TransferFrom unsupported.
     /// @dev Overrides the ERC20 `transferFrom` function to make unsupported.
+    /// @return Boolean for execution success.
     function transferFrom(
         address from, 
         address to, 

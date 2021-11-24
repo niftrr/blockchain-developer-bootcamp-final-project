@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: BUSL-1.1
-pragma solidity ^0.8.0;
+pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import { INToken } from './interfaces/INToken.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
@@ -11,7 +12,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
 /// @author Niftrr
 /// @notice Allows for the tracking of asset positions for purpose the yield accrual.
 /// @dev NTokens follow the ERC20 standard in that they can be transferred and traded elsewhere.
-contract NToken is Context, ERC20Pausable, INToken, AccessControl {
+contract NToken is Context, ERC20Pausable, INToken, AccessControl, ReentrancyGuard {
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
 
@@ -49,39 +50,57 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
     /// @param to The account.
     /// @param amount The amount of NTokens.
     /// @dev Calls the underlying ERC20 `_mint` function.
+    /// @return Boolean for execution success.
     function mint(
         address to, 
+        uint256 amount
+    ) 
+        external 
+        virtual 
+        override 
+        nonReentrant
+        onlyLendingPool 
+        whenNotPaused 
+        returns (bool)
+    {
+        _mint(to, amount);
+        return true;
+    }
+
+    /// @notice Burns an amount of NTokens from the _msgSender() account.
+    /// @param amount The amount of NTokens.
+    /// @dev Calls the underlying ERC20 `_burn` function.
+    /// @return Boolean for execution success.
+    function burn(
         uint256 amount
     ) 
         public 
         virtual 
         override 
         onlyLendingPool 
-        whenNotPaused 
+        whenNotPaused  
+        returns (bool)
     {
-        _mint(to, amount);
-    }
-
-    /// @notice Burns an amount of NTokens from the _msgSender() account.
-    /// @param amount The amount of NTokens.
-    /// @dev Calls the underlying ERC20 `_burn` function.
-    function burn(uint256 amount) public virtual override onlyLendingPool whenNotPaused {
         _burn(_msgSender(), amount);
+        return true;
     }
 
     /// @notice Burns an amount of NTokens from a given account.
     /// @param account The account.
     /// @param amount The amount of debt tokens.
     /// @dev Calls the underlying ERC20 `_burn` function.
+    /// @return Boolean for execution success.
     function burnFrom(
         address account, 
         uint256 amount
     ) 
-        public 
+        external 
         virtual 
         override 
+        nonReentrant
         onlyLendingPool 
         whenNotPaused 
+        returns (bool)
     {
         uint256 currentAllowance = allowance(account, _msgSender());
         require(currentAllowance >= amount, "ERC20: burn amount exceeds allowance");
@@ -89,6 +108,7 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
             _approve(account, _msgSender(), currentAllowance - amount);
         }
         _burn(account, amount);
+        return true;
     }
 
     /// @notice Transfer of Asset tokens from the reserve.
@@ -96,6 +116,7 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
     /// @param asset The Asset token.
     /// @param amount The amount of Asset tokens.
     /// @dev Asset tokens reclaimed from the NToken reserve.
+    /// @return Boolean for execution success.
     function reserveTransfer(
         address to, 
         address asset, 
@@ -104,13 +125,19 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
         external 
         virtual 
         override 
+        nonReentrant
         onlyLendingPool 
         whenNotPaused
+        returns (bool)
     {
+        bool success;
         require(IERC20(asset).balanceOf(address(this)) >= amount, "Insufficient supply of asset token in reserve.");
-        IERC20(asset).approve(to, amount);
-        IERC20(asset).transfer(to, amount);
+        success = IERC20(asset).approve(to, amount);
+        require(success, "UNSUCCESSFUL_APPROVE");
+        success = IERC20(asset).transfer(to, amount);
+        require(success, "UNSUCCESSFUL_TRANSFER");
         emit ReserveTransfer(address(this), to, amount);
+        return success;
     }
 
     /// @notice Transfers Asset tokens to the reserve.
@@ -118,6 +145,7 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
     /// @param asset The Asset token.
     /// @param amount The amount of Asset tokens.
     /// @dev Asset tokens deposited to the NToken reserve.
+    /// @return Boolean for execution success.
     function reserveTransferFrom(
         address from, 
         address asset, 
@@ -126,12 +154,17 @@ contract NToken is Context, ERC20Pausable, INToken, AccessControl {
         external 
         virtual 
         override 
+        nonReentrant
         onlyLendingPool 
         whenNotPaused
+        returns (bool)
     {
+        bool success;
         require(IERC20(asset).balanceOf(from) >= amount, "Insufficient user asset token balance.");
-        IERC20(asset).transferFrom(from, address(this), amount);
+        success = IERC20(asset).transferFrom(from, address(this), amount);
+        require(success, "UNSUCCESSFUL_TRANSFER");
         emit ReserveTransfer(from, address(this), amount);
+        return success;
     }
 
     /// @notice Get the current yield; APY (WIP)

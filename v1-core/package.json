@@ -19,13 +19,13 @@
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.1",
-    "hardhat": "^2.6.8",
     "web3": "^1.6.0"
   },
   "dependencies": {
     "@chainlink/contracts": "^0.2.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.7",
     "dotenv": "^10.0.0",
+    "hardhat": "^2.6.8",
     "hardhat-deploy-fake-erc20": "0.0.3-alpha",
     "hardhat-gas-reporter": "^1.0.4",
     "solidity-coverage": "^0.7.17"
