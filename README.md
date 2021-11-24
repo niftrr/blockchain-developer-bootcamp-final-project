@@ -66,10 +66,56 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 ![Asset](assets/nftlend-ui-asset.png?raw=true "Asset")
 
+## Directory Structure
+
+
+    .
+    ├── assets                                      # README assets
+    ├── docs                                        # Documentation directory
+    │   ├── avoiding_common_attacks.md              # Security measures documentation
+    │   ├── deployed_address.txt                    # Deployed smart contract addresses
+    │   └── design_pattern_decisions.md             # Design patterns documentation
+    ├── interface                                   # Front-end interface directory
+    │   ├── components                              # React components directory
+    │   ├── hooks                                   # React hooks directory
+    │   ├── App.jsx                                 # React app
+    │   ├── AppContext.jsx                          # React app state management
+    │   ├── LICENCE                          
+    │   ├── README.md                        
+    │   └── ...   
+    ├── v1-core                                     # Protocol directory
+    │   ├── contracts                               # Smart contracts
+    │   │   ├── interfaces                          # Smart contract interfaces
+    │   │   │   ├── ICollateralManager.sol          # CollateralManager interface
+    │   │   │   ├── IDebtToken.sol                  # DebtToken interface
+    │   │   │   ├── ILendingPool.sol                # LendingPool interface
+    │   │   │   └── INToken.sol                     # NToken interface
+    │   │   ├── libraries                           # Smart contract libraries
+    │   │   │   ├── DataTypes.sol                   # DataTypes library
+    │   │   │   └── ReserveLogic.sol                # ReserveLogic library (WIP)
+    │   │   ├── mocks                               # Mocks directory
+    │   │   │   ├── AssetToken.sol                  # Mock assetToken contract
+    │   │   │   └── NFT.sol                         # Mock NFT contract
+    │   │   ├── CollateralManager.sol               # CollateralManager contract
+    │   │   ├── Configurator.sol                    # Configurator contract
+    │   │   ├── DebtToken.sol                       # DebtToken contract
+    │   │   ├── LendingPool.sol                     # LendingPool contract
+    │   │   ├── LendingPoolEvents.sol               # LendingPoolEvents contract
+    │   │   ├── LendingPoolStorage.sol              # LendingPoolStorage contract
+    │   │   ├── NToken.sol                          # NToken contract
+    │   │   └── TokenPriceOracle.sol                # TokenPriceOracle contract (WIP)
+    │   ├── scripts                                 # Scripts directory
+    │   │   └── deploy.js                           # Deployment script
+    │   ├── test                                    # Unit tests
+    │   ├── LICENCE  
+    │   ├── README.md      
+    │   └── ...  
+    └── ...
+
 ## Instructions
 
-1. Follow the instructions as per [v1-core/README.md](v1-core/README.md).
-2. Follow the instructions as per [interface/README.md](interface/README.md).
+1. Deploy the smart contracts locally by following the instructions in [v1-core/README.md](v1-core/README.md).
+2. Deploy the front-end to localhost by following the instruction in [interface/README.md](interface/README.md).
 
 ## Licensing
 
