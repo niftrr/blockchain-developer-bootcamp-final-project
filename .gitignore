@@ -4,3 +4,5 @@ node_modules/
 *.zip
 *.map
 v1-core-truffle/
+.env
+dist/

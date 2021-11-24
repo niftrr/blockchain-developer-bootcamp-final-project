@@ -1,5 +1,5 @@
 import { useContract } from "./useContract";
-import NFTData from "../../v1-core/artifacts/contracts/NFT.sol/NFT.json";
+import NFTData from "../../v1-core/artifacts/contracts/mocks/NFT.sol/NFT.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";

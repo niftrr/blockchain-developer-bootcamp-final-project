@@ -1,7 +1,7 @@
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useContract } from "./useContract";
-import AssetTokenData from "../../v1-core/artifacts/contracts/AssetToken.sol/AssetToken.json";
+import AssetTokenData from "../../v1-core/artifacts/contracts/mocks/AssetToken.sol/AssetToken.json";
 import { useAppContext } from "../AppContext";
 
 export const useAssetToken = () => {
