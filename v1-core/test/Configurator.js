@@ -319,7 +319,7 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
         .connect(admin)
         .connectCollateralManager(
             hhCollateralManagerAddress
-        )
+        );
         
         await expect(
             hhConfigurator
