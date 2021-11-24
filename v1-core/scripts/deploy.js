@@ -66,8 +66,9 @@ async function main() {
   tokenPriceOracle = await TokenPriceOracle.deploy();
 
   // Get and deploy AssetToken contracts
-  const assetTokenSupply = hre.ethers.utils.parseEther("3000.0");
-  const assetTokenInitialBalance = hre.ethers.utils.parseEther("100.0");
+  const assetTokenSupply = hre.ethers.utils.parseEther("5000000.0");
+  const assetTokenInitialBalance = hre.ethers.utils.parseEther("150000.0");
+  const assetTokenInitialBalanceWETH = hre.ethers.utils.parseEther("200.0");
   const AssetToken = await hre.ethers.getContractFactory('AssetToken');
   // DAI:
   assetTokenDAI = await AssetToken.connect(admin).deploy('DAI Token', 'DAI', assetTokenSupply);
@@ -185,16 +186,41 @@ async function main() {
   configurator.connect(admin).setCollateralManagerInterestRate(nftPUNK.address, 18);
   configurator.connect(admin).setCollateralManagerInterestRate(nftBAYC.address, 20);
 
-  // Transfer funds to acc1 and acc2
-  await assetTokenDAI.connect(admin).transfer(acc1.address, assetTokenInitialBalance);
-  await assetTokenDAI.connect(admin).transfer(acc2.address, assetTokenInitialBalance);
-  await assetTokenETH.connect(admin).transfer(acc1.address, assetTokenInitialBalance);
-  await assetTokenETH.connect(admin).transfer(acc2.address, assetTokenInitialBalance);
-  await assetTokenUSDC.connect(admin).transfer(acc1.address, assetTokenInitialBalance);
-  await assetTokenUSDC.connect(admin).transfer(acc2.address, assetTokenInitialBalance);
+  // Transfer funds to acc0, acc1 and acc2
+  const accDict = {0: acc0, 1: acc1, 2: acc2}
+  const tokenDict = {
+    "DAI": assetTokenDAI.address,
+    "USDC": assetTokenUSDC.address,
+    "WETH": assetTokenETH.address
+  }
+  function swap(_dict){ 
+    var ret = {};
+    for(var key in _dict){
+      ret[_dict[key]] = key;
+    }
+    return ret;
+  }
+  const inverseTokenDict = swap(tokenDict);
+
+  async function transfer(accNum, token) {
+    let transferAmount = assetTokenInitialBalance
+    if (inverseTokenDict[token.address]=="WETH") {
+      transferAmount = assetTokenInitialBalanceWETH;
+    }
+    await token.connect(admin).transfer(accDict[accNum].address, transferAmount);
+    console.log(`Transferred acc${accNum} (${accDict[accNum].address}) ${transferAmount/10**18} ${inverseTokenDict[token.address]} (${token.address})`)
+  }
+  await transfer(0, assetTokenDAI);
+  await transfer(0, assetTokenUSDC);
+  await transfer(0, assetTokenETH);
+  await transfer(1, assetTokenDAI);
+  await transfer(1, assetTokenUSDC);
+  await transfer(1, assetTokenETH);
+  await transfer(2, assetTokenDAI);
+  await transfer(2, assetTokenUSDC);
+  await transfer(2, assetTokenETH);
 
   // Mint NFTs to acc1 and acc2
-  const accDict = {0: acc0, 1: acc1, 2: acc2}
   const nftDict = {"PUNK": nftPUNK, "BAYC": nftBAYC}
   async function mint(nftName, accNum, tokenId) {
     const nft = nftDict[nftName];
