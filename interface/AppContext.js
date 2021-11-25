@@ -4,20 +4,20 @@ import App from "./App";
 const initialContext = {
     debtTokenBalanceDAI: "--",
     setDebtTokenBalanceDAI: () => {},
-    debtTokenBalanceETH: "--",
-    setDebtTokenBalanceETH: () => {},
+    debtTokenBalanceWETH: "--",
+    setDebtTokenBalanceWETH: () => {},
     debtTokenBalanceUSDC: "--",
     setDebtTokenBalanceUSDC: () => {},
     nTokenBalanceDAI: "--",
     setNTokenBalanceDAI: () => {},
-    nTokenBalanceETH: "--",
-    setNTokenBalanceETH: () => {},
+    nTokenBalanceWETH: "--",
+    setNTokenBalanceWETH: () => {},
     nTokenBalanceUSDC: "--",
     setNTokenBalanceUSDC: () => {},
     nTokenYieldDAI: "--",
     setNTokenYieldDAI: () => {},
-    nTokenYieldETH: "--",
-    setNTokenYieldETH: () => {},
+    nTokenYieldWETH: "--",
+    setNTokenYieldWETH: () => {},
     nTokenYieldUSDC: "--",
     setNTokenYieldUSDC: () => {},
     userBorrows: {},
@@ -44,7 +44,7 @@ const initialContext = {
     setBorrowCollRatio: () => {},
     borrowAPR: "--",
     setBorrowAPR: () => {},
-    borrowToken: "ETH",
+    borrowToken: "WETH",
     setBorrowToken: () => {},
     borrowAmount: "--",
     setBorrowAmount: () => {},
@@ -68,10 +68,10 @@ const appReducer = (state, { type, payload }) => {
           debtTokenBalanceDAI: payload,
         };
 
-      case "SET_DEBTTOKEN_BALANCE_ETH":
+      case "SET_DEBTTOKEN_BALANCE_WETH":
         return {
           ...state,
-          debtTokenBalanceETH: payload,
+          debtTokenBalanceWETH: payload,
         };
 
       case "SET_DEBTTOKEN_BALANCE_USDC":
@@ -86,10 +86,10 @@ const appReducer = (state, { type, payload }) => {
           nTokenBalanceDAI: payload,
         };
 
-      case "SET_NTOKEN_BALANCE_ETH":
+      case "SET_NTOKEN_BALANCE_WETH":
         return {
           ...state,
-          nTokenBalanceETH: payload,
+          nTokenBalanceWETH: payload,
         };
 
       case "SET_NTOKEN_BALANCE_USDC":
@@ -104,10 +104,10 @@ const appReducer = (state, { type, payload }) => {
           nTokenYieldDAI: payload,
         };
 
-      case "SET_NTOKEN_YIELD_ETH":
+      case "SET_NTOKEN_YIELD_WETH":
         return {
           ...state,
-          nTokenYieldETH: payload,
+          nTokenYieldWETH: payload,
         };
 
       case "SET_NTOKEN_YIELD_USDC":
@@ -244,9 +244,9 @@ export const AppContextProvider = ({ children }) => {
       setDebtTokenBalanceDAI: (balance) => {
         dispatch({ type: "SET_DEBTTOKEN_BALANCE_DAI", payload: balance});
       },
-      debtTokenBalanceETH: store.debtTokenBalanceETH,
-      setDebtTokenBalanceETH: (balance) => {
-        dispatch({ type: "SET_DEBTTOKEN_BALANCE_ETH", payload: balance});
+      debtTokenBalanceWETH: store.debtTokenBalanceWETH,
+      setDebtTokenBalanceWETH: (balance) => {
+        dispatch({ type: "SET_DEBTTOKEN_BALANCE_WETH", payload: balance});
       },
       debtTokenBalanceUSDC: store.debtTokenBalanceUSDC,
       setDebtTokenBalanceUSDC: (balance) => {
@@ -256,9 +256,9 @@ export const AppContextProvider = ({ children }) => {
       setNTokenBalanceDAI: (balance) => {
         dispatch({ type: "SET_NTOKEN_BALANCE_DAI", payload: balance});
       },
-      nTokenBalanceETH: store.nTokenBalanceETH,
-      setNTokenBalanceETH: (balance) => {
-        dispatch({ type: "SET_NTOKEN_BALANCE_ETH", payload: balance});
+      nTokenBalanceWETH: store.nTokenBalanceWETH,
+      setNTokenBalanceWETH: (balance) => {
+        dispatch({ type: "SET_NTOKEN_BALANCE_WETH", payload: balance});
       },
       nTokenBalanceUSDC: store.nTokenBalanceUSDC,
       setNTokenBalanceUSDC: (balance) => {
@@ -268,9 +268,9 @@ export const AppContextProvider = ({ children }) => {
       setNTokenYieldDAI: (_yield) => {
         dispatch({ type: "SET_NTOKEN_YIELD_DAI", payload: _yield});
       },
-      nTokenYieldETH: store.nTokenYieldETH,
-      setNTokenYieldETH: (_yield) => {
-        dispatch({ type: "SET_NTOKEN_YIELD_ETH", payload: _yield});
+      nTokenYieldWETH: store.nTokenYieldWETH,
+      setNTokenYieldWETH: (_yield) => {
+        dispatch({ type: "SET_NTOKEN_YIELD_WETH", payload: _yield});
       },
       nTokenYieldUSDC: store.nTokenYieldUSDC,
       setNTokenYieldUSDC: (_yield) => {

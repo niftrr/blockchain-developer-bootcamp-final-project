@@ -11,42 +11,42 @@ export const useNToken = () => {
     const { isValidNetwork } = useIsValidNetwork();
     // NTokens
     const nTokenContractAddressDAI = process.env.REACT_APP_N_TOKEN_DAI_CONTRACT_ADDRESS; 
-    const nTokenContractAddressETH = process.env.REACT_APP_N_TOKEN_ETH_CONTRACT_ADDRESS; 
     const nTokenContractAddressUSDC = process.env.REACT_APP_N_TOKEN_USDC_CONTRACT_ADDRESS; 
+    const nTokenContractAddressWETH = process.env.REACT_APP_N_TOKEN_WETH_CONTRACT_ADDRESS; 
     // AssetTokens
     const assetTokenContractAddressDAI = process.env.REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS;
-    const assetTokenContractAddressETH = process.env.REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS;
     const assetTokenContractAddressUSDC = process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS;
+    const assetTokenContractAddressWETH = process.env.REACT_APP_ASSET_TOKEN_WETH_CONTRACT_ADDRESS;
     const assetTokenContractAddress = {
         "DAI": assetTokenContractAddressDAI,
-        "ETH": assetTokenContractAddressETH,
-        "USDC": assetTokenContractAddressUSDC
+        "USDC": assetTokenContractAddressUSDC,
+        "WETH": assetTokenContractAddressWETH
     }
     const nTokenABI = NTokenData["abi"];
     const nTokenContractDAI = useContract(nTokenContractAddressDAI, nTokenABI);
-    const nTokenContractETH = useContract(nTokenContractAddressETH, nTokenABI);
     const nTokenContractUSDC = useContract(nTokenContractAddressUSDC, nTokenABI);
+    const nTokenContractWETH = useContract(nTokenContractAddressWETH, nTokenABI);
     const nTokenContract = {
         "DAI": nTokenContractDAI,
-        "ETH": nTokenContractETH,
-        "USDC": nTokenContractUSDC
+        "USDC": nTokenContractUSDC,
+        "WETH": nTokenContractWETH
     }
-    const {setNTokenBalanceDAI, setNTokenBalanceETH, setNTokenBalanceUSDC, 
-        setNTokenYieldDAI, setNTokenYieldETH, setNTokenYieldUSDC, setTxnStatus, 
-        nTokenBalanceDAI, nTokenBalanceETH, nTokenBalanceUSDC,
-        nTokenYieldDAI, nTokenYieldETH, nTokenYieldUSDC} = useAppContext();
+    const {setNTokenBalanceDAI, setNTokenBalanceWETH, setNTokenBalanceUSDC, 
+        setNTokenYieldDAI, setNTokenYieldWETH, setNTokenYieldUSDC, setTxnStatus, 
+        nTokenBalanceDAI, nTokenBalanceWETH, nTokenBalanceUSDC,
+        nTokenYieldDAI, nTokenYieldWETH, nTokenYieldUSDC} = useAppContext();
 
     const fetchNTokenBalance = async (ccy) => {
         switch(ccy) {
             case "DAI":
                 const nTokenBalanceDAI = await nTokenContractDAI.balanceOf(account);
                 setNTokenBalanceDAI(formatUnits(nTokenBalanceDAI, 18));
-            case "ETH": 
-                const nTokenBalanceETH = await nTokenContractETH.balanceOf(account);
-                setNTokenBalanceETH(formatUnits(nTokenBalanceETH, 18));
             case "USDC":
                 const nTokenBalanceUSDC = await nTokenContractUSDC.balanceOf(account);
                 setNTokenBalanceUSDC(formatUnits(nTokenBalanceUSDC, 18));
+            case "WETH": 
+                const nTokenBalanceWETH = await nTokenContractWETH.balanceOf(account);
+                setNTokenBalanceWETH(formatUnits(nTokenBalanceWETH, 18));
         }
     };
 
@@ -55,23 +55,23 @@ export const useNToken = () => {
             case "DAI":
                 const nTokenYieldDAI = await nTokenContractDAI.getCurrentAPY();
                 setNTokenYieldDAI(formatUnits(nTokenYieldDAI, 18));
-            case "ETH": 
-                const nTokenYieldETH = await nTokenContractETH.getCurrentAPY();
-                setNTokenYieldETH(formatUnits(nTokenYieldETH, 18));
             case "USDC":
                 const nTokenYieldUSDC = await nTokenContractUSDC.getCurrentAPY();
                 setNTokenYieldUSDC(formatUnits(nTokenYieldUSDC, 18));
+            case "WETH": 
+                const nTokenYieldWETH = await nTokenContractWETH.getCurrentAPY();
+                setNTokenYieldWETH(formatUnits(nTokenYieldWETH, 18));
         }
     };
 
     return {
         nTokenBalanceDAI,
-        nTokenBalanceETH,
         nTokenBalanceUSDC,
+        nTokenBalanceWETH,
         fetchNTokenBalance,
         nTokenYieldDAI,
-        nTokenYieldETH,
         nTokenYieldUSDC,
+        nTokenYieldWETH,
         fetchNTokenYield,
         assetTokenContractAddress,
         nTokenContract

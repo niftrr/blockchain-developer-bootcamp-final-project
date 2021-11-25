@@ -12,7 +12,7 @@ function InputDropdown(props) {
 
   return (
       <select onChange={(e) => handleBorrowTokenInput(e.target.value)} className={`input-dropdown ${className || ""}`} id="tokens" name="tokens">
-      <option value="ETH" defaultChecked>ETH</option>
+      <option value="WETH" defaultChecked>WETH</option>
       <option value="DAI">DAI</option>
       <option value="USDC">USDC</option>
       </select>

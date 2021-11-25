@@ -84,17 +84,17 @@ async function main() {
   await assetTokenDAI.deployed();
   console.log("assetTokenDAI deployed to:", assetTokenDAI.address);
   fileData += `REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS=${assetTokenDAI.address}\n`;
-  // ETH:
-  assetTokenETH = await AssetToken.connect(admin).deploy('ETH Token', 'ETH', assetTokenSupply);
-  await assetTokenETH.deployed();
-  console.log("assetTokenETH deployed to:", assetTokenETH.address);
-  fileData += `REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS=${assetTokenETH.address}\n`;
   // USDC:
   assetTokenUSDC = await AssetToken.connect(admin).deploy('USDC Token', 'USDC', assetTokenSupply);
   await assetTokenUSDC.deployed();
   console.log("assetTokenUSDC deployed to:", assetTokenUSDC.address);
   fileData += `REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS=${assetTokenUSDC.address}\n`;
-
+  // WETH:
+  assetTokenWETH = await AssetToken.connect(admin).deploy('WETH Token', 'WETH', assetTokenSupply);
+  await assetTokenWETH.deployed();
+  console.log("assetTokenWETH deployed to:", assetTokenWETH.address);
+  fileData += `REACT_APP_ASSET_TOKEN_WETH_CONTRACT_ADDRESS=${assetTokenWETH.address}\n`;
+  
   // Get and deploy nToken contracts
   NToken = await hre.ethers.getContractFactory('NToken');
   // DAI:
@@ -107,16 +107,6 @@ async function main() {
   await nTokenDAI.deployed();
   console.log("nTokenDAI deployed to:", nTokenDAI.address);
   fileData += `REACT_APP_N_TOKEN_DAI_CONTRACT_ADDRESS=${nTokenDAI.address}\n`;
-  // ETH:
-  nTokenETH = await NToken.deploy(
-    configurator.address,
-    lendingPool.address,
-    'ETH nToken', 
-    'nETH'
-  );
-  await nTokenETH.deployed();
-  console.log("nTokenETH deployed to:", nTokenETH.address);
-  fileData += `REACT_APP_N_TOKEN_ETH_CONTRACT_ADDRESS=${nTokenETH.address}\n`;
   // USDC:
   nTokenUSDC = await NToken.deploy(
     configurator.address,
@@ -127,6 +117,16 @@ async function main() {
   await nTokenUSDC.deployed();
   console.log("nTokenUSDC deployed to:", nTokenUSDC.address);
   fileData += `REACT_APP_N_TOKEN_USDC_CONTRACT_ADDRESS=${nTokenUSDC.address}\n`;
+  // WETH:
+  nTokenWETH = await NToken.deploy(
+    configurator.address,
+    lendingPool.address,
+    'WETH nToken', 
+    'nWETH'
+  );
+  await nTokenWETH.deployed();
+  console.log("nTokenWETH deployed to:", nTokenWETH.address);
+  fileData += `REACT_APP_N_TOKEN_WETH_CONTRACT_ADDRESS=${nTokenWETH.address}\n`;
 
   // Get and deploy debtToken contracts
   DebtToken = await hre.ethers.getContractFactory('DebtToken');
@@ -140,16 +140,6 @@ async function main() {
   await debtTokenDAI.deployed();  
   console.log("debtTokenDAI deployed to:", debtTokenDAI.address);
   fileData += `REACT_APP_DEBT_TOKEN_DAI_CONTRACT_ADDRESS=${debtTokenDAI.address}\n`;
-  // ETH:
-  debtTokenETH = await DebtToken.deploy(
-    configurator.address,
-    lendingPool.address,
-    'ETH debtToken', 
-    'debtETH'
-  );
-  await debtTokenETH.deployed();  
-  console.log("debtTokenETH deployed to:", debtTokenETH.address);
-  fileData += `REACT_APP_DEBT_TOKEN_ETH_CONTRACT_ADDRESS=${debtTokenETH.address}\n`;
   // USDC:
   debtTokenUSDC = await DebtToken.deploy(
     configurator.address,
@@ -160,14 +150,24 @@ async function main() {
   await debtTokenUSDC.deployed();  
   console.log("debtTokenUSDC deployed to:", debtTokenUSDC.address);
   fileData += `REACT_APP_DEBT_TOKEN_USDC_CONTRACT_ADDRESS=${debtTokenUSDC.address}\n`;
+  // WETH:
+  debtTokenWETH = await DebtToken.deploy(
+    configurator.address,
+    lendingPool.address,
+    'WETH debtToken', 
+    'debtWETH'
+  );
+  await debtTokenWETH.deployed();  
+  console.log("debtTokenWETH deployed to:", debtTokenWETH.address);
+  fileData += `REACT_APP_DEBT_TOKEN_WETH_CONTRACT_ADDRESS=${debtTokenWETH.address}\n`;
 
   // Initialize Reserves
   // DAI:
   configurator.connect(admin).initLendingPoolReserve(assetTokenDAI.address, nTokenDAI.address, debtTokenDAI.address);
-  // ETH:
-  configurator.connect(admin).initLendingPoolReserve(assetTokenETH.address, nTokenETH.address, debtTokenETH.address);
   // USDC:
   configurator.connect(admin).initLendingPoolReserve(assetTokenUSDC.address, nTokenUSDC.address, debtTokenUSDC.address);
+  // WETH:
+  configurator.connect(admin).initLendingPoolReserve(assetTokenWETH.address, nTokenWETH.address, debtTokenWETH.address);
   console.log('Initialized Reserves');
 
   // Get and deploy NFT contracts
@@ -208,7 +208,7 @@ async function main() {
   const mockETHWETH = ethers.utils.parseUnits('1', 18);
   lendingPool.setMockEthTokenPrice(assetTokenDAI.address, mockETHDAI);  
   lendingPool.setMockEthTokenPrice(assetTokenUSDC.address, mockETHUSDC); 
-  lendingPool.setMockEthTokenPrice(assetTokenETH.address, mockETHWETH);  
+  lendingPool.setMockEthTokenPrice(assetTokenWETH.address, mockETHWETH);  
 
   // Writes fileData to interface ../interface/.env 
   await writeContractAddressesToInterfaceEnv(fileData);
@@ -225,7 +225,7 @@ async function main() {
   const tokenDict = {
     "DAI": assetTokenDAI.address,
     "USDC": assetTokenUSDC.address,
-    "WETH": assetTokenETH.address
+    "WETH": assetTokenWETH.address
   }
   function swap(_dict){ 
     var ret = {};
@@ -246,13 +246,13 @@ async function main() {
   }
   await transfer(0, assetTokenDAI);
   await transfer(0, assetTokenUSDC);
-  await transfer(0, assetTokenETH);
+  await transfer(0, assetTokenWETH);
   await transfer(1, assetTokenDAI);
   await transfer(1, assetTokenUSDC);
-  await transfer(1, assetTokenETH);
+  await transfer(1, assetTokenWETH);
   await transfer(2, assetTokenDAI);
   await transfer(2, assetTokenUSDC);
-  await transfer(2, assetTokenETH);
+  await transfer(2, assetTokenWETH);
 
   // Mint NFTs to acc1 and acc2
   const nftDict = {"PUNK": nftPUNK, "BAYC": nftBAYC}
@@ -294,18 +294,18 @@ async function main() {
   await lendingPool.connect(acc1).deposit(assetTokenUSDC.address, depositAmount);
 
   depositAmount = hre.ethers.utils.parseEther("200.00");
-  await assetTokenETH.connect(acc1).approve(lendingPool.address, depositAmount);
-  await lendingPool.connect(acc1).deposit(assetTokenETH.address, depositAmount);
+  await assetTokenWETH.connect(acc1).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc1).deposit(assetTokenWETH.address, depositAmount);
 
   // Borrows from Account 2
   let borrowAmount;
   borrowAmount = hre.ethers.utils.parseEther("50");
   await nftPUNK.connect(acc2).approve(collateralManager.address, 4);
   console.log('lendingPool.address', lendingPool.address);
-  console.log('assetTokenETH.address', assetTokenETH.address);
+  console.log('assetTokenWETH.address', assetTokenWETH.address);
   console.log('nftPUNK.address', nftPUNK.address);
   await lendingPool.connect(acc2).borrow(
-    assetTokenETH.address,
+    assetTokenWETH.address,
     borrowAmount,
     nftPUNK.address,
     4,
@@ -315,7 +315,7 @@ async function main() {
   // borrowAmount = hre.ethers.utils.parseEther("30")
   // await nftPUNK.connect(acc2).approve(collateralManager.address, 5);
   // await lendingPool.connect(acc2).borrow(
-  //   assetTokenETH.address,
+  //   assetTokenWETH.address,
   //   borrowAmount,
   //   nftPUNK.address,
   //   5,
@@ -325,7 +325,7 @@ async function main() {
   // borrowAmount = hre.ethers.utils.parseEther("30")
   // await nftBAYC.connect(acc2).approve(collateralManager.address, 4);
   // await lendingPool.connect(acc2).borrow(
-  //   assetTokenETH.address,
+  //   assetTokenWETH.address,
   //   borrowAmount,
   //   nftBAYC.address,
   //   4,
@@ -335,7 +335,7 @@ async function main() {
   // borrowAmount = hre.ethers.utils.parseEther("20")
   // await nftBAYC.connect(acc2).approve(collateralManager.address, 5);
   // await lendingPool.connect(acc2).borrow(
-  //   assetTokenETH.address,
+  //   assetTokenWETH.address,
   //   borrowAmount,
   //   nftBAYC.address,
   //   5,

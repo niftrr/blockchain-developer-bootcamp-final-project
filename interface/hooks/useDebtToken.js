@@ -11,25 +11,26 @@ export const useDebtToken = () => {
     const { isValidNetwork } = useIsValidNetwork();
     // DebtTokens
     const debtTokenContractAddressDAI = process.env.REACT_APP_DEBT_TOKEN_DAI_CONTRACT_ADDRESS;
-    const debtTokenContractAddressETH = process.env.REACT_APP_DEBT_TOKEN_ETH_CONTRACT_ADDRESS;
     const debtTokenContractAddressUSDC =  process.env.REACT_APP_DEBT_TOKEN_USDC_CONTRACT_ADDRESS;
+    const debtTokenContractAddressWETH = process.env.REACT_APP_DEBT_TOKEN_WETH_CONTRACT_ADDRESS;
     
     const debtTokenABI = DebtTokenData["abi"];
     const debtTokenContractDAI = useContract(debtTokenContractAddressDAI, debtTokenABI);
-    const debtTokenContractETH = useContract(debtTokenContractAddressETH, debtTokenABI);
     const debtTokenContractUSDC = useContract(debtTokenContractAddressUSDC, debtTokenABI);
+    const debtTokenContractWETH = useContract(debtTokenContractAddressWETH, debtTokenABI);
     const debtTokenContract = {
         "DAI": debtTokenContractDAI,
-        "ETH": debtTokenContractETH,
-        "USDC": debtTokenContractUSDC
+        "USDC": debtTokenContractUSDC,
+        "WETH": debtTokenContractWETH
     }
     const {
         setDebtTokenBalanceDAI,
-        setDebtTokenBalanceETH,
         setDebtTokenBalanceUSDC, 
+        setDebtTokenBalanceWETH,
         debtTokenBalanceDAI, 
-        debtTokenBalanceETH, 
-        debtTokenBalanceUSDC} = useAppContext();
+        debtTokenBalanceUSDC,
+        debtTokenBalanceWETH
+    } = useAppContext();
 
     const fetchDebtTokenBalance = async (ccy) => {
         
@@ -37,19 +38,19 @@ export const useDebtToken = () => {
             case "DAI":
                 const debtTokenBalanceDAI = await debtTokenContractDAI.balanceOf(account);
                 setDebtTokenBalanceDAI(formatUnits(debtTokenBalanceDAI, 18));
-            case "ETH":
-                const debtTokenBalanceETH = await debtTokenContractETH.balanceOf(account);
-                setDebtTokenBalanceETH(formatUnits(debtTokenBalanceETH, 18));
             case "USDC":
                 const debtTokenBalanceUSDC = await debtTokenContractUSDC.balanceOf(account);
                 setDebtTokenBalanceUSDC(formatUnits(debtTokenBalanceUSDC, 18));
+            case "WETH":
+                const debtTokenBalanceWETH = await debtTokenContractWETH.balanceOf(account);
+                setDebtTokenBalanceWETH(formatUnits(debtTokenBalanceWETH, 18));
         }
     };
 
     return {
         debtTokenBalanceDAI,
-        debtTokenBalanceETH,
         debtTokenBalanceUSDC,
+        debtTokenBalanceWETH,
         fetchDebtTokenBalance,
         debtTokenContract
     }

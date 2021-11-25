@@ -8,30 +8,30 @@ import useNToken from "../../hooks/useNToken";
 
 function Lend(props) {
   const { account } = useWeb3React();
-  const {fetchNTokenBalance, nTokenBalanceDAI, nTokenBalanceETH, nTokenBalanceUSDC, 
-    fetchNTokenYield, nTokenYieldDAI, nTokenYieldETH, nTokenYieldUSDC } = useNToken();
+  const {fetchNTokenBalance, nTokenBalanceDAI, nTokenBalanceWETH, nTokenBalanceUSDC, 
+    fetchNTokenYield, nTokenYieldDAI, nTokenYieldWETH, nTokenYieldUSDC } = useNToken();
   const { buttonDepositProps, buttonRepayProps, token } = props;
   
   const nTokenBalance = {
     "DAI": nTokenBalanceDAI,
-    "ETH": nTokenBalanceETH,
-    "USDC": nTokenBalanceUSDC
+    "USDC": nTokenBalanceUSDC,
+    "WETH": nTokenBalanceWETH,
   }
   
   const nTokenYield = {
     "DAI": nTokenYieldDAI,
-    "ETH": nTokenYieldETH,
-    "USDC": nTokenYieldUSDC
+    "USDC": nTokenYieldUSDC,
+    "WETH": nTokenYieldWETH
   }
 
   useEffect(() => {
     if (account) {
       fetchNTokenBalance('DAI');
-      fetchNTokenBalance('ETH');
       fetchNTokenBalance('USDC');
+      fetchNTokenBalance('WETH');
       fetchNTokenYield('DAI');
-      fetchNTokenYield('ETH');
       fetchNTokenYield('USDC');
+      fetchNTokenYield('WETH');
     }    
   }, [account, nTokenBalanceDAI]);
 

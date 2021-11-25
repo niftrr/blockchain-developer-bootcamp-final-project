@@ -9,23 +9,23 @@ export const useAssetToken = () => {
     const { isValidNetwork } = useIsValidNetwork();
 
     const assetTokenContractAddressDAI = process.env.REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS;
-    const assetTokenContractAddressETH = process.env.REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS;
     const assetTokenContractAddressUSDC = process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS;
+    const assetTokenContractAddressWETH = process.env.REACT_APP_ASSET_TOKEN_WETH_CONTRACT_ADDRESS;
     const assetTokenContractAddress = {
         "DAI": assetTokenContractAddressDAI,
-        "ETH": assetTokenContractAddressETH,
-        "USDC": assetTokenContractAddressUSDC
+        "USDC": assetTokenContractAddressUSDC,
+        "WETH": assetTokenContractAddressWETH
     }
 
     const assetTokenABI = AssetTokenData["abi"];
     const assetTokenContractDAI = useContract(assetTokenContractAddressDAI, assetTokenABI);
-    const assetTokenContractETH = useContract(assetTokenContractAddressETH, assetTokenABI);
     const assetTokenContractUSDC = useContract(assetTokenContractAddressUSDC, assetTokenABI);
+    const assetTokenContractWETH = useContract(assetTokenContractAddressWETH, assetTokenABI);
 
     const assetTokenContract = {
         "DAI": assetTokenContractDAI,
-        "ETH": assetTokenContractETH,
-        "USDC": assetTokenContractUSDC
+        "USDC": assetTokenContractUSDC,
+        "WETH": assetTokenContractWETH
     }
 
     return {

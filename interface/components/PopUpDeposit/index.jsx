@@ -22,9 +22,9 @@ function PopUp(props) {
   }, [account]);
 
   const tokenImage = {
-    "DAI": "/img/rectangle-16@2x.png",
-    "ETH": "/img/rectangle-19@2x.png",
-    "USDC": "/img/rectangle-22@2x.png"
+    "DAI": "/img/dai-logo.png",
+    "USDC": "/img/usdc-logo.png",
+    "WETH": "/img/weth-logo.png"
   }
 
   const handleDepositSubmit = () => {

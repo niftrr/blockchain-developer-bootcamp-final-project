@@ -26,8 +26,8 @@ export const useLendingPool = () => {
 
     const assetTokenContractAddressSymbolLookup = {};
     assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS] = "DAI"; 
-    assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_ETH_CONTRACT_ADDRESS] = "ETH"; 
     assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS] = "USDC"; 
+    assetTokenContractAddressSymbolLookup[process.env.REACT_APP_ASSET_TOKEN_WETH_CONTRACT_ADDRESS] = "WETH"; 
             
     function wait(seconds) {
         return new Promise( res => setTimeout(res, seconds*1000) );

@@ -5,9 +5,9 @@ function TokenLend(props) {
   const { token } = props;
 
   const tokenImage = {
-    "DAI": "/img/rectangle-25@2x.png",
-    "ETH": "/img/rectangle-27@2x.png",
-    "USDC": "/img/rectangle-22@2x.png"
+    "DAI": "/img/dai-logo.png",
+    "USDC": "/img/usdc-logo.png",
+    "WETH": "/img/weth-logo.png",
   }
 
   return (

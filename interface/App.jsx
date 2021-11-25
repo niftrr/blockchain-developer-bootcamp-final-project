@@ -175,7 +175,7 @@ const popUpWithdrawData = {
 
 const borrowDataFloorPriceData = {
     borrowAmount: "Borrow Amount:",
-    address: "60 ETH",
+    address: "60 WETH",
 };
 
 const borrowDataFloorPrice2Data = {
@@ -344,7 +344,7 @@ const borrow22Data = {
     nftAvatar: "/img/nft-avatar-1@2x.png",
     amount: "Amount:",
     text15: "Current Floor Price:",
-    address: "120 ETH",
+    address: "120 WETH",
     headerProps: header3Data,
     itemProjectProps: itemProject2Data,
     itemProject2Props: itemProject3Data,
@@ -444,7 +444,7 @@ const previousBorrowData = {
     text26: "50.02",
     percent: "30%",
     rectangle19: "/img/rectangle-19@2x.png",
-    place: "ETH",
+    place: "WETH",
     x0X123456: "0x123456",
     repaid: "Repaid",
     spanText: <>175%<br /></>,
@@ -475,7 +475,7 @@ const borrowDataCollRatio24Data = {
 
 const borrowDataCollRatio5Data = {
     maturity: "Repayment:",
-    d: "65.6726 ETH",
+    d: "65.6726 WETH",
     className: "borrow-data-floor-price-1",
 };
 

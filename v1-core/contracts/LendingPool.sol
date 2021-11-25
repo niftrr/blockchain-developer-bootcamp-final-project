@@ -256,7 +256,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @param nTokenAddress The derivative nToken address.
     /// @param debtTokenAddress The derivative debtToken address.
-    /// @dev Protocol to be updated to support native ETH as well as ERC20.    
+    /// @dev ERC20 asset address used as reserve key.    
     function _initReserve(
         address asset,
         address nTokenAddress,

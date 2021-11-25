@@ -8,8 +8,8 @@ function Lends(props) {
 
   const tokenList = [
     "DAI",
-    "ETH",
-    "USDC"
+    "USDC",
+    "WETH"
   ]
 
   return (
