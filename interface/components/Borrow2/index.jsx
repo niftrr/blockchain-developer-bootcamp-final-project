@@ -48,7 +48,7 @@ function Borrow2(props) {
     imageDictPUNK, imageDictBAYC, nftAddressSymbolDict } = useNFT();
   const { fetchWhitelistNFT, whitelistNFT } = useCollateralManager();
   const { fetchBorrowFloorPrice, borrowFloorPrice } = useLendingPool();
-  const { borrowNFT, borrowProject, imageDictBorrow, borrowCollRatio, borrowRepaymentAmount } = useAppContext();
+  const { borrowNFT, borrowProject, borrowToken, imageDictBorrow, borrowCollRatio, borrowRepaymentAmount } = useAppContext();
 
   useEffect(() => {
     if (account) {
@@ -60,7 +60,7 @@ function Borrow2(props) {
       borrowRepaymentAmount
       console.log('borrow');
     }  
-  }, [account, imageDictBorrow]);
+  }, [account, imageDictBorrow, borrowProject, borrowToken]);
 
   const nftProjectClassName = {
     "PUNK": itemProject2Props.className,

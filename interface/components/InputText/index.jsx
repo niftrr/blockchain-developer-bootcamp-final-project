@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useWeb3React } from "@web3-react/core";
 import "./InputText.css";
 import { useAppContext } from "../../AppContext";
+import useLendingPool from "../../hooks/useLendingPool";
 
 function InputText(props) {
   const { children } = props;
-  const { setBorrowAmount, setBorrowCollRatio, borrowCollRatio, borrowFloorPrice } = useAppContext();
+  const { account } = useWeb3React();
+  const { setBorrowAmount, setBorrowCollRatio, borrowToken, borrowFloorPrice } = useAppContext();
+  const { fetchBorrowFloorPrice } = useLendingPool();
+
+  useEffect(() => {
+    if (account) {
+      fetchBorrowFloorPrice();
+    }  
+  }, [account, borrowToken, borrowFloorPrice]);
 
   const handleBorrowAmountInput = (value) => {
     setBorrowAmount(value);

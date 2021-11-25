@@ -17,7 +17,7 @@ export const useLendingPool = () => {
     const lendingPoolABI = LendingPoolData["abi"];
     const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
     
-    const { setBorrowFloorPrice, borrowFloorPrice, setTxnStatus } = useAppContext();
+    const { setBorrowFloorPrice, borrowFloorPrice, setTxnStatus, borrowProject, borrowToken } = useAppContext();
     const { nTokenContract, fetchNTokenBalance } = useNToken();
     const { debtTokenContract, fetchDebtTokenBalance } = useDebtToken();
     const { assetTokenContract, assetTokenContractAddress } = useAssetToken();
@@ -34,8 +34,15 @@ export const useLendingPool = () => {
     }
 
     const fetchBorrowFloorPrice = async () => {
-        const price = await lendingPoolContract._mockOracle();
-        setBorrowFloorPrice(formatUnits(price, 0));
+        if (borrowProject != "--") { 
+            const nftContractAddress = await nftContract[borrowProject].address;
+            console.log('borrowToken', borrowToken);
+            const assetTokenContractAddress = await assetTokenContract[borrowToken].address;
+            console.log('assetTokenContractAddress', assetTokenContractAddress);
+            // TODO update: second parameter should be assetToken (not currently used by SC)
+            const price = await lendingPoolContract.getMockFloorPrice(nftContractAddress, assetTokenContractAddress); 
+            setBorrowFloorPrice(formatUnits(price, 18));
+        }
     };
 
     const deposit = async (tokenSymbol, amount) => {
