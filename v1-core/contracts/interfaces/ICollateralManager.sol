@@ -41,6 +41,8 @@ interface ICollateralManager {
         returns (bool success);
     
     function setInterestRate(address _erc721Token, uint256 interestRate) external;
+
+    function getInterestRate(address _erc721Token) external returns (uint256);
     
     function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external;
 

@@ -23,6 +23,12 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
+  /* 
+  
+  1. Deploy locally
+  
+  */
+
   // Get Signers 
   [acc0, acc1, acc2, emergencyAdmin, admin] = await hre.ethers.getSigners();
 
@@ -60,6 +66,9 @@ async function main() {
   await configurator.connect(admin).connectCollateralManager(
       collateralManager.address
   );
+
+  // Link CollateralManager to LendingPool
+  await configurator.connect(admin).connectLendingPoolCollateralManager();
 
   // Get and deploy OraceTokenPrice
   TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
@@ -186,6 +195,31 @@ async function main() {
   configurator.connect(admin).setCollateralManagerInterestRate(nftPUNK.address, 18);
   configurator.connect(admin).setCollateralManagerInterestRate(nftBAYC.address, 20);
 
+  // Set Mocked Oracle NFT prices
+  let mockFloorPrice;
+  mockFloorPrice = ethers.utils.parseUnits('100', 18);
+  lendingPool.setMockFloorPrice(nftPUNK.address, mockFloorPrice);
+  mockFloorPrice = ethers.utils.parseUnits('60', 18);
+  lendingPool.setMockFloorPrice(nftBAYC.address, mockFloorPrice);
+
+  // Set Mock Oracle Asset Token prices
+  const mockETHDAI = ethers.utils.parseUnits('4325.37', 18);
+  const mockETHUSDC = ethers.utils.parseUnits('4332.14', 18);
+  const mockETHWETH = ethers.utils.parseUnits('1', 18);
+  lendingPool.setMockEthTokenPrice(assetTokenDAI.address, mockETHDAI);  
+  lendingPool.setMockEthTokenPrice(assetTokenUSDC.address, mockETHUSDC); 
+  lendingPool.setMockEthTokenPrice(assetTokenETH.address, mockETHWETH);  
+
+  // Writes fileData to interface ../interface/.env 
+  await writeContractAddressesToInterfaceEnv(fileData);
+
+  /* 
+  
+  2. Transfer Asset Tokens and NFTs to accounts 0, 1 and 2.
+
+  */
+
+
   // Transfer funds to acc0, acc1 and acc2
   const accDict = {0: acc0, 1: acc1, 2: acc2}
   const tokenDict = {
@@ -243,8 +277,77 @@ async function main() {
   await mint("BAYC", 2, 4);
   await mint("BAYC", 2, 5); 
 
-  // Writes fileData to interface ../interface/.env 
-  await writeContractAddressesToInterfaceEnv(fileData);
+  /* 
+  
+  3. Create deposits and borrows (including defaulted borrows) from accounts 2 and 3.
+
+  */
+
+  // Deposits from Account 1
+  let depositAmount; 
+  depositAmount = hre.ethers.utils.parseEther("150000");
+  await assetTokenDAI.connect(acc1).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc1).deposit(assetTokenDAI.address, depositAmount);
+
+  depositAmount = hre.ethers.utils.parseEther("150000");
+  await assetTokenUSDC.connect(acc1).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc1).deposit(assetTokenUSDC.address, depositAmount);
+
+  depositAmount = hre.ethers.utils.parseEther("200.00");
+  await assetTokenETH.connect(acc1).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc1).deposit(assetTokenETH.address, depositAmount);
+
+  // Borrows from Account 2
+  let borrowAmount;
+  borrowAmount = hre.ethers.utils.parseEther("50");
+  await nftPUNK.connect(acc2).approve(collateralManager.address, 4);
+  console.log('lendingPool.address', lendingPool.address);
+  console.log('assetTokenETH.address', assetTokenETH.address);
+  console.log('nftPUNK.address', nftPUNK.address);
+  await lendingPool.connect(acc2).borrow(
+    assetTokenETH.address,
+    borrowAmount,
+    nftPUNK.address,
+    4,
+    1
+  );
+
+  // borrowAmount = hre.ethers.utils.parseEther("30")
+  // await nftPUNK.connect(acc2).approve(collateralManager.address, 5);
+  // await lendingPool.connect(acc2).borrow(
+  //   assetTokenETH.address,
+  //   borrowAmount,
+  //   nftPUNK.address,
+  //   5,
+  //   2
+  // )
+
+  // borrowAmount = hre.ethers.utils.parseEther("30")
+  // await nftBAYC.connect(acc2).approve(collateralManager.address, 4);
+  // await lendingPool.connect(acc2).borrow(
+  //   assetTokenETH.address,
+  //   borrowAmount,
+  //   nftBAYC.address,
+  //   4,
+  //   26
+  // )
+
+  // borrowAmount = hre.ethers.utils.parseEther("20")
+  // await nftBAYC.connect(acc2).approve(collateralManager.address, 5);
+  // await lendingPool.connect(acc2).borrow(
+  //   assetTokenETH.address,
+  //   borrowAmount,
+  //   nftBAYC.address,
+  //   5,
+  //   13
+  // )
+
+  // // Update Mocked Oracle NFT prices - to put half in default
+  // mockFloorPrice = ethers.utils.parseUnits('80', 18);
+  // lendingPool.setMockFloorPrice(nftPUNK.address, mockFloorPrice);
+  // mockFloorPrice = ethers.utils.parseUnits('50', 18);
+  // lendingPool.setMockFloorPrice(nftBAYC.address, mockFloorPrice);
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

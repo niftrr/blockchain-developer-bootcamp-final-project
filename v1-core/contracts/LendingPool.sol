@@ -9,10 +9,9 @@ import { INToken } from "./interfaces/INToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
-import { LendingPoolStorage } from './LendingPoolStorage.sol';
+import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { LendingPoolEvents } from './LendingPoolEvents.sol';
 import { TokenPriceOracle } from './TokenPriceOracle.sol';
-
 import { DataTypes } from "./libraries/DataTypes.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -23,7 +22,7 @@ import "hardhat/console.sol";
 /// @author Niftrr
 /// @notice Allows for the borrow/repay of loans and deposit/withdraw of assets.
 /// @dev This is our protocol's point of access.
-contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessControl, Pausable, ReentrancyGuard {
+contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;  
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
@@ -56,6 +55,36 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
         DataTypes.Reserve memory reserve = reserves[asset];  
         require(reserve.status != DataTypes.ReserveStatus.Protected, "Reserve is protected.");  
         _;
+    }
+
+    /// @notice Initialize the Collateral Manager contract address.
+    /// @param _collateralManagerAddress The Collateral Manager contract address.
+    /// @dev Uses a state varaible.
+    function connectCollateralManager(
+        address _collateralManagerAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        require(!isCollateralManagerConnected, "Collateral Manager already connected");
+        isCollateralManagerConnected = true;
+        collateralManagerAddress = _collateralManagerAddress;
+
+        emit CollateralManagerConnected(collateralManagerAddress);
+    }
+
+    /// @notice Connect the Token Price Oracle contract by setting the address.
+    /// @param _tokenPriceOracleAddress The Token Price Oracle address.
+    /// @dev Uses a state variable.
+    function connectTokenPriceOracle(
+        address _tokenPriceOracleAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        tokenPriceOracleAddress = _tokenPriceOracleAddress;
+
+        emit TokenPriceOracleConnected(tokenPriceOracleAddress);
     }
 
     /// @notice Initializes a reserve.
@@ -111,7 +140,6 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
     /// @param amount The amount of ERC20 tokens to be borrowed.
     /// @param collateral The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited. 
-    /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
     /// @param numWeeks The number of weeks until the borrow maturity.
     /// @dev Calls internal `_borrow` function if modifiers are succeeded. 
     function borrow(
@@ -119,7 +147,6 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
         uint256 amount, 
         address collateral, 
         uint256 tokenId,
-        uint256 interestRate,
         uint256 numWeeks
     ) 
         external 
@@ -132,7 +159,6 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
             amount, 
             collateral, 
             tokenId,
-            interestRate,
             numWeeks
         );
     }
@@ -226,81 +252,6 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
         emit ReserveActivated(asset);
     }
 
-    /// @notice Initialize the Collateral Manager contract address.
-    /// @param _collateralManagerAddress The Collateral Manager contract address.
-    /// @dev Uses a state varaible.
-    function connectCollateralManager(
-        address _collateralManagerAddress
-    ) 
-        public 
-        onlyConfigurator 
-    {
-        require(!isCollateralManagerConnected, "Collateral Manager already connected");
-        isCollateralManagerConnected = true;
-        collateralManagerAddress = _collateralManagerAddress;
-
-        emit CollateralManagerConnected(collateralManagerAddress);
-    }
-
-    /// @notice Connect the Token Price Oracle contract by setting the address.
-    /// @param _tokenPriceOracleAddress The Token Price Oracle address.
-    /// @dev Uses a state variable.
-    function connectTokenPriceOracle(
-        address _tokenPriceOracleAddress
-    ) 
-        public 
-        onlyConfigurator 
-    {
-        tokenPriceOracleAddress = _tokenPriceOracleAddress;
-
-        emit TokenPriceOracleConnected(tokenPriceOracleAddress);
-    }
-
-    /// @notice Gets the NFT floor price in terms of the asset provided (WIP3)
-    /// @param collateral The ERC721 token.
-    /// @param asset The ERC20 token price the NFT in.
-    /// @dev This is also a WIP as calls getLatestPriceMock and getFloorPriceMock.
-    /// @return Returns the floorPrice of the NFT project in terms of the asset provided. 
-    function getFloorPrice(address collateral, address asset) public view returns (uint256) {
-        uint256 floorPrice = 60; //getFloorPriceMock(collateral); TODO: connect Oracle
-        string memory pricePair = pricePairs[asset];
-        if (keccak256(abi.encodePacked(pricePair))!=keccak256(abi.encodePacked(""))) {
-            (bool success, int price, uint8 decimal) = TokenPriceOracle(
-                tokenPriceOracleAddress
-            ).getLatestPriceMock(pricePair);
-            require(success, "UNSUCCESSFUL_FEED");
-            uint256 price_ = uint256(price);
-            floorPrice = floorPrice.mul(price_).div(decimal);
-        }
-        return floorPrice;
-    }
-    
-    /// @notice Gets the liquidation threshold of the collateral provided.
-    /// @param collateral An ERC721 token.
-    /// @dev Makes a call to the Collateral Manager.
-    /// @return Returns the liquidation threshold as a 18 decimal percentage. 
-    function getLiquidationThreshold(address collateral) public returns (bool, uint256) {
-        (bool success, bytes memory data) = collateralManagerAddress.call(
-            abi.encodeWithSignature("getLiquidationThreshold(address)", "call getLiquidationThreshold", collateral)
-        );
-        require(success, "UNSUCCESSFUL_CALL");
-        return (success, abi.decode(data, (uint256)));
-    }
-
-    /// @notice Get the Token Price Oracle contract address.
-    /// @dev Uses a state variable.
-    /// @return Returns the Token price oracle contract address.
-    function getTokenPriceOracleAddress() public view returns (address) {
-        return tokenPriceOracleAddress;
-    }
-
-    /// @notice Get the Collateral Manager contract address.
-    /// @dev Uses a state variable.
-    /// @return Returns the Collateral Manager contract address.
-    function getCollateralManagerAddress() public view returns (address) {
-        return collateralManagerAddress;
-    }
-
     /// @notice Private function to initialize a reserve.
     /// @param asset The ERC20, reserve asset token.
     /// @param nTokenAddress The derivative nToken address.
@@ -376,7 +327,6 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
     /// @param amount The amount of ERC20 tokens to be borrowed.
     /// @param collateral The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited. 
-    /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
     /// @param numWeeks The number of weeks until the borrow maturity.
     /// @dev Deposits collateral in CM before minting debtTokens and finally loaning assets. 
     function _borrow(
@@ -384,18 +334,16 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
         uint256 amount, 
         address collateral, 
         uint256 tokenId,
-        uint256 interestRate,
         uint256 numWeeks
     ) 
         private
     {
         bool success;
         DataTypes.Reserve memory reserve = reserves[asset]; 
-        uint256[3] memory variables = getBorrowVariables(
+        uint256[4] memory variables = getBorrowVariables(
             asset,
             amount, 
             collateral,
-            interestRate, 
             numWeeks
         );
 
@@ -406,9 +354,9 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
             tokenId, 
             amount,
             variables[0], //repaymentAmount
-            interestRate,
-            variables[1], //collateralFloorPrice
-            variables[2]); //maturity
+            variables[1], //interestRate
+            variables[2], //collateralFloorPrice
+            variables[3]); //maturity
         require(success, "UNSUCCESSFUL_DEPOSIT");
 
         success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), variables[0]);
@@ -468,6 +416,12 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
         DataTypes.Borrow memory borrowItem = ICollateralManager(
             collateralManagerAddress
         ).getBorrow(borrowId);
+        require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
+        require(block.timestamp < borrowItem.maturity, "UNEXPIRED_MATURITY");
+
+        uint256 floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
+        require(floorPrice < borrowItem.liquidationPrice, "ABOVE_LIQUIDATION_THRESHOLD");
+
         address borrower = borrowItem.borrower;
         uint256 repaymentAmount = borrowItem.repaymentAmount;
 
@@ -496,34 +450,5 @@ contract LendingPool is Context, LendingPoolStorage, LendingPoolEvents, AccessCo
         require(success, "UNSUCCESSFUL_RETRIEVE");
 
         emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
-    }
-
-    /// @notice Private function to calculate borrow variables.
-    /// @param asset The ERC20 token to be borrowed.
-    /// @param amount The amount of ERC20 tokens to be borrowed.
-    /// @param collateral The ERC721 token to be used as collateral.
-    /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
-    /// @param numWeeks The number of weeks until the borrow maturity.
-    /// @dev Returns items in a fixed array and split from _borrow to save on space.
-    /// @return Array of the repaymentAmount, collateralFloorPrice and maturity.
-    function getBorrowVariables(
-        address asset,
-        uint256 amount, 
-        address collateral,
-        uint256 interestRate,
-        uint256 numWeeks
-    )
-        private
-        view
-        returns (uint256[3] memory)
-    {
-        uint256[3] memory variables;
-        //repaymentAmount
-        variables[0] = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52)); 
-        //collateralFloorPrice
-        variables[1] = getFloorPrice(collateral, asset); 
-        //maturity
-        variables[2] = block.timestamp + numWeeks * 1 weeks; 
-        return variables;
     }
 }

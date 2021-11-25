@@ -160,6 +160,7 @@ contract Configurator is Context, AccessControl {
         whenLendingPoolConnected
         whenCollateralManagerConnected
     {
+        require(collateralManagerAddress != address(0), "UNDEFINED_ADDRESS");
         ILendingPool(lendingPoolAddress).connectCollateralManager(
             collateralManagerAddress
         );

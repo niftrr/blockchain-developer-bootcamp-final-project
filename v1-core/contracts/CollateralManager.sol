@@ -230,7 +230,6 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @param interestRate The (new) interest rate APY to set for the project.
     /// @dev Mapping used to keep track of interest rates, set per NFT project.
     function setInterestRate(address erc721Token, uint256 interestRate) external onlyConfigurator {
-        console.log('here too');
         interestRates[erc721Token] = interestRate;
 
         emit SetInterestRate(erc721Token, interestRate);
@@ -310,6 +309,27 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     function getWhitelist() public view returns (address[] memory) {
         return whitelist;
     }
+    /// @notice Gets the liquidation for given borrow parameters.
+    /// @param erc721Token The ERC721 token to be used as collateral.
+    /// @param borrowAmount The amount of ERC20 tokens to be borrowed.
+    /// @dev Logic separated from _deposit function.
+    /// @return Returns the liquidationPrice.
+    function _getLiquidationPrice(
+        address erc721Token,
+        uint256 borrowAmount,
+        uint256 collateralFloorPrice
+    ) 
+        private
+        view
+        returns (uint256)
+    {
+        uint256 liquidationThreshold = getLiquidationThreshold(erc721Token);
+        uint256 maxAmount = collateralFloorPrice.mul(100).div(liquidationThreshold);
+        require(borrowAmount <= maxAmount, "UNDERCOLLATERALIZED");
+
+        uint256 liquidationPrice = borrowAmount.mul(liquidationThreshold).div(100);
+        return liquidationPrice;
+    }
 
     /// @notice Private function to deposit ERC721 token in escrow and create a borrow.
     /// @param borrower The borrower account.
@@ -345,7 +365,11 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         require(newOwner == address(this), "UNSUCCESSFUL_TRANSFER");
 
         uint256 id = counter.current();
-        uint256 liquidationPrice = collateralFloorPrice.div(getLiquidationThreshold(erc721Token));
+        uint256 liquidationPrice = _getLiquidationPrice(
+            erc721Token,
+            borrowAmount,
+            collateralFloorPrice
+        );
 
         borrows[id] = DataTypes.Borrow({
             status: DataTypes.BorrowStatus.Active,

@@ -18,7 +18,6 @@ interface ILendingPool {
         uint256 amount, 
         address collateral, 
         uint256 tokenId,
-        uint256 interestRate,
         uint256 numWeeks
     )
         external;
@@ -48,8 +47,6 @@ interface ILendingPool {
     function protectReserve(address asset) external;
 
     function activateReserve(address asset) external;
-
-    function getUserBorrows(address user) external returns (uint256[] memory);
 
     function connectCollateralManager(address _collateralManagerAddress) external;
 

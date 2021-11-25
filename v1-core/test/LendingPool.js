@@ -17,11 +17,14 @@ let NToken;
 let hhNToken;
 let DebtToken;
 let hhDebtToken;
-let owner;
+let admin;
+let emergencyAdmin;
 let alice;
 let bob;
 let alice_tokenId;
 let bob_tokenId;
+let liquidationThreshold = 150;
+let interestRate = 20;
 
 beforeEach(async function() {
     numDecimals = 10; // set lower than 18 due to ether.js issue
@@ -31,7 +34,16 @@ beforeEach(async function() {
     bob_tokenId = 1;
 
     // Get Signers
-    [owner, alice, bob] = await ethers.getSigners();
+    [admin, emergencyAdmin, alice, bob] = await ethers.getSigners();
+
+    // Get and deploy Configurator
+    Configurator = await ethers.getContractFactory('Configurator');
+    hhConfigurator = await Configurator.deploy(
+        emergencyAdmin.address,
+        admin.address 
+    );
+    await hhConfigurator.deployed();
+    hhConfiguratorAddress = await hhConfigurator.resolvedAddress;
 
     // Get and deploy OraceTokenPrice
     TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
@@ -41,47 +53,53 @@ beforeEach(async function() {
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
     hhLendingPool = await LendingPool.deploy(
-        owner.address // NOTE: Using the owner as standin for the Configurator
+        hhConfiguratorAddress
     );
     await hhLendingPool.deployed();
     hhLendingPoolAddress = await hhLendingPool.resolvedAddress;
 
+    // Connect Configurator to LendingPool by setting the address
+    await hhConfigurator.connectLendingPool(hhLendingPoolAddress);
+
     // Get and deploy CollateralManager
     CollateralManager = await ethers.getContractFactory('CollateralManager');
     hhCollateralManager = await CollateralManager.deploy(
-        owner.address, // NOTE: Using the owner as standin for the Configurator
+        hhConfiguratorAddress,
         hhLendingPoolAddress
         );
     await hhCollateralManager.deployed();
     hhCollateralManagerAddress = await hhCollateralManager.resolvedAddress;
 
+    // Connect Configurator to CollateralManager
+    await hhConfigurator
+    .connect(admin)
+    .connectCollateralManager(
+        hhCollateralManagerAddress
+    )
+
     // Link CollateralManager to LendingPool
-    await hhLendingPool.connectCollateralManager(hhCollateralManagerAddress);
+    await hhConfigurator
+    .connect(admin)
+    .connectLendingPoolCollateralManager();
 
     // Get and deploy Asset Token
     AssetToken = await ethers.getContractFactory('AssetToken');
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
-
+    
     // Get and deploy nToken
     NToken = await ethers.getContractFactory('NToken');
     hhNToken = await NToken.deploy(
-        owner.address, // NOTE: Using the owner as standin for the Configurator
+        hhConfiguratorAddress,
         hhLendingPoolAddress,
         'Dai nToken', 
         'nDAI');
     await hhNToken.deployed();
 
-    // -- Assign minter role to LendingPool
-    // await hhNToken.setMinter(hhLendingPoolAddress);
-
-    // -- Assign burner role to LendingPool
-    // await hhNToken.setBurner(hhLendingPoolAddress);
-
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
     hhDebtToken = await DebtToken.deploy(
-        owner.address, // NOTE: Using the owner as standin for the Configurator
+        hhConfiguratorAddress,
         hhLendingPoolAddress,
         'Dai debtToken', 
         'debtDAI'
@@ -100,10 +118,20 @@ beforeEach(async function() {
     await hhNFT.deployed();
 
     // Whitelist NFT
-    hhCollateralManager.updateWhitelist(hhNFT.address, true);
+    hhConfigurator
+    .connect(admin)
+    .updateCollateralManagerWhitelist(hhNFT.address, true);
 
     // Set NFT liquidation threshold
-    hhCollateralManager.setLiquidationThreshold(hhNFT.address, 150); // in percent
+    hhConfigurator
+    .connect(admin)
+    .setCollateralManagerLiquidationThreshold(hhNFT.address, liquidationThreshold); // in percent
+
+    // Set NFT interestRate threshold
+    hhConfigurator
+    .connect(admin)
+    .setCollateralManagerInterestRate(hhNFT.address, interestRate); // in percent
+
 
     // Transfer funds to alice and bob
     await hhAssetToken.transfer(alice.address, hhAssetTokenInitialBalance.toString());
@@ -113,6 +141,16 @@ beforeEach(async function() {
     await hhNFT.mint(alice.address, alice_tokenId);
     await hhNFT.mint(bob.address, bob_tokenId);
 
+    // Set Mocked Oracle NFT price
+    const mockFloorPrice = ethers.utils.parseUnits('100', 18);
+    hhLendingPool.setMockFloorPrice(hhNFT.address, mockFloorPrice);
+
+    // Set Mock Oracle Asset Token prices
+    const mockETHDAI = ethers.utils.parseUnits('4325.37', 18);
+    // const mockETHUSDC = ethers.utils.parseUnits('4332.14.', 18);
+    // const mockETHWETH = ethers.utils.parseUnits('1', 18);
+    hhLendingPool.setMockEthTokenPrice(hhAssetToken.address, mockETHDAI);    
+
     // Logging 
     // console.log('CollateralManager deployed:', hhCollateralManagerAddress);
     // console.log('LendingPoolAddress deployed:', hhLendingPoolAddress);
@@ -121,10 +159,13 @@ beforeEach(async function() {
 });
 
 async function initReserve() {
-    return hhLendingPool.initReserve(
+    return hhConfigurator
+    .connect(admin)
+    .initLendingPoolReserve(
         hhAssetToken.address, 
         hhNToken.address,
-        hhDebtToken.address)
+        hhDebtToken.address
+    )
 }
 
 async function deposit(signer, assetToken, tokenAmount) {
@@ -141,7 +182,7 @@ async function withdraw(signer, assetToken, nToken, tokenAmount) {
     return hhLendingPool.connect(signer).withdraw(assetToken.address, tokenAmount);
 }
 
-async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, interestRate, numWeeks) {
+async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, numWeeks) {
     // Approve NFT transfer
     await nftToken.connect(signer).approve(hhCollateralManagerAddress, tokenId);
     return hhLendingPool.connect(signer).borrow(
@@ -149,7 +190,6 @@ async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, intere
         tokenAmount,
         nftToken.address,
         tokenId, 
-        interestRate,
         numWeeks);
 }
 
@@ -171,250 +211,248 @@ async function liquidate(signer, assetToken, liquidationAmount, borrowId) {
         borrowId);
 }
 
-// describe('TokenPriceOracle', function() {
+describe('TokenPriceOracle', function() {
 
-//     it('ETH/USD', async function () {
-//         let latestPrice = (await hhTokenPriceOracle.getLatestPriceMock("ETHUSD")).toString();
-//         expect(latestPrice).to.equal('400000000000,8');
-//     })
-// })
+    it('ETH/USD', async function () {
+        let latestPrice = (await hhTokenPriceOracle.getLatestPriceMock("ETHUSD")).toString();
+        expect(latestPrice).to.equal('true,400000000000,8');
+    })
+})
 
-// describe('AssetToken', function() {
+describe('AssetToken', function() {
 
-//     it('balance should be 1*10*numDecimals for owner', async function () {
-//         let balance = (await hhAssetToken.balanceOf(await owner.address)).toString();
-//         expect(balance).to.equal((hhAssetTokenSupply - 2 * hhAssetTokenInitialBalance).toString());
-//     })
+    it('balance should be 1*10*numDecimals for owner', async function () {
+        let balance = (await hhAssetToken.balanceOf(await admin.address)).toString();
+        expect(balance).to.equal((hhAssetTokenSupply - 2 * hhAssetTokenInitialBalance).toString());
+    })
 
-//     it('balance should be 1*10*numDecimals for alice & bob', async function () {
-//         let balanceAlice = (await hhAssetToken.balanceOf(await alice.address)).toString();
-//         expect(balanceAlice).to.equal(hhAssetTokenInitialBalance.toString());
-//         let balanceBob = (await hhAssetToken.balanceOf(await bob.address)).toString();
-//         expect(balanceBob).to.equal(hhAssetTokenInitialBalance.toString());
-//     })
-// })
+    it('balance should be 1*10*numDecimals for alice & bob', async function () {
+        let balanceAlice = (await hhAssetToken.balanceOf(await alice.address)).toString();
+        expect(balanceAlice).to.equal(hhAssetTokenInitialBalance.toString());
+        let balanceBob = (await hhAssetToken.balanceOf(await bob.address)).toString();
+        expect(balanceBob).to.equal(hhAssetTokenInitialBalance.toString());
+    })
+})
 
-// describe('LendingPool >> Init', function() {
+describe('LendingPool >> Init', function() {
 
-//     it('should init reserve', async function () {
+    it('should init reserve', async function () {
 
-//         // Initialize reserve
-//         async function _initReserve() {
-//             return initReserve();
-//         }
+        // Initialize reserve
+        async function _initReserve() {
+            return initReserve();
+        }
 
-//         // Expect: InitReserve Emit response
-//         await expect(
-//             _initReserve())
-//             .to.emit(hhLendingPool, 'InitReserve')
-//             .withArgs(
-//                 hhAssetToken.address, 
-//                 hhNToken.address,
-//                 hhDebtToken.address);
-//     });
-// });
+        // Expect: InitReserve Emit response
+        await expect(
+            _initReserve())
+            .to.emit(hhLendingPool, 'InitReserve')
+            .withArgs(
+                hhAssetToken.address, 
+                hhNToken.address,
+                hhDebtToken.address);
+    });
+});
     
-// describe('LendingPool >> Deposit', function() {
+describe('LendingPool >> Deposit', function() {
 
-//     it('should deposit tokens to NToken reserve', async function () {
-//         const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
+    it('should deposit tokens to NToken reserve', async function () {
+        const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
 
-//         // Initialize reserve
-//         await initReserve();
+        // Initialize reserve
+        await initReserve();
 
-//         // Deposit Asset tokens
-//         async function _deposit(signer, assetToken, tokenAmount) {
-//             return deposit(signer, assetToken, tokenAmount);
-//         }
+        // Deposit Asset tokens
+        async function _deposit(signer, assetToken, tokenAmount) {
+            return deposit(signer, assetToken, tokenAmount);
+        }
 
-//         // Expect: Deposit Emit response
-//         await expect(
-//             _deposit(alice, hhAssetToken, tokenAmount))
-//             .to.emit(hhLendingPool, 'Deposit')
-//             .withArgs(
-//                 hhAssetToken.address,
-//                 tokenAmount,
-//                 alice.address);
+        // Expect: Deposit Emit response
+        await expect(
+            _deposit(alice, hhAssetToken, tokenAmount))
+            .to.emit(hhLendingPool, 'Deposit')
+            .withArgs(
+                hhAssetToken.address,
+                tokenAmount,
+                alice.address);
 
-//         // Expect: assetTokens transferred from alice to hhNToken contract
-//         await expect(
-//             (await hhAssetToken.balanceOf(alice.address)))
-//             .to.equal((hhAssetTokenInitialBalance - tokenAmount));
-//         await expect(
-//             (await hhAssetToken.balanceOf(hhNToken.address)))
-//             .to.equal(tokenAmount);
+        // Expect: assetTokens transferred from alice to hhNToken contract
+        await expect(
+            (await hhAssetToken.balanceOf(alice.address)))
+            .to.equal((hhAssetTokenInitialBalance.sub(tokenAmount)));
+        await expect(
+            (await hhAssetToken.balanceOf(hhNToken.address)))
+            .to.equal(tokenAmount);
 
-//         // Expect: nTokens minted to alice 
-//         await expect(
-//             (await hhNToken.balanceOf(hhNToken.address)))
-//             .to.equal(0);
-//         await expect(
-//             (await hhNToken.balanceOf(alice.address)))
-//             .to.equal(tokenAmount);
-//     });
-// });
+        // Expect: nTokens minted to alice 
+        await expect(
+            (await hhNToken.balanceOf(hhNToken.address)))
+            .to.equal(0);
+        await expect(
+            (await hhNToken.balanceOf(alice.address)))
+            .to.equal(tokenAmount);
+    });
+});
 
-// describe('LendingPool >> Withdraw', function() {
+describe('LendingPool >> Withdraw', function() {
 
-//     it('should withdraw tokens from NToken reserve', async function () {
-//         const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
+    it('should withdraw tokens from NToken reserve', async function () {
+        const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
 
-//         // Initialize reserve
-//         await initReserve();
+        // Initialize reserve
+        await initReserve();
 
-//         // Deposit Asset tokens
-//         await deposit(alice, hhAssetToken, tokenAmount);
+        // Deposit Asset tokens
+        await deposit(alice, hhAssetToken, tokenAmount);
 
-//         // Withdraw Asset tokens
-//         async function _withdraw(signer, assetToken, nToken, tokenAmount) {
-//             return withdraw(signer, assetToken, nToken, tokenAmount);
-//         }
+        // Withdraw Asset tokens
+        async function _withdraw(signer, assetToken, nToken, tokenAmount) {
+            return withdraw(signer, assetToken, nToken, tokenAmount);
+        }
 
-//         // Expect: Withdraw Emit response
-//         await expect(
-//             _withdraw(alice, hhAssetToken, hhNToken, tokenAmount))
-//             .to.emit(hhLendingPool, 'Withdraw')
-//             .withArgs(
-//                 hhAssetToken.address,
-//                 tokenAmount,
-//                 alice.address);
+        // Expect: Withdraw Emit response
+        await expect(
+            _withdraw(alice, hhAssetToken, hhNToken, tokenAmount))
+            .to.emit(hhLendingPool, 'Withdraw')
+            .withArgs(
+                hhAssetToken.address,
+                tokenAmount,
+                alice.address);
 
-//         // Expect: assetTokens transfered from hhNToken contract to alice
-//         await expect(
-//             (await hhAssetToken.balanceOf(alice.address)))
-//             .to.equal(hhAssetTokenInitialBalance);
-//         await expect(
-//             (await hhAssetToken.balanceOf(hhNToken.address)))
-//             .to.equal(0);
+        // Expect: assetTokens transfered from hhNToken contract to alice
+        await expect(
+            (await hhAssetToken.balanceOf(alice.address)))
+            .to.equal(hhAssetTokenInitialBalance);
+        await expect(
+            (await hhAssetToken.balanceOf(hhNToken.address)))
+            .to.equal(0);
 
-//         // Expect: nTokens burnedFrom alice
-//         await expect(
-//             (await hhNToken.balanceOf(alice.address)))
-//             .to.equal(0);
-//     });
-// });
+        // Expect: nTokens burnedFrom alice
+        await expect(
+            (await hhNToken.balanceOf(alice.address)))
+            .to.equal(0);
+    });
+});
 
-// describe('LendingPool >> Borrow', function() {
+describe('LendingPool >> Borrow', function() {
     
-//     it('should check NFT balances', async function () {
-//         await expect(
-//             (await hhNFT.balanceOf(alice.address)))
-//             .to.equal(1);
-//         await expect(
-//             (await hhNFT.balanceOf(bob.address)))
-//             .to.equal(1);
-//     });
+    it('should check NFT balances', async function () {
+        await expect(
+            (await hhNFT.balanceOf(alice.address)))
+            .to.equal(1);
+        await expect(
+            (await hhNFT.balanceOf(bob.address)))
+            .to.equal(1);
+    });
 
-//     it('should check NFT tokenId ownership', async function () {
-//         await expect(
-//             (await hhNFT.ownerOf(alice_tokenId)))
-//             .to.equal(alice.address);
-//         await expect(
-//             (await hhNFT.ownerOf(bob_tokenId)))
-//             .to.equal(bob.address);    
-//     });
+    it('should check NFT tokenId ownership', async function () {
+        await expect(
+            (await hhNFT.ownerOf(alice_tokenId)))
+            .to.equal(alice.address);
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(bob.address);    
+    });
 
-//     it('should create borrow with an NFT as collateral', async function() {
-//         const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
-//         const interestRate = 20;
-//         const numWeeks = 1;
-//         const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
-//         // Initialize reserve
-//         await initReserve();
+    it('should create borrow with an NFT as collateral', async function() {
+        const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
+        const numWeeks = 1;
+        const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
+        // Initialize reserve
+        await initReserve();
 
-//         // Deposit Asset tokens [required for liquidity]
-//         await deposit(alice, hhAssetToken, tokenAmount);
+        // Deposit Asset tokens [required for liquidity]
+        await deposit(alice, hhAssetToken, tokenAmount);
 
-//         // Borrow Asset tokens
-//         async function _borrow(signer, nftToken, tokenId, assetToken, tokenAmount, interestRate, numWeeks) {
-//             return borrow(signer, nftToken, tokenId, assetToken, tokenAmount, interestRate, numWeeks);
-//         }
+        // Borrow Asset tokens
+        async function _borrow(signer, nftToken, bob_tokenId, assetToken, tokenAmount, numWeeks) {
+            return borrow(signer, nftToken, bob_tokenId, assetToken, tokenAmount, numWeeks);
+        }
         
-//         // Expect: Borrow Emit response
-//         await expect(
-//             _borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, interestRate, numWeeks))
-//             .to.emit(hhLendingPool, 'Borrow')
-//             .withArgs(
-//                 hhAssetToken.address,
-//                 tokenAmount,
-//                 repaymentAmount,
-//                 hhNFT.address,
-//                 bob_tokenId,
-//                 bob.address);
+        // Expect: Borrow Emit response
+        await expect(
+            _borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks))
+            .to.emit(hhLendingPool, 'Borrow')
+            .withArgs(
+                hhAssetToken.address,
+                tokenAmount,
+                repaymentAmount,
+                hhNFT.address,
+                bob_tokenId,
+                bob.address);
 
-//         // Expect: NFT to be held in Escrow
-//         await expect(
-//             (await hhNFT.ownerOf(bob_tokenId)))
-//             .to.equal(hhCollateralManagerAddress);
+        // Expect: NFT to be held in Escrow
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(hhCollateralManagerAddress);
 
-//         // Expect: assetTokens transferred to bob
-//         await expect(
-//             (await hhAssetToken.balanceOf(bob.address)))
-//             .to.equal(hhAssetTokenInitialBalance.add(tokenAmount));
-//     });
-// });
+        // Expect: assetTokens transferred to bob
+        await expect(
+            (await hhAssetToken.balanceOf(bob.address)))
+            .to.equal(hhAssetTokenInitialBalance.add(tokenAmount));
+    });
+});
 
-// describe('LendingPool >> Repay', function() {
+describe('LendingPool >> Repay', function() {
 
-//     it('should retreive an NFT by repaying a borrow', async function () {
-//         const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
-//         const interestRate = 20;
-//         const numWeeks = 1;
-//         const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
+    it('should retreive an NFT by repaying a borrow', async function () {
+        const tokenAmount = ethers.utils.parseUnits('1', 18); //1*10**numDecimals;
+        const interestRate = 20;
+        const numWeeks = 1;
+        const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
 
-//         // Initialize reserve
-//         await initReserve();
+        // Initialize reserve
+        await initReserve();
 
-//         // Deposit Asset tokens [required for liquidity]
-//         await deposit(alice, hhAssetToken, tokenAmount);
+        // Deposit Asset tokens [required for liquidity]
+        await deposit(admin, hhAssetToken, tokenAmount);
 
-//         // Borrow Asset tokens
-//         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, interestRate, numWeeks);
+        // Borrow Asset tokens
+        const borrowItem = await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
         
-//         // Retrieve borrowId 
-//         borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
-//         borrowId = borrowIds[0];
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowId = borrowIds[0];
 
-//         // Repay Asset tokens
-//         async function _repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
-//             return repay(signer, assetToken, nToken, repaymentAmount, borrowId);
-//         }
+        // Repay Asset tokens
+        async function _repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
+            return repay(signer, assetToken, nToken, repaymentAmount, borrowId);
+        }
 
-//         // Expect: Repay Emit response
-//         await expect(
-//             _repay(bob, hhAssetToken, hhNToken, repaymentAmount, borrowId))
-//             .to.emit(hhLendingPool, 'Repay')
-//             .withArgs(
-//                 borrowId,
-//                 hhAssetToken.address,
-//                 repaymentAmount,
-//                 bob.address);  
+        // Expect: Repay Emit response
+        await expect(
+            _repay(bob, hhAssetToken, hhNToken, repaymentAmount, borrowId))
+            .to.emit(hhLendingPool, 'Repay')
+            .withArgs(
+                borrowId,
+                hhAssetToken.address,
+                repaymentAmount,
+                bob.address);  
 
-//         // Expect: assetTokens transferred from user to nToken reserve
-//         await expect(
-//             (await hhAssetToken.balanceOf(bob.address)))
-//             .to.equal(hhAssetTokenInitialBalance.add(tokenAmount).sub(repaymentAmount));
-//         await expect(
-//             (await hhAssetToken.balanceOf(hhNToken.address)))
-//             .to.equal(repaymentAmount); // Alice's deposit - Bob's borrow + Bob's repayment  
+        // Expect: assetTokens transferred from user to nToken reserve
+        await expect(
+            (await hhAssetToken.balanceOf(bob.address)))
+            .to.equal(hhAssetTokenInitialBalance.add(tokenAmount).sub(repaymentAmount));
+        await expect(
+            (await hhAssetToken.balanceOf(hhNToken.address)))
+            .to.equal(repaymentAmount); // Alice's deposit - Bob's borrow + Bob's repayment  
 
-//         // Expect: corresponding debtTokens to have been burned
-//         await expect(
-//             (await hhDebtToken.balanceOf(bob.address)))
-//             .to.equal(0);
+        // Expect: corresponding debtTokens to have been burned
+        await expect(
+            (await hhDebtToken.balanceOf(bob.address)))
+            .to.equal(0);
 
-//         // Expect: NFT transferred from Escrow back to user
-//         await expect(
-//             (await hhNFT.ownerOf(bob_tokenId)))
-//             .to.equal(bob.address);           
-//     });
-// });
+        // Expect: NFT transferred from Escrow back to user
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(bob.address);           
+    });
+});
 
 describe('LendingPool >> Liquidate', function() {
 
     it('should retreive an NFT by liquidating a borrow', async function () {
         const tokenAmount = ethers.utils.parseUnits('2', 18); //1*10**numDecimals;
-        const interestRate = 20;
         const numWeeks = 1;
         // const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
         const liquidationAmount = tokenAmount.mul(160).div(100);
@@ -423,22 +461,27 @@ describe('LendingPool >> Liquidate', function() {
         await initReserve();
 
         // Deposit Asset tokens [required for liquidity]
-        await deposit(owner, hhAssetToken, tokenAmount);
+        await deposit(admin, hhAssetToken, tokenAmount);
 
         // Borrow Asset tokens
-        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, interestRate, numWeeks);
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
         
         // Retrieve borrowId 
         borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
         borrowId = borrowIds[0];
 
         // Retreive borrow
-        borrow = await hhCollateralManager.getBorrow(borrowId);
+        const borrowItem = await hhCollateralManager.getBorrow(borrowId);
 
         // Liquidate Borrow
         async function _liquidate(signer, assetToken, liquidationAmount, borrowId) {
             return liquidate(signer, assetToken, liquidationAmount, borrowId);
         }
+
+        // Set Mocked Oracle NFT price to be below liquidation threshold 
+        // (recall only borrowed 2 DAI and price below is in ETH)
+        let updatedFloorPrice = ethers.utils.parseUnits('0.0005', 18);
+        hhLendingPool.setMockFloorPrice(hhNFT.address, updatedFloorPrice);
 
         // Expect: Repay Emit response
         await expect(
@@ -458,18 +501,18 @@ describe('LendingPool >> Liquidate', function() {
         // Expect: borrow.repaymentAmount assetTokens transferred from liquidator (alice) to nToken reserve
         await expect(
             (await hhAssetToken.balanceOf(hhNToken.address)))
-            .to.equal(borrow.repaymentAmount); 
+            .to.equal(borrowItem.repaymentAmount); 
 
         // Expect: 5% of the remaining to be paid to LP as a liquidation fee
         await expect(
             (await hhAssetToken.balanceOf(hhLendingPoolAddress)))
-            .to.equal(((liquidationAmount).sub(borrow.repaymentAmount)).mul(5).div(100)); 
+            .to.equal(((liquidationAmount).sub(borrowItem.repaymentAmount)).mul(5).div(100)); 
 
 
         // Expect: 95% of the remaining be reimbursed to the borrower
         await expect(
             (await hhAssetToken.balanceOf(bob.address)))
-            .to.equal(liquidationAmount.sub(borrow.repaymentAmount).sub(((liquidationAmount).sub(borrow.repaymentAmount)).mul(5).div(100)).add(hhAssetTokenInitialBalance).add(tokenAmount)); 
+            .to.equal(liquidationAmount.sub(borrowItem.repaymentAmount).sub(((liquidationAmount).sub(borrowItem.repaymentAmount)).mul(5).div(100)).add(hhAssetTokenInitialBalance).add(tokenAmount)); 
 
 
         // Expect: corresponding debtTokens to have been burned
@@ -481,5 +524,80 @@ describe('LendingPool >> Liquidate', function() {
         await expect(
             (await hhNFT.ownerOf(bob_tokenId)))
             .to.equal(alice.address);           
+    });
+
+    it('should revert if called with incorrect asset', async function () {
+        const tokenAmount = ethers.utils.parseUnits('2', 18); //1*10**numDecimals;
+        const interestRate = 20;
+        const numWeeks = 1;
+        // const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
+        const liquidationAmount = tokenAmount.mul(160).div(100);
+
+        // Get and deploy incorrect Asset Token
+        IncorrectAssetToken = await ethers.getContractFactory('AssetToken');
+        hhIncorrectAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
+        await hhIncorrectAssetToken.deployed();
+
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens [required for liquidity]
+        await deposit(admin, hhAssetToken, tokenAmount);
+
+        // Borrow Asset tokens
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
+        
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowId = borrowIds[0];
+
+        // Retreive borrow
+        // await hhCollateralManager.getBorrow(borrowId);
+
+        // Liquidate Borrow
+        async function _liquidate(signer, assetToken, liquidationAmount, borrowId) {
+            return liquidate(signer, assetToken, liquidationAmount, borrowId);
+        }
+
+        // Expect: Repay Emit response
+        await expect(
+            _liquidate(alice, hhIncorrectAssetToken, liquidationAmount, borrowId))
+            .to.be.revertedWith("INCORRECT_ASSET");
+       
+    });
+
+    it('should revert if floor price is above liquidiation threshold', async function () {
+        const tokenAmount = ethers.utils.parseUnits('2', 18); //1*10**numDecimals;
+        const interestRate = 20;
+        const numWeeks = 1;
+        // const repaymentAmount = tokenAmount.add(tokenAmount.mul(interestRate).div(100).mul(numWeeks).div(52));
+        const liquidationAmount = tokenAmount.mul(160).div(100);
+
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens [required for liquidity]
+        await deposit(admin, hhAssetToken, tokenAmount);
+
+        // Borrow Asset tokens
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
+        
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowId = borrowIds[0];
+
+        // Retreive borrow
+        // await hhCollateralManager.getBorrow(borrowId);
+
+        // Liquidate Borrow
+        async function _liquidate(signer, assetToken, liquidationAmount, borrowId) {
+            return liquidate(signer, assetToken, liquidationAmount, borrowId);
+        }
+
+        // Expect: Repay Emit response
+        await expect(
+            _liquidate(alice, hhAssetToken, liquidationAmount, borrowId))
+            .to.be.revertedWith("ABOVE_LIQUIDATION_THRESHOLD");
+       
     });
 });
