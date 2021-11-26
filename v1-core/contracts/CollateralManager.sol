@@ -284,7 +284,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         return counter._value;
     }
 
-    /// @notice Retreives the Borrow for a given id.
+    /// @notice retrieves the Borrow for a given id.
     /// @dev Uses a mapping and returns a struct.
     /// @return Returns the Borrow for a given id.
     function getBorrow(uint256 borrowId) public view returns (DataTypes.Borrow memory) {

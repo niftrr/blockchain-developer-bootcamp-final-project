@@ -7,7 +7,6 @@ function Background(props) {
   return (
     <div className={`background ${className || ""}`}>
       <div className="flex-col">
-        <img className="bored-ape-logo-outline-1" src="/img/bored-ape-logo-outline-1@2x.png" />
         <img className="punk-woman-outl-ovebg-preview-1" src="/img/punk-woman-outline-removebg-preview-1@2x.png" />
       </div>
       <div className="flex-col-1">

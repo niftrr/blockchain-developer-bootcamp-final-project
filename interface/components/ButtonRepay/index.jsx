@@ -11,7 +11,8 @@ function ButtonRepay(props) {
     tokenAddress,
     nftSymbol,
     nftTokenId, 
-    imgUrl} = props;
+    imgUrl,
+    token} = props;
 
   return (
     <Popup modal trigger={
@@ -28,6 +29,7 @@ function ButtonRepay(props) {
         nftSymbol={nftSymbol}
         nftTokenId={nftTokenId}
         imgUrl={imgUrl}
+        token={token}
       />
       </Popup>
   );

@@ -154,6 +154,37 @@ export const useLendingPool = () => {
         }
     };
 
+    const liquidate = async (
+        tokenAddress, 
+        tokenAmount,
+        borrowId) => {        
+        if (account && isValidNetwork) {
+            try {
+                setTxnStatus("LOADING");
+                const tokenSymbol = assetTokenContractAddressSymbolLookup[tokenAddress];           
+                const tokenContract = assetTokenContract[tokenSymbol];
+                await tokenContract.approve(lendingPoolContract.address, parseUnits(tokenAmount.toString(), 18));
+                setTxnStatus("LOADING");
+                const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
+                const txn = await lendingPoolContract.liquidate(
+                    tokenContractAddress, 
+                    parseUnits(tokenAmount.toString(), 18),
+                    borrowId); // TODO: remove hard-coded decimals
+                
+                await txn.wait(1);
+                await fetchDebtTokenBalance(tokenSymbol);
+                setTxnStatus("COMPLETE");
+                await wait(10);
+                setTxnStatus("");
+            } catch (error) {
+                setTxnStatus("ERROR");
+                console.log('ERROR', error);
+                await wait(10);
+                setTxnStatus("");
+            }
+        }
+    };
+
     return {
         assetTokenContractAddressSymbolLookup,
         fetchBorrowFloorPrice,
@@ -161,7 +192,8 @@ export const useLendingPool = () => {
         deposit,
         withdraw,
         borrow,
-        repay
+        repay,
+        liquidate
     }
 };
 

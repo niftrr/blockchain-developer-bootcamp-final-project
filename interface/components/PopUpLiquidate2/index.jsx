@@ -1,34 +1,26 @@
-import React, { useEffect } from "react";
-import "./PopUpNFT.css";
+import React, { useEffect, useState } from "react";
+import "./PopUpLiquidate2.css";
 import { useAppContext } from "../../AppContext";
 import useLendingPool from "../../hooks/useLendingPool";
 import TransactionStatus from "../TransactionStatus";
 import useTransaction from "../../hooks/useTransaction";
 import { useWeb3React } from "@web3-react/core";
+import useNFT from "../../hooks/useNFT";
 
-function PopUpNFT(props) {
-  const { value, tokenAddress, borrowId, spanText, spanText2, nftAvatar, rectangle19, inputType, inputPlaceholder, nftSymbol, nftTokenId, token } = props;
+function PopUpLiquidate2(props) {
+  const { value, tokenAddress, borrowId, spanText, spanText2, rectangle19, inputType, buttonText, inputPlaceholder, nftSymbol, nftTokenId, imgUrl, token } = props;
   const { account } = useWeb3React();
-  const { repay } = useLendingPool();
+  const { liquidate } = useLendingPool();
   const { txnStatus } = useTransaction();
+  const { fetchImageBAYC, fetchImagePUNK } = useNFT();
 
   const handleRepaySubmit = () => {
-    repay(tokenAddress, value, borrowId);
+    liquidate(tokenAddress, value, borrowId);
   }
 
-  useEffect(() => {
-    if (account) {
-      txnStatus
-    }    
-  }, [account]);
-
-  const tokenImage = {
-    "DAI": "/img/dai-logo.png",
-    "USDC": "/img/usdc-logo.png",
-    "WETH": "/img/weth-logo.png"
+  const formatPrice = (price, decimals) => {
+    return price.toFixed(Math.max(decimals, (price.toString().split('.')[1] || []).length))
   }
-
-  console.log('popupnft nftSymbol', nftSymbol);
 
   return (
     <div className="pop-up-nft">
@@ -39,29 +31,30 @@ function PopUpNFT(props) {
         </span>
       </div>
       <TransactionStatus />
-      <img className="nft-avatar" src={nftAvatar} />
+      <img className="nft-avatar" src={imgUrl} />
       <div>
         <span>
           <span className="liquidation-nft oxanium-extra-light-web-orange-24px">{nftSymbol} #{nftTokenId}</span>
         </span>
       </div>
       <div className="overlap-group1 border-1px-black">
-        <img className="rectangle-19" src={tokenImage[token]} />
+        <img className="rectangle-19" src={rectangle19} />
+        
         <input
           align="right"
           className="x19111-repay oxanium-normal-black-24px"
           name="19111"
-          value={value}
+          value={formatPrice(value,4)}
           type={inputType}
           readOnly
         />
       </div>
       <div onClick={handleRepaySubmit} className="overlap-group">
         <button onClick={handleRepaySubmit} className="rectangle-47"></button>
-        <div className="repay valign-text-middle oxanium-normal-white-24px">Repay</div>
+        <div className="repay valign-text-middle oxanium-normal-white-24px">{buttonText}</div>
       </div>
     </div>
   );
 }
 
-export default PopUpNFT;
+export default PopUpLiquidate2;

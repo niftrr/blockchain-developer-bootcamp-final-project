@@ -73,6 +73,7 @@ export const useCollateralManager = () => {
         borrow["nftContractAddress"] = _borrow["collateral"][0];
         borrow["nftSymbol"] = nftContractAddressReverseLookup[borrow["nftContractAddress"]];
         borrow["nftTokenId"] = _borrow["collateral"][1].toNumber();
+        borrow["status"] = _borrow["status"];
         return borrow;
     }
 
@@ -83,7 +84,16 @@ export const useCollateralManager = () => {
             let borrow = await collateralManagerContract.getBorrow(borrowId);
             // Exclude null addresses. TODO: check SC for an alternative to this patch.
             if (borrow[1] != "0x0000000000000000000000000000000000000000") { 
-                userBorrows[borrowId] = await formatBorrow(borrow);
+                // Exclude non-active borrows
+                if (borrow["status"] == 0) {
+                    let borrowFormatted = await formatBorrow(borrow);
+
+                    // Add in collRatio
+                    let floorPrice = formatUnits((await lendingPoolContract.getMockFloorPrice(borrowFormatted["nftContractAddress"], borrowFormatted["erc20Token"])).toString(), 18); 
+                    let borrowCollRatio = 100 * floorPrice / borrowFormatted['borrowAmount'];
+                    borrowFormatted["collRatio"] = borrowCollRatio;
+                    userBorrows[borrowId] = borrowFormatted;
+                }
             } 
         }
         setUserBorrows(userBorrows);

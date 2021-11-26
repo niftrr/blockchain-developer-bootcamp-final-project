@@ -22,7 +22,7 @@ function Liquidate(props) {
       fetchDefaultedBorrows();
       console.log('liquidate');
     }  
-  }, [account]);
+  }, [account, borrowDefaults]);
 
   return (
     <div className="container-center-horizontal">
@@ -41,7 +41,9 @@ function Liquidate(props) {
                 collRatio={borrowDefaults[key]["collRatio"]}
                 nftSymbol={borrowDefaults[key]["nftSymbol"]}
                 nftTokenId={borrowDefaults[key]["nftTokenId"]}
+                tokenAddress={borrowDefaults[key]["erc20Token"]}
                 token={assetTokenContractAddressSymbolLookup[borrowDefaults[key]["erc20Token"]]} 
+                borrowId={key}
                 key={index}
               />
             ))}

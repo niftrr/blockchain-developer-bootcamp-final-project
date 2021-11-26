@@ -1,4 +1,4 @@
-.button-repay {
+.button-liquidate {
   align-items: flex-start;
   border-radius: 5px;
   display: flex;
@@ -17,7 +17,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 5px;
+
 }
 
 .rectangle-11 {
@@ -28,7 +28,6 @@
   position: absolute;
   top: 0;
   width: 113px;
-  border-radius: 5px;
 }
 
 .repay-1 {

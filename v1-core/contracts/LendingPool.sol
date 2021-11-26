@@ -417,10 +417,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
             collateralManagerAddress
         ).getBorrow(borrowId);
         require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
-        require(block.timestamp < borrowItem.maturity, "UNEXPIRED_MATURITY");
 
         uint256 floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
-        require(floorPrice < borrowItem.liquidationPrice, "ABOVE_LIQUIDATION_THRESHOLD");
+        // TODO: To have 80% liquidation price able to be set/updated 
+        require(liquidationAmount == floorPrice.mul(80).div(100), "INCORRECT_AMOUNT");
+        require(floorPrice < borrowItem.liquidationPrice || block.timestamp > borrowItem.maturity, "BORROW_NOT_IN_DEFAULT");
 
         address borrower = borrowItem.borrower;
         uint256 repaymentAmount = borrowItem.repaymentAmount;

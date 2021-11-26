@@ -10,14 +10,15 @@ function PopUpNFTs(props) {
     tokenAddress,
     nftSymbol,
     nftTokenId, 
-    imgUrl } = props;
+    imgUrl,
+    token } = props;
 
   return (
     <div className="container-center-horizontal">
       <div className="popupnfts screen">
         <PopUpNFT
           spanText="Repay borrow."
-          spanText2="Repay borrow to retreive your NFT."
+          spanText2="Repay borrow to retrieve your NFT."
           nftAvatar={imgUrl}
           rectangle19="/img/rectangle-19@2x.png"
           inputType="text"
@@ -25,6 +26,9 @@ function PopUpNFTs(props) {
           tokenAddress={tokenAddress}
           borrowId={borrowId}
           repay="Repay"
+          nftSymbol={nftSymbol}
+          nftTokenId={nftTokenId}
+          token={token}
         />
       </div>
     </div>

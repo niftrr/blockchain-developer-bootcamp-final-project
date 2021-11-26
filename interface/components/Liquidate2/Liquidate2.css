@@ -24,6 +24,7 @@
 .overlap-group-19 {
   align-items: flex-start;
   background-color: var(--blue-zodiac);
+  border-radius: 5px;
   display: flex;
   height: 47px;
   left: 948px;

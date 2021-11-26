@@ -38,7 +38,7 @@ function Borrow(props) {
       }
       fetchImgUrl();
     }  
-  }, [account]);
+  }, [account, userBorrows]);
 
   const formatDate = (timestamp) => {
     let monthNames =["Jan","Feb","Mar","Apr",
@@ -77,6 +77,24 @@ function Borrow(props) {
     return `${days}d ${hours}h ${minutes}m`;
   }
 
+  const warningClassCollRatio = (weight) => {
+    let ret = `oxanium-${weight}-black-20px`;
+    if (userBorrows[borrowId]["collRatio"] < 150){
+      ret = `oxanium-${weight}-red-20px`;
+    } 
+    return ret;
+  }
+
+  const warningClassMaturity = (weight) => {
+    let ret = `oxanium-${weight}-black-20px`;
+    let maturity = new Date(userBorrows[borrowId]["maturity"] * 1000);
+    let now = new Date().getTime(); 
+    if (now > maturity){
+      ret = `oxanium-${weight}-red-20px`;
+    } 
+    return ret;
+  }
+
   return (
     <div className="borrow-6">
       <div className="overlap-group-13">
@@ -96,23 +114,24 @@ function Borrow(props) {
           nftTokenId={userBorrows[borrowId]["nftTokenId"]}
           imgUrl={imgUrl}
           tokenAddress={userBorrows[borrowId]["erc20Token"]}
+          token={assetTokenContractAddressSymbolLookup[userBorrows[borrowId]["erc20Token"]]} 
         />
         <div className="x175-min-150 valign-text-middle oxanium-bold-black-20px">
           <span>
-            <span className="oxanium-bold-black-20px">
+            <span className={warningClassCollRatio("bold")}>
               175%
               <br />
             </span>
-            <span className="oxanium-normal-black-20px">Min. 150%</span>
+            <span className={warningClassCollRatio("normal")}>Min. 150%</span>
           </span>
         </div>
         <div className="text-1 valign-text-middle oxanium-bold-black-20px">
           <span>
-            <span className="oxanium-bold-black-20px">
+            <span className={warningClassMaturity("bold")}>
             {formatDate(userBorrows[borrowId]["maturity"])}
               <br />
             </span>
-            <span className="oxanium-normal-black-20px">{formatCountdown(userBorrows[borrowId]["maturity"])}</span>
+            <span className={warningClassMaturity("normal")}>{formatCountdown(userBorrows[borrowId]["maturity"])}</span>
           </span>
         </div>
         <TokenBorrow token={assetTokenContractAddressSymbolLookup[userBorrows[borrowId]["erc20Token"]]} />

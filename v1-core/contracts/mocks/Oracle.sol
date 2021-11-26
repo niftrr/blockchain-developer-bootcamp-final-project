@@ -24,7 +24,6 @@ contract MockOracle {
 
         uint256 ethTokenPriceDecimal = 1000000000000000000; // 18d TODO: connect Token Price Oracle 
         uint256 floorPrice = floorPriceEth.mul(ethTokenPrice).div(ethTokenPriceDecimal);
-
         return floorPrice;
     }
 

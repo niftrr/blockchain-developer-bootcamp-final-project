@@ -100,6 +100,7 @@
   position: absolute;
   top: 0;
   width: 256px;
+  border-radius: 5px;
 }
 
 .place-11 {

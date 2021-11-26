@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import AssetItem from "../AssetItem";
 import TokenBorrow from "../TokenBorrow";
+import ButtonLiquidate from "../ButtonLiquidate";
 import "./Liquidate2.css";
 import useNFT from "../../hooks/useNFT";
 
 function Liquidate2(props) {
-  const { assetItemProps, tokenBorrowProps, liquidationPrice, maturityTimestamp, collRatio, token, nftSymbol, nftTokenId } = props;
+  const { assetItemProps, tokenBorrowProps, liquidationPrice, maturityTimestamp, collRatio, token, tokenAddress, nftSymbol, nftTokenId, borrowId } = props;
   const { account } = useWeb3React();
   const { 
     fetchImageBAYC,
@@ -86,13 +87,23 @@ function Liquidate2(props) {
     return ret;
   }
 
+  const formatPrice = (price, decimals) => {
+    return price.toFixed(Math.max(decimals, (price.toString().split('.')[1] || []).length))
+  }
+
   return (
     <div className="liquidate-7">
       <div className="overlap-group-18">
         <div className="rectangle-20"></div>
-        <button className="overlap-group-19">
-          <div className="liquidate-8 valign-text-middle oxanium-normal-white-20px">Liquidate</div>
-        </button>
+        <ButtonLiquidate 
+          borrowId={borrowId}
+          liquidationPrice={liquidationPrice}
+          nftSymbol={nftSymbol}
+          nftTokenId={nftTokenId}
+          tokenAddress={tokenAddress}
+          token={token}
+          imgUrl={imgUrl}
+        />
         <div className="text-3 valign-text-middle oxanium-bold-black-20px">
           <span>
             <span className={warningClassMaturity("bold")}>
@@ -117,7 +128,7 @@ function Liquidate2(props) {
           nftSymbol={nftSymbol} 
           nftTokenId={nftTokenId} 
         />
-        <div className="text-2-1 valign-text-middle oxanium-normal-black-24px">{liquidationPrice}</div>
+        <div className="text-2-1 valign-text-middle oxanium-normal-black-24px">{formatPrice(liquidationPrice,4)}</div>
         <TokenBorrow 
           className={tokenBorrowProps.className}
           token={token} 

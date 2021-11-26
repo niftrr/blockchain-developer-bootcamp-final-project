@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
+import { Switch, BrowserRouter as Router, Route, withRouter } from "react-router-dom";
 import PopUpNFTs from "./components/PopUpNFTs";
 import Dashboard from "./components/Dashboard";
 import PopUpTokensDeposit from "./components/PopUpTokensDeposit";
@@ -74,10 +74,10 @@ function App(props) {
   );
 }
 
-export default App;
+export default withRouter(App);
 const popUpNFTData = {
     spanText: <>Repay borrow.<br /></>,
-    spanText2: <><br />Repay borrow to retreive your NFT.</>,
+    spanText2: <><br />Repay borrow to retrieve your NFT.</>,
     nftAvatar: "/img/nft-avatar@2x.png",
     rectangle19: "/img/rectangle-19@2x.png",
     inputType: "text",

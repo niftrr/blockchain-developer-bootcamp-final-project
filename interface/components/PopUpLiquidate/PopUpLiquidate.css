@@ -1,0 +1,16 @@
+.popupnfts {
+  align-items: flex-start;
+  display: flex;
+  height: 732px;
+  position: relative;
+  width: 478px;
+}
+
+.overlay .popupnfts {
+  background-color: #00000000;
+}
+
+#overlay-popupnfts {
+  background-color: transparent;
+}
+
