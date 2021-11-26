@@ -31,7 +31,7 @@ beforeEach(async function() {
     hhAssetTokenInitialBalance = ethers.utils.parseUnits('1', 18);
 
     // Get Signers
-    [admin, emergencyAdmin, alice, bob] = await ethers.getSigners();
+    [admin, emergencyAdmin, alice, bob, treasury] = await ethers.getSigners();
 
     // Get and deploy Configurator
     Configurator = await ethers.getContractFactory('Configurator');
@@ -45,7 +45,8 @@ beforeEach(async function() {
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
     hhLendingPool = await LendingPool.deploy(
-        hhConfiguratorAddress
+        hhConfiguratorAddress,
+        treasury.address
     );
     await hhLendingPool.deployed();
     hhLendingPoolAddress = await hhLendingPool.resolvedAddress;

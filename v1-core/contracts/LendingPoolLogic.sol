@@ -19,14 +19,14 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     /// @dev Uses a state variable.
     /// @return Returns the Token price oracle contract address.
     function getTokenPriceOracleAddress() public view returns (address) {
-        return tokenPriceOracleAddress;
+        return _tokenPriceOracleAddress;
     }
 
     /// @notice Get the Collateral Manager contract address.
     /// @dev Uses a state variable.
     /// @return Returns the Collateral Manager contract address.
     function getCollateralManagerAddress() public view returns (address) {
-        return collateralManagerAddress;
+        return _collateralManagerAddress;
     }
 
     /// @notice Private function to calculate borrow variables.
@@ -47,7 +47,7 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     {
         uint256[4] memory variables;
         uint256 interestRate = ICollateralManager(
-            collateralManagerAddress
+            _collateralManagerAddress
         ).getInterestRate(
             collateral
         );

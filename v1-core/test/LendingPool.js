@@ -34,7 +34,7 @@ beforeEach(async function() {
     bob_tokenId = 1;
 
     // Get Signers
-    [admin, emergencyAdmin, alice, bob] = await ethers.getSigners();
+    [admin, emergencyAdmin, alice, bob, treasury] = await ethers.getSigners();
 
     // Get and deploy Configurator
     Configurator = await ethers.getContractFactory('Configurator');
@@ -53,7 +53,8 @@ beforeEach(async function() {
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
     hhLendingPool = await LendingPool.deploy(
-        hhConfiguratorAddress
+        hhConfiguratorAddress,
+        treasury.address
     );
     await hhLendingPool.deployed();
     hhLendingPoolAddress = await hhLendingPool.resolvedAddress;
@@ -507,7 +508,7 @@ describe('LendingPool >> Liquidate', function() {
 
         // Expect: 5% of the remaining to be paid to LP as a liquidation fee
         await expect(
-            (await hhAssetToken.balanceOf(hhLendingPoolAddress)))
+            (await hhAssetToken.balanceOf(treasury.address)))
             .to.equal(((liquidationAmount).sub(borrowItem.repaymentAmount)).mul(5).div(100)); 
 
         // Expect: 95% of the remaining be reimbursed to the borrower

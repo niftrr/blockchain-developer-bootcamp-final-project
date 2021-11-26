@@ -25,13 +25,13 @@ import "hardhat/console.sol";
 contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;  
 
-    bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
+    bytes32 internal constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
 
-    constructor(address configurator) {
-        // Grant the configurator role
+    constructor(address configurator, address treasuryAddress) {
         _setupRole(CONFIGURATOR_ROLE, configurator);
-        interestFee = 5; // 5%
-        liquidationFee = 5; //5%
+        _treasuryAddress = treasuryAddress;
+        _interestFee = 5; // 5%
+        _liquidationFee = 5; //5%
     }
 
     modifier onlyConfigurator() {
@@ -40,51 +40,51 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     }
 
     modifier whenReserveActive(address asset) {
-        DataTypes.Reserve memory reserve = reserves[asset];  
+        DataTypes.Reserve memory reserve = _reserves[asset];  
         require(reserve.status == DataTypes.ReserveStatus.Active, "Reserve is not active.");  
         _;
     }
 
     modifier whenReserveNotPaused(address asset) {
-        DataTypes.Reserve memory reserve = reserves[asset];  
+        DataTypes.Reserve memory reserve = _reserves[asset];  
         require(reserve.status != DataTypes.ReserveStatus.Paused, "Reserve is paused.");  
         _;
     }
 
     modifier whenReserveNotProtected(address asset) {
-        DataTypes.Reserve memory reserve = reserves[asset];  
+        DataTypes.Reserve memory reserve = _reserves[asset];  
         require(reserve.status != DataTypes.ReserveStatus.Protected, "Reserve is protected.");  
         _;
     }
 
     /// @notice Initialize the Collateral Manager contract address.
-    /// @param _collateralManagerAddress The Collateral Manager contract address.
+    /// @param collateralManagerAddress The Collateral Manager contract address.
     /// @dev Uses a state varaible.
     function connectCollateralManager(
-        address _collateralManagerAddress
+        address collateralManagerAddress
     ) 
         public 
         onlyConfigurator 
     {
-        require(!isCollateralManagerConnected, "Collateral Manager already connected");
-        isCollateralManagerConnected = true;
-        collateralManagerAddress = _collateralManagerAddress;
+        require(!_isCollateralManagerConnected, "Collateral Manager already connected");
+        _isCollateralManagerConnected = true;
+        _collateralManagerAddress = collateralManagerAddress;
 
-        emit CollateralManagerConnected(collateralManagerAddress);
+        emit CollateralManagerConnected(_collateralManagerAddress);
     }
 
     /// @notice Connect the Token Price Oracle contract by setting the address.
-    /// @param _tokenPriceOracleAddress The Token Price Oracle address.
+    /// @param tokenPriceOracleAddress The Token Price Oracle address.
     /// @dev Uses a state variable.
     function connectTokenPriceOracle(
-        address _tokenPriceOracleAddress
+        address tokenPriceOracleAddress
     ) 
         public 
         onlyConfigurator 
     {
-        tokenPriceOracleAddress = _tokenPriceOracleAddress;
+        _tokenPriceOracleAddress = tokenPriceOracleAddress;
 
-        emit TokenPriceOracleConnected(tokenPriceOracleAddress);
+        emit TokenPriceOracleConnected(_tokenPriceOracleAddress);
     }
 
     /// @notice Initializes a reserve.
@@ -216,7 +216,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @dev To freeze deposit and borrow functions for a single reserve.
     function freezeReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[asset]; 
         reserve.status = DataTypes.ReserveStatus.Frozen;
 
         emit ReserveFrozen(asset);
@@ -226,7 +226,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @dev To pause functions for a single reserve instead of the whole contract.
     function pauseReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[asset]; 
         reserve.status = DataTypes.ReserveStatus.Paused;
 
         emit ReservePaused(asset);
@@ -236,7 +236,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @dev Desactivates functions `liquidate`, `deposit` and `borrow`.
     function protectReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[asset]; 
         reserve.status = DataTypes.ReserveStatus.Protected;
 
         emit ReserveProtected(asset);
@@ -246,7 +246,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @dev To activate all functions for a single reserve.
     function activateReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[asset]; 
         reserve.status = DataTypes.ReserveStatus.Active;  
 
         emit ReserveActivated(asset);
@@ -268,9 +268,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.status = DataTypes.ReserveStatus.Active;
         reserve.nTokenAddress = nTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
-        reserves[asset] = reserve;
+        _reserves[asset] = reserve;
 
-        emit InitReserve(asset, reserves[asset].nTokenAddress, reserves[asset].debtTokenAddress);
+        emit InitReserve(asset, _reserves[asset].nTokenAddress, _reserves[asset].debtTokenAddress);
     }
 
     /// @notice Private function to deposit assets into the lending pool.
@@ -284,7 +284,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private 
     {
         bool success;
-        DataTypes.Reserve memory reserve = reserves[asset]; 
+        DataTypes.Reserve memory reserve = _reserves[asset]; 
         address nToken = reserve.nTokenAddress;
         
         success  = IERC20(asset).transferFrom(_msgSender(), nToken, amount);
@@ -307,7 +307,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private 
     {
         bool success;
-        DataTypes.Reserve memory reserve = reserves[asset];        
+        DataTypes.Reserve memory reserve = _reserves[asset];        
         address nToken = reserve.nTokenAddress;
 
         uint256 nTokenBalance = INToken(nToken).balanceOf(_msgSender());
@@ -339,7 +339,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private
     {
         bool success;
-        DataTypes.Reserve memory reserve = reserves[asset]; 
+        DataTypes.Reserve memory reserve = _reserves[asset]; 
         uint256[4] memory variables = getBorrowVariables(
             asset,
             amount, 
@@ -347,7 +347,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
             numWeeks
         );
 
-        success = ICollateralManager(collateralManagerAddress).deposit(
+        success = ICollateralManager(_collateralManagerAddress).deposit(
             _msgSender(), 
             asset, 
             collateral, 
@@ -381,12 +381,12 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private 
     {
         bool success;
-        DataTypes.Reserve memory reserve = reserves[asset]; 
+        DataTypes.Reserve memory reserve = _reserves[asset]; 
 
         success = INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
         require(success, "UNSUCCESSFUL_TRANSFER");
 
-        success = ICollateralManager(collateralManagerAddress).withdraw(
+        success = ICollateralManager(_collateralManagerAddress).withdraw(
             borrowId, 
             asset, 
             repaymentAmount
@@ -412,9 +412,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private
     {
         bool success;
-        DataTypes.Reserve memory reserve = reserves[asset];  
+        DataTypes.Reserve memory reserve = _reserves[asset];  
         DataTypes.Borrow memory borrowItem = ICollateralManager(
-            collateralManagerAddress
+            _collateralManagerAddress
         ).getBorrow(borrowId);
         require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
 
@@ -430,10 +430,10 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         require(success, "UNSUCCESSFUL_TRANSFER");
 
         uint256 remainder = liquidationAmount.sub(repaymentAmount);
-        uint256 feeAmount = remainder.mul(liquidationFee).div(100);
+        uint256 feeAmount = remainder.mul(_liquidationFee).div(100);
         uint256 reimbursementAmount = remainder.sub(feeAmount);
 
-        success = IERC20(asset).transferFrom(_msgSender(), address(this), feeAmount);
+        success = IERC20(asset).transferFrom(_msgSender(), _treasuryAddress, feeAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
         
         success = IERC20(asset).transferFrom(_msgSender(), borrower, reimbursementAmount);
@@ -442,7 +442,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         success = IDebtToken(reserve.debtTokenAddress).burnFrom(borrower, repaymentAmount);
         require(success, "UNSUCCESSFUL_BURN");
         
-        success = ICollateralManager(collateralManagerAddress).retrieve(
+        success = ICollateralManager(_collateralManagerAddress).retrieve(
             borrowId, 
             asset, 
             repaymentAmount,

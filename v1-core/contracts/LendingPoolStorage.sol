@@ -11,14 +11,16 @@ import { ReserveLogic } from './libraries/ReserveLogic.sol';
 contract LendingPoolStorage {
     using ReserveLogic for DataTypes.Reserve;
 
-    mapping(address => DataTypes.Reserve) internal reserves;
-    mapping(address => string) internal pricePairs;
+    address internal _treasuryAddress;
 
-    address internal collateralManagerAddress;
-    address internal tokenPriceOracleAddress;
+    mapping(address => DataTypes.Reserve) internal _reserves;
+    mapping(address => string) internal _pricePairs;
 
-    bool internal isCollateralManagerConnected = false;
+    address internal _collateralManagerAddress;
+    address internal _tokenPriceOracleAddress;
 
-    uint256 internal interestFee;
-    uint256 internal liquidationFee;
+    bool internal _isCollateralManagerConnected = false;
+
+    uint256 internal _interestFee;
+    uint256 internal _liquidationFee;
 }
