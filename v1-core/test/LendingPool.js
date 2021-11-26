@@ -411,7 +411,7 @@ describe('LendingPool >> Repay', function() {
         const borrowItem = await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
         
         // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
         borrowId = borrowIds[0];
 
         // Repay Asset tokens
@@ -467,7 +467,7 @@ describe('LendingPool >> Liquidate', function() {
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
         
         // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
         borrowId = borrowIds[0];
 
         // Retreive borrow
@@ -548,7 +548,7 @@ describe('LendingPool >> Liquidate', function() {
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
         
         // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
         borrowId = borrowIds[0];
 
         // Retreive borrow
@@ -583,7 +583,7 @@ describe('LendingPool >> Liquidate', function() {
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, tokenAmount, numWeeks);
         
         // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrows(bob.address);
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
         borrowId = borrowIds[0];
 
         // Retreive borrow

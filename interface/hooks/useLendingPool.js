@@ -36,9 +36,7 @@ export const useLendingPool = () => {
     const fetchBorrowFloorPrice = async () => {
         if (borrowProject != "--") { 
             const nftContractAddress = await nftContract[borrowProject].address;
-            console.log('borrowToken', borrowToken);
             const assetTokenContractAddress = await assetTokenContract[borrowToken].address;
-            console.log('assetTokenContractAddress', assetTokenContractAddress);
             // TODO update: second parameter should be assetToken (not currently used by SC)
             const price = await lendingPoolContract.getMockFloorPrice(nftContractAddress, assetTokenContractAddress); 
             setBorrowFloorPrice(formatUnits(price, 18));
@@ -96,7 +94,6 @@ export const useLendingPool = () => {
         tokenAmount,
         nftTokenSymbol,
         nftTokenId,
-        interestRate,
         numWeeks) => {
         if (account && isValidNetwork) {
             try {
@@ -110,7 +107,6 @@ export const useLendingPool = () => {
                     parseUnits(tokenAmount, 18),
                     nftTokenContract.address,
                     nftTokenId,
-                    interestRate,
                     numWeeks); // TODO: remove hard-coded decimals
                 await txn.wait(1);
                 await fetchDebtTokenBalance(tokenSymbol);
@@ -159,6 +155,7 @@ export const useLendingPool = () => {
     };
 
     return {
+        assetTokenContractAddressSymbolLookup,
         fetchBorrowFloorPrice,
         borrowFloorPrice,
         deposit,

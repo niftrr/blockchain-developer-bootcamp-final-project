@@ -7,12 +7,14 @@ import "./Borrow.css";
 import useCollateralManager from "../../hooks/useCollateralManager";
 import { useAppContext } from "../../AppContext";
 import useNFT from "../../hooks/useNFT";
+import useLendingPool from "../../hooks/useLendingPool";
 
 
 function Borrow(props) {
   const {borrowId} = props;
   const { account } = useWeb3React();
   const { fetchUserBorrows } = useCollateralManager();
+  const { assetTokenContractAddressSymbolLookup } = useLendingPool();
   const { userBorrows } = useAppContext();
   const { 
     fetchImageBAYC,
@@ -50,7 +52,6 @@ function Borrow(props) {
     let monthName = monthNames[monthIndex];
     
     let year = date.getFullYear();
-    
     return `${day}-${monthName}-${year}`;  
   }
 
@@ -60,9 +61,18 @@ function Borrow(props) {
     let now = new Date().getTime(); 
     let distance = countDownDate - now;
       
-    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let days = distance / (1000 * 60 * 60 * 24);
+    let hours = (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+    let minutes = (distance % (1000 * 60 * 60)) / (1000 * 60);
+    if (distance > 0) {
+      days = Math.floor(days);
+      hours = Math.floor(hours);
+      minutes = Math.floor(minutes);
+    } else {
+      days = Math.ceil(days);
+      hours = Math.ceil(hours);
+      minutes = Math.ceil(minutes);
+    }
 
     return `${days}d ${hours}h ${minutes}m`;
   }
@@ -105,7 +115,7 @@ function Borrow(props) {
             <span className="oxanium-normal-black-20px">{formatCountdown(userBorrows[borrowId]["maturity"])}</span>
           </span>
         </div>
-        <TokenBorrow />
+        <TokenBorrow token={assetTokenContractAddressSymbolLookup[userBorrows[borrowId]["erc20Token"]]} />
       </div>
     </div>
   );

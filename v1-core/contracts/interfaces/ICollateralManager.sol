@@ -50,7 +50,7 @@ interface ICollateralManager {
 
     function getLiquidationThreshold(address _erc721Token) external view;
 
-    function getUserBorrows(address user) external view;
+    function getUserBorrowIds(address user) external view;
 
     function getBorrow(uint256 borrowId) external returns (DataTypes.Borrow memory);
 }

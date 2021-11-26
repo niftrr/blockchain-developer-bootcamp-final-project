@@ -276,8 +276,12 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @param user The user account.
     /// @dev Uses a mapping.
     /// @return Returns an array of the user borrow ids.
-    function getUserBorrows(address user) public view returns (uint256[] memory) {
+    function getUserBorrowIds(address user) public view returns (uint256[] memory) {
         return userBorrows[user];
+    }
+
+    function getLastBorrowId() public view returns (uint256) {
+        return counter._value;
     }
 
     /// @notice Retreives the Borrow for a given id.

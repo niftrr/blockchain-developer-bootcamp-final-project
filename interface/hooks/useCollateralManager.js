@@ -1,5 +1,6 @@
 import { useContract } from "./useContract";
 import CollateralManagerData from "../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json";
+import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
@@ -23,6 +24,11 @@ export const useCollateralManager = () => {
     nftContractAddressReverseLookup[nftContractAddressPUNK] = "PUNK";
     nftContractAddressReverseLookup[nftContractAddressBAYC] = "BAYC";
 
+    // LendingPool Contract
+    const lendingPoolContractAddress = process.env.REACT_APP_LENDING_POOL_CONTRACT_ADDRESS;
+    const lendingPoolABI = LendingPoolData["abi"];
+    const lendingPoolContract = useContract(lendingPoolContractAddress, lendingPoolABI);
+
     const { 
         setWhitelistNFT, 
         whitelistNFT, 
@@ -31,7 +37,10 @@ export const useCollateralManager = () => {
         aprPUNK, 
         aprBAYC, 
         setBorrowAPR, 
-        setUserBorrows } = useAppContext();
+        setUserBorrows,
+        setBorrowDefaults,
+        borrowFloorPrice 
+    } = useAppContext();
 
     const fetchWhitelistNFT = async () => {
         const whitelist = await collateralManagerContract.getWhitelist();
@@ -61,13 +70,14 @@ export const useCollateralManager = () => {
         borrow["repaymentAmount"] = formatUnits(_borrow["repaymentAmount"].toString(),18)
         borrow["interestRate"] = _borrow["interestRate"].toString()
         borrow["liquidationPrice"] = formatUnits(_borrow["liquidationPrice"].toString(),18)
-        borrow["nftSymbol"] = nftContractAddressReverseLookup[_borrow["collateral"][0]];
+        borrow["nftContractAddress"] = _borrow["collateral"][0];
+        borrow["nftSymbol"] = nftContractAddressReverseLookup[borrow["nftContractAddress"]];
         borrow["nftTokenId"] = _borrow["collateral"][1].toNumber();
         return borrow;
     }
 
     const fetchUserBorrows = async () => {
-        const userBorrowIds = await collateralManagerContract.getUserBorrows(account);
+        const userBorrowIds = await collateralManagerContract.getUserBorrowIds(account);
         const userBorrows = {};
         for (var borrowId in userBorrowIds) {
             let borrow = await collateralManagerContract.getBorrow(borrowId);
@@ -79,13 +89,43 @@ export const useCollateralManager = () => {
         setUserBorrows(userBorrows);
     }
 
+    const fetchDefaultedBorrows = async () => {
+        const lastBorrowId = await collateralManagerContract.getLastBorrowId();
+        const borrowDefaults = {};
+        for (let i = 0; i <= lastBorrowId; i++) {
+            let borrow = await collateralManagerContract.getBorrow(i);
+            
+            // Check if SC borrow is active and exclude null address (FE patch)
+            if (borrow['status'] == 0 && borrow['borrower'] != "0x0000000000000000000000000000000000000000") { 
+                
+                let maturity = new Date(borrow['maturity'] * 1000);
+                let now = new Date().getTime();
+
+                let borrowFormatted = await formatBorrow(borrow);
+                let floorPrice = formatUnits((await lendingPoolContract.getMockFloorPrice(borrowFormatted["nftContractAddress"], borrowFormatted["erc20Token"])).toString(), 18); 
+                let borrowCollRatio = 100 * floorPrice / borrowFormatted['borrowAmount'];
+
+                // if maturity expired or undercollateralized 
+                // TODO: Update hard-coded below to take threshold from SC
+                if (now > maturity || borrowCollRatio < 150 ) {
+                    borrowDefaults[i] = borrowFormatted;
+                    borrowDefaults[i]["collRatio"] = borrowCollRatio;
+                    // 20% discount on the floor price. TODO: take discount from SC
+                    borrowDefaults[i]["liquidationPrice"] = floorPrice * 0.8 
+                }
+            }
+        }
+        setBorrowDefaults(borrowDefaults);
+    }
+
     return {
         fetchWhitelistNFT,
         whitelistNFT,
         fetchAPR,
         fetchBorrowAPR,
         collateralManagerContractAddress,
-        fetchUserBorrows
+        fetchUserBorrows,
+        fetchDefaultedBorrows
     }
 };
 

@@ -26,7 +26,7 @@ function Instructions(props) {
     subtitle = "Note that balances and APY are updated each block based on open borrows and the token supply. "; 
   } else if (page == "LIQUIDATE") {
     title = "Liquidate defaulted borrows to purchase the underlying NFT at a discount. ";
-    subtitle = "Liquidations maintain protocol health and are incentivised with prices at 10-20% below the market floor."; 
+    subtitle = "Liquidations maintain protocol health and are incentivised with prices at 20% below the market floor."; 
   } else if (page == "ASSET") {
     title = "Asset borrow details.";
     subtitle = "Including historic data and external links.";   

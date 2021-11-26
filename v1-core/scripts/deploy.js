@@ -297,19 +297,20 @@ async function main() {
   await assetTokenWETH.connect(acc1).approve(lendingPool.address, depositAmount);
   await lendingPool.connect(acc1).deposit(assetTokenWETH.address, depositAmount);
 
-  // Borrows from Account 2
+  // Borrows from Account 0
   let borrowAmount;
+  let tokenId = 1
   borrowAmount = hre.ethers.utils.parseEther("50");
-  await nftPUNK.connect(acc2).approve(collateralManager.address, 4);
+  await nftPUNK.connect(acc0).approve(collateralManager.address, tokenId);
   console.log('lendingPool.address', lendingPool.address);
   console.log('assetTokenWETH.address', assetTokenWETH.address);
   console.log('nftPUNK.address', nftPUNK.address);
-  await lendingPool.connect(acc2).borrow(
+  await lendingPool.connect(acc0).borrow(
     assetTokenWETH.address,
     borrowAmount,
     nftPUNK.address,
-    4,
-    1
+    tokenId,
+    0
   );
 
   // borrowAmount = hre.ethers.utils.parseEther("30")

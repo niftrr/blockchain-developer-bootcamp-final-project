@@ -40,7 +40,6 @@ function PopUpBorrow() {
       borrowAmount, 
       borrowProject, 
       borrowNFT, 
-      borrowAPR,
       borrowMaturity);
   }
 
