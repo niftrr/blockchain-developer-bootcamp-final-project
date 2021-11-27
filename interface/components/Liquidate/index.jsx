@@ -9,6 +9,7 @@ import "./Liquidate.css";
 import useCollateralManager from "../../hooks/useCollateralManager";
 import { useAppContext } from "../../AppContext";
 import useLendingPool from "../../hooks/useLendingPool";
+import useTransaction from "../../hooks/useTransaction";
 
 function Liquidate(props) {
   const { headerProps, liquidate2Props, liquidate22Props, liquidate23Props } = props;
@@ -16,13 +17,14 @@ function Liquidate(props) {
   const { borrowDefaults } = useAppContext();
   const { fetchDefaultedBorrows } = useCollateralManager();
   const { assetTokenContractAddressSymbolLookup } = useLendingPool();
+  const { txnStatus } = useTransaction();
 
   useEffect(() => {
     if (account) {
       fetchDefaultedBorrows();
       console.log('liquidate');
     }  
-  }, [account, borrowDefaults]);
+  }, [account, txnStatus]);
 
   return (
     <div className="container-center-horizontal">

@@ -126,6 +126,7 @@
   margin-top: 40px;
   position: relative;
   width: 256px;
+  cursor: pointer;
 }
 
 .rectangle-47-borrowPopUp {
@@ -136,6 +137,7 @@
   top: 0;
   width: 256px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .borrow-borrowPopUp {

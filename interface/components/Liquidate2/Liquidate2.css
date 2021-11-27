@@ -38,6 +38,7 @@
   letter-spacing: 0;
   text-align: center;
   width: 100px;
+  cursor: pointer;
 }
 
 .overlap-group-19:hover {

@@ -5,6 +5,7 @@
   display: flex;
   margin-left: 17px;
   min-width: 89px;
+  cursor: pointer;
 }
 
 .withdraw {

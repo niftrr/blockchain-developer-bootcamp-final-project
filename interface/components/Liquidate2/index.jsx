@@ -91,6 +91,10 @@ function Liquidate2(props) {
     return price.toFixed(Math.max(decimals, (price.toString().split('.')[1] || []).length))
   }
 
+  const formatPercentage = (price, decimals) => {
+    return price.toFixed(Math.min(decimals, (price.toString().split('.')[1] || []).length))
+  }
+
   return (
     <div className="liquidate-7">
       <div className="overlap-group-18">
@@ -116,7 +120,7 @@ function Liquidate2(props) {
         <div className="x130-min-150 valign-text-middle oxanium-bold-red-20px">
           <span>
             <span className={warningClassCollRatio("bold")}>
-              {collRatio}%
+              {formatPercentage(collRatio,0)}%
               <br />
             </span>
             <span className={warningClassCollRatio("normal")}>Min. 150%</span>

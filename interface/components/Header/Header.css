@@ -73,6 +73,7 @@
   display: flex;
   margin-left: 20px;
   min-width: 185px;
+  cursor: pointer;
 }
 
 .connect-wallet {

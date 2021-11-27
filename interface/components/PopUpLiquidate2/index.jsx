@@ -30,13 +30,14 @@ function PopUpLiquidate2(props) {
           <span className="oxanium-extra-light-web-orange-24px">{spanText2}</span>
         </span>
       </div>
-      <TransactionStatus />
       <img className="nft-avatar" src={imgUrl} />
       <div>
         <span>
           <span className="liquidation-nft oxanium-extra-light-web-orange-24px">{nftSymbol} #{nftTokenId}</span>
         </span>
       </div>
+      <br/>
+      <TransactionStatus />
       <div className="overlap-group1 border-1px-black">
         <img className="rectangle-19" src={rectangle19} />
         

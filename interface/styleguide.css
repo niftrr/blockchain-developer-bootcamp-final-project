@@ -14,6 +14,7 @@
  
   --font-size-l: 25px;
   --font-size-m: 24px;
+  --font-size-xs: 18px;
   --font-size-s: 22px;
   --font-size-xl: 28px;
   --font-size-xs: 20px;
@@ -84,6 +85,14 @@
   font-size: var(--font-size-m);
   font-style: normal;
   font-weight: 700;
+}
+
+.oxanium-extra-light-web-orange-18px {
+  color: var(--web-orange);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xs);
+  font-style: normal;
+  font-weight: 200;
 }
 
 .oxanium-extra-light-web-orange-24px {

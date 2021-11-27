@@ -25,6 +25,7 @@
   letter-spacing: 0;
   text-align: center;
   width: 100%;
+  cursor: pointer;
 }
 
 .borrow-place-9-disabled {

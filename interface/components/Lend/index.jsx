@@ -33,7 +33,7 @@ function Lend(props) {
       fetchNTokenYield('USDC');
       fetchNTokenYield('WETH');
     }    
-  }, [account, nTokenBalanceDAI]);
+  }, [account, nTokenBalanceDAI,nTokenBalanceUSDC,nTokenBalanceWETH]);
 
   const formatNumber = (value) => {
     let res;

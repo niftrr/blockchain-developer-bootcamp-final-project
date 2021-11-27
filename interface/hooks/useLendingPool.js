@@ -48,11 +48,13 @@ export const useLendingPool = () => {
             try {
                 setTxnStatus("LOADING");
                 const tokenContract = assetTokenContract[tokenSymbol];
-                await tokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
-                setTxnStatus("LOADING");
+                const txn1 = await tokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                setTxnStatus("ACCEPTING");
+                await txn1.wait(1);
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
-                const txn = await lendingPoolContract.deposit(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
-                await txn.wait(1);
+                const txn2 = await lendingPoolContract.deposit(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                setTxnStatus("TRANSFERRING");
+                await txn2.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
                 await wait(10);
@@ -71,11 +73,14 @@ export const useLendingPool = () => {
             try {
                 setTxnStatus("LOADING");
                 const _nTokenContract = nTokenContract[tokenSymbol];
-                await _nTokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                const txn1 = await _nTokenContract.approve(lendingPoolContract.address, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                setTxnStatus("ACCEPTING");
+                await txn1.wait(1);
                 setTxnStatus("LOADING");
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
-                const txn = await lendingPoolContract.withdraw(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
-                await txn.wait(1);
+                const txn2 = await lendingPoolContract.withdraw(tokenContractAddress, parseUnits(amount, 18)); // TODO: remove hard-coded decimals
+                setTxnStatus("TRANSFERRING");
+                await txn2.wait(1);
                 await fetchNTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
                 await wait(10);
@@ -99,16 +104,18 @@ export const useLendingPool = () => {
             try {
                 setTxnStatus("LOADING");
                 const nftTokenContract = nftContract[nftTokenSymbol];
-                await nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
-                setTxnStatus("LOADING");
+                const txn1 = await nftTokenContract.approve(collateralManagerContractAddress, nftTokenId);
+                await txn1.wait(1);
+                setTxnStatus("ACCEPTING");
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
-                const txn = await lendingPoolContract.borrow(
+                const txn2 = await lendingPoolContract.borrow(
                     tokenContractAddress, 
                     parseUnits(tokenAmount, 18),
                     nftTokenContract.address,
                     nftTokenId,
                     numWeeks); // TODO: remove hard-coded decimals
-                await txn.wait(1);
+                    setTxnStatus("TRANSFERRING");
+                    await txn2.wait(1);
                 await fetchDebtTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
                 await wait(10);
@@ -132,15 +139,16 @@ export const useLendingPool = () => {
                 const tokenSymbol = assetTokenContractAddressSymbolLookup[tokenAddress];           
                 const tokenContract = assetTokenContract[tokenSymbol];
                 const _nTokenContract = nTokenContract[tokenSymbol];
-                await tokenContract.approve(_nTokenContract.address, parseUnits(tokenAmount, 18));
-                setTxnStatus("LOADING");
+                const txn1 = await tokenContract.approve(_nTokenContract.address, parseUnits(tokenAmount, 18));
+                setTxnStatus("ACCEPTING");
+                await txn1.wait(1);
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
-                const txn = await lendingPoolContract.repay(
+                const txn2 = await lendingPoolContract.repay(
                     tokenContractAddress, 
                     parseUnits(tokenAmount, 18),
                     borrowId); // TODO: remove hard-coded decimals
-                
-                await txn.wait(1);
+                setTxnStatus("TRANSFERRING");
+                await txn2.wait(1);
                 await fetchDebtTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
                 await wait(10);
@@ -163,15 +171,16 @@ export const useLendingPool = () => {
                 setTxnStatus("LOADING");
                 const tokenSymbol = assetTokenContractAddressSymbolLookup[tokenAddress];           
                 const tokenContract = assetTokenContract[tokenSymbol];
-                await tokenContract.approve(lendingPoolContract.address, parseUnits(tokenAmount.toString(), 18));
-                setTxnStatus("LOADING");
+                const txn1 = await tokenContract.approve(lendingPoolContract.address, parseUnits(tokenAmount.toString(), 18));
+                setTxnStatus("ACCEPTING");
+                await txn1.wait(1);
                 const tokenContractAddress = assetTokenContractAddress[tokenSymbol];
-                const txn = await lendingPoolContract.liquidate(
+                const txn2 = await lendingPoolContract.liquidate(
                     tokenContractAddress, 
                     parseUnits(tokenAmount.toString(), 18),
                     borrowId); // TODO: remove hard-coded decimals
-                
-                await txn.wait(1);
+                    setTxnStatus("TRANSFERRING");
+                await txn2.wait(1);
                 await fetchDebtTokenBalance(tokenSymbol);
                 setTxnStatus("COMPLETE");
                 await wait(10);

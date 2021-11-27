@@ -80,7 +80,8 @@ export const useCollateralManager = () => {
     const fetchUserBorrows = async () => {
         const userBorrowIds = await collateralManagerContract.getUserBorrowIds(account);
         const userBorrows = {};
-        for (var borrowId in userBorrowIds) {
+        for (var i=0; i<userBorrowIds.length; i++) {
+            let borrowId = userBorrowIds[i].toString();
             let borrow = await collateralManagerContract.getBorrow(borrowId);
             // Exclude null addresses. TODO: check SC for an alternative to this patch.
             if (borrow[1] != "0x0000000000000000000000000000000000000000") { 

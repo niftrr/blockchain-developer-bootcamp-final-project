@@ -28,8 +28,6 @@ function PopUpNFT(props) {
     "WETH": "/img/weth-logo.png"
   }
 
-  console.log('popupnft nftSymbol', nftSymbol);
-
   return (
     <div className="pop-up-nft">
       <div className="pop-up-text valign-text-middle oxanium-bold-web-orange-32px">
@@ -38,13 +36,14 @@ function PopUpNFT(props) {
           <span className="oxanium-extra-light-web-orange-24px">{spanText2}</span>
         </span>
       </div>
-      <TransactionStatus />
       <img className="nft-avatar" src={nftAvatar} />
       <div>
         <span>
           <span className="liquidation-nft oxanium-extra-light-web-orange-24px">{nftSymbol} #{nftTokenId}</span>
         </span>
       </div>
+      <br/>
+      <TransactionStatus />
       <div className="overlap-group1 border-1px-black">
         <img className="rectangle-19" src={tokenImage[token]} />
         <input

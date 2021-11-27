@@ -8,6 +8,7 @@ import useCollateralManager from "../../hooks/useCollateralManager";
 import { useAppContext } from "../../AppContext";
 import useNFT from "../../hooks/useNFT";
 import useLendingPool from "../../hooks/useLendingPool";
+import useTransaction from "../../hooks/useTransaction";
 
 
 function Borrow(props) {
@@ -19,6 +20,7 @@ function Borrow(props) {
   const { 
     fetchImageBAYC,
     fetchImagePUNK} = useNFT();
+  const { txnStatus } = useTransaction();
 
   const [imgUrl, setImgUrl] = useState("");
 
@@ -37,8 +39,9 @@ function Borrow(props) {
         } 
       }
       fetchImgUrl();
+      console.log('borrow');
     }  
-  }, [account, userBorrows]);
+  }, [account, txnStatus]);
 
   const formatDate = (timestamp) => {
     let monthNames =["Jan","Feb","Mar","Apr",
@@ -101,7 +104,7 @@ function Borrow(props) {
         <div className="rectangle-17"></div>
         <div className="number valign-text-middle oxanium-normal-black-24px">{Number(userBorrows[borrowId]["borrowAmount"]).toFixed(1)}</div> {/* TODO: Make number of decimals consistent  */}
         <div className="text valign-text-middle oxanium-normal-black-25px">{Number(userBorrows[borrowId]["repaymentAmount"]).toFixed(4)}</div>
-        <div className="percent valign-text-middle oxanium-normal-black-25px">{Number(userBorrows[borrowId]["interestRate"]).toFixed(0)}</div>
+        <div className="percent valign-text-middle oxanium-normal-black-25px">{Number(userBorrows[borrowId]["interestRate"]).toFixed(0)}%</div>
         <AssetItem 
           nftSymbol={userBorrows[borrowId]["nftSymbol"]}
           nftTokenId={userBorrows[borrowId]["nftTokenId"]}

@@ -81,6 +81,7 @@
   top: 0;
   width: 256px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .repay {
@@ -95,8 +96,12 @@
 
 .repay:hover {
   background-color: var(--geebung);
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .repay:active {
   background-color: var(--web-orange);
+  border-radius: 5px;
+  cursor: pointer;
 }
