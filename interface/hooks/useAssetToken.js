@@ -4,7 +4,7 @@ import { useContract } from "./useContract";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
 
-const AssetTokenData = URL("../artifacts/contracts/mocks/AssetToken.sol/AssetToken.json", import.meta.url);
+const AssetTokenData = URL("../../v1-core/artifacts/contracts/mocks/AssetToken.sol/AssetToken.json", import.meta.url);
 
 export const useAssetToken = () => {
     const { account } = useWeb3React();

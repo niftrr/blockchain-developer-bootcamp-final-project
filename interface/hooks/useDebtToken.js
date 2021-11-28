@@ -4,7 +4,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
 
-const DebtTokenData = URL("../artifacts/contracts/Debttoken.sol/DebtToken.json", import.meta.url);
+const DebtTokenData = URL("../../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json", import.meta.url);
 
 export const useDebtToken = () => {
     const { account } = useWeb3React();

@@ -9,7 +9,7 @@ import useAssetToken from "./useAssetToken";
 import useCollateralManager from "./useCollateralManager";
 import { formatUnits, parseUnits } from "@ethersproject/units";
 
-const LendingPoolData = URL("../artifacts/contracts/LendingPool.sol/LendingPool.json", import.meta.url);
+const LendingPoolData = URL("../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json", import.meta.url);
 
 export const useLendingPool = () => {
     const { account } = useWeb3React();
