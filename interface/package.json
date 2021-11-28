@@ -1,5 +1,8 @@
 {
-  "name": "react-package",
+  "name": "interface",
+  "author": "NFTlend",
+  "email": "niftrr@protonmail.com",
+  "license": "BSL1.1",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --public-url ./"

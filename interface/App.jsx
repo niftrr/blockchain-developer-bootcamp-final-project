@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Switch, BrowserRouter as HashRouter, Route, withRouter } from "react-router-dom";
 import PopUpNFTs from "./components/PopUpNFTs";
 import Dashboard from "./components/Dashboard";
@@ -13,7 +13,6 @@ import Liquidate from "./components/Liquidate";
 import Asset from "./components/Asset";
 import { Web3ReactProvider } from "@web3-react/core"
 import { ethers } from "ethers";
-import NFTlendV1LendingPool from '../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json'
 import { AppContextProvider } from './AppContext';
 
 function getLibrary(provider) {
