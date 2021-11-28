@@ -2,11 +2,11 @@ import React, { createContext, useReducer } from "react";
 import App from "./App";
 
 const initialContext = {
-    assetTokenBalanceDAI: 0,
+    assetTokenBalanceDAI: "--",
     setAssetTokenBalanceDAI: () => {},
-    assetTokenBalanceWETH: 0,
+    assetTokenBalanceWETH: "--",
     setAssetTokenBalanceWETH: () => {},
-    assetTokenBalanceUSDC: 0,
+    assetTokenBalanceUSDC: "--",
     setAssetTokenBalanceUSDC: () => {},
     debtTokenBalanceDAI: "--",
     setDebtTokenBalanceDAI: () => {},
@@ -26,6 +26,12 @@ const initialContext = {
     setNTokenYieldWETH: () => {},
     nTokenYieldUSDC: "--",
     setNTokenYieldUSDC: () => {},
+    nTokenSupplyDAI: "--",
+    setNTokenSupplyDAI: () => {},
+    nTokenSupplyWETH: "--",
+    setNTokenSupplyWETH: () => {},
+    nTokenSupplyUSDC: "--",
+    setNTokenSupplyUSDC: () => {},
     userBorrows: {},
     setUserBorrows: () => {},
     borrowDefaults: [],
@@ -139,6 +145,24 @@ const appReducer = (state, { type, payload }) => {
           ...state,
           nTokenYieldUSDC: payload,
         };
+
+        case "SET_NTOKEN_SUPPLY_DAI":
+          return {
+            ...state,
+            nTokenSupplyDAI: payload,
+          };
+  
+        case "SET_NTOKEN_SUPPLY_WETH":
+          return {
+            ...state,
+            nTokenSupplyWETH: payload,
+          };
+  
+        case "SET_NTOKEN_SUPPLY_USDC":
+          return {
+            ...state,
+            nTokenSupplyUSDC: payload,
+          };        
 
       case "SET_USER_BORROWS":
         return {
@@ -311,6 +335,18 @@ export const AppContextProvider = ({ children }) => {
       nTokenYieldUSDC: store.nTokenYieldUSDC,
       setNTokenYieldUSDC: (_yield) => {
         dispatch({ type: "SET_NTOKEN_YIELD_USDC", payload: _yield});
+      },
+      nTokenSupplyDAI: store.nTokenSupplyDAI,
+      setNTokenSupplyDAI: (supply) => {
+        dispatch({ type: "SET_NTOKEN_SUPPLY_DAI", payload: supply});
+      },
+      nTokenSupplyWETH: store.nTokenSupplyWETH,
+      setNTokenSupplyWETH: (supply) => {
+        dispatch({ type: "SET_NTOKEN_SUPPLY_WETH", payload: supply});
+      },
+      nTokenSupplyUSDC: store.nTokenSupplyUSDC,
+      setNTokenSupplyUSDC: (supply) => {
+        dispatch({ type: "SET_NTOKEN_SUPPLY_USDC", payload: supply});
       },
       userBorrows: store.userBorrows,
       setUserBorrows: (userBorrows) => {

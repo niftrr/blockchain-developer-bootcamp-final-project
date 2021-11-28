@@ -5,12 +5,18 @@ import ButtonWithdraw from "../ButtonWithdraw";
 import "./Lend.css";
 import { useWeb3React } from "@web3-react/core";
 import useNToken from "../../hooks/useNToken";
+import { useAppContext } from "../../AppContext";
+import useTransaction from "../../hooks/useTransaction";
 
 function Lend(props) {
   const { account } = useWeb3React();
-  const {fetchNTokenBalance, nTokenBalanceDAI, nTokenBalanceWETH, nTokenBalanceUSDC, 
-    fetchNTokenYield, nTokenYieldDAI, nTokenYieldWETH, nTokenYieldUSDC } = useNToken();
+  const {fetchNTokenBalance,  
+    fetchNTokenYield, fetchNTokenSupply } = useNToken();
   const { buttonDepositProps, buttonRepayProps, token } = props;
+  const { nTokenSupplyDAI, nTokenSupplyWETH, nTokenSupplyUSDC,
+    nTokenBalanceDAI, nTokenBalanceWETH, nTokenBalanceUSDC,
+    nTokenYieldDAI, nTokenYieldWETH, nTokenYieldUSDC} = useAppContext();
+  const { txnStatus } = useTransaction();
   
   const nTokenBalance = {
     "DAI": nTokenBalanceDAI,
@@ -24,16 +30,19 @@ function Lend(props) {
     "WETH": nTokenYieldWETH
   }
 
+  const nTokenSupply = {
+    "DAI": nTokenSupplyDAI,
+    "USDC": nTokenSupplyUSDC,
+    "WETH": nTokenSupplyWETH 
+  }
+
   useEffect(() => {
     if (account) {
-      fetchNTokenBalance('DAI');
-      fetchNTokenBalance('USDC');
-      fetchNTokenBalance('WETH');
-      fetchNTokenYield('DAI');
-      fetchNTokenYield('USDC');
-      fetchNTokenYield('WETH');
+      fetchNTokenBalance();
+      fetchNTokenYield();
+      fetchNTokenSupply();
     }    
-  }, [account, nTokenBalanceDAI,nTokenBalanceUSDC,nTokenBalanceWETH]);
+  }, [account, txnStatus, nTokenBalanceDAI,nTokenBalanceUSDC,nTokenBalanceWETH]);
 
   const formatNumber = (value) => {
     let res;
@@ -48,6 +57,7 @@ function Lend(props) {
   return (
     <div className="lend">
       <TokenLend token={token} />
+      <div className="text-2 valign-text-middle oxanium-normal-black-24px">{formatNumber(nTokenSupply[token])}</div>
       <div className="text-2 valign-text-middle oxanium-normal-black-24px">{formatNumber(nTokenBalance[token])}</div>
       <div className="percent-1 valign-text-middle oxanium-normal-black-25px">{formatNumber(nTokenYield[token])}</div>
       <ButtonDeposit token={token}>Deposit</ButtonDeposit>

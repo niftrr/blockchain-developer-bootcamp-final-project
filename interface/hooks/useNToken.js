@@ -34,45 +34,46 @@ export const useNToken = () => {
     const {setNTokenBalanceDAI, setNTokenBalanceWETH, setNTokenBalanceUSDC, 
         setNTokenYieldDAI, setNTokenYieldWETH, setNTokenYieldUSDC, setTxnStatus, 
         nTokenBalanceDAI, nTokenBalanceWETH, nTokenBalanceUSDC,
-        nTokenYieldDAI, nTokenYieldWETH, nTokenYieldUSDC} = useAppContext();
+        nTokenYieldDAI, nTokenYieldWETH, nTokenYieldUSDC,
+        setNTokenSupplyDAI, setNTokenSupplyUSDC, setNTokenSupplyWETH} = useAppContext();
 
-    const fetchNTokenBalance = async (ccy) => {
-        switch(ccy) {
-            case "DAI":
-                const nTokenBalanceDAI = await nTokenContractDAI.balanceOf(account);
-                setNTokenBalanceDAI(formatUnits(nTokenBalanceDAI, 18));
-            case "USDC":
-                const nTokenBalanceUSDC = await nTokenContractUSDC.balanceOf(account);
-                setNTokenBalanceUSDC(formatUnits(nTokenBalanceUSDC, 18));
-            case "WETH": 
-                const nTokenBalanceWETH = await nTokenContractWETH.balanceOf(account);
-                setNTokenBalanceWETH(formatUnits(nTokenBalanceWETH, 18));
-        }
+    const fetchNTokenBalance = async () => {
+        const nTokenBalanceDAI = await nTokenContractDAI.balanceOf(account);
+        setNTokenBalanceDAI(formatUnits(nTokenBalanceDAI, 18));
+
+        const nTokenBalanceUSDC = await nTokenContractUSDC.balanceOf(account);
+        setNTokenBalanceUSDC(formatUnits(nTokenBalanceUSDC, 18));
+
+        const nTokenBalanceWETH = await nTokenContractWETH.balanceOf(account);
+        setNTokenBalanceWETH(formatUnits(nTokenBalanceWETH, 18));
     };
 
-    const fetchNTokenYield = async (ccy) => {
-        switch(ccy) {
-            case "DAI":
-                const nTokenYieldDAI = await nTokenContractDAI.getCurrentAPY();
-                setNTokenYieldDAI(formatUnits(nTokenYieldDAI, 18));
-            case "USDC":
-                const nTokenYieldUSDC = await nTokenContractUSDC.getCurrentAPY();
-                setNTokenYieldUSDC(formatUnits(nTokenYieldUSDC, 18));
-            case "WETH": 
-                const nTokenYieldWETH = await nTokenContractWETH.getCurrentAPY();
-                setNTokenYieldWETH(formatUnits(nTokenYieldWETH, 18));
-        }
+    const fetchNTokenYield = async () => {
+        const nTokenYieldDAI = await nTokenContractDAI.getCurrentAPY();
+        setNTokenYieldDAI(formatUnits(nTokenYieldDAI, 18));
+
+        const nTokenYieldUSDC = await nTokenContractUSDC.getCurrentAPY();
+        setNTokenYieldUSDC(formatUnits(nTokenYieldUSDC, 18));
+    
+        const nTokenYieldWETH = await nTokenContractWETH.getCurrentAPY();
+        setNTokenYieldWETH(formatUnits(nTokenYieldWETH, 18));
     };
+
+    const fetchNTokenSupply = async () => {
+        const nTokenSupplyDAI = await nTokenContractDAI.totalSupply();
+        setNTokenSupplyDAI(formatUnits(nTokenSupplyDAI, 18));
+
+        const nTokenSupplyUSDC = await nTokenContractUSDC.totalSupply();
+        setNTokenSupplyUSDC(formatUnits(nTokenSupplyUSDC, 18));
+
+        const nTokenSupplyWETH = await nTokenContractWETH.totalSupply();
+        setNTokenSupplyWETH(formatUnits(nTokenSupplyWETH, 18));
+    }
 
     return {
-        nTokenBalanceDAI,
-        nTokenBalanceUSDC,
-        nTokenBalanceWETH,
         fetchNTokenBalance,
-        nTokenYieldDAI,
-        nTokenYieldUSDC,
-        nTokenYieldWETH,
         fetchNTokenYield,
+        fetchNTokenSupply,
         assetTokenContractAddress,
         nTokenContract
     }
