@@ -1,10 +1,10 @@
 import { useContract } from "./useContract";
-import DebtTokenData from "../artifacts/contracts/Debttoken.sol/DebtToken.json";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
-import { useEffect } from "react";
+
+const DebtTokenData = URL("../artifacts/contracts/Debttoken.sol/DebtToken.json", import.meta.url);
 
 export const useDebtToken = () => {
     const { account } = useWeb3React();

@@ -1,8 +1,9 @@
 import { useContract } from "./useContract";
-import NFTData from "../artifacts/contracts/mocks/NFT.sol/NFT.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
+
+const NFTData = URL("../artifacts/contracts/mocks/NFT.sol/NFT.json", import.meta.url);
 
 export const useNFT = () => {
     const { account } = useWeb3React();

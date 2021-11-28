@@ -1,10 +1,11 @@
 import { useContract } from "./useContract";
-import CollateralManagerData from "../artifacts/contracts/CollateralManager.sol/CollateralManager.json";
-import LendingPoolData from "../artifacts/contracts/LendingPool.sol/LendingPool.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
 import { formatUnits, parseUnits } from "@ethersproject/units";
+
+const CollateralManagerData = URL("../artifacts/contracts/CollateralManager.sol/CollateralManager.json", import.meta.url);
+const LendingPoolData = URL("../artifacts/contracts/LendingPool.sol/LendingPool.json", import.meta.url);
 
 export const useCollateralManager = () => {
     const { account } = useWeb3React();

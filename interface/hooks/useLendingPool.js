@@ -1,5 +1,4 @@
 import { useContract } from "./useContract";
-import LendingPoolData from "../artifacts/contracts/LendingPool.sol/LendingPool.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
@@ -9,6 +8,8 @@ import useNFT from "./useNFT";
 import useAssetToken from "./useAssetToken";
 import useCollateralManager from "./useCollateralManager";
 import { formatUnits, parseUnits } from "@ethersproject/units";
+
+const LendingPoolData = URL("../artifacts/contracts/LendingPool.sol/LendingPool.json", import.meta.url);
 
 export const useLendingPool = () => {
     const { account } = useWeb3React();

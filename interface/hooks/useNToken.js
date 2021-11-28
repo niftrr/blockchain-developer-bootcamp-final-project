@@ -4,7 +4,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
 
-const NTokenData =URL( "../artifacts/contracts/Ntoken.sol/NToken.json", import.meta.url), ;
+const NTokenData =URL( "../artifacts/contracts/Ntoken.sol/NToken.json", import.meta.url);
 
 export const useNToken = () => {
     const { account } = useWeb3React();
