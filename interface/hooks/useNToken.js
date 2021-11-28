@@ -3,10 +3,9 @@ import useIsValidNetwork from "../hooks/useIsValidNetwork";
 import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
-
-const NTokenData =URL( "../../v1-core/artifacts/contracts/Ntoken.sol/NToken.json", import.meta.url);
-
+import NTokenData from  "../../v1-core/artifacts/contracts/Ntoken.sol/NToken.json";
 export const useNToken = () => {
+    
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
     // NTokens
