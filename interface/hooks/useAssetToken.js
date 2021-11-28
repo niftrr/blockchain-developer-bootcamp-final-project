@@ -31,7 +31,6 @@ export const useAssetToken = () => {
     }
 
     const fetchAssetTokenBalances = async () => {
-        console.log('fetchAssetTokenBalances...')
         const tokenBalanceDAI = await assetTokenContractDAI.balanceOf(account);
         setAssetTokenBalanceDAI(formatUnits(tokenBalanceDAI, 18));
 

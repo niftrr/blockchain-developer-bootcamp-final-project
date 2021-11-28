@@ -46,7 +46,7 @@ function App(props) {
                 <Route path="/borrow">
                 <Borrow2 {...borrow22Data} />
                 </Route>
-                <Route path="/">
+                <Route path="/:path(|#)">
                 <LandingPage
                     text17="The NFT Liquidity Protocol"
                     text18="NFTlend.xyz is an open-source, non-custodial liquidity protocol for borrowing assets using NFTs as collateral and earning interest on deposits."
