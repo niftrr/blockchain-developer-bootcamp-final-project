@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { Switch, BrowserRouter as HashRouter, Route, withRouter } from "react-router-dom";
+import { Switch, HashRouter as Router, Route, withRouter } from "react-router-dom";
 import PopUpNFTs from "./components/PopUpNFTs";
 import Dashboard from "./components/Dashboard";
 import PopUpTokensDeposit from "./components/PopUpTokensDeposit";
@@ -23,7 +23,7 @@ function App(props) {
   return (
     <AppContextProvider>
         <Web3ReactProvider getLibrary={getLibrary}>
-            <HashRouter>
+            <Router>
             <Switch>
                 <Route path="/popupnfts">
                 <PopUpNFTs popUpNFTProps={popUpNFTsData.popUpNFTProps} />
@@ -67,7 +67,7 @@ function App(props) {
                 <Asset {...assetData} />
                 </Route>
             </Switch>
-            </HashRouter>
+            </Router>
         </Web3ReactProvider>
     </AppContextProvider>
   );
