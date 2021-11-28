@@ -31,7 +31,8 @@
 .navigation {
   align-items: center;
   display: flex;
-  margin-left: 350px;
+  margin-left: auto;
+  margin-right: 0;
   min-width: 661px;
 }
 
@@ -111,4 +112,61 @@
 
 .nav-title:active {
   text-decoration: none;
+}
+
+.overlap-group-3-balance {
+  align-items: center;
+  background-color: var(--mist-gray);
+  border-radius: 10px;
+  display: flex;
+  height: 46px;
+  justify-content: flex-end;
+  margin-left: 20px;
+  min-width: 299px;
+  padding: 10px 5px;
+  cursor: pointer;
+}
+
+.overlap-group1-1-balance {
+  align-self: flex-end;
+  height: 25px;
+  position: relative;
+  width: 100%;
+}
+
+.weth-logo {
+  height: 30px;
+  left: 0px;
+  position: relative;
+  top: -1px;
+  width: 30px;
+}
+
+.usdc-logo {
+  height: 30px;
+  left: 0px;
+  position: relative;
+  top: -1px;
+  width: 30px;
+}
+
+.dai-logo {
+  height: 30px;
+  left: 0;
+  position: relative;
+  margin-left: 0px;
+  top: -1px;
+  width: 30px;
+}
+
+.balance {
+  letter-spacing: 0;
+  margin-left: 5px;
+  margin-right: 10px;
+  position: relative;
+}
+
+.balance-item {
+  float: left;
+  display: flex;
 }

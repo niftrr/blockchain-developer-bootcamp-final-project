@@ -3,10 +3,12 @@ import useIsValidNetwork from "./useIsValidNetwork";
 import { useContract } from "./useContract";
 import AssetTokenData from "../../v1-core/artifacts/contracts/mocks/AssetToken.sol/AssetToken.json";
 import { useAppContext } from "../AppContext";
+import { formatUnits } from "@ethersproject/units";
 
 export const useAssetToken = () => {
     const { account } = useWeb3React();
     const { isValidNetwork } = useIsValidNetwork();
+    const {setAssetTokenBalanceDAI, setAssetTokenBalanceWETH, setAssetTokenBalanceUSDC} = useAppContext();
 
     const assetTokenContractAddressDAI = process.env.REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS;
     const assetTokenContractAddressUSDC = process.env.REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS;
@@ -28,9 +30,22 @@ export const useAssetToken = () => {
         "WETH": assetTokenContractWETH
     }
 
+    const fetchAssetTokenBalances = async () => {
+        console.log('fetchAssetTokenBalances...')
+        const tokenBalanceDAI = await assetTokenContractDAI.balanceOf(account);
+        setAssetTokenBalanceDAI(formatUnits(tokenBalanceDAI, 18));
+
+        const tokenBalanceUSDC = await assetTokenContractUSDC.balanceOf(account);
+        setAssetTokenBalanceUSDC(formatUnits(tokenBalanceUSDC, 18));
+
+        const tokenBalanceWETH = await assetTokenContractWETH.balanceOf(account);
+        setAssetTokenBalanceWETH(formatUnits(tokenBalanceWETH, 18));
+    }
+
     return {
         assetTokenContract,
-        assetTokenContractAddress
+        assetTokenContractAddress,
+        fetchAssetTokenBalances
     }
 };
 

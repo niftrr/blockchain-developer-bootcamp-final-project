@@ -2,6 +2,12 @@ import React, { createContext, useReducer } from "react";
 import App from "./App";
 
 const initialContext = {
+    assetTokenBalanceDAI: 0,
+    setAssetTokenBalanceDAI: () => {},
+    assetTokenBalanceWETH: 0,
+    setAssetTokenBalanceWETH: () => {},
+    assetTokenBalanceUSDC: 0,
+    setAssetTokenBalanceUSDC: () => {},
     debtTokenBalanceDAI: "--",
     setDebtTokenBalanceDAI: () => {},
     debtTokenBalanceWETH: "--",
@@ -62,6 +68,24 @@ const initialContext = {
 
 const appReducer = (state, { type, payload }) => {
     switch (type) {
+      case "SET_ASSETTOKEN_BALANCE_DAI":
+        return {
+          ...state,
+          assetTokenBalanceDAI: payload,
+        };
+
+      case "SET_ASSETTOKEN_BALANCE_WETH":
+        return {
+          ...state,
+          assetTokenBalanceWETH: payload,
+        };
+
+      case "SET_ASSETTOKEN_BALANCE_USDC":
+        return {
+          ...state,
+          assetTokenBalanceUSDC: payload,
+        };
+
       case "SET_DEBTTOKEN_BALANCE_DAI":
         return {
           ...state,
@@ -240,6 +264,18 @@ export const AppContextProvider = ({ children }) => {
     const [store, dispatch] = useReducer(appReducer, initialContext);
 
     const contextValue = {
+      assetTokenBalanceDAI: store.assetTokenBalanceDAI,
+      setAssetTokenBalanceDAI: (balance) => {
+        dispatch({ type: "SET_ASSETTOKEN_BALANCE_DAI", payload: balance});
+      },
+      assetTokenBalanceWETH: store.assetTokenBalanceWETH,
+      setAssetTokenBalanceWETH: (balance) => {
+        dispatch({ type: "SET_ASSETTOKEN_BALANCE_WETH", payload: balance});
+      },
+      assetTokenBalanceUSDC: store.assetTokenBalanceUSDC,
+      setAssetTokenBalanceUSDC: (balance) => {
+        dispatch({ type: "SET_ASSETTOKEN_BALANCE_USDC", payload: balance});
+      },
       debtTokenBalanceDAI: store.debtTokenBalanceDAI,
       setDebtTokenBalanceDAI: (balance) => {
         dispatch({ type: "SET_DEBTTOKEN_BALANCE_DAI", payload: balance});

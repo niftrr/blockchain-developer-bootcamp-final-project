@@ -95,6 +95,14 @@
   font-weight: 200;
 }
 
+.oxanium-extra-light-web-white-18px {
+  color: var(--white);
+  font-family: var(--font-family-oxanium);
+  font-size: var(--font-size-xs);
+  font-style: normal;
+  font-weight: 200;
+}
+
 .oxanium-extra-light-web-orange-24px {
   color: var(--web-orange);
   font-family: var(--font-family-oxanium);
@@ -157,4 +165,8 @@
 
 .border-1px-black {
   border: 1px solid var(--black);
+}
+
+.border-2px-white {
+  border: 2px solid var(--white);
 }
