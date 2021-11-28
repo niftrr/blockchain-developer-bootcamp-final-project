@@ -3,7 +3,7 @@ import useIsValidNetwork from "./useIsValidNetwork";
 import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
-import DebtTokenData from "../../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json";
+import DebtTokenData from "../../v1-core/artifacts/contracts/Debttoken/DebtToken.json";
 
 
 export const useDebtToken = () => {

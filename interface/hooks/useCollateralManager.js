@@ -3,8 +3,8 @@ import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";
 import { formatUnits, parseUnits } from "@ethersproject/units";
-import CollateralManagerData from "../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json";
-import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json";
+import CollateralManagerData from "../../v1-core/artifacts/contracts/CollateralManager/CollateralManager.json";
+import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool/LendingPool.json";
 
 
 export const useCollateralManager = () => {

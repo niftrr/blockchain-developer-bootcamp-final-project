@@ -8,7 +8,7 @@ import useNFT from "./useNFT";
 import useAssetToken from "./useAssetToken";
 import useCollateralManager from "./useCollateralManager";
 import { formatUnits, parseUnits } from "@ethersproject/units";
-import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json";
+import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool/LendingPool.json";
 
 export const useLendingPool = () => {
     const { account } = useWeb3React();
