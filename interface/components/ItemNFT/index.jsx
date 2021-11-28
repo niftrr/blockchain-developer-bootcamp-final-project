@@ -18,7 +18,7 @@ function ItemNFT(props) {
       fetchImagesPUNK();
       fetchImagesBAYC();
     }  
-  }, [account, txnStatus]);
+  }, [account, txnStatus, imageDictPUNK, imageDictBAYC]);
 
   const nftItemClassName = {
     0: "item-nft-0",
@@ -41,11 +41,13 @@ function ItemNFT(props) {
     }
   }
 
+  // TODO: Implement an actual scroll. Note below mock only for two items.
+
   return (
     <div>
     <div className={visible("PUNK")}>
-      {Object.keys(imageDictPUNK).map(tokenId => (
-        <div className={nftItemClassName[tokenId]} key={tokenId}>
+      {Object.keys(imageDictPUNK).map((tokenId, idx) => (
+        <div className={nftItemClassName[idx]} key={tokenId}>
           <input type="checkbox" onChange={() => handleChange(tokenId)} className="rectangle-33 border-1px-pickled-bluewood"></input>
           <img className="rectangle-32" src={imageDictPUNK[tokenId]} />
           <div className="fidenza-157-3 valign-text-middle oxanium-normal-black-20px">PUNK<br></br>#{tokenId}</div> 
@@ -53,8 +55,8 @@ function ItemNFT(props) {
       ))}
     </div>
     <div className={visible("BAYC")}>
-      {Object.keys(imageDictBAYC).map(tokenId => (
-        <div className={nftItemClassName[tokenId]} key={tokenId}>
+      {Object.keys(imageDictBAYC).map((tokenId, idx) => (
+        <div className={nftItemClassName[idx]} key={tokenId}>
           <input type="checkbox" onChange={() => handleChange(tokenId)} className="rectangle-33 border-1px-pickled-bluewood"></input>
           <img className="rectangle-32" src={imageDictBAYC[tokenId]} />
           <div className="fidenza-157-3 valign-text-middle oxanium-normal-black-20px">BAYC<br></br>#{tokenId}</div> 

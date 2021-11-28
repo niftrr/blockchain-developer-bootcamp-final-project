@@ -308,7 +308,7 @@ async function main() {
   await assetTokenDAI.connect(acc1).approve(lendingPool.address, depositAmount);
   await lendingPool.connect(acc1).deposit(assetTokenDAI.address, depositAmount);
 
-  depositAmount = hre.ethers.utils.parseEther("150000");
+  depositAmount = hre.ethers.utils.parseEther("100000");
   await assetTokenUSDC.connect(acc1).approve(lendingPool.address, depositAmount);
   await lendingPool.connect(acc1).deposit(assetTokenUSDC.address, depositAmount);
 
@@ -316,19 +316,30 @@ async function main() {
   await assetTokenWETH.connect(acc1).approve(lendingPool.address, depositAmount);
   await lendingPool.connect(acc1).deposit(assetTokenWETH.address, depositAmount);
 
+  // Deposits from Account 2
+  depositAmount = hre.ethers.utils.parseEther("98040");
+  await assetTokenDAI.connect(acc2).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc2).deposit(assetTokenDAI.address, depositAmount);
+
+  depositAmount = hre.ethers.utils.parseEther("52940");
+  await assetTokenUSDC.connect(acc2).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc2).deposit(assetTokenUSDC.address, depositAmount);
+
+  depositAmount = hre.ethers.utils.parseEther("135");
+  await assetTokenWETH.connect(acc2).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(acc2).deposit(assetTokenWETH.address, depositAmount);
+
   // Prepopulate borrows
   let borrowAmount;
   let tokenId;
   let numWeeks;
+
   // Borrows from Account 0
   borrowAmount = "50";
   tokenId = 1;
   numWeeks = 0;
   borrowAmount = hre.ethers.utils.parseEther(borrowAmount);
   await nftPUNK.connect(acc0).approve(collateralManager.address, tokenId);
-  console.log('lendingPool.address', lendingPool.address);
-  console.log('assetTokenWETH.address', assetTokenWETH.address);
-  console.log('nftPUNK.address', nftPUNK.address);
   await lendingPool.connect(acc0).borrow(
     assetTokenWETH.address,
     borrowAmount,
@@ -336,6 +347,7 @@ async function main() {
     tokenId,
     numWeeks
   );
+  console.log(`acc0 deposits PUNK #${tokenId} to borrow ${hre.ethers.utils.formatEther(borrowAmount)} WETH`);
 
   // Borrows from Account 1
   borrowAmount = "42";
@@ -343,9 +355,6 @@ async function main() {
   numWeeks = 0;
   borrowAmount = hre.ethers.utils.parseEther(borrowAmount);
   await nftPUNK.connect(acc1).approve(collateralManager.address, tokenId);
-  console.log('lendingPool.address', lendingPool.address);
-  console.log('assetTokenWETH.address', assetTokenWETH.address);
-  console.log('nftPUNK.address', nftPUNK.address);
   await lendingPool.connect(acc1).borrow(
     assetTokenWETH.address,
     borrowAmount,
@@ -353,6 +362,7 @@ async function main() {
     tokenId,
     numWeeks
   );
+  console.log(`acc1 deposits PUNK #${tokenId} to borrow ${hre.ethers.utils.formatEther(borrowAmount)} WETH`);
 
   // borrowAmount = hre.ethers.utils.parseEther("30")
   // await nftPUNK.connect(acc2).approve(collateralManager.address, 5);

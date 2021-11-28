@@ -19,8 +19,6 @@ function PopUpLiquidate(props) {
     "WETH": "/img/weth-logo.png"
   }
 
-  console.log('popUpLiquidate liquidationPrice', liquidationPrice);
-
   return (
     <div className="container-center-horizontal">
       <div className="popupnfts screen">

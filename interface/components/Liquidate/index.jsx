@@ -22,9 +22,8 @@ function Liquidate(props) {
   useEffect(() => {
     if (account) {
       fetchDefaultedBorrows();
-      console.log('liquidate');
     }  
-  }, [account, txnStatus]);
+  }, [account, txnStatus, borrowDefaults]);
 
   return (
     <div className="container-center-horizontal">
