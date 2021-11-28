@@ -6,3 +6,4 @@ node_modules/
 v1-core-truffle/
 .env
 dist/
+.parcel-cache/
