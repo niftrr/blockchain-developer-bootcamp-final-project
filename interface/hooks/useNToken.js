@@ -1,5 +1,5 @@
 import { useContract } from "./useContract";
-import NTokenData from "../artifacts/contracts/Ntoken.sol/NToken.json";
+import { default as NTokenData } from "../artifacts/contracts/Ntoken.sol/NToken.json";
 import useIsValidNetwork from "../hooks/useIsValidNetwork";
 import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
