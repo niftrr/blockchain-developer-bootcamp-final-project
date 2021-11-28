@@ -1,5 +1,5 @@
 import { useContract } from "./useContract";
-import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json";
+import LendingPoolData from "../artifacts/contracts/LendingPool.sol/LendingPool.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";

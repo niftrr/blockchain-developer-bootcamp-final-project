@@ -1,6 +1,6 @@
 import { useContract } from "./useContract";
-import CollateralManagerData from "../../v1-core/artifacts/contracts/CollateralManager.sol/CollateralManager.json";
-import LendingPoolData from "../../v1-core/artifacts/contracts/LendingPool.sol/LendingPool.json";
+import CollateralManagerData from "../artifacts/contracts/CollateralManager.sol/CollateralManager.json";
+import LendingPoolData from "../artifacts/contracts/LendingPool.sol/LendingPool.json";
 import { useWeb3React } from "@web3-react/core";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useAppContext } from "../AppContext";

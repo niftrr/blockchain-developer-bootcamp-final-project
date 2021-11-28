@@ -1,5 +1,5 @@
 import { useContract } from "./useContract";
-import DebtTokenData from "../../v1-core/artifacts/contracts/Debttoken.sol/DebtToken.json";
+import DebtTokenData from "../artifacts/contracts/Debttoken.sol/DebtToken.json";
 import useIsValidNetwork from "./useIsValidNetwork";
 import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
