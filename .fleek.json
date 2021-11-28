@@ -1,8 +1,8 @@
 {
   "build": {
-    "image": "node:alpine",
-    "command": "npm install && npm run build && echo $SOME_ENV",
-    "publicDir": "dist",
+    "image": "fleek/create-react-app",
+    "command": "yarn && yarn build && echo $SOME_ENV",
+    "publicDir": "build",
     "baseDir": "interface",
     "environment": {
       "SOME_ENV": "Build finished!"
