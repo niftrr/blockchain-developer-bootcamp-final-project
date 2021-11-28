@@ -1,10 +1,10 @@
 import { useContract } from "./useContract";
-import { default as NTokenData } from "../artifacts/contracts/Ntoken.sol/NToken.json";
 import useIsValidNetwork from "../hooks/useIsValidNetwork";
 import { useWeb3React } from "@web3-react/core";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
-import { useEffect } from "react";
+
+const NTokenData =URL( "../artifacts/contracts/Ntoken.sol/NToken.json", import.meta.url), ;
 
 export const useNToken = () => {
     const { account } = useWeb3React();
