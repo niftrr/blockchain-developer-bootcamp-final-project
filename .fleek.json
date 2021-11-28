@@ -2,7 +2,7 @@
   "build": {
     "image": "fleek/create-react-app",
     "command": "yarn && yarn build && echo $SOME_ENV",
-    "publicDir": "build",
+    "publicDir": "dist",
     "baseDir": "interface",
     "environment": {
       "SOME_ENV": "Build finished!"
