@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { Switch, BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+import { Switch, BrowserRouter as HashRouter, Route, withRouter } from "react-router-dom";
 import PopUpNFTs from "./components/PopUpNFTs";
 import Dashboard from "./components/Dashboard";
 import PopUpTokensDeposit from "./components/PopUpTokensDeposit";
@@ -24,7 +24,7 @@ function App(props) {
   return (
     <AppContextProvider>
         <Web3ReactProvider getLibrary={getLibrary}>
-            <Router>
+            <HashRouter>
             <Switch>
                 <Route path="/popupnfts">
                 <PopUpNFTs popUpNFTProps={popUpNFTsData.popUpNFTProps} />
@@ -47,7 +47,7 @@ function App(props) {
                 <Route path="/borrow">
                 <Borrow2 {...borrow22Data} />
                 </Route>
-                <Route path="/:path(|landing-page)">
+                <Route path="/">
                 <LandingPage
                     text17="The NFT Liquidity Protocol"
                     text18="NFTlend.xyz is an open-source, non-custodial liquidity protocol for borrowing assets using NFTs as collateral and earning interest on deposits."
@@ -68,7 +68,7 @@ function App(props) {
                 <Asset {...assetData} />
                 </Route>
             </Switch>
-            </Router>
+            </HashRouter>
         </Web3ReactProvider>
     </AppContextProvider>
   );

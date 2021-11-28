@@ -43,7 +43,7 @@ function Header(props) {
 
   return (
     <div className={`header ${className || ""}`}>
-      <Link to="/landing-page">
+      <Link to="/">
         <div className="logo">
           <img className="nf-tlend-logo-light-1" src="/img/nftlend-logo-light-1@2x.png" />
           <div className="nf-tlendxyz valign-text-middle oxanium-semi-bold-web-orange-36px">NFTlend.xyz</div>
