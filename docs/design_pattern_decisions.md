@@ -103,7 +103,7 @@ TODO -->
 
 ### `Role-Based Access Control`
 
-*Role-Based Access Control (RBAC)* design pattern used, inherriting from the OpenZeppelin `AccessControl` contract. The RBAC design is used to restrict access to function calls. Roles for each of the protocol contract "callers" have been created (e.g. `LendingPool` &rarr; `LENDING_POOL_ROLE`) to permission inter-contract execution, and help protect the sytem from bad actors. Access roles as per the below.
+*Role-Based Access Control (RBAC)* design pattern used, inherriting from the OpenZeppelin `AccessControl` contract. The RBAC design is used to restrict access to function calls. Roles for each of the protocol contract "callers" have been created (e.g. `LendingPool` &rarr; `LENDING_POOL_ROLE`) to permission inter-contract execution, and help protect the sytem from bad actors. Access control as per the below.
 
 #### `LendingPool`
 * `CONFIGURATOR_ROLE`
