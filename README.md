@@ -20,9 +20,13 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 [![Video Demo](assets/nftlend-ui-landingpage.png)](https://www.youtube.com/watch?v=juGUTuLzXGs)
 
-## System diagram
+## Protocol system design
+
+### System diagram
 
 ![System Diagram](assets/nftlend-system-diagram.png?raw=true "System diagram")
+
+### Summary
 
 - **Lending Pool** is the main contract of the protocol exposing all user interaction endpoints; `deposit`, `withdraw`, `borrow`, `repay` and `liquidate`.
 
@@ -39,6 +43,14 @@ NFTlend is building the first automated market maker for instant, permissionless
 - **Libraries** contain reusable code, refactored from the protocol to save gas.
 
 - **Configurator** is the admin contract used to set / update protocol variables. 
+
+### Design pattern decisions
+
+Link to detail on [design pattern decisions](docs/design_pattern_decisions.md).
+
+### Security measures
+
+Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
 
 ## User Interface
 
