@@ -105,25 +105,25 @@ TODO -->
 
 *Role-Based Access Control (RBAC)* design pattern used, inherriting from the OpenZeppelin `AccessControl` contract. The RBAC design is used to restrict access to function calls. Roles for each of the protocol contract "callers" have been created (e.g. `LendingPool` &rarr; `LENDING_POOL_ROLE`) to permission inter-contract execution, and help protect the sytem from bad actors. Access roles as per the below.
 
-* `LendingPool`:
-  * `CONFIGURATOR_ROLE`
-    * `pause()`, `unpause()`, `initReserve()`, `freezeReserve()`, `pauseReserve()`, `protectReserve()`, `activateReserve()`, `connectCollateralManager()` and connect oracles.
-* `CollateralManager`:
+#### `LendingPool`
+* `CONFIGURATOR_ROLE`
+  * `pause()`, `unpause()`, `initReserve()`, `freezeReserve()`, `pauseReserve()`, `protectReserve()`, `activateReserve()`, `connectCollateralManager()` and connect oracles.
+#### `CollateralManager`
   * `CONFIGURATOR_ROLE`
     * `pause()` and `unpause()`
   * `LENDING_POOL_ROLE`
     * `deposit()`, `withdraw()` and `retrieve()`
-* `NToken`:
+#### `NToken`
   * `CONFIGURATOR_ROLE`
     * `pause()` and `unpause()`
   * `LENDING_POOL_ROLE`
     * `mint()`, `burn()`, `burnFrom()`, `approve()`, `reserveTransfer()`, `reserveTransferFrom()`
-* `DebtToken`:
+#### `DebtToken`
   * `CONFIGURATOR_ROLE`
     * `pause()` and `unpause()`
   * `LENDING_POOL_ROLE`
     * `mint()`, `burn()`, `burnFrom()`, `approve()`
-* `Configurator`:
+#### `Configurator`
   * `ADMIN_ROLE`
     * `connectLendingPool()`, `connectCollateralManager()`, `connectLendingPoolCollateralManager()`, `initLendingPoolReserve()`, `setCollateralManagerInterestRate()`, `setCollateralManagerLiquidationThreshold()`, `updateCollatearlManagerWhitelist()` and connect oracles.
   * `EMERGENCY_ADMIN_ROLE`
