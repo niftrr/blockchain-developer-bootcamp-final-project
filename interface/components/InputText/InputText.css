@@ -10,8 +10,8 @@
 
 .phone {
   color: black;
-  font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-xs);
+  font-family: "Oxanium", Helvetica;
+  font-size: 20px;
   font-weight: 400;
   height: 28px;
   letter-spacing: 0;

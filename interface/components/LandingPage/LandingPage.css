@@ -26,8 +26,8 @@
 }
 
 .text-17 {
-  color: var(--white);
-  font-family: var(--font-family-oxanium);
+  color: #ffffff;
+  font-family: "Oxanium", Helvetica;
   font-size: 48px;
   font-weight: 400;
   height: 60px;
@@ -37,9 +37,9 @@
 }
 
 .text-18 {
-  color: var(--white);
-  font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-xl);
+  color: #ffffff;
+  font-family: "Oxanium", Helvetica;
+  font-size: 28px;
   font-weight: 400;
   height: 70px;
   letter-spacing: 0;

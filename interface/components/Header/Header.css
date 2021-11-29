@@ -69,7 +69,7 @@
 
 .overlap-group-1 {
   align-items: flex-start;
-  background-color: var(--geebung);
+  background-color: #d68d00;
   border-radius: 10px;
   display: flex;
   margin-left: 20px;
@@ -99,11 +99,11 @@
 }
 
 .overlap-group-1:hover {
-  background-color: var(--web-orange);
+  background-color: #ffa800;
 }
 
 .overlap-group-1:active {
-  background-color: var(--geebung);
+  background-color: #d68d00;
 }
 
 .nav-title:hover {
@@ -116,7 +116,7 @@
 
 .overlap-group-3-balance {
   align-items: center;
-  background-color: var(--mist-gray);
+  background-color: #c4c4c426;
   border-radius: 10px;
   display: flex;
   height: 46px;

@@ -1,6 +1,6 @@
 .button-connect-wallet {
   align-items: center;
-  background-color: var(--geebung);
+  background-color: #d68d00;
   border-radius: 10px;
   display: flex;
   height: 74px;
@@ -10,8 +10,8 @@
 }
 
 .connect-wallet-6 {
-  color: var(--white);
-  font-family: var(--font-family-oxanium);
+  color: #ffffff;
+  font-family: "Oxanium", Helvetica;
   font-size: 30px;
   font-weight: 400;
   height: 38px;
@@ -21,9 +21,9 @@
 }
 
 .button-connect-wallet:hover {
-  background-color: var(--web-orange);
+  background-color: #ffa800;
 }
 
 .button-connect-wallet:active {
-  background-color: var(--geebung);
+  background-color: #d68d00;
 }

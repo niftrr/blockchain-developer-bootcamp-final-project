@@ -69,7 +69,7 @@
 }
 
 .rectangle-47 {
-  background-color: var(--web-orange);
+  background-color: #ffa800;
   height: 63px;
   left: 0;
   position: absolute;
@@ -89,9 +89,9 @@
 }
 
 .repay:hover {
-  background-color: var(--geebung);
+  background-color: #d68d00;
 }
 
 .repay:active {
-  background-color: var(--web-orange);
+  background-color: #ffa800;
 }

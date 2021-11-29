@@ -1,6 +1,6 @@
 .items-scroll {
   align-items: flex-end;
-  background-color: var(--mist-gray);
+  background-color: #c4c4c426;
   border-radius: 5px;
   display: flex;
   height: 225px;

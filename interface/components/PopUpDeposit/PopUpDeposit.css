@@ -12,9 +12,9 @@
 
 .x {
   align-self: flex-end;
-  color: var(--web-orange);
-  font-family: var(--font-family-oxanium);
-  font-size: var(--font-size-s);
+  color: #ffa800;
+  font-family: "Oxanium", Helvetica;
+  font-size: 22px;
   font-weight: 600;
   height: 20px;
   letter-spacing: 0;
@@ -32,7 +32,7 @@
 
 .overlap-group1-1 {
   align-items: center;
-  background-color: var(--white);
+  background-color: #ffffff;
   border-radius: 10px;
   display: flex;
   height: 83px;
@@ -63,7 +63,7 @@
 
 .overlap-group-15 {
   align-items: flex-start;
-  background-color: var(--white);
+  background-color: #ffffff;
   display: flex;
   margin-bottom: 1.0px;
   margin-left: 67px;
@@ -80,11 +80,11 @@
 }
 
 .popup-deposit-name:hover {
-  color: var(--geebung);
+  color: #d68d00;
 }
 
 .popup-deposit-name:active {
-  color: var(--web-orange);
+  color: #ffa800;
 }
 
 .overlap-group-16 {
@@ -97,7 +97,7 @@
 }
 
 .rectangle-47-1 {
-  background-color: var(--web-orange);
+  background-color: #ffa800;
   height: 63px;
   left: 0;
   position: absolute;
@@ -118,9 +118,9 @@
 }
 
 .place-11:hover {
-  background-color: var(--geebung);
+  background-color: #d68d00;
 }
 
 .place-11:active {
-  background-color: var(--web-orange);
+  background-color: #ffa800;
 }

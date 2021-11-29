@@ -1,6 +1,6 @@
 .item-project {
   align-items: center;
-  background-color: var(--tropical-blue);
+  background-color: #c7defa;
   border-radius: 5px;
   display: flex;
   height: 39px;
@@ -12,7 +12,7 @@
 }
 
 .rectangle-31 {
-  background-color: var(--tropical-blue);
+  background-color: #c7defa;
   box-shadow: 0px 4px 4px #00000040;
   height: 22px;
   margin-bottom: 1.0px;
