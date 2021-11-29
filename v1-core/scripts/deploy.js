@@ -37,7 +37,7 @@ async function main() {
   [acc0, acc1, acc2, emergencyAdmin, admin, treasuryAccount] = await hre.ethers.getSigners();
  
   // Get network
-  docsFileData += `NETWORK=${network.name.toUpperCase()}`;
+  docsFileData += `NETWORK=${network.name.toUpperCase()}\n`;
 
   // Get and deploy Configurator
   Configurator = await ethers.getContractFactory('Configurator');
