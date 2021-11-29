@@ -8,6 +8,14 @@
 
 The `Configurator` and `LendingPool` contracts use interfaces to call and update state within the `CollateralManager`, `NToken` and `DebtToken` contracts. Oracle contracts are called directly.
 
+### `NTokens`
+* Inherit from `IER20` to make use to the ERC20 Token Standard functions.
+* Functions `totalSupply`, `balanceOf(account)`, `transfer`, `transferFrom`, `_mint` and `_burn` used as an efficient and decentralized method of accounting through tokenization.
+
+### `DebtTokens`
+* Inherit from `IER20` but override the ERC20 Token Standard.
+* Functions `transfer` and `transferFrom` are disallowed to ensure persistence of tokenized debt positions. 
+
 ### `LendingPool`
 * `deposit()`: 
   * Uses the `IERC20` interface to transfer tokens from sender to the `NToken` contract
@@ -30,7 +38,7 @@ The `Configurator` and `LendingPool` contracts use interfaces to call and update
 
 ### `CollateralManager`
 * `deposit()`, `withdraw()` and `retrieve()`:
-  * Uses the `IERC721` interface to transfer ERC721 token tokenIds to and from the contract.
+  * Use the `IERC721` interface to transfer ERC721 token tokenIds to and from the contract.
 
 ### `Configurator`
 * Uses the `ILendingPool` interface to:
@@ -95,36 +103,31 @@ TODO -->
 
 ### `Role-Based Access Control`
 
-*Role-Based Access Control (RBAC)* design pattern used, inherriting from the OpenZeppelin `AccessControl` contract. The RBAC design is used to restrict access to function calls. Roles for each of the protocol contract "callers" have been created (e.g. `LendingPool` &rarr; `LENDING_POOL_ROLE`) to permission inter-contract execution, and help protect the sytem from bad actors. Access roles enable only the:
-
-* `LENDING_POOL_ROLE` to:
-  * `deposit()`, `withdraw()` and `retrieve()` collateral within the `CollateralManager` contract.
-  * `mint()`, `burn()`, `burnFrom()`, `approve()`, `reserveTransfer()`, `reserveTransferFrom()` within the `NToken` contract.
-  * `mint()`, `burn()`, `burnFrom()`, `approve()`, within the `DebtToken` contract.
-* `CONFIGURATOR_ROLE` to:
-  * `pause()` or `unpause()` all other contracts and set state variables. 
-  * `initReserve()`, `freezeReserve()`, `pauseReserve()`, `protectReserve()`, `activateReserve()`, `connectCollateralManager()` and connect oracles within the `LendingPool` contract. 
-* `ADMIN_ROLE` to:
-  * `connectLendingPool()`, `connectCollateralManager()`, `connectLendingPoolCollateralManager()`, `initLendingPoolReserve()`, `setCollateralManagerInterestRate()`, `setCollateralManagerLiquidationThreshold()`, `updateCollatearlManagerWhitelist()` and connect oracles within the `Configurator` contract.
-* `EMERGENCY_ADMIN_ROLE` to:
-  * `pauseLendingPool()`, `unpauseLendingPool()`, `freezeLendingPoolReserve()`, `pauseLendingPoolReserve()`, `protectLendingPoolReserve()`, `activateLendingPoolReserve()`, `pauseCollateralManager()`, `unpauseCollateralManager()`, `pauseNToken()`, `unpauseNToken()` and `pauseDebtToken()`, `unpauseDebtToken()` within the `Configurator` contract.
-
-Assess roles per contract:
+*Role-Based Access Control (RBAC)* design pattern used, inherriting from the OpenZeppelin `AccessControl` contract. The RBAC design is used to restrict access to function calls. Roles for each of the protocol contract "callers" have been created (e.g. `LendingPool` &rarr; `LENDING_POOL_ROLE`) to permission inter-contract execution, and help protect the sytem from bad actors. Access roles as per the below.
 
 * `LendingPool`:
   * `CONFIGURATOR_ROLE`
+    * `pause()`, `unpause()`, `initReserve()`, `freezeReserve()`, `pauseReserve()`, `protectReserve()`, `activateReserve()`, `connectCollateralManager()` and connect oracles.
 * `CollateralManager`:
   * `CONFIGURATOR_ROLE`
+    * `pause()` and `unpause()`
   * `LENDING_POOL_ROLE`
+    * `deposit()`, `withdraw()` and `retrieve()`
 * `NToken`:
   * `CONFIGURATOR_ROLE`
+    * `pause()` and `unpause()`
   * `LENDING_POOL_ROLE`
+    * `mint()`, `burn()`, `burnFrom()`, `approve()`, `reserveTransfer()`, `reserveTransferFrom()`
 * `DebtToken`:
   * `CONFIGURATOR_ROLE`
+    * `pause()` and `unpause()`
   * `LENDING_POOL_ROLE`
+    * `mint()`, `burn()`, `burnFrom()`, `approve()`
 * `Configurator`:
-  * `EMERGENCY_ADMIN_ROLE`
   * `ADMIN_ROLE`
+    * `connectLendingPool()`, `connectCollateralManager()`, `connectLendingPoolCollateralManager()`, `initLendingPoolReserve()`, `setCollateralManagerInterestRate()`, `setCollateralManagerLiquidationThreshold()`, `updateCollatearlManagerWhitelist()` and connect oracles.
+  * `EMERGENCY_ADMIN_ROLE`
+    * `pauseLendingPool()`, `unpauseLendingPool()`, `freezeLendingPoolReserve()`, `pauseLendingPoolReserve()`, `protectLendingPoolReserve()`, `activateLendingPoolReserve()`, `pauseCollateralManager()`, `unpauseCollateralManager()`, `pauseNToken()`, `unpauseNToken()`, `pauseDebtToken()` and `unpauseDebtToken()`
 
 <!-- ## Upgradable Contracts
 
