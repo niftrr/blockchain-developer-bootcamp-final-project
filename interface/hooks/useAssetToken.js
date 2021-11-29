@@ -3,8 +3,7 @@ import useIsValidNetwork from "./useIsValidNetwork";
 import { useContract } from "./useContract";
 import { useAppContext } from "../AppContext";
 import { formatUnits } from "@ethersproject/units";
-// import AssetTokenData from "../artifacts/contracts/mocks/AssetToken/AssetToken.json";
-import AssetTokenData from "../../v1-core/artifacts/contracts/mocks/AssetToken.sol/AssetToken.json";
+import AssetTokenData from "../artifacts/contracts/mocks/AssetToken/AssetToken.json";
 
 
 export const useAssetToken = () => {
