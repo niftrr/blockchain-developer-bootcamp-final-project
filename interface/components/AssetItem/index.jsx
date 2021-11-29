@@ -6,7 +6,7 @@ function AssetItem(props) {
   const { className, nftSymbol, nftTokenId, imgUrl } = props;
 
   return (
-    <Link to="/asset">
+    // <Link to="/asset">
       <div className={`asset-item-3 ${className || ""}`}>
         <img className="rectangle-18" src={imgUrl} />
         <div className="fidenza-157 valign-text-middle oxanium-semi-bold-black-20px">
@@ -19,7 +19,7 @@ function AssetItem(props) {
           </span>
         </div>
       </div>
-    </Link>
+    // </Link>
   );
 }
 

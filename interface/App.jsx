@@ -49,7 +49,7 @@ function App(props) {
                 <Route path="/:path(|#)">
                 <LandingPage
                     text17="The NFT Liquidity Protocol"
-                    text18="NFTlend.xyz is an open-source, non-custodial liquidity protocol for borrowing assets using NFTs as collateral and earning interest on deposits."
+                    text18="NFTlend is the first automated market maker for instant, permissionless NFT-backed loans."
                     backgroundProps={landingPageData.backgroundProps}
                     buttonConnectWalletProps={landingPageData.buttonConnectWalletProps}
                     headerProps={landingPageData.headerProps}
@@ -63,9 +63,9 @@ function App(props) {
                     liquidate23Props={liquidateData.liquidate23Props}
                 />
                 </Route>
-                <Route path="/asset">
+                {/* <Route path="/asset">
                 <Asset {...assetData} />
-                </Route>
+                </Route> */}
             </Switch>
             </Router>
         </Web3ReactProvider>
