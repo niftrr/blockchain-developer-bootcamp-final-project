@@ -6,10 +6,13 @@
 const hre = require("hardhat");
 const fs = require("fs");
 const envFile = "../interface/.env";
+const docsFile = "../docs/deployed_address.txt";
+let dataItem = "";
 let fileData = "";
+let docsFileData = "";
   
-async function writeContractAddressesToInterfaceEnv(fileData) {
-  fs.writeFile(envFile, fileData, (err) => {
+async function writeContractAddressesToFile(fileData, fileName) {
+  fs.writeFile(fileName, fileData, (err) => {
     // In case of a error throw err.
     if (err) throw err;
   });
@@ -23,35 +26,19 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
+  console.log('network', network.name);
+
   /* 
   
   1. Deploy locally
   
   */
 
-  // Get Signers 
-  // let acc0;
-  // let acc1;
-  // let acc2;
-  // let emergencyAdmin;
-  // let admin;
-  // let treasuryAccount;
-
   [acc0, acc1, acc2, emergencyAdmin, admin, treasuryAccount] = await hre.ethers.getSigners();
  
-  // // Update undefinted accounts (for testnet deployment with only two accounts provided)
-  // function updateUndefinedAccount(x, acc) {
-  //   if (x === undefined) {
-  //     console.log('Setting undefined account to acc0');
-  //     return acc
-  //   }
-  //   return x;
-  // }
-  // acc2 = updateUndefinedAccount(acc2, acc0);
-  // emergencyAdmin = updateUndefinedAccount(emergencyAdmin, acc0);
-  // admin = updateUndefinedAccount(admin, acc0);
-  // treasuryAccount = updateUndefinedAccount(treasuryAccount, acc0);
-  
+  // Get network
+  docsFileData += `NETWORK=${network.name.toUpperCase()}`;
+
   // Get and deploy Configurator
   Configurator = await ethers.getContractFactory('Configurator');
   configurator = await Configurator.deploy(
@@ -59,6 +46,8 @@ async function main() {
       admin.address 
   );
   await configurator.deployed();
+  console.log("Configurator deployed to:", configurator.address);
+  docsFileData += `LENDING_POOL_CONTRACT_ADDRESS=${configurator.address}\n`;
 
   // Get and deploy LendingPool contract
   const LendingPool = await hre.ethers.getContractFactory('LendingPool');
@@ -68,7 +57,9 @@ async function main() {
   );
   await lendingPool.deployed();
   console.log("LendingPool deployed to:", lendingPool.address);
-  fileData += `REACT_APP_LENDING_POOL_CONTRACT_ADDRESS=${lendingPool.address}\n`;
+  dataItem = `LENDING_POOL_CONTRACT_ADDRESS=${lendingPool.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
 
   // Connect LendingPool in Configurator
   await configurator.connect(admin).connectLendingPool(lendingPool.address);
@@ -81,7 +72,9 @@ async function main() {
   );
   await collateralManager.deployed();
   console.log("CollateralManager deployed to:", collateralManager.address);
-  fileData += `REACT_APP_COLLATERAL_MANAGER_CONTRACT_ADDRESS=${collateralManager.address}\n`;
+  dataItem = `COLLATERAL_MANAGER_CONTRACT_ADDRESS=${collateralManager.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
 
   // Connect CollateralManager in Configurator
   await configurator.connect(admin).connectCollateralManager(
@@ -104,17 +97,25 @@ async function main() {
   assetTokenDAI = await AssetToken.connect(admin).deploy('DAI Token', 'DAI', assetTokenSupply);
   await assetTokenDAI.deployed();
   console.log("assetTokenDAI deployed to:", assetTokenDAI.address);
-  fileData += `REACT_APP_ASSET_TOKEN_DAI_CONTRACT_ADDRESS=${assetTokenDAI.address}\n`;
+  dataItem = `ASSET_TOKEN_DAI_CONTRACT_ADDRESS=${assetTokenDAI.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // USDC:
   assetTokenUSDC = await AssetToken.connect(admin).deploy('USDC Token', 'USDC', assetTokenSupply);
   await assetTokenUSDC.deployed();
   console.log("assetTokenUSDC deployed to:", assetTokenUSDC.address);
-  fileData += `REACT_APP_ASSET_TOKEN_USDC_CONTRACT_ADDRESS=${assetTokenUSDC.address}\n`;
+  dataItem = `ASSET_TOKEN_USDC_CONTRACT_ADDRESS=${assetTokenUSDC.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // WETH:
   assetTokenWETH = await AssetToken.connect(admin).deploy('WETH Token', 'WETH', assetTokenSupply);
   await assetTokenWETH.deployed();
   console.log("assetTokenWETH deployed to:", assetTokenWETH.address);
-  fileData += `REACT_APP_ASSET_TOKEN_WETH_CONTRACT_ADDRESS=${assetTokenWETH.address}\n`;
+  dataItem = `ASSET_TOKEN_WETH_CONTRACT_ADDRESS=${assetTokenWETH.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
   
   // Get and deploy nToken contracts
   NToken = await hre.ethers.getContractFactory('NToken');
@@ -127,7 +128,10 @@ async function main() {
   );
   await nTokenDAI.deployed();
   console.log("nTokenDAI deployed to:", nTokenDAI.address);
-  fileData += `REACT_APP_N_TOKEN_DAI_CONTRACT_ADDRESS=${nTokenDAI.address}\n`;
+  dataItem = `N_TOKEN_DAI_CONTRACT_ADDRESS=${nTokenDAI.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // USDC:
   nTokenUSDC = await NToken.connect(admin).deploy(
     configurator.address,
@@ -137,7 +141,10 @@ async function main() {
   );
   await nTokenUSDC.deployed();
   console.log("nTokenUSDC deployed to:", nTokenUSDC.address);
-  fileData += `REACT_APP_N_TOKEN_USDC_CONTRACT_ADDRESS=${nTokenUSDC.address}\n`;
+  dataItem = `N_TOKEN_USDC_CONTRACT_ADDRESS=${nTokenUSDC.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // WETH:
   nTokenWETH = await NToken.connect(admin).deploy(
     configurator.address,
@@ -147,7 +154,9 @@ async function main() {
   );
   await nTokenWETH.deployed();
   console.log("nTokenWETH deployed to:", nTokenWETH.address);
-  fileData += `REACT_APP_N_TOKEN_WETH_CONTRACT_ADDRESS=${nTokenWETH.address}\n`;
+  dataItem = `N_TOKEN_WETH_CONTRACT_ADDRESS=${nTokenWETH.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
 
   // Get and deploy debtToken contracts
   DebtToken = await hre.ethers.getContractFactory('DebtToken');
@@ -160,7 +169,10 @@ async function main() {
   );
   await debtTokenDAI.deployed();  
   console.log("debtTokenDAI deployed to:", debtTokenDAI.address);
-  fileData += `REACT_APP_DEBT_TOKEN_DAI_CONTRACT_ADDRESS=${debtTokenDAI.address}\n`;
+  dataItem = `DEBT_TOKEN_DAI_CONTRACT_ADDRESS=${debtTokenDAI.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // USDC:
   debtTokenUSDC = await DebtToken.connect(admin).deploy(
     configurator.address,
@@ -170,7 +182,10 @@ async function main() {
   );
   await debtTokenUSDC.deployed();  
   console.log("debtTokenUSDC deployed to:", debtTokenUSDC.address);
-  fileData += `REACT_APP_DEBT_TOKEN_USDC_CONTRACT_ADDRESS=${debtTokenUSDC.address}\n`;
+  dataItem = `DEBT_TOKEN_USDC_CONTRACT_ADDRESS=${debtTokenUSDC.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // WETH:
   debtTokenWETH = await DebtToken.connect(admin).deploy(
     configurator.address,
@@ -180,7 +195,9 @@ async function main() {
   );
   await debtTokenWETH.deployed();  
   console.log("debtTokenWETH deployed to:", debtTokenWETH.address);
-  fileData += `REACT_APP_DEBT_TOKEN_WETH_CONTRACT_ADDRESS=${debtTokenWETH.address}\n`;
+  dataItem = `DEBT_TOKEN_WETH_CONTRACT_ADDRESS=${debtTokenWETH.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
 
   // Initialize Reserves
   // DAI:
@@ -197,12 +214,17 @@ async function main() {
   nftPUNK = await NFT.connect(admin).deploy('Cryptopunks', 'PUNK');
   await nftPUNK.deployed();
   console.log("NFT PUNK deployed to:", nftPUNK.address);
-  fileData += `REACT_APP_NFT_PUNK_CONTRACT_ADDRESS=${nftPUNK.address}\n`;
+  dataItem = `NFT_PUNK_CONTRACT_ADDRESS=${nftPUNK.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
+
   // BAYC:
   nftBAYC = await NFT.connect(admin).deploy('Bored Ape Yacht Club', 'BAYC');
   await nftBAYC.deployed();
   console.log("NFT BAYC deployed to:", nftBAYC.address);
-  fileData += `REACT_APP_NFT_BAYC_CONTRACT_ADDRESS=${nftBAYC.address}`;
+  dataItem = `NFT_BAYC_CONTRACT_ADDRESS=${nftBAYC.address}`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
 
   // Set NFT liquidation thresholds
   await configurator.connect(admin).setCollateralManagerLiquidationThreshold(nftPUNK.address, 150); // in percent
@@ -232,7 +254,12 @@ async function main() {
   await lendingPool.setMockEthTokenPrice(assetTokenWETH.address, mockETHWETH);  
 
   // Writes fileData to interface ../interface/.env 
-  await writeContractAddressesToInterfaceEnv(fileData);
+  await writeContractAddressesToFile(fileData, envFile);
+
+  // Write out docs data if network == ropsten
+  if (network.name=="ropsten") {
+    await writeContractAddressesToFile(docsFileData, docsFile);
+  }
 
   /* 
   
