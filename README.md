@@ -26,7 +26,7 @@ Contact me on Twitter [@niftrr](https://twitter.com/niftrr) with your Ethereum a
 
 ## Video demo
 
-[![Video Demo](assets/nftlend-ui-landingpage.png)](https://www.youtube.com/watch?v=juGUTuLzXGs)
+[![Video Demo](assets/nftlend-ui-landingpage.png)](https://youtu.be/iT2rJXup3eQ)
 
 ## Protocol system design
 
@@ -60,7 +60,7 @@ Link to detail on [design pattern decisions](docs/design_pattern_decisions.md).
 
 Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
 
-## User Interface
+## User interface
 
 ### Landing page
 
