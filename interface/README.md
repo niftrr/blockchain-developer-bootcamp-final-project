@@ -2,11 +2,27 @@
 
 An interface for NFTlend.
 
-## Instructions
+## Local development
+
+The following assumes the use of node `@>=14`.
+### Install dependencies
+
+```shell
+yarn
 ```
-npm install
-npm start
+
+### Build
+
+```shell
+yarn build
 ```
+
+### Deploy
+
+```shell
+yarn start
+```
+
 Open [http://localhost:1234](http://localhost:1234).
 
 ## Licensing

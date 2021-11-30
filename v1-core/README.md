@@ -2,7 +2,14 @@
 
 Protocol code for NFTlend.
 
-## Instructions
+## Local development
+
+The following assumes the use of node `@>=14`.
+### Install dependencies
+
+```shell
+npm install
+```
 
 ### Compile
 

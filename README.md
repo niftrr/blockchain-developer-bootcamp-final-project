@@ -80,34 +80,33 @@ Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
 
 ## Directory Structure
 
-
     .
     ├── assets                                      # README assets
-    ├── docs                                        # Documentation directory
-    │   ├── avoiding_common_attacks.md              # Security measures documentation
+    ├── docs                                        # Documentation 
+    │   ├── avoiding_common_attacks.md              # Security measures 
     │   ├── deployed_address.txt                    # Deployed smart contract addresses
-    │   └── design_pattern_decisions.md             # Design patterns documentation
-    ├── interface                                   # Front-end interface directory
-    │   ├── components                              # React components directory
-    │   ├── hooks                                   # React hooks directory
+    │   └── design_pattern_decisions.md             # Design patterns 
+    ├── interface                                   # Front-end interface
+    │   ├── components                              # React components 
+    │   ├── hooks                                   # React hooks 
     │   ├── App.jsx                                 # React app
     │   ├── AppContext.jsx                          # React app state management
     │   ├── LICENCE                          
     │   ├── README.md                        
     │   └── ...   
-    ├── v1-core                                     # Protocol directory
+    ├── v1-core                                     # Protocol 
     │   ├── contracts                               # Smart contracts
-    │   │   ├── interfaces                          # Smart contract interfaces
+    │   │   ├── interfaces                          # Interfaces
     │   │   │   ├── ICollateralManager.sol          # CollateralManager interface
     │   │   │   ├── IDebtToken.sol                  # DebtToken interface
     │   │   │   ├── ILendingPool.sol                # LendingPool interface
     │   │   │   └── INToken.sol                     # NToken interface
-    │   │   ├── libraries                           # Smart contract libraries
+    │   │   ├── libraries                           # Libraries
     │   │   │   ├── DataTypes.sol                   # DataTypes library
-    │   │   │   └── ReserveLogic.sol                # ReserveLogic library (WIP)
-    │   │   ├── mocks                               # Mocks directory
-    │   │   │   ├── AssetToken.sol                  # Mock assetToken contract
-    │   │   │   └── NFT.sol                         # Mock NFT contract
+    │   │   │   └── ReserveLogic.sol                # ReserveLogic library
+    │   │   ├── mocks                               # Mocks
+    │   │   │   ├── AssetToken.sol                  # ERC20 contract
+    │   │   │   └── NFT.sol                         # ERC721 contract
     │   │   ├── CollateralManager.sol               # CollateralManager contract
     │   │   ├── Configurator.sol                    # Configurator contract
     │   │   ├── DebtToken.sol                       # DebtToken contract
@@ -116,7 +115,7 @@ Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
     │   │   ├── LendingPoolStorage.sol              # LendingPoolStorage contract
     │   │   ├── NToken.sol                          # NToken contract
     │   │   └── TokenPriceOracle.sol                # TokenPriceOracle contract (WIP)
-    │   ├── scripts                                 # Scripts directory
+    │   ├── scripts                                 # Scripts 
     │   │   └── deploy.js                           # Deployment script
     │   ├── test                                    # Unit tests
     │   ├── LICENCE  
@@ -124,10 +123,10 @@ Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
     │   └── ...  
     └── ...
 
-## Instructions
+## Local development
 
-1. Deploy the smart contracts locally by following the instructions in [v1-core/README.md](v1-core/README.md).
-2. Deploy the front-end to localhost by following the instruction in [interface/README.md](interface/README.md).
+1. Follow the instructions in [v1-core/README.md](v1-core/README.md).
+2. Follow the instruction in [interface/README.md](interface/README.md).
 
 ## Licensing
 
