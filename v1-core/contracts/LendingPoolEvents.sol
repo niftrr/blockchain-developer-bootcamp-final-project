@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.9;
 
+/// @title Lending Pool Events contract.
+/// @author Niftrr
+/// @notice Contains Lending Pool events
+/// @dev To help organize and limit size of Lending Pool contract.
 contract LendingPoolEvents {    
     /// @notice Emitted when a new reserve is initialized.
     /// @param asset The ERC20, reserve asset address.
