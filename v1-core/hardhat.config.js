@@ -24,21 +24,21 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.9",
   networks: {
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        [
-          process.env.PRIVATE_KEY_ACC0,
-          process.env.PRIVATE_KEY_ACC1,
-          process.env.PRIVATE_KEY_ACC2,
-          process.env.PRIVATE_KEY_EMERGENCY_ADMIN,
-          process.env.PRIVATE_KEY_ADMIN,
-          process.env.PRIVATE_KEY_TREASURY,
-        ],
-      gas: 2100000,
-      gasPrice: 8000000000,
-      saveDeploymentes: true,
-    },
+    // ropsten: {
+    //   url: process.env.ROPSTEN_URL || "",
+    //   accounts:
+    //     [
+    //       process.env.PRIVATE_KEY_ACC0,
+    //       process.env.PRIVATE_KEY_ACC1,
+    //       process.env.PRIVATE_KEY_ACC2,
+    //       process.env.PRIVATE_KEY_EMERGENCY_ADMIN,
+    //       process.env.PRIVATE_KEY_ADMIN,
+    //       process.env.PRIVATE_KEY_TREASURY,
+    //     ],
+    //   gas: 2100000,
+    //   gasPrice: 8000000000,
+    //   saveDeploymentes: true,
+    // },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
