@@ -86,7 +86,7 @@ Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
 
 ![Asset](assets/nftlend-ui-asset.png?raw=true "Asset")
 
-## Directory Structure
+## Directory structure
 
     .
     ├── assets                                      # README assets
