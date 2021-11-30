@@ -16,6 +16,14 @@ NFTlend is building the first automated market maker for instant, permissionless
 
 - **Liquidators** repay any loan defaults (those expired or undercollateralized) to purchase the underlying NFT at a discount.
 
+## Live dApp 
+
+Deployed on Ropsten and IPFS: [ropsten.nftlend.xyz](https://ropsten.nftlend.xyz/#/).
+
+Note that test `DAI`, `USDC` or `WETH` is required to interact with the protocol. 
+
+Contact me on Twitter [@niftrr](https://twitter.com/niftrr) with your Ethereum address and I will send you some. 
+
 ## Video demo
 
 [![Video Demo](assets/nftlend-ui-landingpage.png)](https://www.youtube.com/watch?v=juGUTuLzXGs)
@@ -133,22 +141,6 @@ Follow the instructions in [v1-core/README.md](v1-core/README.md).
 
 Follow the instruction in [interface/README.md](interface/README.md).
 
-## Live dApp 
-
-Protocol smart contracts are deployed on Ropsten testnet.
-
-Interface is deployed on IPFS. 
-
-### Prequisite
-
-Test `DAI`, `USDC` or `WETH` is required to interact with the protocol. 
-
-Contact me on Twitter [@niftrr](https://twitter.com/niftrr) with your Ethereum address and I will send you some. 
-
-### Link
-
-[ropsten.nftlend.xyz](https://ropsten.nftlend.xyz/#/)
-
 ## Next steps
 
 * Connect with [Opensea Chainlink external adapter](https://github.com/niftrr/opensea-cl-ea) for NFT floor prices. (Note: external adapter development already complete and being supported by node operators).
@@ -164,5 +156,3 @@ Contact me on Twitter [@niftrr](https://twitter.com/niftrr) with your Ethereum a
 The primary license for both the NFTlend V1 Core and Interface is the Business Source License 1.1 (`BUSL-1.1`), see:
 * [`./v1-core/LICENSE`](./v1-core/LICENCE),
 * [`./interface/LICENSE`](./interface/LICENCE).
-
-  
