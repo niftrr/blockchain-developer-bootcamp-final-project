@@ -16,7 +16,7 @@ import "hardhat/console.sol";
 /// @title A contract for managing borrows and their underlying collateral
 /// @author Niftrr
 /// @notice Allows for the deposit/withdraw of collateral to open/close a borrow position
-/// @dev Currently in development
+/// @dev Acts as the NFT collateral escrow.
 contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
