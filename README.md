@@ -125,8 +125,39 @@ Link to detail on [avoiding common attacks](docs/avoiding_common_attacks.md).
 
 ## Local development
 
-1. Follow the instructions in [v1-core/README.md](v1-core/README.md).
-2. Follow the instruction in [interface/README.md](interface/README.md).
+### Protocol
+
+Follow the instructions in [v1-core/README.md](v1-core/README.md).
+
+### Interface
+
+Follow the instruction in [interface/README.md](interface/README.md).
+
+## Live dApp 
+
+Protocol smart contracts are deployed on Ropsten testnet.
+
+Interface is deployed on IPFS. 
+
+### Prequisite
+
+Test `DAI`, `USDC` or `WETH` is required to interact with the protocol. 
+
+Contact me on Twitter [@niftrr](https://twitter.com/niftrr) with your Ethereum address and I will send you some. 
+
+### Link
+
+[ropsten.nftlend.xyz](https://ropsten.nftlend.xyz/#/)
+
+## Next steps
+
+* Connect with [Opensea Chainlink external adapter](https://github.com/niftrr/opensea-cl-ea) for NFT floor prices. (Note: external adapter development already complete and being supported by node operators).
+* Connect to [Chainlink data feeds](https://chain.link/data-feeds) for price-feed integration. 
+* Add logic to generage interest payment accrual to lenders.
+* Update liquidate function to trigger a timed auction with a feature to allow the original owner to purchase back their deposited price at the cost of the outstanding debt plus a fee; to provide better protection and compensation for NFT owners during liquidation events. 
+* Add flash loan functionality.
+* Audit smart contracts.
+* Update the Interface in terms of UX, with full test coverage.
 
 ## Licensing
 
