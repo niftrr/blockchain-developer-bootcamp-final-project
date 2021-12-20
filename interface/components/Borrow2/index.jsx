@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Scrollbars } from 'react-custom-scrollbars';
 import { useWeb3React } from "@web3-react/core";
 import Header from "../Header";
 import Background from "../Background";
@@ -21,7 +22,6 @@ import useNFT from "../../hooks/useNFT";
 import useCollateralManager from "../../hooks/useCollateralManager";
 import useLendingPool from "../../hooks/useLendingPool";
 import { useAppContext } from "../../AppContext";
-
 
 
 function Borrow2(props) {
@@ -62,11 +62,8 @@ function Borrow2(props) {
     }  
   }, [account, imageDictBorrow, borrowProject, borrowToken]);
 
-  const nftProjectClassName = {
-    "PUNK": itemProject2Props.className,
-    "BAYC": "",
-    "Fidenza": itemProject2Props.className
-  }
+  imageDictBorrow[""] = "/img/nftlend-logo-large.png"
+  imageDictBorrow["--"] = "/img/nftlend-logo-large.png"
 
   return (
     <div className="container-center-horizontal">
@@ -79,9 +76,11 @@ function Borrow2(props) {
             <div className="flex-row">
               <div className="overlap-group1-3">
                 <ItemsScroll />
-                {whitelistNFT.map(nft => (
-                  <ItemProject className={nftProjectClassName[nftAddressSymbolDict[nft]]} nftSymbol={nftAddressSymbolDict[nft]} key={nft}/>
-                ))}
+                <Scrollbars style={{ width: 231, height: 250 }}>
+                  {whitelistNFT.map(nft => (
+                    <ItemProject nftSymbol={nftAddressSymbolDict[nft]} key={nft}/>
+                  ))}
+                </Scrollbars>
               </div>
               <div className="overlap-group2">
                 <ItemsScroll />

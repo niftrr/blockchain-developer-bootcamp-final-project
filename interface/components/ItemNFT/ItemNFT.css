@@ -1,31 +1,15 @@
-.item-nft-0 {
+.item-nft {
   align-items: flex-start;
   background-color: #c7defa;
   border-radius: 5px;
   display: flex;
   height: 84px;
   left: 8px;
-  min-width: 218px;
+  width: 210px;
   padding: 0 6px;
-  position: absolute;
-  top: 9px;
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.item-nft-1 {
-  align-items: flex-start;
-  background-color: #c7defa;
-  border-radius: 5px;
-  display: flex;
-  height: 84px;
-  left: 8px;
-  min-width: 218px;
-  padding: 0 6px;
-  position: absolute;
-  top: 100px;
+  position: relative;
+  top: 8px;
+  margin-bottom: 6px;
 }
 
 .rectangle-33 {

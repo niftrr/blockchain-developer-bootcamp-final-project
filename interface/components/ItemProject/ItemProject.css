@@ -6,9 +6,10 @@
   height: 39px;
   justify-content: flex-end;
   left: 7px;
-  min-width: 216px;
-  position: absolute;
-  top: 55px;
+  width: 212px;
+  position: relative;
+  top: 8px;
+  margin-bottom: 6px;
 }
 
 .rectangle-31 {
@@ -33,12 +34,3 @@
   margin-left: 11px;
   width: 127px;
 }
-
-.item-project.item-project-1 {
-  top: 100px;
-}
-
-.item-project.item-project-2 {
-  top: 10px;
-}
-

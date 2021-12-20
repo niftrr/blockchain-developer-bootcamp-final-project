@@ -16,13 +16,22 @@ function ItemProject(props) {
   }
 
   const handleChange = (nftSymbol) => {
-    setBorrowProject(nftSymbol);
-    setImagesBorrow(nftSymbol);
+    if (borrowProject == nftSymbol) {
+      setBorrowProject("--");
+      setImagesBorrow("--");
+    } else {
+      setBorrowProject(nftSymbol);
+      setImagesBorrow(nftSymbol);
+    }
+  }
+
+  const checked = (nftSymbol) => {
+    return nftSymbol == borrowProject;
   }
 
   return (
     <div className={`item-project ${className || ""}`}>
-      <input type="checkbox" onChange={() => handleChange(nftSymbol)} className="rectangle-31 border-1px-pickled-bluewood"></input>
+      <input type="checkbox" onChange={() => handleChange(nftSymbol)} checked={checked(nftSymbol)} className="rectangle-31 border-1px-pickled-bluewood"></input>
       <img className="rectangle-18-3" src={nftProjectImage[nftSymbol]} />
       <div className="place-12 valign-text-middle oxanium-normal-black-20px">{nftSymbol}</div>
     </div>
