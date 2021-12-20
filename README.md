@@ -1,4 +1,4 @@
-# NFTlend.xyz
+# [NFTlend.xyz](https://nftlend.xyz/)
 
 The end of searching for liquidity. 
 
@@ -156,3 +156,7 @@ Follow the instruction in [interface/README.md](interface/README.md).
 The primary license for both the NFTlend V1 Core and Interface is the Business Source License 1.1 (`BUSL-1.1`), see:
 * [`./v1-core/LICENSE`](./v1-core/LICENCE),
 * [`./interface/LICENSE`](./interface/LICENCE).
+
+## Public Ethereum Address
+
+niftrr.eth
