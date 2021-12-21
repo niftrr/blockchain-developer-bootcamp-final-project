@@ -20,7 +20,11 @@ library DataTypes {
         ReserveStatus status;
         address nTokenAddress;
         address debtTokenAddress;
-        uint128 currentInterestRate;
+        uint256 previousLiquidityIndex;
+        uint256 interestRate;
+        uint256 borrowRate;
+        uint256 normalizedIncome;
+        uint256 latestUpdateTimestamp;
     }
 
     struct Collateral {

@@ -172,15 +172,23 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         onlyLendingPool 
         whenNotPaused 
         whenBorrowActive(_id)
-        returns (bool)
+        returns (
+            bool,
+            uint256,
+            uint256
+        )
     {
-        bool success = _withdraw(
+        (
+            bool success,
+            uint256 borrowAmount,
+            uint256 interestRate
+        ) = _withdraw(
             _id, 
             _asset, 
             _repaymentAmount
         );
 
-        return success;
+        return (success, borrowAmount, interestRate);
     }
 
     /// @notice To retrieve the ERC721 token collateral for a borrow position liquidator.
@@ -408,14 +416,18 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @param _asset The ERC20 token to be repaid.
     /// @param _repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @dev Removes a borrow and transfers the ERC721 from escrow back to the borrower.
-    /// @return Boolean for success. 
+    /// @return Boolean for success and interestRate of borrow. 
     function _withdraw(
         uint256 _id, 
         address _asset, 
         uint256 _repaymentAmount
     ) 
         private
-        returns (bool)
+        returns (
+            bool, 
+            uint256,
+            uint256
+        )
     {
         address newOwner;
         address borrowAsset = borrows[_id].erc20Token;
@@ -440,7 +452,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
             _id
         );
 
-        return true;
+        return (true, borrows[_id].borrowAmount, borrows[_id].interestRate);
     }
 
     /// @notice Private function to retrieve the collateral for a borrow liquidator.

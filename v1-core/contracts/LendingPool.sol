@@ -268,9 +268,49 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.status = DataTypes.ReserveStatus.Active;
         reserve.nTokenAddress = nTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
+        reserve.previousLiquidityIndex = 10**27;
         _reserves[asset] = reserve;
 
         emit InitReserve(asset, _reserves[asset].nTokenAddress, _reserves[asset].debtTokenAddress);
+    }
+
+    function _updateReserveNormalizedIncome(
+        address asset
+    )
+        private
+    {
+        DataTypes.Reserve storage reserve = _reserves[asset];
+
+        // Calcualte Utilization Rate
+        uint256 utilizationRate = IDebtToken(reserve.debtTokenAddress).getTotalSupply()
+            .div(INToken(reserve.nTokenAddress).totalSupply()); 
+
+        // Calculate Liquidity Rate
+        uint256 liquidityRate = reserve.borrowRate.mul(utilizationRate);
+
+        // Update Reserve Normalized Income
+        uint256 ongoingTimeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp).div(365 days);
+        reserve.normalizedIncome = (liquidityRate.mul(ongoingTimeDelta).add(1)).mul(reserve.previousLiquidityIndex);
+
+        // Update Liquidity Index
+        uint256 timeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp).div(365 days);
+        reserve.previousLiquidityIndex = (liquidityRate.mul(timeDelta).add(1)).mul(reserve.previousLiquidityIndex);
+    }
+
+    function _updateUserScaledBalance(
+        address user,
+        address asset,
+        uint256 amount,
+        bool isDeposit
+    )
+        private
+    {
+        DataTypes.Reserve memory reserve = _reserves[asset];
+        if (isDeposit) {
+            userScaledBalances[user][asset] = userScaledBalances[user][asset].add(amount.div(reserve.normalizedIncome));
+        } else {
+            userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(amount.div(reserve.normalizedIncome));
+        }
     }
 
     /// @notice Private function to deposit assets into the lending pool.
@@ -292,6 +332,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
 
         success = INToken(nToken).mint(_msgSender(), amount);
         require(success, "UNSUCCESSFUL_MINT");
+
+        _updateReserveNormalizedIncome(asset);
+        _updateUserScaledBalance(_msgSender(), asset, amount, true);
 
         emit Deposit(asset, amount, _msgSender());
     }
@@ -319,6 +362,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         success = INToken(nToken).reserveTransfer(_msgSender(), asset, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
         
+        _updateReserveNormalizedIncome(asset);
+        _updateUserScaledBalance(_msgSender(), asset, amount, false);
+
         emit Withdraw(asset, amount, _msgSender());
     }
 
@@ -339,7 +385,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private
     {
         bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[asset]; 
         uint256[4] memory variables = getBorrowVariables(
             asset,
             amount, 
@@ -365,6 +411,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         success = INToken(reserve.nTokenAddress).reserveTransfer(_msgSender(), asset, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
 
+        // Update borrowRate - for use in APR calculation
+        reserve.borrowRate = reserve.borrowRate.add(amount.mul(variables[1]));
+
+        _updateReserveNormalizedIncome(asset);
+
         emit Borrow(asset, amount, variables[0], collateral, tokenId, _msgSender());
     }
 
@@ -381,12 +432,14 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         private 
     {
         bool success;
+        uint256 borrowAmount;
+        uint256 interestRate;
         DataTypes.Reserve memory reserve = _reserves[asset]; 
 
         success = INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
         require(success, "UNSUCCESSFUL_TRANSFER");
 
-        success = ICollateralManager(_collateralManagerAddress).withdraw(
+        (success, borrowAmount, interestRate) = ICollateralManager(_collateralManagerAddress).withdraw(
             borrowId, 
             asset, 
             repaymentAmount
@@ -395,6 +448,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
 
         success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);
         require(success, "UNSUCCESSFUL_BURN");
+
+        // Update borrowRate - for use in APR calculation
+        reserve.borrowRate = reserve.borrowRate.sub(borrowAmount.mul(interestRate));
+
+        _updateReserveNormalizedIncome(asset);
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
@@ -449,6 +507,13 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
             _msgSender()
         );
         require(success, "UNSUCCESSFUL_RETRIEVE");
+
+        // Update borrowRate - for use in APR calculation
+        reserve.borrowRate = reserve.borrowRate.sub(
+            borrowItem.borrowAmount.mul(borrowItem.interestRate)
+        );
+
+        _updateReserveNormalizedIncome(asset);
 
         emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
     }

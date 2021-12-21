@@ -15,6 +15,8 @@ contract LendingPoolStorage {
 
     mapping(address => DataTypes.Reserve) internal _reserves;
     mapping(address => string) internal _pricePairs;
+    mapping(address => mapping(address => uint256)) userScaledBalances;
+    mapping(address => mapping(address => uint256)) userNTokenBalances;
 
     address internal _collateralManagerAddress;
     address internal _tokenPriceOracleAddress;

@@ -6,6 +6,8 @@ import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { MockOracle } from "./mocks/Oracle.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
+import { DataTypes } from "./libraries/DataTypes.sol";
+
 import "hardhat/console.sol";
 
 /// @title Lending Pool Logic contract.
@@ -60,4 +62,17 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
         variables[3] = block.timestamp + numWeeks * 1 weeks; 
         return variables;
     }
+
+    function getUserNTokenBalance(
+        address user,
+        address asset
+    )
+        public
+        view
+        returns (uint256)
+    {
+        DataTypes.Reserve memory reserve = _reserves[asset];
+        return userScaledBalances[user][asset].mul(reserve.normalizedIncome);
+    }
+
 }

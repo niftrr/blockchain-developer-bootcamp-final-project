@@ -29,7 +29,11 @@ interface ICollateralManager {
         uint256 repaymentAmount
     ) 
         external
-        returns (bool success);
+        returns (
+            bool success,
+            uint256 borrowAmount,
+            uint256 interestRate
+        );
 
     function retrieve(
         uint256 _id, 
