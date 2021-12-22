@@ -62,6 +62,62 @@ beforeEach(async function() {
     // Connect Configurator to LendingPool by setting the address
     await hhConfigurator.connectLendingPool(hhLendingPoolAddress);
 
+    // Get, deploy and connect LendingPoolBorrow ti LendingPool
+    LendingPoolBorrow = await ethers.getContractFactory('LendingPoolBorrow');
+    hhLendingPoolBorrow = await LendingPoolBorrow.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+    );
+    await hhLendingPoolBorrow.deployed();
+    hhLendingPoolBorrowAddress = await hhLendingPoolBorrow.resolvedAddress;
+    await hhConfigurator.connectLendingPoolBorrow(hhLendingPoolBorrowAddress);
+    await hhConfigurator.connectLendingPoolLendingPoolBorrow();
+
+    // Get, deploy and connect LendingPoolDeposit to LendingPool
+    LendingPoolDeposit = await ethers.getContractFactory('LendingPoolDeposit');
+    hhLendingPoolDeposit = await LendingPoolDeposit.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+    );
+    await hhLendingPoolDeposit.deployed();
+    hhLendingPoolDepositAddress = await hhLendingPoolDeposit.resolvedAddress;
+    await hhConfigurator.connectLendingPoolDeposit(hhLendingPoolDepositAddress);
+    await hhConfigurator.connectLendingPoolLendingPoolDeposit();
+
+    // Get, deploy and connect LendingPoolLiquidate to LendingPool
+    LendingPoolLiquidate = await ethers.getContractFactory('LendingPoolLiquidate');
+    hhLendingPoolLiquidate = await LendingPoolLiquidate.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+    );
+    await hhLendingPoolLiquidate.deployed();
+    hhLendingPoolLiquidateAddress = await hhLendingPoolLiquidate.resolvedAddress;
+    await hhConfigurator.connectLendingPoolLiquidate(hhLendingPoolLiquidateAddress);
+    await hhConfigurator.connectLendingPoolLendingPoolLiquidate();
+
+    // Get, deploy and connect LendingPoolRepay to LendingPool
+    LendingPoolRepay = await ethers.getContractFactory('LendingPoolRepay');
+    hhLendingPoolRepay = await LendingPoolRepay.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+    );
+    await hhLendingPoolRepay.deployed();
+    hhLendingPoolRepayAddress = await hhLendingPoolRepay.resolvedAddress;
+    await hhConfigurator.connectLendingPoolRepay(hhLendingPoolRepayAddress);
+    await hhConfigurator.connectLendingPoolLendingPoolRepay();
+
+    // Get, deploy and connect LendingPoolWithdraw to LendingPool
+    LendingPoolWithdraw = await ethers.getContractFactory('LendingPoolWithdraw');
+    hhLendingPoolWithdraw = await LendingPoolWithdraw.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+    );
+    await hhLendingPoolWithdraw.deployed();
+    hhLendingPoolWithdrawAddress = await hhLendingPoolWithdraw.resolvedAddress;
+    await hhConfigurator.connectLendingPoolWithdraw(hhLendingPoolWithdrawAddress);
+    await hhConfigurator.connectLendingPoolLendingPoolWithdraw();
+
+
     // Get and deploy CollateralManager
     CollateralManager = await ethers.getContractFactory('CollateralManager');
     hhCollateralManager = await CollateralManager.deploy(

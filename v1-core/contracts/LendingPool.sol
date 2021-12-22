@@ -8,6 +8,11 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INToken } from "./interfaces/INToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
+import { ILendingPoolDeposit } from "./interfaces/ILendingPoolDeposit.sol";
+import { ILendingPoolWithdraw } from "./interfaces/ILendingPoolWithdraw.sol";
+import { ILendingPoolBorrow } from "./interfaces/ILendingPoolBorrow.sol";
+import { ILendingPoolRepay } from "./interfaces/ILendingPoolRepay.sol";
+import { ILendingPoolLiquidate } from "./interfaces/ILendingPoolLiquidate.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { LendingPoolEvents } from './LendingPoolEvents.sol';
@@ -27,7 +32,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
 
     bytes32 internal constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
 
-    constructor(address configurator, address treasuryAddress) {
+    constructor(
+        address configurator, 
+        address treasuryAddress
+        ) 
+    {
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _treasuryAddress = treasuryAddress;
         _interestFee = 5; // 5%
@@ -73,6 +82,76 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         emit CollateralManagerConnected(_collateralManagerAddress);
     }
 
+    /// @notice Connect the LendingPoolBorrow contract address.
+    /// @param lendingPoolBorrowAddress The LendingPoolBorrow contract address.
+    /// @dev Uses a state varaible.
+    function connectLendingPoolBorrow(
+        address lendingPoolBorrowAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        _lendingPoolBorrowAddress = lendingPoolBorrowAddress;
+
+        emit LendingPoolBorrowConnected(_lendingPoolBorrowAddress);
+    }
+
+    /// @notice Connect the LendingPoolDeposit contract address.
+    /// @param lendingPoolDepositAddress The LendingPoolDeposit contract address.
+    /// @dev Uses a state varaible.
+    function connectLendingPoolDeposit(
+        address lendingPoolDepositAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        _lendingPoolDepositAddress = lendingPoolDepositAddress;
+
+        emit LendingPoolDepositConnected(_lendingPoolDepositAddress);
+    }
+
+    /// @notice Connect the LendingPoolLiquidate contract address.
+    /// @param lendingPoolLiquidateAddress The LendingPoolLiquidate contract address.
+    /// @dev Uses a state varaible.
+    function connectLendingPoolLiquidate(
+        address lendingPoolLiquidateAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        _lendingPoolLiquidateAddress = lendingPoolLiquidateAddress;
+
+        emit LendingPoolLiquidateConnected(_lendingPoolLiquidateAddress);
+    }
+
+    /// @notice Connect the LendingPoolRepay contract address.
+    /// @param lendingPoolRepayAddress The LendingPoolRepay contract address.
+    /// @dev Uses a state varaible.
+    function connectLendingPoolRepay(
+        address lendingPoolRepayAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        _lendingPoolRepayAddress = lendingPoolRepayAddress;
+
+        emit LendingPoolRepayConnected(_lendingPoolRepayAddress);
+    }        
+
+    /// @notice Connect the LendingPoolWithdraw contract address.
+    /// @param lendingPoolWithdrawAddress The LendingPoolWithdraw contract address.
+    /// @dev Uses a state varaible.
+    function connectLendingPoolWithdraw(
+        address lendingPoolWithdrawAddress
+    ) 
+        public 
+        onlyConfigurator 
+    {
+        _lendingPoolWithdrawAddress = lendingPoolWithdrawAddress;
+
+        emit LendingPoolWithdrawConnected(_lendingPoolWithdrawAddress);
+    }        
+
     /// @notice Connect the Token Price Oracle contract by setting the address.
     /// @param tokenPriceOracleAddress The Token Price Oracle address.
     /// @dev Uses a state variable.
@@ -116,7 +195,15 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenNotPaused 
         whenReserveActive(asset)
     {
-        _deposit(asset, amount);
+        (bool success, ) = _lendingPoolDepositAddress.delegatecall(
+            abi.encodeWithSignature("deposit(address,uint256)", asset,amount)
+        );
+        require(success, "DEPOSIT_ERROR");
+        
+        _updateReserveNormalizedIncome(asset);
+        _updateUserScaledBalance(_msgSender(), asset, amount, true);
+
+        emit Deposit(asset, amount, _msgSender());
     }
 
     /// @notice Withdraw assets from the lending pool.
@@ -132,7 +219,15 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenNotPaused 
         whenReserveNotPaused(asset)
     {
-        _withdraw(asset, amount);
+        (bool success, ) = _lendingPoolWithdrawAddress.delegatecall(
+            abi.encodeWithSignature("withdraw(address,uint256)", asset,amount)
+        );
+        require(success, "WITHDRAW_ERROR");
+
+        _updateReserveNormalizedIncome(asset);
+        _updateUserScaledBalance(_msgSender(), asset, amount, false);
+
+        emit Withdraw(asset, amount, _msgSender());
     }
 
     /// @notice External function to create a borrow position.
@@ -154,13 +249,17 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenNotPaused
         whenReserveActive(asset)
     {
-        _borrow(
-            asset, 
-            amount, 
-            collateral, 
-            tokenId,
-            numWeeks
+        uint256 repaymentAmount;
+        (bool success, bytes memory data) = _lendingPoolBorrowAddress.delegatecall(
+            abi.encodeWithSignature("borrow(address,uint256,address,uint256,uint256)", asset,amount,collateral,tokenId,numWeeks)
         );
+        require(success, "BORROW_DELEGATECALL_UNSUCCESSFUL");
+        (success, repaymentAmount) = abi.decode(data, (bool,uint256));
+        require(success, "BORROW_UNSUCCESSFUL");
+
+        _updateReserveNormalizedIncome(asset);
+
+        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, _msgSender());
     }
 
     /// @notice To repay a borrow position.
@@ -178,7 +277,14 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenNotPaused
         whenReserveNotPaused(asset)
     {
-        _repay(asset, repaymentAmount, borrowId);
+        (bool success, bytes memory data ) = _lendingPoolRepayAddress.delegatecall(
+            abi.encodeWithSignature("repay(address,uint256,uint256)", asset,repaymentAmount,borrowId)
+        );
+        require(success, "REPAY_UNSUCCESSFUL");
+
+        _updateReserveNormalizedIncome(asset);
+
+        emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
 
     /// @notice To liquidate a borrow position.
@@ -197,7 +303,14 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenReserveNotPaused(asset)
         whenReserveNotProtected(asset)
     {
-        _liquidate(asset, liquidationAmount, borrowId);
+        (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
+            abi.encodeWithSignature("liquidate(address,uint256,uint256)", asset,liquidationAmount,borrowId)
+        );
+        require(success, string(data));
+
+        _updateReserveNormalizedIncome(asset);
+
+        emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
     }
 
     /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
@@ -270,6 +383,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.debtTokenAddress = debtTokenAddress;
         reserve.previousLiquidityIndex = 10**27;
         _reserves[asset] = reserve;
+        console.log('init reserve asset', asset);
+        console.log('init reserve asset nTokenAddress', _reserves[asset].nTokenAddress);
 
         emit InitReserve(asset, _reserves[asset].nTokenAddress, _reserves[asset].debtTokenAddress);
     }
@@ -282,8 +397,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         DataTypes.Reserve storage reserve = _reserves[asset];
 
         // Calcualte Utilization Rate
-        uint256 utilizationRate = IDebtToken(reserve.debtTokenAddress).getTotalSupply()
-            .div(INToken(reserve.nTokenAddress).totalSupply()); 
+        uint256 nTokenSupply = INToken(reserve.nTokenAddress).totalSupply();
+        uint256 utilizationRate = 0;
+        if (nTokenSupply > 0) {
+            utilizationRate = IDebtToken(reserve.debtTokenAddress).getTotalSupply().div(nTokenSupply); 
+        }
 
         // Calculate Liquidity Rate
         uint256 liquidityRate = reserve.borrowRate.mul(utilizationRate);
@@ -311,210 +429,5 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         } else {
             userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(amount.div(reserve.normalizedIncome));
         }
-    }
-
-    /// @notice Private function to deposit assets into the lending pool.
-    /// @param asset The ERC20 address of the asset.
-    /// @param amount The amount of ERC20 tokens.
-    /// @dev Deposits assets into the LP in exchange for nTokens at a 1:1 ratio.  
-    function _deposit(
-        address asset, 
-        uint256 amount
-    ) 
-        private 
-    {
-        bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset]; 
-        address nToken = reserve.nTokenAddress;
-        
-        success  = IERC20(asset).transferFrom(_msgSender(), nToken, amount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-
-        success = INToken(nToken).mint(_msgSender(), amount);
-        require(success, "UNSUCCESSFUL_MINT");
-
-        _updateReserveNormalizedIncome(asset);
-        _updateUserScaledBalance(_msgSender(), asset, amount, true);
-
-        emit Deposit(asset, amount, _msgSender());
-    }
-
-    /// @notice Private function to withdraw assets from the lending pool.
-    /// @param asset The ERC20 address of the asset.
-    /// @param amount The amount of ERC20 tokens.
-    /// @dev Withdraws assets from the LP by exchanging nTokens at a 1:1 ratio. 
-    function _withdraw(
-        address asset, 
-        uint256 amount
-    ) 
-        private 
-    {
-        bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset];        
-        address nToken = reserve.nTokenAddress;
-
-        uint256 nTokenBalance = INToken(nToken).balanceOf(_msgSender());
-        require(nTokenBalance >= amount, "INSUFFICIENT_BALANCE");
-
-        success = INToken(nToken).burnFrom(_msgSender(), amount);
-        require(success, "UNSUCCESSFUL_BURN");
-
-        success = INToken(nToken).reserveTransfer(_msgSender(), asset, amount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-        
-        _updateReserveNormalizedIncome(asset);
-        _updateUserScaledBalance(_msgSender(), asset, amount, false);
-
-        emit Withdraw(asset, amount, _msgSender());
-    }
-
-    /// @notice Private function to create a borrow position.
-    /// @param asset The ERC20 token to be borrowed.
-    /// @param amount The amount of ERC20 tokens to be borrowed.
-    /// @param collateral The ERC721 token to be used as collateral.
-    /// @param tokenId The tokenId of the ERC721 token to be deposited. 
-    /// @param numWeeks The number of weeks until the borrow maturity.
-    /// @dev Deposits collateral in CM before minting debtTokens and finally loaning assets. 
-    function _borrow(
-        address asset, 
-        uint256 amount, 
-        address collateral, 
-        uint256 tokenId,
-        uint256 numWeeks
-    ) 
-        private
-    {
-        bool success;
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
-        uint256[4] memory variables = getBorrowVariables(
-            asset,
-            amount, 
-            collateral,
-            numWeeks
-        );
-
-        success = ICollateralManager(_collateralManagerAddress).deposit(
-            _msgSender(), 
-            asset, 
-            collateral, 
-            tokenId, 
-            amount,
-            variables[0], //repaymentAmount
-            variables[1], //interestRate
-            variables[2], //collateralFloorPrice
-            variables[3]); //maturity
-        require(success, "UNSUCCESSFUL_DEPOSIT");
-
-        success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), variables[0]);
-        require(success, "UNSUCCESSFUL_MINT");
-
-        success = INToken(reserve.nTokenAddress).reserveTransfer(_msgSender(), asset, amount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-
-        // Update borrowRate - for use in APR calculation
-        reserve.borrowRate = reserve.borrowRate.add(amount.mul(variables[1]));
-
-        _updateReserveNormalizedIncome(asset);
-
-        emit Borrow(asset, amount, variables[0], collateral, tokenId, _msgSender());
-    }
-
-    /// @notice Private function to repay a borrow position.
-    /// @param asset The ERC20 token to be borrowed.
-    /// @param repaymentAmount The amount of ERC20 tokens to be repaid.
-    /// @param borrowId The unique identifier of the borrow.
-    /// @dev Transfers assets back to the reserve before burning debtTokens and returning collateral. 
-    function _repay(
-        address asset,
-        uint256 repaymentAmount,
-        uint256 borrowId
-    ) 
-        private 
-    {
-        bool success;
-        uint256 borrowAmount;
-        uint256 interestRate;
-        DataTypes.Reserve memory reserve = _reserves[asset]; 
-
-        success = INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
-        require(success, "UNSUCCESSFUL_TRANSFER");
-
-        (success, borrowAmount, interestRate) = ICollateralManager(_collateralManagerAddress).withdraw(
-            borrowId, 
-            asset, 
-            repaymentAmount
-        );
-        require(success, "UNSUCCESSFUL_WITHDRAW");
-
-        success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);
-        require(success, "UNSUCCESSFUL_BURN");
-
-        // Update borrowRate - for use in APR calculation
-        reserve.borrowRate = reserve.borrowRate.sub(borrowAmount.mul(interestRate));
-
-        _updateReserveNormalizedIncome(asset);
-
-        emit Repay(borrowId, asset, repaymentAmount, _msgSender());
-    }
-
-    /// @notice Private function to liquidate a borrow position.
-    /// @param asset The ERC20 token to be borrowed.
-    /// @param liquidationAmount The amount of ERC20 tokens to be paid.
-    /// @param borrowId The unique identifier of the borrow.
-    /// @dev Transfers assets back to the reserve before burning debtTokens and retreiving collateral for the liquidator. 
-    function _liquidate(
-        address asset,
-        uint256 liquidationAmount,
-        uint256 borrowId
-    ) 
-        private
-    {
-        bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset];  
-        DataTypes.Borrow memory borrowItem = ICollateralManager(
-            _collateralManagerAddress
-        ).getBorrow(borrowId);
-        require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
-
-        uint256 floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
-        // TODO: To have 80% liquidation price able to be set/updated 
-        require(liquidationAmount == floorPrice.mul(80).div(100), "INCORRECT_AMOUNT");
-        require(floorPrice < borrowItem.liquidationPrice || block.timestamp > borrowItem.maturity, "BORROW_NOT_IN_DEFAULT");
-
-        address borrower = borrowItem.borrower;
-        uint256 repaymentAmount = borrowItem.repaymentAmount;
-
-        success = IERC20(asset).transferFrom(_msgSender(), reserve.nTokenAddress, repaymentAmount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-
-        uint256 remainder = liquidationAmount.sub(repaymentAmount);
-        uint256 feeAmount = remainder.mul(_liquidationFee).div(100);
-        uint256 reimbursementAmount = remainder.sub(feeAmount);
-
-        success = IERC20(asset).transferFrom(_msgSender(), _treasuryAddress, feeAmount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-        
-        success = IERC20(asset).transferFrom(_msgSender(), borrower, reimbursementAmount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-        
-        success = IDebtToken(reserve.debtTokenAddress).burnFrom(borrower, repaymentAmount);
-        require(success, "UNSUCCESSFUL_BURN");
-        
-        success = ICollateralManager(_collateralManagerAddress).retrieve(
-            borrowId, 
-            asset, 
-            repaymentAmount,
-            _msgSender()
-        );
-        require(success, "UNSUCCESSFUL_RETRIEVE");
-
-        // Update borrowRate - for use in APR calculation
-        reserve.borrowRate = reserve.borrowRate.sub(
-            borrowItem.borrowAmount.mul(borrowItem.interestRate)
-        );
-
-        _updateReserveNormalizedIncome(asset);
-
-        emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
     }
 }

@@ -94,6 +94,36 @@ contract LendingPoolEvents {
         address collateralManagerAddress
     );
 
+    /// @notice Emitted when the lendingPoolBorrow contract is connected.
+    /// @param lendingPoolBorrowAddress The lendingPoolBorrow contract address.
+    event LendingPoolBorrowConnected(
+        address lendingPoolBorrowAddress
+    );
+
+    /// @notice Emitted when the lendingPoolDeposit contract is connected.
+    /// @param lendingPoolDepositAddress The lendingPoolDeposit contract address.
+    event LendingPoolDepositConnected(
+        address lendingPoolDepositAddress
+    );
+
+    /// @notice Emitted when the lendingPoolLiquidate contract is connected.
+    /// @param lendingPoolLiquidateAddress The lendingPoolLiquidate contract address.
+    event LendingPoolLiquidateConnected(
+        address lendingPoolLiquidateAddress
+    );
+    
+    /// @notice Emitted when the lendingPoolRepay contract is connected.
+    /// @param lendingPoolRepayAddress The lendingPoolLiquidate contract address.
+    event LendingPoolRepayConnected(
+        address lendingPoolRepayAddress
+    );
+    
+    /// @notice Emitted when the lendingPoolWithdraw contract is connected.
+    /// @param lendingPoolWithdrawAddress The lendingPoolWithdraw contract address.
+    event LendingPoolWithdrawConnected(
+        address lendingPoolWithdrawAddress
+    );
+    
     /// @notice Emitted when the token price oracle is connected.
     /// @param tokenPriceOracleAddress The token price oracle address.
     event TokenPriceOracleConnected(

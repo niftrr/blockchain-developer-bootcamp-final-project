@@ -12,6 +12,11 @@ contract LendingPoolStorage {
     using ReserveLogic for DataTypes.Reserve;
 
     address internal _treasuryAddress;
+    address internal _lendingPoolBorrowAddress;
+    address internal _lendingPoolDepositAddress;
+    address internal _lendingPoolLiquidateAddress;
+    address internal _lendingPoolRepayAddress;
+    address internal _lendingPoolWithdrawAddress;
 
     mapping(address => DataTypes.Reserve) internal _reserves;
     mapping(address => string) internal _pricePairs;

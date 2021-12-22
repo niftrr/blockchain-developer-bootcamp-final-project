@@ -19,6 +19,11 @@ contract Configurator is Context, AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     
     address public lendingPoolAddress;
+    address public lendingPoolBorrowAddress;
+    address public lendingPoolDepositAddress;
+    address public lendingPoolLiquidateAddress;
+    address public lendingPoolRepayAddress;
+    address public lendingPoolWithdrawAddress;
     address public collateralManagerAddress;
 
     constructor(address emergencyAdmin, address admin) {
@@ -41,6 +46,31 @@ contract Configurator is Context, AccessControl {
         _;
     }
 
+    modifier whenLendingPoolBorrowConnected {
+        require(lendingPoolBorrowAddress != address(0), "LendingPoolBorrow not connected");
+        _;
+    }
+
+    modifier whenLendingPoolDepositConnected {
+        require(lendingPoolDepositAddress != address(0), "LendingPoolDeposit not connected");
+        _;
+    }
+
+    modifier whenLendingPoolLiquidateConnected {
+        require(lendingPoolLiquidateAddress != address(0), "LendingPoolLiquidate not connected");
+        _;
+    }
+
+    modifier whenLendingPoolRepayConnected {
+        require(lendingPoolRepayAddress != address(0), "LendingPoolRepay not connected");
+        _;
+    }
+
+    modifier whenLendingPoolWithdrawConnected {
+        require(lendingPoolWithdrawAddress != address(0), "LendingPoolWithdraw not connected");
+        _;
+    }
+
     modifier whenCollateralManagerConnected {
         require(collateralManagerAddress != address(0), "CollateralManager not connected");
         _;
@@ -51,6 +81,41 @@ contract Configurator is Context, AccessControl {
     /// @dev Sets the lendingPoolAddress variable.
     function connectLendingPool(address _lendingPoolAddress) public onlyAdmin {
         lendingPoolAddress = _lendingPoolAddress;
+    }
+
+    /// @notice Connects the LendingPoolBorrow contract by setting the address.
+    /// @param _lendingPoolBorrowAddress The LendingPoolBorrow contract address.
+    /// @dev Sets the lendingPoolBorrowAddress variable.
+    function connectLendingPoolBorrow(address _lendingPoolBorrowAddress) public onlyAdmin {
+        lendingPoolBorrowAddress = _lendingPoolBorrowAddress;
+    }
+
+    /// @notice Connects the LendingPoolDeposit contract by setting the address.
+    /// @param _lendingPoolDepositAddress The LendingPoolDeposit contract address.
+    /// @dev Sets the lendingPoolDepositAddress variable.
+    function connectLendingPoolDeposit(address _lendingPoolDepositAddress) public onlyAdmin {
+        lendingPoolDepositAddress = _lendingPoolDepositAddress;
+    }
+
+    /// @notice Connects the LendingPoolLiquidate contract by setting the address.
+    /// @param _lendingPoolLiquidateAddress The lendingPoolLiquidate contract address.
+    /// @dev Sets the lendingPoolLiquidateAddress variable.
+    function connectLendingPoolLiquidate(address _lendingPoolLiquidateAddress) public onlyAdmin {
+        lendingPoolLiquidateAddress = _lendingPoolLiquidateAddress;
+    }
+
+    /// @notice Connects the LendingPoolRepay contract by setting the address.
+    /// @param _lendingPoolRepayAddress The lendingPoolRepay contract address.
+    /// @dev Sets the lendingPoolRepayAddress variable.
+    function connectLendingPoolRepay(address _lendingPoolRepayAddress) public onlyAdmin {
+        lendingPoolRepayAddress = _lendingPoolRepayAddress;
+    }            
+
+    /// @notice Connects the LendingPoolWithdraw contract by setting the address.
+    /// @param _lendingPoolWithdrawAddress The lendingPoolWithdraw contract address.
+    /// @dev Sets the lendingPoolWithdrawAddress variable.
+    function connectLendingPoolWithdraw(address _lendingPoolWithdrawAddress) public onlyAdmin {
+        lendingPoolWithdrawAddress = _lendingPoolWithdrawAddress;
     }
 
     /// @notice Gets the Lending Pool contract address.
@@ -160,9 +225,74 @@ contract Configurator is Context, AccessControl {
         whenLendingPoolConnected
         whenCollateralManagerConnected
     {
-        require(collateralManagerAddress != address(0), "UNDEFINED_ADDRESS");
         ILendingPool(lendingPoolAddress).connectCollateralManager(
             collateralManagerAddress
+        );
+    }
+
+    /// @notice Connects the Lending Pool to the LendingPoolBorrow contract by setting the address.
+    /// @dev This can be set more than once to allow for future optimizations.
+    function connectLendingPoolLendingPoolBorrow() 
+        public
+        onlyAdmin
+        whenLendingPoolConnected
+        whenLendingPoolBorrowConnected
+    {
+        ILendingPool(lendingPoolAddress).connectLendingPoolBorrow(
+            lendingPoolBorrowAddress
+        );
+    }
+
+
+    /// @notice Connects the Lending Pool to the LendingPoolDeposit contract by setting the address.
+    /// @dev This can be set more than once to allow for future optimizations.
+    function connectLendingPoolLendingPoolDeposit() 
+        public
+        onlyAdmin
+        whenLendingPoolConnected
+        whenLendingPoolDepositConnected
+    {
+        ILendingPool(lendingPoolAddress).connectLendingPoolDeposit(
+            lendingPoolDepositAddress
+        );
+    }
+
+    /// @notice Connects the Lending Pool to the LendingPoolLiquidate contract by setting the address.
+    /// @dev This can be set more than once to allow for future optimizations.
+    function connectLendingPoolLendingPoolLiquidate() 
+        public
+        onlyAdmin
+        whenLendingPoolConnected
+        whenLendingPoolLiquidateConnected
+    {
+        ILendingPool(lendingPoolAddress).connectLendingPoolLiquidate(
+            lendingPoolLiquidateAddress
+        );
+    }
+    
+    /// @notice Connects the Lending Pool to the LendingPoolRepay contract by setting the address.
+    /// @dev This can be set more than once to allow for future optimizations.
+    function connectLendingPoolLendingPoolRepay() 
+        public
+        onlyAdmin
+        whenLendingPoolConnected
+        whenLendingPoolRepayConnected
+    {
+        ILendingPool(lendingPoolAddress).connectLendingPoolRepay(
+            lendingPoolRepayAddress
+        );
+    }
+
+    /// @notice Connects the Lending Pool to the LendingPoolWithdraw contract by setting the address.
+    /// @dev This can be set more than once to allow for future optimizations.
+    function connectLendingPoolLendingPoolWithdraw() 
+        public
+        onlyAdmin
+        whenLendingPoolConnected
+        whenLendingPoolWithdrawConnected
+    {
+        ILendingPool(lendingPoolAddress).connectLendingPoolWithdraw(
+            lendingPoolWithdrawAddress
         );
     }
 

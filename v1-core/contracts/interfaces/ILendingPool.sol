@@ -50,6 +50,16 @@ interface ILendingPool {
 
     function connectCollateralManager(address _collateralManagerAddress) external;
 
+    function connectLendingPoolBorrow(address _lendingPoolBorrowAddress) external;
+
+    function connectLendingPoolDeposit(address _lendingPoolDepositAddress) external;
+
+    function connectLendingPoolLiquidate(address _lendingPoolLiquidateAddress) external;
+
+    function connectLendingPoolRepay(address _lendingPoolRepayAddress) external;
+
+    function connectLendingPoolWithdraw(address _lendingPoolWithdrawAddress) external;
+
     function connectTokenPriceOracle(address _oracleTokenPriceAddress) external;
 
     function getFloorPrice(address collateral, address asset) external returns (uint256);
