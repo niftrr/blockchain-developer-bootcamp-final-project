@@ -195,10 +195,10 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenNotPaused 
         whenReserveActive(asset)
     {
-        (bool success, ) = _lendingPoolDepositAddress.delegatecall(
+        (bool success, bytes memory data) = _lendingPoolDepositAddress.delegatecall(
             abi.encodeWithSignature("deposit(address,uint256)", asset,amount)
         );
-        require(success, "DEPOSIT_ERROR");
+        require(success, string(data));
         
         _updateReserveNormalizedIncome(asset);
         _updateUserScaledBalance(_msgSender(), asset, amount, true);
@@ -219,10 +219,10 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenNotPaused 
         whenReserveNotPaused(asset)
     {
-        (bool success, ) = _lendingPoolWithdrawAddress.delegatecall(
+        (bool success, bytes memory data) = _lendingPoolWithdrawAddress.delegatecall(
             abi.encodeWithSignature("withdraw(address,uint256)", asset,amount)
         );
-        require(success, "WITHDRAW_ERROR");
+        require(success, string(data));
 
         _updateReserveNormalizedIncome(asset);
         _updateUserScaledBalance(_msgSender(), asset, amount, false);
@@ -253,7 +253,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         (bool success, bytes memory data) = _lendingPoolBorrowAddress.delegatecall(
             abi.encodeWithSignature("borrow(address,uint256,address,uint256,uint256)", asset,amount,collateral,tokenId,numWeeks)
         );
-        require(success, "BORROW_DELEGATECALL_UNSUCCESSFUL");
+        require(success, string(data));
+        
         (success, repaymentAmount) = abi.decode(data, (bool,uint256));
         require(success, "BORROW_UNSUCCESSFUL");
 
@@ -280,7 +281,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         (bool success, bytes memory data ) = _lendingPoolRepayAddress.delegatecall(
             abi.encodeWithSignature("repay(address,uint256,uint256)", asset,repaymentAmount,borrowId)
         );
-        require(success, "REPAY_UNSUCCESSFUL");
+        require(success, string(data));
 
         _updateReserveNormalizedIncome(asset);
 
