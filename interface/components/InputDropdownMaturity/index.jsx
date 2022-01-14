@@ -15,7 +15,8 @@ function InputDropdown(props) {
       <option value="1" defaultChecked>1 Week</option>
       <option value="4">4 Weeks</option>
       <option value="13">3 Months</option>
-      <option value="26">6 Months</option>
+      {/* <option value="26">6 Months</option> */}
+      <option value="0">Now [Test]</option>
       </select>
   );
 }
