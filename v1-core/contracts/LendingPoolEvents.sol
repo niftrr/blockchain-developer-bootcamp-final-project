@@ -64,6 +64,13 @@ contract LendingPoolEvents {
         address liquidator
     );
 
+    event UpdateReserve(
+        address asset,
+        uint256 borrowRate,
+        uint256 utilizationRate,
+        uint256 liquidityIndex
+    );
+
     /// @notice Emitted when the asset reserve is frozen.
     /// @param asset The reserve asset.
     event ReserveFrozen(

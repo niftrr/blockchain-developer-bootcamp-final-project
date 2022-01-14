@@ -227,6 +227,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         _updateReserveNormalizedIncome(asset);
         _updateUserScaledBalance(_msgSender(), asset, amount, false);
 
+        console.log('withdraw', amount);
+
         emit Withdraw(asset, amount, _msgSender());
     }
 
@@ -384,8 +386,6 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.debtTokenAddress = debtTokenAddress;
         reserve.previousLiquidityIndex = 10**27;
         _reserves[asset] = reserve;
-        console.log('init reserve asset', asset);
-        console.log('init reserve asset nTokenAddress', _reserves[asset].nTokenAddress);
 
         emit InitReserve(asset, _reserves[asset].nTokenAddress, _reserves[asset].debtTokenAddress);
     }
@@ -404,6 +404,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
             utilizationRate = IDebtToken(reserve.debtTokenAddress).getTotalSupply().div(nTokenSupply); 
         }
 
+        console.log('debtTokenSupply', IDebtToken(reserve.debtTokenAddress).getTotalSupply());
+        console.log('nTokenSupply', nTokenSupply);
+
         // Calculate Liquidity Rate
         uint256 liquidityRate = reserve.borrowRate.mul(utilizationRate);
 
@@ -412,8 +415,27 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.normalizedIncome = (liquidityRate.mul(ongoingTimeDelta).add(1)).mul(reserve.previousLiquidityIndex);
 
         // Update Liquidity Index
-        uint256 timeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp).div(365 days);
-        reserve.previousLiquidityIndex = (liquidityRate.mul(timeDelta).add(1)).mul(reserve.previousLiquidityIndex);
+        // uint256 timeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp); // division by 365 days moved to next line to avoid rounding to zero
+        // reserve.previousLiquidityIndex = (liquidityRate.mul(timeDelta).add(1)).mul(reserve.previousLiquidityIndex).div(365 days);
+    
+        uint256 unnormalizedTimeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp);
+        reserve.previousLiquidityIndex = (
+            liquidityRate.mul(unnormalizedTimeDelta).mul(reserve.previousLiquidityIndex).div(365 days)
+        ).add(
+            reserve.previousLiquidityIndex
+        );
+
+        // Update timestamp
+        reserve.latestUpdateTimestamp = block.timestamp;
+
+        console.log('unnormalizedTimeDelta', unnormalizedTimeDelta);
+        console.log('reserve.latestUpdateTimestamp', reserve.latestUpdateTimestamp);
+        console.log('reserve.previousLiquidityIndex', reserve.previousLiquidityIndex);
+        console.log('liquidityRate', liquidityRate);
+        console.log('reserve.borrowRate', reserve.borrowRate);
+        console.log('utilizationRate', utilizationRate);
+
+        emit UpdateReserve(asset, reserve.borrowRate, utilizationRate, reserve.previousLiquidityIndex);
     }
 
     function _updateUserScaledBalance(
