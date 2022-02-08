@@ -16,7 +16,8 @@ contract LendingPoolEvents {
     /// @param asset The ERC20, reserve asset address.
     /// @param amount The amount of ERC20 tokens.
     /// @param lender The lender account.
-    event Deposit(address asset, uint256 amount, address lender);
+    /// @param userScaledBalance The user's scaled balance.
+    event Deposit(address asset, uint256 amount, address lender, uint256 userScaledBalance);
 
     /// @notice Emitted when an asset withdraw is made.
     /// @param asset The ERC20, reserve asset address.
@@ -31,13 +32,15 @@ contract LendingPoolEvents {
     /// @param collateral The ERC721 token used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited in escrow.
     /// @param borrower The borrower account.
+    /// @param liquidityIndex The updated liquidity index.
     event Borrow(
         address asset, 
         uint256 amount, 
         uint256 repaymentAmount, 
         address collateral, 
         uint256 tokenId, 
-        address borrower
+        address borrower,
+        uint256 liquidityIndex
     );
 
     /// @notice Emitted when a borrow is repaid.

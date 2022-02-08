@@ -157,7 +157,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         _unpause();
     }
 
-    function getTotalSupply() public override returns (uint256) {
+    function getTotalSupply() public override view returns (uint256) {
         return totalSupply();
     }
 }

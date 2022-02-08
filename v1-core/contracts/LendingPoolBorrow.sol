@@ -12,10 +12,14 @@ import { ILendingPoolBorrow } from "./interfaces/ILendingPoolBorrow.sol";
 import { INToken } from "./interfaces/INToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "./WadRayMath.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
+
+import "hardhat/console.sol";
 
 contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILendingPoolBorrow, Pausable, AccessControl {
     using SafeMath for uint256; 
+    using WadRayMath for uint256;
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
@@ -73,6 +77,9 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
             numWeeks
         );
 
+        // TODO: remove, used for calculating user scaled balance
+        variables[0] = amount; // setting repayment amount equal to borrow amount
+
         success = ICollateralManager(_collateralManagerAddress).deposit(
             _msgSender(), 
             asset, 
@@ -91,8 +98,18 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
         success = INToken(reserve.nTokenAddress).reserveTransfer(_msgSender(), asset, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
 
-        // Update borrowRate - for use in APR calculation
-        reserve.borrowRate = reserve.borrowRate.add(amount.mul(variables[1]));
+        // Update reserve borrow numbers - for use in APR calculation
+        reserve.borrowRate = WadRayMath.rayDiv(
+            WadRayMath.rayMul(
+                WadRayMath.wadToRay(reserve.borrowAmount), reserve.borrowRate
+            ).add(
+                WadRayMath.rayMul(
+                    WadRayMath.wadToRay(amount), variables[1] // interestRate
+                )    
+            ), (WadRayMath.wadToRay(reserve.borrowAmount).add(WadRayMath.wadToRay(amount)))
+        );
+
+        reserve.borrowAmount = reserve.borrowAmount.add(amount);
 
         return (success, variables[0]);
     }

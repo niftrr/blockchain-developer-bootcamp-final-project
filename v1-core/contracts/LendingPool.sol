@@ -14,6 +14,7 @@ import { ILendingPoolBorrow } from "./interfaces/ILendingPoolBorrow.sol";
 import { ILendingPoolRepay } from "./interfaces/ILendingPoolRepay.sol";
 import { ILendingPoolLiquidate } from "./interfaces/ILendingPoolLiquidate.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
+import { LendingPoolCore } from './LendingPoolCore.sol';
 import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { LendingPoolEvents } from './LendingPoolEvents.sol';
 import { TokenPriceOracle } from './TokenPriceOracle.sol';
@@ -21,14 +22,16 @@ import { DataTypes } from "./libraries/DataTypes.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "./WadRayMath.sol";
 import "hardhat/console.sol";
 
 /// @title Lending Pool contract for instant, permissionless NFT-backed loans
 /// @author Niftrr
 /// @notice Allows for the borrow/repay of loans and deposit/withdraw of assets.
 /// @dev This is our protocol's point of access.
-contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessControl, Pausable, ReentrancyGuard {
+contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoolCore, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;  
+    using WadRayMath for uint256;
 
     bytes32 internal constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
 
@@ -39,8 +42,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     {
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _treasuryAddress = treasuryAddress;
-        _interestFee = 5; // 5%
-        _liquidationFee = 5; //5%
+        _interestFee = WadRayMath.ray().rayMul(5).rayDiv(100); // 5%
+        _liquidationFee = WadRayMath.ray().rayMul(5).rayDiv(100); //5%
     }
 
     modifier onlyConfigurator() {
@@ -200,10 +203,13 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         );
         require(success, string(data));
         
-        _updateReserveNormalizedIncome(asset);
-        _updateUserScaledBalance(_msgSender(), asset, amount, true);
+        console.log('-----');
+        uint256 liquidityIndex = _updateLiquidityIndex(asset);
+        uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, true);
 
-        emit Deposit(asset, amount, _msgSender());
+        console.log('!!!LP,deposit: nTokenBalance, liquidityIndex, userScaledBalance', getUserNTokenBalance(_msgSender(), asset), liquidityIndex, userScaledBalance);
+
+        emit Deposit(asset, amount, _msgSender(), userScaledBalance);
     }
 
     /// @notice Withdraw assets from the lending pool.
@@ -224,10 +230,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         );
         require(success, string(data));
 
-        _updateReserveNormalizedIncome(asset);
-        _updateUserScaledBalance(_msgSender(), asset, amount, false);
-
-        console.log('withdraw', amount);
+        uint256 liquidityIndex =  _updateLiquidityIndex(asset);
+        uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, false);
 
         emit Withdraw(asset, amount, _msgSender());
     }
@@ -259,10 +263,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         
         (success, repaymentAmount) = abi.decode(data, (bool,uint256));
         require(success, "BORROW_UNSUCCESSFUL");
-
-        _updateReserveNormalizedIncome(asset);
-
-        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, _msgSender());
+        uint256 liquidityIndex = _updateLiquidityIndex(asset);
+        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, _msgSender(), liquidityIndex);
     }
 
     /// @notice To repay a borrow position.
@@ -285,7 +287,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         );
         require(success, string(data));
 
-        _updateReserveNormalizedIncome(asset);
+        uint256 liquidityIndex = _updateLiquidityIndex(asset);
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
@@ -311,7 +313,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         );
         require(success, string(data));
 
-        _updateReserveNormalizedIncome(asset);
+        uint256 liquidityIndex = _updateLiquidityIndex(asset);
 
         emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
     }
@@ -384,73 +386,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.status = DataTypes.ReserveStatus.Active;
         reserve.nTokenAddress = nTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
-        reserve.previousLiquidityIndex = 10**27;
+        reserve.liquidityIndex = 10**27;
         _reserves[asset] = reserve;
 
         emit InitReserve(asset, _reserves[asset].nTokenAddress, _reserves[asset].debtTokenAddress);
-    }
-
-    function _updateReserveNormalizedIncome(
-        address asset
-    )
-        private
-    {
-        DataTypes.Reserve storage reserve = _reserves[asset];
-
-        // Calcualte Utilization Rate
-        uint256 nTokenSupply = INToken(reserve.nTokenAddress).totalSupply();
-        uint256 utilizationRate = 0;
-        if (nTokenSupply > 0) {
-            utilizationRate = IDebtToken(reserve.debtTokenAddress).getTotalSupply().div(nTokenSupply); 
-        }
-
-        console.log('debtTokenSupply', IDebtToken(reserve.debtTokenAddress).getTotalSupply());
-        console.log('nTokenSupply', nTokenSupply);
-
-        // Calculate Liquidity Rate
-        uint256 liquidityRate = reserve.borrowRate.mul(utilizationRate);
-
-        // Update Reserve Normalized Income
-        uint256 ongoingTimeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp).div(365 days);
-        reserve.normalizedIncome = (liquidityRate.mul(ongoingTimeDelta).add(1)).mul(reserve.previousLiquidityIndex);
-
-        // Update Liquidity Index
-        // uint256 timeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp); // division by 365 days moved to next line to avoid rounding to zero
-        // reserve.previousLiquidityIndex = (liquidityRate.mul(timeDelta).add(1)).mul(reserve.previousLiquidityIndex).div(365 days);
-    
-        uint256 unnormalizedTimeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp);
-        reserve.previousLiquidityIndex = (
-            liquidityRate.mul(unnormalizedTimeDelta).mul(reserve.previousLiquidityIndex).div(365 days)
-        ).add(
-            reserve.previousLiquidityIndex
-        );
-
-        // Update timestamp
-        reserve.latestUpdateTimestamp = block.timestamp;
-
-        console.log('unnormalizedTimeDelta', unnormalizedTimeDelta);
-        console.log('reserve.latestUpdateTimestamp', reserve.latestUpdateTimestamp);
-        console.log('reserve.previousLiquidityIndex', reserve.previousLiquidityIndex);
-        console.log('liquidityRate', liquidityRate);
-        console.log('reserve.borrowRate', reserve.borrowRate);
-        console.log('utilizationRate', utilizationRate);
-
-        emit UpdateReserve(asset, reserve.borrowRate, utilizationRate, reserve.previousLiquidityIndex);
-    }
-
-    function _updateUserScaledBalance(
-        address user,
-        address asset,
-        uint256 amount,
-        bool isDeposit
-    )
-        private
-    {
-        DataTypes.Reserve memory reserve = _reserves[asset];
-        if (isDeposit) {
-            userScaledBalances[user][asset] = userScaledBalances[user][asset].add(amount.div(reserve.normalizedIncome));
-        } else {
-            userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(amount.div(reserve.normalizedIncome));
-        }
     }
 }

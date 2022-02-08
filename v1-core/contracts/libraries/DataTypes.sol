@@ -20,8 +20,9 @@ library DataTypes {
         ReserveStatus status;
         address nTokenAddress;
         address debtTokenAddress;
-        uint256 previousLiquidityIndex;
+        uint256 liquidityIndex;
         uint256 interestRate;
+        uint256 borrowAmount;
         uint256 borrowRate;
         uint256 normalizedIncome;
         uint256 latestUpdateTimestamp;

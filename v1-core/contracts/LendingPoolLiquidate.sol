@@ -13,9 +13,12 @@ import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolLiquidate } from "./interfaces/ILendingPoolLiquidate.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "./WadRayMath.sol";
+import "hardhat/console.sol";
 
 contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, ILendingPoolLiquidate, Pausable, AccessControl {
     using SafeMath for uint256; 
+    using WadRayMath for uint256;
 
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
@@ -62,36 +65,52 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         returns (bool)
     {
         bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset];  
+        DataTypes.Reserve storage reserve = _reserves[asset];  
         DataTypes.Borrow memory borrowItem = ICollateralManager(
             _collateralManagerAddress
         ).getBorrow(borrowId);
         require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
 
         uint256 floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
+        console.log('floorPrice', floorPrice);
         // TODO: To have 80% liquidation price able to be set/updated 
         require(liquidationAmount == floorPrice.mul(80).div(100), "INCORRECT_AMOUNT");
+        console.log('liquidationAmount', liquidationAmount);
         require(floorPrice < borrowItem.liquidationPrice || block.timestamp > borrowItem.maturity, "BORROW_NOT_IN_DEFAULT");
-
         address borrower = borrowItem.borrower;
         uint256 repaymentAmount = borrowItem.repaymentAmount;
 
+        console.log('borrowItem.borrowAmount', borrowItem.borrowAmount);
+        console.log('borrowItem.repaymentAmount', borrowItem.repaymentAmount);
+
+
         success = IERC20(asset).transferFrom(_msgSender(), reserve.nTokenAddress, repaymentAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
-
+        console.log('here5');
         uint256 remainder = liquidationAmount.sub(repaymentAmount);
-        uint256 feeAmount = remainder.mul(_liquidationFee).div(100);
+        console.log('here5a');
+        uint256 feeAmount = WadRayMath.rayToWad(WadRayMath.rayMul(WadRayMath.wadToRay(remainder), _liquidationFee));
+        console.log('here5b');
+        console.log('remainder', remainder);
+        console.log('feeAmount', feeAmount);
+        console.log(' WadRayMath.wadToRay(remainder)',  WadRayMath.wadToRay(remainder));
         uint256 reimbursementAmount = remainder.sub(feeAmount);
+        console.log('here5c');
+
+        console.log('liquidationAmount', liquidationAmount);
+        console.log('repaymentAmount', repaymentAmount);
+        console.log('reimbursementAmount', reimbursementAmount);
+        console.log('feeAmount', feeAmount);
 
         success = IERC20(asset).transferFrom(_msgSender(), _treasuryAddress, feeAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
-        
+        console.log('here6');
         success = IERC20(asset).transferFrom(_msgSender(), borrower, reimbursementAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
-        
+        console.log('here7');
         success = IDebtToken(reserve.debtTokenAddress).burnFrom(borrower, repaymentAmount);
         require(success, "UNSUCCESSFUL_BURN");
-        
+        console.log('here8');
         success = ICollateralManager(_collateralManagerAddress).retrieve(
             borrowId, 
             asset, 
@@ -99,11 +118,38 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
             _msgSender()
         );
         require(success, "UNSUCCESSFUL_RETRIEVE");
+        console.log('here9');
+        // Update reserve borrow numbers - for use in APR calculation
+        console.log('reserve.borrowAmount', reserve.borrowAmount);
+        console.log('borrowItem.borrowAmount', borrowItem.borrowAmount);
 
-        // Update borrowRate - for use in APR calculation
-        reserve.borrowRate = reserve.borrowRate.sub(
-            borrowItem.borrowAmount.mul(borrowItem.interestRate)
-        );
+
+        // if (reserve.borrowAmount.sub(borrowItem.borrowAmount) > 0) {
+        //     reserve.borrowRate = (
+        //         (reserve.borrowAmount.mul(reserve.borrowRate)).sub(borrowItem.borrowAmount.mul(borrowItem.interestRate))
+        //     ).div(reserve.borrowAmount.sub(borrowItem.borrowAmount));
+        // } else {
+        //     reserve.borrowRate  = 0;
+        // }
+
+        // reserve.borrowAmount = reserve.borrowAmount.sub(borrowItem.borrowAmount);
+
+        if (reserve.borrowAmount.sub(borrowItem.borrowAmount) > 0) {
+            reserve.borrowRate = WadRayMath.rayDiv(
+                WadRayMath.rayMul(
+                    WadRayMath.wadToRay(reserve.borrowAmount), reserve.borrowRate
+                ).sub(
+                    WadRayMath.rayMul(
+                        WadRayMath.wadToRay(borrowItem.borrowAmount), borrowItem.interestRate 
+                    )    
+                ), (WadRayMath.wadToRay(reserve.borrowAmount).sub(WadRayMath.wadToRay(borrowItem.borrowAmount)))
+            );
+        } else {
+            reserve.borrowRate  = 0;
+        }
+
+        reserve.borrowAmount = reserve.borrowAmount.sub(borrowItem.borrowAmount);
+
         return success;
     }
 

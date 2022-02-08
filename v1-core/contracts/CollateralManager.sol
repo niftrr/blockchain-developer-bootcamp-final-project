@@ -72,7 +72,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
 
     /// @notice Emitted when the interest rate is set for a given NFT project.
     /// @param erc721Token The ERC721 token for the NFT project.
-    /// @param interestRate The 18 decimal interest rate.
+    /// @param interestRate Interest rate in RAY (1e27)
     event SetInterestRate(
         address erc721Token,
         uint256 interestRate
@@ -302,7 +302,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @notice Gets the interest rate APY for a given ERC721 token.
     /// @param erc721Token The ERC721 token for which to get the interest rate.
     /// @dev Retrieves the NFT project interest rate back from the mapping.
-    /// @return Interest rate APR to 18 decimal places.
+    /// @return Interest rate in RAY (1e27)
     function getInterestRate(address erc721Token) public view returns (uint256) {
         return interestRates[erc721Token];
     }

@@ -13,11 +13,13 @@ import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolRepay } from "./interfaces/ILendingPoolRepay.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "./WadRayMath.sol";
 
 import "hardhat/console.sol";
 
 contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pausable, AccessControl {
     using SafeMath for uint256;
+    using WadRayMath for uint256;
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
@@ -70,18 +72,37 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
         success = INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
         require(success, "UNSUCCESSFUL_TRANSFER");
 
+        console.log('REPAY before ICol withdraw');
+
         (success, borrowAmount, interestRate) = ICollateralManager(_collateralManagerAddress).withdraw(
             borrowId, 
             asset, 
             repaymentAmount
         );
+
+        console.log('REPAY after ICol withdraw', success);
+
         require(success, "UNSUCCESSFUL_WITHDRAW");
 
         success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);
         require(success, "UNSUCCESSFUL_BURN");
 
-        // Update borrowRate - for use in APR calculation
-        reserve.borrowRate = reserve.borrowRate.sub(borrowAmount.mul(interestRate));
+        // Update reserve borrow numbers - for use in APR calculation
+        if (reserve.borrowAmount.sub(borrowAmount) > 0) {
+            reserve.borrowRate = WadRayMath.rayDiv(
+                WadRayMath.rayMul(
+                    WadRayMath.wadToRay(reserve.borrowAmount), reserve.borrowRate
+                ).sub(
+                    WadRayMath.rayMul(
+                        WadRayMath.wadToRay(borrowAmount), interestRate 
+                    )    
+                ), (WadRayMath.wadToRay(reserve.borrowAmount).sub(WadRayMath.wadToRay(borrowAmount)))
+            );
+        } else {
+            reserve.borrowRate  = 0;
+        }
+
+        reserve.borrowAmount = reserve.borrowAmount.sub(borrowAmount);
 
         return success;
     }

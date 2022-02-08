@@ -2,9 +2,12 @@
 pragma solidity 0.8.9;
 
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
+import { INToken } from "./interfaces/INToken.sol";
+import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { MockOracle } from "./mocks/Oracle.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "./WadRayMath.sol";
 
 import { DataTypes } from "./libraries/DataTypes.sol";
 
@@ -16,6 +19,7 @@ import "hardhat/console.sol";
 /// @dev To help organize and limit size of Lending Pool contract.
 contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     using SafeMath for uint256;  
+    using WadRayMath for uint256;
 
     /// @notice Get the Token Price Oracle contract address.
     /// @dev Uses a state variable.
@@ -54,25 +58,19 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
             collateral
         );
         //repaymentAmount
-        variables[0] = amount.add(amount.mul(interestRate).div(100).mul(numWeeks).div(52)); 
+        variables[0] = amount.add(
+            WadRayMath.rayToWad(
+                WadRayMath.rayMul(WadRayMath.wadToRay(amount), interestRate).mul(numWeeks).div(52)
+            )
+        );
+
+        //interestRate
         variables[1] = interestRate;
         //collateralFloorPrice
         variables[2] = getMockFloorPrice(collateral, asset); 
         //maturity
-        variables[3] = block.timestamp + numWeeks * 1 weeks; 
+        variables[3] = block.timestamp.add(numWeeks.mul(1 weeks)); 
         return variables;
-    }
-
-    function getUserNTokenBalance(
-        address user,
-        address asset
-    )
-        public
-        view
-        returns (uint256)
-    {
-        DataTypes.Reserve memory reserve = _reserves[asset];
-        return userScaledBalances[user][asset].mul(reserve.normalizedIncome);
     }
 
 }
