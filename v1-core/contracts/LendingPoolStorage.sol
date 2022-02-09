@@ -19,9 +19,10 @@ contract LendingPoolStorage {
     address internal _lendingPoolWithdrawAddress;
 
     mapping(address => DataTypes.Reserve) internal _reserves;
+    mapping(address => address) internal _fTokenAssetMapping;
     mapping(address => string) internal _pricePairs;
     mapping(address => mapping(address => uint256)) userScaledBalances;
-    mapping(address => mapping(address => uint256)) userNTokenBalances;
+    mapping(address => mapping(address => uint256)) userFTokenBalances;
 
     address internal _collateralManagerAddress;
     address internal _tokenPriceOracleAddress;

@@ -19,10 +19,10 @@ library ReserveLogic {
 
     function init(
         DataTypes.Reserve storage reserve,
-        address nTokenAddress,
+        address fTokenAddress,
         address debtTokenAddress
     ) external {
-        reserve.nTokenAddress = nTokenAddress;
+        reserve.fTokenAddress = fTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
     }
 

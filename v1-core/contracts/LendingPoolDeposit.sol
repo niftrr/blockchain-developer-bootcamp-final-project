@@ -4,16 +4,17 @@ pragma solidity 0.8.9;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import { DataTypes } from "./libraries/DataTypes.sol";
+import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { ILendingPoolDeposit } from "./interfaces/ILendingPoolDeposit.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "hardhat/console.sol";
 
-contract LendingPoolDeposit is Context, LendingPoolStorage, ILendingPoolDeposit, Pausable, AccessControl {
+contract LendingPoolDeposit is Context, LendingPoolStorage, LendingPoolLogic, ILendingPoolDeposit, Pausable, AccessControl {
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
@@ -48,7 +49,7 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, ILendingPoolDeposit,
     /// @notice Private function to deposit assets into the lending pool.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
-    /// @dev Deposits assets into the LP in exchange for nTokens at a 1:1 ratio.  
+    /// @dev Deposits assets into the LP in exchange for fTokens at a 1:1 ratio.  
     function deposit(
         address asset, 
         uint256 amount
@@ -58,15 +59,17 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, ILendingPoolDeposit,
     {
         bool success;
         DataTypes.Reserve memory reserve = _reserves[asset]; 
-        address nToken = reserve.nTokenAddress;
+        address fToken = reserve.fTokenAddress;
         
         console.log('asset', asset);
-        console.log('nToken', nToken);
+        console.log('fToken', fToken);
 
-        success  = IERC20(asset).transferFrom(_msgSender(), nToken, amount);
+        success  = IERC20(asset).transferFrom(_msgSender(), fToken, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
 
-        success = INToken(nToken).mint(_msgSender(), amount);
+        uint256 liquidityIndex = getLiquidityIndex(asset);
+
+        success = IFToken(fToken).mint(_msgSender(), amount, liquidityIndex);
         require(success, "UNSUCCESSFUL_MINT");
 
         return success;

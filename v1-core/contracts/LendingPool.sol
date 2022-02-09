@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { ILendingPoolDeposit } from "./interfaces/ILendingPoolDeposit.sol";
@@ -171,18 +171,18 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
 
     /// @notice Initializes a reserve.
     /// @param asset The ERC20, reserve asset token.
-    /// @param nTokenAddress The derivative nToken address.
+    /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
     /// @dev Calls internal `_initReserve` function if modifiers are succeeded.    
     function initReserve(
         address asset,
-        address nTokenAddress,
+        address fTokenAddress,
         address debtTokenAddress
     ) 
         external 
         onlyConfigurator 
     {
-        _initReserve(asset, nTokenAddress, debtTokenAddress);
+        _initReserve(asset, fTokenAddress, debtTokenAddress);
     }
 
     /// @notice Deposit assets into the lending pool.
@@ -203,11 +203,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         );
         require(success, string(data));
         
-        console.log('-----');
         uint256 liquidityIndex = _updateLiquidityIndex(asset);
         uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, true);
-
-        console.log('!!!LP,deposit: nTokenBalance, liquidityIndex, userScaledBalance', getUserNTokenBalance(_msgSender(), asset), liquidityIndex, userScaledBalance);
 
         emit Deposit(asset, amount, _msgSender(), userScaledBalance);
     }
@@ -292,31 +289,31 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
 
-    /// @notice To liquidate a borrow position.
-    /// @param asset The ERC20 token to be borrowed.
-    /// @param liquidationAmount The amount of ERC20 tokens to be paid.
-    /// @param borrowId The unique identifier of the borrow.
-    /// @dev Calls internal `_liquidate` function if modifiers are succeeded.   
-    function liquidate(
-        address asset,
-        uint256 liquidationAmount,
-        uint256 borrowId
-    )
-        external 
-        nonReentrant
-        whenNotPaused
-        whenReserveNotPaused(asset)
-        whenReserveNotProtected(asset)
-    {
-        (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
-            abi.encodeWithSignature("liquidate(address,uint256,uint256)", asset,liquidationAmount,borrowId)
-        );
-        require(success, string(data));
+    // /// @notice To liquidate a borrow position.
+    // /// @param asset The ERC20 token to be borrowed.
+    // /// @param liquidationAmount The amount of ERC20 tokens to be paid.
+    // /// @param borrowId The unique identifier of the borrow.
+    // /// @dev Calls internal `_liquidate` function if modifiers are succeeded.   
+    // function liquidate(
+    //     address asset,
+    //     uint256 liquidationAmount,
+    //     uint256 borrowId
+    // )
+    //     external 
+    //     nonReentrant
+    //     whenNotPaused
+    //     whenReserveNotPaused(asset)
+    //     whenReserveNotProtected(asset)
+    // {
+    //     (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
+    //         abi.encodeWithSignature("liquidate(address,uint256,uint256)", asset,liquidationAmount,borrowId)
+    //     );
+    //     require(success, string(data));
 
-        uint256 liquidityIndex = _updateLiquidityIndex(asset);
+    //     uint256 liquidityIndex = _updateLiquidityIndex(asset);
 
-        emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
-    }
+    //     emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
+    // }
 
     /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
     /// @dev Functions paused via modifiers using Pausable contract.
@@ -372,23 +369,24 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
 
     /// @notice Private function to initialize a reserve.
     /// @param asset The ERC20, reserve asset token.
-    /// @param nTokenAddress The derivative nToken address.
+    /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
     /// @dev ERC20 asset address used as reserve key.    
     function _initReserve(
         address asset,
-        address nTokenAddress,
+        address fTokenAddress,
         address debtTokenAddress
     ) 
         private
     {
         DataTypes.Reserve memory reserve;
         reserve.status = DataTypes.ReserveStatus.Active;
-        reserve.nTokenAddress = nTokenAddress;
+        reserve.fTokenAddress = fTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
         reserve.liquidityIndex = 10**27;
         _reserves[asset] = reserve;
+        _fTokenAssetMapping[fTokenAddress] = asset;
 
-        emit InitReserve(asset, _reserves[asset].nTokenAddress, _reserves[asset].debtTokenAddress);
+        emit InitReserve(asset, _reserves[asset].fTokenAddress, _reserves[asset].debtTokenAddress);
     }
 }

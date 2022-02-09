@@ -9,7 +9,7 @@ import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { ILendingPoolBorrow } from "./interfaces/ILendingPoolBorrow.sol";
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "./WadRayMath.sol";
@@ -95,7 +95,7 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
         success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), variables[0]);
         require(success, "UNSUCCESSFUL_MINT");
 
-        success = INToken(reserve.nTokenAddress).reserveTransfer(_msgSender(), asset, amount);
+        success = IFToken(reserve.fTokenAddress).reserveTransfer(_msgSender(), asset, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
 
         // Update reserve borrow numbers - for use in APR calculation

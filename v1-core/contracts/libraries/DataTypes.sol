@@ -18,7 +18,7 @@ library DataTypes {
     
     struct Reserve {
         ReserveStatus status;
-        address nTokenAddress;
+        address fTokenAddress;
         address debtTokenAddress;
         uint256 liquidityIndex;
         uint256 interestRate;

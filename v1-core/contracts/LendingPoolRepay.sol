@@ -7,7 +7,7 @@ import { DataTypes } from "./libraries/DataTypes.sol";
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -69,7 +69,7 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
         uint256 interestRate;
         DataTypes.Reserve storage reserve = _reserves[asset]; 
         
-        success = INToken(reserve.nTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
+        success = IFToken(reserve.fTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
         require(success, "UNSUCCESSFUL_TRANSFER");
 
         console.log('REPAY before ICol withdraw');

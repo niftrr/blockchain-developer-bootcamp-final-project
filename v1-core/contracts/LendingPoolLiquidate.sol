@@ -8,7 +8,7 @@ import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolLiquidate } from "./interfaces/ILendingPoolLiquidate.sol";
@@ -84,7 +84,7 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         console.log('borrowItem.repaymentAmount', borrowItem.repaymentAmount);
 
 
-        success = IERC20(asset).transferFrom(_msgSender(), reserve.nTokenAddress, repaymentAmount);
+        success = IERC20(asset).transferFrom(_msgSender(), reserve.fTokenAddress, repaymentAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
         console.log('here5');
         uint256 remainder = liquidationAmount.sub(repaymentAmount);

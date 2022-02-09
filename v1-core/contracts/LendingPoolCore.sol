@@ -3,7 +3,7 @@ pragma solidity 0.8.9;
 
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { LendingPoolEvents } from './LendingPoolEvents.sol';
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
@@ -22,16 +22,16 @@ contract LendingPoolCore is LendingPoolStorage, LendingPoolEvents {
         returns (uint256)
     {
         DataTypes.Reserve memory reserve = _reserves[asset];
-        uint256 nTokenSupply = INToken(reserve.nTokenAddress).totalSupply();
+        uint256 fTokenSupply = IFToken(reserve.fTokenAddress).totalSupply();
         uint256 utilizationRate = 0;
-        if (nTokenSupply > 0) {
+        if (fTokenSupply > 0) {
             utilizationRate = WadRayMath.wadToRay(
                 WadRayMath.wadDiv(
-                    IDebtToken(reserve.debtTokenAddress).getTotalSupply(), nTokenSupply
+                    IDebtToken(reserve.debtTokenAddress).getTotalSupply(), fTokenSupply
                 )
             ); 
         }
-        console.log('[logic] U=D/L', utilizationRate, IDebtToken(reserve.debtTokenAddress).getTotalSupply(), nTokenSupply);
+        console.log('[logic] U=D/L', utilizationRate, IDebtToken(reserve.debtTokenAddress).getTotalSupply(), fTokenSupply);
         return utilizationRate;
     }
 
@@ -90,12 +90,12 @@ contract LendingPoolCore is LendingPoolStorage, LendingPoolEvents {
 
         // Calculate Utlization Rate (DRY exception - LendingPool line 401)
         // U_t = D_t / L_t
-        uint256 nTokenSupply = INToken(reserve.nTokenAddress).totalSupply();
+        uint256 fTokenSupply = IFToken(reserve.fTokenAddress).totalSupply();
         uint256 utilizationRate = 0;
-        if (nTokenSupply > 0) {
+        if (fTokenSupply > 0) {
             utilizationRate = WadRayMath.wadToRay(
                 WadRayMath.wadDiv(
-                    IDebtToken(reserve.debtTokenAddress).getTotalSupply(), nTokenSupply
+                    IDebtToken(reserve.debtTokenAddress).getTotalSupply(), fTokenSupply
                 )
             ); 
         }
@@ -145,7 +145,7 @@ contract LendingPoolCore is LendingPoolStorage, LendingPoolEvents {
         return userScaledBalances[user][asset];
     }
 
-    function getUserNTokenBalance(
+    function getUserFTokenBalance(
         address user,
         address asset
     )

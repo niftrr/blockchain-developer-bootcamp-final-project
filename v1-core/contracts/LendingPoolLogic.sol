@@ -2,7 +2,7 @@
 pragma solidity 0.8.9;
 
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { MockOracle } from "./mocks/Oracle.sol";
@@ -71,6 +71,25 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
         //maturity
         variables[3] = block.timestamp.add(numWeeks.mul(1 weeks)); 
         return variables;
+    }
+
+    function getLiquidityIndex(
+        address asset
+    ) 
+        public
+        returns (uint256)
+    {
+        DataTypes.Reserve memory reserve = _reserves[asset]; 
+        return reserve.liquidityIndex;
+    }
+
+    function getFTokenAsset(
+        address fToken
+    )
+        public 
+        returns (address)
+    {
+        return _fTokenAssetMapping[fToken];
     }
 
 }

@@ -8,9 +8,9 @@ pragma solidity 0.8.9;
 contract LendingPoolEvents {    
     /// @notice Emitted when a new reserve is initialized.
     /// @param asset The ERC20, reserve asset address.
-    /// @param nTokenAddress The derivative nToken address.
+    /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
-    event InitReserve(address asset, address nTokenAddress, address debtTokenAddress);
+    event InitReserve(address asset, address fTokenAddress, address debtTokenAddress);
     
     /// @notice Emitted when an asset deposit is made.
     /// @param asset The ERC20, reserve asset address.

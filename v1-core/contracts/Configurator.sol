@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPool } from "./interfaces/ILendingPool.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 
 import "hardhat/console.sol";
@@ -146,12 +146,12 @@ contract Configurator is Context, AccessControl {
 
     /// @notice Initializes a Lending Pool reserve.
     /// @param asset The ERC20, reserve asset token.
-    /// @param nTokenAddress The derivative nToken address.
+    /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
     /// @dev External `initReserve` function calls `_initReserve` if modifiers are succeeded.    
     function initLendingPoolReserve(
         address asset, 
-        address nTokenAddress,
+        address fTokenAddress,
         address debtTokenAddress
     )
         public
@@ -160,7 +160,7 @@ contract Configurator is Context, AccessControl {
     {
         ILendingPool(lendingPoolAddress).initReserve(
             asset, 
-            nTokenAddress, 
+            fTokenAddress, 
             debtTokenAddress
         );
     }
@@ -376,22 +376,22 @@ contract Configurator is Context, AccessControl {
         ICollateralManager(collateralManagerAddress).unpause();
     }
 
-    function pauseNToken(
-        address nTokenAddress
+    function pauseFToken(
+        address fTokenAddress
     ) 
         public 
         onlyEmergencyAdmin
     {
-        INToken(nTokenAddress).pause();
+        IFToken(fTokenAddress).pause();
     }
 
-    function unpauseNToken(
-        address nTokenAddress
+    function unpauseFToken(
+        address fTokenAddress
     ) 
         public 
         onlyEmergencyAdmin
     {
-        INToken(nTokenAddress).unpause();
+        IFToken(fTokenAddress).unpause();
     }
 
     function pauseDebtToken(

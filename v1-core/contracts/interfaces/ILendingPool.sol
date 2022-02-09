@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 interface ILendingPool {
     function initReserve(
         address asset, 
-        address nTokenAddress, 
+        address fTokenAddress, 
         address debtTokenAddress
     ) 
         external;
@@ -35,6 +35,18 @@ interface ILendingPool {
         uint256 borrowId
     ) 
         external;
+
+    function getLiquidityIndex(
+        address asset
+    )
+        external 
+        returns (uint256);
+
+    function getFTokenAsset(
+        address fToken
+    )
+        external 
+        returns (address);
 
     function pause() external;
 

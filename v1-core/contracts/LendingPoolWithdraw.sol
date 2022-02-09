@@ -5,14 +5,15 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import { DataTypes } from "./libraries/DataTypes.sol";
 import { LendingPoolStorage } from './LendingPoolStorage.sol';
+import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
-import { INToken } from "./interfaces/INToken.sol";
+import { IFToken } from "./interfaces/IFToken.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolWithdraw } from "./interfaces/ILendingPoolWithdraw.sol";
 
-contract LendingPoolWithdraw is Context, LendingPoolStorage, ILendingPoolWithdraw, Pausable, AccessControl {
+contract LendingPoolWithdraw is Context, LendingPoolStorage, LendingPoolLogic, ILendingPoolWithdraw, Pausable, AccessControl {
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
@@ -47,7 +48,7 @@ contract LendingPoolWithdraw is Context, LendingPoolStorage, ILendingPoolWithdra
     /// @notice Private function to withdraw assets from the lending pool.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
-    /// @dev Withdraws assets from the LP by exchanging nTokens at a 1:1 ratio. 
+    /// @dev Withdraws assets from the LP by exchanging fTokens at a 1:1 ratio. 
     function withdraw(
         address asset, 
         uint256 amount
@@ -57,15 +58,17 @@ contract LendingPoolWithdraw is Context, LendingPoolStorage, ILendingPoolWithdra
     {
         bool success;
         DataTypes.Reserve memory reserve = _reserves[asset];        
-        address nToken = reserve.nTokenAddress;
+        address fToken = reserve.fTokenAddress;
 
-        uint256 nTokenBalance = INToken(nToken).balanceOf(_msgSender());
-        require(nTokenBalance >= amount, "INSUFFICIENT_BALANCE");
+        uint256 fTokenBalance = IFToken(fToken).balanceOf(_msgSender());
+        require(fTokenBalance >= amount, "INSUFFICIENT_BALANCE");
 
-        success = INToken(nToken).burnFrom(_msgSender(), amount);
+        uint256 liquidityIndex = getLiquidityIndex(asset);
+
+        success = IFToken(fToken).burnFrom(_msgSender(), amount, liquidityIndex);
         require(success, "UNSUCCESSFUL_BURN");
 
-        success = INToken(nToken).reserveTransfer(_msgSender(), asset, amount);
+        success = IFToken(fToken).reserveTransfer(_msgSender(), asset, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
         
         return success;
