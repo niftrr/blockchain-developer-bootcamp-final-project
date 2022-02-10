@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 interface IDebtToken {
-    function mint(address account, uint256 amount) external returns (bool);
+    function mint(address account, uint256 amount, uint256 rate) external returns (bool);
 
     function burnFrom(address account, uint256 amount) external returns (bool);
 

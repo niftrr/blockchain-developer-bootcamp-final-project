@@ -5,15 +5,35 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
+import { InterestLogic } from "./libraries/InterestLogic.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
+import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import "./WadRayMath.sol";
+
+import "hardhat/console.sol";
 
 /// @title DebtToken Contract for the NFTlend protocol.
 /// @author Niftrr
 /// @notice Allows for the tracking of debt for the purposes of APY calculations.
 /// @dev Debt tokens are non-transferable and so diverge from the ERC20 standard.
 contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, ReentrancyGuard {
+    using SafeMath for uint256;
+    using WadRayMath for uint256;
+
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
+
+    mapping(address => uint256) internal _userAverageRate;
+    mapping(address => uint40) internal _timestamps;
+    uint256 internal _averageRate;
+    uint40 internal _totalSupplyTimestamp;
+
+    /// @notice Emitted when debtTokens are minted.
+    /// @param to The recipient account.
+    /// @param amount The amount of debtTokens to be minted.
+    /// @param newBalance The newBalance of debtTokens.
+    event Mint(address to, uint256 amount, uint256 newBalance);
+
 
     constructor(
         address configurator, 
@@ -37,6 +57,13 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         _;
     }
 
+    struct mintDataLocalVars {
+        uint256 previousSupply;
+        uint256 currentAverageRate;
+        uint256 nextSupply;
+        uint256 newUserAverageRate;
+    }
+
     /// @notice Mints an amount of debt tokens to a given account.
     /// @param to The account.
     /// @param amount The amount of debt tokens.
@@ -44,18 +71,48 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
     /// @return Boolean for execution success.
     function mint(
         address to, 
-        uint256 amount
+        uint256 amount,
+        uint256 rate
     ) 
-        public 
+        external 
         virtual 
         override 
         nonReentrant
-        onlyLendingPool 
+        // onlyLendingPool TODO: reinstate
         whenNotPaused 
         returns (bool)
     {
-        _mint(to, amount);
-        return true;
+        (, uint256 currentBalance, uint256 balanceIncrease) = _calculateBalanceIncrease(to);
+        console.log('currentBalance', currentBalance);
+        console.log('balanceIncrease', balanceIncrease);
+        mintDataLocalVars memory vars;
+        
+        vars.previousSupply = totalSupply();
+        vars.currentAverageRate = _averageRate;
+        vars.nextSupply = vars.previousSupply.add(amount);
+
+        vars.newUserAverageRate = _userAverageRate[to]
+            .rayMul(currentBalance.wadToRay())
+            .add(amount.wadToRay())
+            .rayDiv(currentBalance.add(amount).wadToRay());
+
+        _userAverageRate[to] = vars.newUserAverageRate;
+        
+        _totalSupplyTimestamp = _timestamps[to] = uint40(block.timestamp);
+
+        // Calculates the updated average rate
+        vars.currentAverageRate = _averageRate = 
+            vars.currentAverageRate
+            .rayMul(vars.previousSupply.wadToRay())
+            .add(rate.rayMul(amount.wadToRay()))
+            .rayDiv(vars.nextSupply.wadToRay());
+
+        console.log('_averageRate', _averageRate);
+
+        _mint(to, amount.add(balanceIncrease));
+
+        emit Mint(to, amount, currentBalance.add(amount));
+        return currentBalance == 0;
     }
 
     /// @notice Burns an amount of debt tokens from a given account.
@@ -159,5 +216,54 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
 
     function getTotalSupply() public override view returns (uint256) {
         return totalSupply();
+    }
+
+    function totalSupply() public view override returns (uint256) {
+        //TODO
+    }
+
+    function balanceOf(address account)
+        public
+        view
+        virtual
+        override
+        returns (uint256) 
+    {
+        uint256 accountBalance = super.balanceOf(account);
+        uint256 averageRate = _userAverageRate[account];
+        if (accountBalance == 0) {
+            return 0;
+        }
+        uint256 accumulatedInterest = 
+            InterestLogic.calculateCompoundedInterest(averageRate, _timestamps[account]);
+     
+        console.log('accumulatedInterest', accumulatedInterest);
+
+        return accountBalance.rayMul(accumulatedInterest);
+    }
+
+    function _calculateBalanceIncrease(address user)
+        internal
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256
+        )
+    {
+        uint256 previousPrincipalBalance = super.balanceOf(user);
+        console.log('previousPrincipalBalance', previousPrincipalBalance);
+
+        if (previousPrincipalBalance == 0) {
+            return (0, 0, 0);
+        }
+
+        uint256 balanceIncrease = balanceOf(user).sub(previousPrincipalBalance);
+        console.log('balanceIncrease1', balanceIncrease);
+        return (
+            previousPrincipalBalance,
+            previousPrincipalBalance.add(balanceIncrease),
+            balanceIncrease
+        );
     }
 }

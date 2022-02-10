@@ -92,7 +92,9 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
             variables[3]); //maturity
         require(success, "UNSUCCESSFUL_DEPOSIT");
 
-        success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), variables[0]);
+        uint256 dummyRate = WadRayMath.ray().div(10); // TODO: include logic for actual rate
+
+        success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), variables[0], dummyRate);
         require(success, "UNSUCCESSFUL_MINT");
 
         success = IFToken(reserve.fTokenAddress).reserveTransfer(_msgSender(), asset, amount);
