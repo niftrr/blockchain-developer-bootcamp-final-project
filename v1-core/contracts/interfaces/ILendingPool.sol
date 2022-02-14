@@ -42,11 +42,18 @@ interface ILendingPool {
         external 
         returns (uint256);
 
-    function getFTokenAsset(
+    function getUnderlyingAsset(
         address fToken
     )
         external 
         returns (address);
+
+    function getReserveNormalizedIncome(
+        address asset
+    )
+        external 
+        view
+        returns (uint256);
 
     function pause() external;
 

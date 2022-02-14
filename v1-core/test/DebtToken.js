@@ -143,38 +143,35 @@ describe('DebtToken', function() {
         await expect(hhDebtToken.connect(lendingPool).mint(alice.address, amount, interestRate))
         .to.emit(hhDebtToken, 'Mint')
         .withArgs(alice.address, amount, amount.mul(2).add(balanceIncrease));
+
+        let newDebtBalance = await hhDebtToken.balanceOf(alice.address);
+        await expect(newDebtBalance).to.equal(amount.mul(2).add(balanceIncrease));
     }) 
 
-    // // NOTE: comment-out function modifier "onlyLendingPool" to run 
-    // it('should burn fTokens', async function () {
-    //     await hhFToken.connect(lendingPool).mint(lendingPool.address, amount, liquidityIndex);
+    // NOTE: comment-out function modifier "onlyLendingPool" to run 
+    it('should burn debtTokens from alice', async function () {
+        await hhDebtToken.mint(alice.address, amount, interestRate);
+
+        let balanceBefore = await hhDebtToken.balanceOf(alice.address);
+        // await hhDebtToken.connect(alice).approve(alice.address, amount);
+        await expect(hhDebtToken.connect(alice).burnFrom(alice.address, amount))
+        .to.emit(hhDebtToken, 'Burn')
+        .withArgs(alice.address, amount);
         
-    //     await expect(hhFToken.connect(lendingPool).burn(amount, liquidityIndex))
-    //     .to.emit(hhFToken, 'Burn')
-    //     .withArgs(lendingPool.address, amount, amountDivliquidityIndex);
-    // });
+        let balanceAfter = await hhDebtToken.balanceOf(alice.address);
+        await expect(balanceAfter).to.equal(balanceBefore - amount);
+    });
 
-    // // NOTE: comment-out function modifier "onlyLendingPool" to run 
-    // it('should burn fTokens from alice', async function () {
-    //     await hhFToken.mint(alice.address, amount, liquidityIndex);
 
-    //     await hhFToken.connect(alice).approve(alice.address, amount);
-    //     await expect(hhFToken.connect(alice).burnFrom(alice.address, amount, liquidityIndex))
-    //     .to.emit(hhFToken, 'Burn')
-    //     .withArgs(alice.address, amount, amountDivliquidityIndex);
+    // NOTE: comment-out function modifier "onlyLendingPool" to run 
+    it('should update the total supply', async function () {
+        await hhDebtToken.mint(alice.address, amount, interestRate);
 
-    // });
-
-    // // NOTE: will fail due to the reserve not being innitialized. 
-    // // Copy this line to set liquidityIndex to 1 Ray and run the test
-    // // uint256 liquidityIndex = WadRayMath.ray();
-    // it('should transfer tokens', async function () {
-    //     console.log('alice', alice.address);
-    //     console.log('bob', bob.address);
-    //     await hhFToken.connect(lendingPool).mint(alice.address, amount, liquidityIndex);
-    //     await hhFToken.connect(alice).approve(bob.address, amount);
-    //     await expect(hhFToken.connect(lendingPool).transferBalance(alice.address, bob.address, amount))
-    //     .to.emit(hhFToken, 'BalanceTransfer')
-    //     .withArgs(alice.address, bob.address, amount, liquidityIndex);
-    // });
+        let totalSupplyBefore = await hhDebtToken.totalSupply();
+        // await hhDebtToken.connect(alice).approve(alice.address, amount);
+        await hhDebtToken.connect(alice).burnFrom(alice.address, amount);
+        
+        let totalSupplyAfter = await hhDebtToken.totalSupply()
+        await expect(totalSupplyAfter).to.equal(totalSupplyBefore.sub(amount));
+    });
 })

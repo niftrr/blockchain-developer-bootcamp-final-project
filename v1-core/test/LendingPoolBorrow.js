@@ -13,8 +13,8 @@ let hhTokenPriceOracleAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
-let NToken;
-let hhNToken;
+let FToken;
+let hhFToken;
 let DebtToken;
 let hhDebtToken;
 let admin;
@@ -148,14 +148,16 @@ beforeEach(async function() {
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
     
-    // Get and deploy nToken
-    NToken = await ethers.getContractFactory('NToken');
-    hhNToken = await NToken.deploy(
+    // Get and deploy fToken
+    FToken = await ethers.getContractFactory('FToken');
+    hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
-        'Dai nToken', 
-        'nDAI');
-    await hhNToken.deployed();
+        treasury.address,
+        hhAssetToken.address,
+        'Dai fToken', 
+        'fDAI');
+    await hhFToken.deployed();
 
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
@@ -224,7 +226,7 @@ async function initReserve() {
     .connect(admin)
     .initLendingPoolReserve(
         hhAssetToken.address, 
-        hhNToken.address,
+        hhFToken.address,
         hhDebtToken.address
     )
 }
@@ -232,14 +234,14 @@ async function initReserve() {
 async function deposit(signer, assetToken, tokenAmount) {
     // Approve transferFrom lendingPool 
     await assetToken.connect(signer).approve(hhLendingPoolAddress, tokenAmount);
-    // Deposit in hhNToken contract reserve
+    // Deposit in hhFToken contract reserve
     return hhLendingPool.connect(signer).deposit(assetToken.address, tokenAmount)
 }
 
-async function withdraw(signer, assetToken, nToken, _tokenAmount) {
-    // Approve nToken burnFrom lendingPool 
-    await nToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
-    // Withdraw assetTokens by depositing/buring nTokens
+async function withdraw(signer, assetToken, fToken, _tokenAmount) {
+    // Approve fToken burnFrom lendingPool 
+    await fToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
+    // Withdraw assetTokens by depositing/buring fTokens
     return hhLendingPool.connect(signer).withdraw(assetToken.address, _tokenAmount);
 }
 
@@ -254,9 +256,9 @@ async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, numWee
         numWeeks);
 }
 
-async function repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
-    // Approve transfer of repaymentAmount asset tokens to nToken address (asset reserve)
-    await assetToken.connect(signer).approve(nToken.address, repaymentAmount);
+async function repay(signer, assetToken, fToken, repaymentAmount, borrowId) {
+    // Approve transfer of repaymentAmount asset tokens to fToken address (asset reserve)
+    await assetToken.connect(signer).approve(fToken.address, repaymentAmount);
     return hhLendingPool.connect(signer).repay(
         assetToken.address,
         repaymentAmount,

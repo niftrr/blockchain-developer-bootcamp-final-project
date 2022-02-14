@@ -24,8 +24,10 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
 
-    uint256 currentAPY; 
-    address _lendingPool;
+    // uint256 currentAPY; 
+    ILendingPool internal _pool;
+    address internal _underlyingAsset;
+    address internal _treasury;
 
     /// @notice Emitted when fTokens are minted.
     /// @param to The recipient account.
@@ -55,6 +57,8 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
     constructor(
         address configurator, 
         address lendingPool,
+        address treasury,
+        address underlyingAsset,
         string memory name, 
         string memory symbol
     ) 
@@ -62,7 +66,9 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
     {
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _setupRole(LENDING_POOL_ROLE, lendingPool);
-        _lendingPool = lendingPool;
+        _pool = ILendingPool(lendingPool);
+        _treasury = treasury;
+        _underlyingAsset = underlyingAsset;
     }
 
     modifier onlyConfigurator() {
@@ -93,13 +99,14 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         whenNotPaused 
         returns (bool)
     {
+        console.log('-amount', amount);
         uint256 amountScaled = amount.rayDiv(liquidityIndex);
-        console.log('mint amountScaled', amountScaled);
+        console.log('- mint amountScaled', amountScaled);
         require(amountScaled != 0, "MINT_AMOUNT_ZERO");
         _mint(to, amountScaled);
         
         emit Mint(to, amount, amountScaled);
-        console.log('mint balance: ', balanceOf(to));
+        console.log('- mint balance: ', balanceOf(to));
 
         return true;
     }
@@ -225,10 +232,14 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         override(ERC20, IERC20)
         returns (uint256)
     {
-        // address asset = ILendingPool(_lendingPool).getFTokenAsset(address(this));
+        // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
         // uint256 liquidityIndex = ILendingPool(_lendingPool).getLiquidityIndex(asset);
-        uint256 liquidityIndex = WadRayMath.ray();  
-        return super.balanceOf(account).rayMul(liquidityIndex);
+        // uint256 liquidityIndex = WadRayMath.ray();  
+        // return super.balanceOf(account).rayMul(liquidityIndex);
+        // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
+        console.log('super.balanceOf(account)', super.balanceOf(account));
+        console.log('_pool.getReserveNormalizedIncome(_underlyingAsset)', _pool.getReserveNormalizedIncome(_underlyingAsset));
+        return super.balanceOf(account).rayMul(_pool.getReserveNormalizedIncome(_underlyingAsset));
     }
 
     function scaledBalanceOf(
@@ -252,7 +263,7 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         if (currentScaledTotalSupply == 0) {
             return 0;
         }
-        // address asset = ILendingPool(_lendingPool).getFTokenAsset(address(this));
+        // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
         // uint256 liquidityIndex = ILendingPool(_lendingPool).getLiquidityIndex(asset);
         uint256 liquidityIndex = WadRayMath.ray();  
         return currentScaledTotalSupply.rayMul(liquidityIndex);
@@ -276,13 +287,9 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         virtual
         override(ERC20)
     {
-        address asset = ILendingPool(_lendingPool).getFTokenAsset(address(this));
-        // uint256 liquidityIndex = ILendingPool(_lendingPool).getLiquidityIndex(asset);
-        uint256 liquidityIndex = WadRayMath.ray().mul(8); // as per test input
-
-        console.log('amount.rayDiv(liquidityIndex)', amount.rayDiv(liquidityIndex));
-        console.log('balanceOf(from)', balanceOf(from));
-        console.log('diff',  amount.rayDiv(liquidityIndex).sub(balanceOf(from)));
+        // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
+        uint256 liquidityIndex = _pool.getLiquidityIndex(_underlyingAsset);
+        // uint256 liquidityIndex = WadRayMath.ray().mul(8); // as per test input
 
         super._transfer(from, to, amount.rayDiv(liquidityIndex));
 

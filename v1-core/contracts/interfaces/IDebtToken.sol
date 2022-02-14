@@ -14,5 +14,5 @@ interface IDebtToken {
 
     function unpause() external;
 
-    function getTotalSupply() external returns (uint256);
+    function totalSupply() external view returns (uint256);
 }

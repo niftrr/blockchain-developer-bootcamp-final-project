@@ -66,10 +66,8 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, LendingPoolLogic, IL
 
         success  = IERC20(asset).transferFrom(_msgSender(), fToken, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
-
-        uint256 liquidityIndex = getLiquidityIndex(asset);
-
-        success = IFToken(fToken).mint(_msgSender(), amount, liquidityIndex);
+        
+        success = IFToken(fToken).mint(_msgSender(), amount, reserve.liquidityIndex);
         require(success, "UNSUCCESSFUL_MINT");
 
         return success;

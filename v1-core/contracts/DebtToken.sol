@@ -34,6 +34,11 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
     /// @param newBalance The newBalance of debtTokens.
     event Mint(address to, uint256 amount, uint256 newBalance);
 
+    /// @notice Emitted when debtTokens are burned.
+    /// @param account The account from which tokens are burned.
+    /// @param amount The amount of debtTokens to be minted.
+    event Burn(address account, uint256 amount);
+
 
     constructor(
         address configurator, 
@@ -128,11 +133,12 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         virtual 
         override 
         nonReentrant
-        onlyLendingPool
+        // onlyLendingPool TODO: uncomment
         whenNotPaused 
         returns (bool)
     {
         _burn(account, amount);
+        emit Burn(account, amount);
         return true;
     }
 
@@ -214,12 +220,13 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         _unpause();
     }
 
-    function getTotalSupply() public override view returns (uint256) {
-        return totalSupply();
-    }
-
-    function totalSupply() public view override returns (uint256) {
-        //TODO
+    function totalSupply() 
+        public 
+        view 
+        override(ERC20, IDebtToken) 
+        returns (uint256) 
+    {
+        return _calculateTotalSupply();
     }
 
     function balanceOf(address account)
@@ -240,6 +247,23 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         console.log('accumulatedInterest', accumulatedInterest);
 
         return accountBalance.rayMul(accumulatedInterest);
+    }
+
+    function _calculateTotalSupply() 
+        internal
+        view
+        virtual
+        returns (uint256)
+    {
+        uint256 principalSupply = super.totalSupply();
+        if (principalSupply == 0) {
+            return 0;
+        }
+        
+        uint256 accumulatedInterest = 
+            InterestLogic.calculateCompoundedInterest(_averageRate, _totalSupplyTimestamp);
+     
+        return principalSupply.rayMul(accumulatedInterest);
     }
 
     function _calculateBalanceIncrease(address user)

@@ -10,6 +10,7 @@ import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "./WadRayMath.sol";
 
 import { DataTypes } from "./libraries/DataTypes.sol";
+import { ReserveLogic } from "./libraries/ReserveLogic.sol";
 
 import "hardhat/console.sol";
 
@@ -20,6 +21,7 @@ import "hardhat/console.sol";
 contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     using SafeMath for uint256;  
     using WadRayMath for uint256;
+    using ReserveLogic for DataTypes.Reserve;
 
     /// @notice Get the Token Price Oracle contract address.
     /// @dev Uses a state variable.
@@ -77,19 +79,70 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
         address asset
     ) 
         public
+        view
         returns (uint256)
     {
         DataTypes.Reserve memory reserve = _reserves[asset]; 
         return reserve.liquidityIndex;
     }
 
-    function getFTokenAsset(
+    function getUnderlyingAsset(
         address fToken
     )
         public 
+        view
         returns (address)
     {
-        return _fTokenAssetMapping[fToken];
+        return _underlyingAssets[fToken];
     }
 
+    function getReserveNormalizedIncome(
+        address asset
+    )
+        public
+        view
+        returns (uint256)
+    {
+        DataTypes.Reserve storage reserve = _reserves[asset];
+        (,uint256 normalizedIncome) = ReserveLogic.getNormalizedIncome(reserve);
+        return normalizedIncome;
+    }
+    function _updateLiquidityIndex(
+        address asset
+    )
+        public // internal TODO: revert to internal
+        returns (uint256)
+    {
+        DataTypes.Reserve storage reserve = _reserves[asset];
+        (,reserve.liquidityIndex) = reserve.getNormalizedIncome();
+        return reserve.liquidityIndex;
+    }
+
+    function _updateUserScaledBalance(
+        address user,
+        address asset,
+        uint256 amount,
+        bool isDeposit
+    )
+        internal
+        returns (uint256)
+    {
+        uint256 reserveNormalizedIncome = getReserveNormalizedIncome(asset);
+        
+        if (isDeposit) {
+            userScaledBalances[user][asset] = userScaledBalances[user][asset].add(
+                WadRayMath.rayToWad(
+                    WadRayMath.wadToRay(amount).rayDiv(reserveNormalizedIncome)
+                )
+            );
+        } else {
+            userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(
+                WadRayMath.rayToWad(
+                    WadRayMath.wadToRay(amount).div(reserveNormalizedIncome)
+                )
+            );
+        }
+
+        return userScaledBalances[user][asset];
+    }
 }

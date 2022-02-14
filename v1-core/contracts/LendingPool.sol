@@ -203,7 +203,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         );
         require(success, string(data));
         
-        uint256 liquidityIndex = _updateLiquidityIndex(asset);
+        // TODO: Confirm that below two lines are redundant and can be removed
+        // Do this by testing:
+        // liquidity index and (this might be required! some type of update event at least)
+        // user scaled balance in tests
+        _updateLiquidityIndex(asset);
         uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, true);
 
         emit Deposit(asset, amount, _msgSender(), userScaledBalance);
@@ -227,8 +231,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         );
         require(success, string(data));
 
-        uint256 liquidityIndex =  _updateLiquidityIndex(asset);
-        uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, false);
+        _updateLiquidityIndex(asset);
+        _updateUserScaledBalance(_msgSender(), asset, amount, false);
 
         emit Withdraw(asset, amount, _msgSender());
     }
@@ -284,7 +288,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         );
         require(success, string(data));
 
-        uint256 liquidityIndex = _updateLiquidityIndex(asset);
+        _updateLiquidityIndex(asset);
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
@@ -385,7 +389,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         reserve.debtTokenAddress = debtTokenAddress;
         reserve.liquidityIndex = 10**27;
         _reserves[asset] = reserve;
-        _fTokenAssetMapping[fTokenAddress] = asset;
+        _underlyingAssets[fTokenAddress] = asset;
 
         emit InitReserve(asset, _reserves[asset].fTokenAddress, _reserves[asset].debtTokenAddress);
     }

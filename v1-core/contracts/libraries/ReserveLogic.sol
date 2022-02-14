@@ -9,6 +9,8 @@ import {SafeMath} from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "../WadRayMath.sol";
 import { DataTypes } from './DataTypes.sol';
 
+import "hardhat/console.sol";
+
 library ReserveLogic {
     using SafeMath for uint256;
     using WadRayMath for uint256;
@@ -30,24 +32,14 @@ library ReserveLogic {
 
     using ReserveLogic for DataTypes.Reserve;
 
-    function getUtilizationRateOld(
-        DataTypes.Reserve storage reserve,
-        uint256 totalFTokenSupply,
-        uint256 totalDebtTokenSupply
+    function updateState(
+        DataTypes.Reserve storage reserve
     )
         internal
-        view
         returns (uint256)
     {
-        reserveDataLocalVars memory vars;
-        vars.totalDebt = totalDebtTokenSupply;
-        vars.totalLiquidity = totalFTokenSupply;
-        
-        vars.utilizationRate = 0;
-        if (totalFTokenSupply > 0) {
-            vars.utilizationRate = vars.totalDebt.wadToRay().rayDiv(vars.totalLiquidity.wadToRay());
-        }
-        return vars.utilizationRate;
+        (reserve.latestUpdateTimestamp, reserve.liquidityIndex) = getNormalizedIncome(reserve);
+        return reserve.liquidityIndex;
     }
 
     function getUtilizationRate(
@@ -58,7 +50,8 @@ library ReserveLogic {
         returns (uint256)
     {
         reserveDataLocalVars memory vars;
-        vars.totalDebt = IFToken(reserve.debtTokenAddress).totalSupply(); // TODO: change to IDebtToken after this is implemented
+        console.log('reserve.debtTokenAddress', reserve.debtTokenAddress);
+        vars.totalDebt = IDebtToken(reserve.debtTokenAddress).totalSupply(); // TODO: change to IDebtToken after this is implemented
         vars.totalLiquidity = IFToken(reserve.fTokenAddress).totalSupply();
         
         vars.utilizationRate = 0;
@@ -80,28 +73,27 @@ library ReserveLogic {
         return reserve.borrowRate.rayMul(vars.utilizationRate);
     }
 
-    function getReserveNormalizedIncome(
-        DataTypes.Reserve storage reserve,
-        uint256 totalFTokenSupply,
-        uint256 totalDebtTokenSupply
+    function getNormalizedIncome(
+        DataTypes.Reserve storage reserve
     )
         internal
         view
-        returns (uint256)
+        returns (uint40, uint256)
     {
         reserveDataLocalVars memory vars;
         vars.liquidityRate = getLiquidityRate(reserve);
 
+        uint256 timestamp = block.timestamp;
         if (reserve.latestUpdateTimestamp == 0) {
             vars.timeDelta = 0;
         } else {
-            vars.timeDelta = block.timestamp.sub(reserve.latestUpdateTimestamp);
+            vars.timeDelta = timestamp.sub(reserve.latestUpdateTimestamp);
             // vars.timeDelta = 365 days;
         }
 
-        return reserve.liquidityIndex.add(
+        return (uint40(timestamp), reserve.liquidityIndex.add(
             reserve.liquidityIndex.rayMul(vars.liquidityRate).mul(vars.timeDelta).div(365 days)
-        );
+        ));
     }
 
     function getUserFTokenBalance(
@@ -126,15 +118,15 @@ library ReserveLogic {
         return IFToken(reserve.debtTokenAddress).balanceOf(user); // TODO: change to IDebtToken
     }
 
-    function getFTokenTotalSupply(
-        DataTypes.Reserve storage reserve
-    )
-        internal
-        view
-        returns (uint256)
-    {
-        return IFToken(reserve.fTokenAddress).totalSupply();
-    }
+    // function getFTokenTotalSupply(
+    //     DataTypes.Reserve storage reserve
+    // )
+    //     internal
+    //     view
+    //     returns (uint256)
+    // {
+    //     return IFToken(reserve.fTokenAddress).totalSupply();
+    // }
 
     // function getDebtTokenTotalSupply(
     //     DataTypes.Reserve storage reserve

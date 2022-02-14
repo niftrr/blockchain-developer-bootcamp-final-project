@@ -117,26 +117,28 @@ beforeEach(async function() {
     AssetToken = await ethers.getContractFactory('AssetToken');
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
+    hhAssetTokenAddress = await hhAssetToken.resolvedAddress;
     
     // Get and deploy fToken
     FToken = await ethers.getContractFactory('FToken');
     hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
-        // lendingPool.address, // Using lendingPool.address as sub for lendingPool to be able to run tests [hhLendingPoolAddress],
+        treasury.address,
+        hhAssetTokenAddress,
         'Dai fToken', 
         'fDAI');
     await hhFToken.deployed();
 
-    // // Get and deploy debtToken
-    // DebtToken = await ethers.getContractFactory('DebtToken');
-    // hhDebtToken = await DebtToken.deploy(
-    //     hhConfiguratorAddress,
-    //     hhLendingPoolAddress,
-    //     'Dai debtToken', 
-    //     'debtDAI'
-    // );
-    // await hhDebtToken.deployed();   
+    // Get and deploy debtToken
+    DebtToken = await ethers.getContractFactory('DebtToken');
+    hhDebtToken = await DebtToken.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+        'Dai debtToken', 
+        'debtDAI'
+    );
+    await hhDebtToken.deployed();   
 
     // -- Assign minter role to LendingPool
     // await hhDebtToken.setMinter(hhLendingPoolAddress);
@@ -151,45 +153,116 @@ beforeEach(async function() {
 
 });
 
+async function initReserve() {
+    return hhConfigurator
+    .connect(admin)
+    .initLendingPoolReserve(
+        hhAssetToken.address, 
+        hhFToken.address,
+        hhDebtToken.address
+    )
+}
+
+describe('FToken >> LendingPool >> Init', function() {
+
+    it('should init reserve', async function () {
+
+        // Initialize reserve
+        async function _initReserve() {
+            return initReserve();
+        }
+
+        // Expect: InitReserve Emit response
+        await expect(
+            _initReserve())
+            .to.emit(hhLendingPool, 'InitReserve')
+            .withArgs(
+                hhAssetToken.address, 
+                hhFToken.address,
+                hhDebtToken.address);
+    });
+});
+
 describe('FToken', function() {
-    let liquidityIndex = ethers.utils.parseUnits('8', 27); 
+    let liquidityIndex = ethers.utils.parseUnits('1', 27); 
 
     let amount = ethers.utils.parseUnits('4', 18);
-    let amountDivliquidityIndex = ethers.utils.parseUnits('5', 17); 
-
+    let amountDivliquidityIndex = ethers.utils.parseUnits('4', 18); 
+    
     // NOTE: comment-out function modifier "onlyLendingPool" to run 
     it('should mint fTokens', async function () {
+        await initReserve();
         await expect(hhFToken.connect(lendingPool).mint(alice.address, amount, liquidityIndex))
         .to.emit(hhFToken, 'Mint')
         .withArgs(alice.address, amount, amountDivliquidityIndex);
+
+        let newBalance = await hhFToken.balanceOf(alice.address);
+        await expect(newBalance).to.equal(amount);
     }) 
 
     // NOTE: comment-out function modifier "onlyLendingPool" to run 
     it('should burn fTokens', async function () {
+        await initReserve();
+
         await hhFToken.connect(lendingPool).mint(lendingPool.address, amount, liquidityIndex);
         
         await expect(hhFToken.connect(lendingPool).burn(amount, liquidityIndex))
         .to.emit(hhFToken, 'Burn')
         .withArgs(lendingPool.address, amount, amountDivliquidityIndex);
+
+        let newBalance = await hhFToken.balanceOf(alice.address);
+        await expect(newBalance).to.equal(amount.sub(amount));
     });
 
     // NOTE: comment-out function modifier "onlyLendingPool" to run 
     it('should burn fTokens from alice', async function () {
-        await hhFToken.mint(alice.address, amount, liquidityIndex);
+        let liquidityIndex = ethers.utils.parseUnits('1', 27); 
+        let amount = ethers.utils.parseUnits('4.5', 18);
+        let amountDivliquidityIndex = ethers.utils.parseUnits('4.5', 18); 
 
+        await initReserve();
+
+        await hhFToken.mint(alice.address, amount, liquidityIndex);
+        
+        let balanceBefore = await hhFToken.balanceOf(alice.address);
         await hhFToken.connect(alice).approve(alice.address, amount);
         await expect(hhFToken.connect(alice).burnFrom(alice.address, amount, liquidityIndex))
         .to.emit(hhFToken, 'Burn')
         .withArgs(alice.address, amount, amountDivliquidityIndex);
 
+        let balanceAfter = await hhFToken.balanceOf(alice.address);
+
+        await expect(balanceAfter).to.equal(balanceBefore.sub(amount));
+
+    });
+
+    // NOTE: comment-out function modifier "onlyLendingPool" to run 
+    it('should update the total supply', async function () {
+        let liquidityIndex = ethers.utils.parseUnits('1', 27); 
+        let amount = ethers.utils.parseUnits('4.5', 18);
+
+        await initReserve();
+
+        await hhFToken.mint(alice.address, amount, liquidityIndex);
+
+        let totalSupplyBefore = await hhFToken.totalSupply();
+
+        await hhFToken.connect(alice).approve(alice.address, amount);
+        await hhFToken.connect(alice).burnFrom(alice.address, amount, liquidityIndex);
+        
+        let totalSupplyAfter = await hhFToken.totalSupply()
+        await expect(totalSupplyAfter).to.equal(totalSupplyBefore.sub(amount));
     });
 
     // NOTE: will fail due to the reserve not being innitialized. 
     // Copy this line to set liquidityIndex to 1 Ray and run the test
     // uint256 liquidityIndex = WadRayMath.ray();
     it('should transfer tokens', async function () {
-        console.log('alice', alice.address);
-        console.log('bob', bob.address);
+        let liquidityIndex = ethers.utils.parseUnits('1', 27); 
+        let amount = ethers.utils.parseUnits('4.5', 18);
+
+        await initReserve();
+
         await hhFToken.connect(lendingPool).mint(alice.address, amount, liquidityIndex);
         await hhFToken.connect(alice).approve(bob.address, amount);
         await expect(hhFToken.connect(lendingPool).transferBalance(alice.address, bob.address, amount))

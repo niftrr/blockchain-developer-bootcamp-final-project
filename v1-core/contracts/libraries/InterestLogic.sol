@@ -45,11 +45,9 @@ library InterestLogic {
         uint256 currentTimestamp
     ) 
         internal 
-        view // pure 
+        pure 
         returns (uint256) 
     {
-        console.log('lastUpdateTimestamp', lastUpdateTimestamp);
-        console.log('currentTimestamp', currentTimestamp);
         //solium-disable-next-line
         uint256 exp = currentTimestamp.sub(uint256(lastUpdateTimestamp));
 
@@ -61,7 +59,6 @@ library InterestLogic {
 
         uint256 expMinusTwo = exp > 2 ? exp - 2 : 0;
 
-        console.log('rate', rate);
         uint256 ratePerSecond = rate / SECONDS_PER_YEAR;
 
         uint256 basePowerTwo = ratePerSecond.rayMul(ratePerSecond);
@@ -70,9 +67,6 @@ library InterestLogic {
         uint256 secondTerm = exp.mul(expMinusOne).mul(basePowerTwo) / 2;
         uint256 thirdTerm = exp.mul(expMinusOne).mul(expMinusTwo).mul(basePowerThree) / 6;
 
-        console.log('ratePerSecond', ratePerSecond);
-        console.log('secondTerm', secondTerm);
-        console.log('thirdTerm', thirdTerm);
         return WadRayMath.ray().add(ratePerSecond.mul(exp)).add(secondTerm).add(thirdTerm);
     }
 
