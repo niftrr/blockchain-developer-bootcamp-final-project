@@ -38,7 +38,9 @@ library ReserveLogic {
         internal
         returns (uint256)
     {
+        console.log('=before=reserve.liquidityIndex', reserve.liquidityIndex);
         (reserve.latestUpdateTimestamp, reserve.liquidityIndex) = getNormalizedIncome(reserve);
+        console.log('=after=reserve.liquidityIndex', reserve.liquidityIndex);
         return reserve.liquidityIndex;
     }
 
@@ -50,7 +52,6 @@ library ReserveLogic {
         returns (uint256)
     {
         reserveDataLocalVars memory vars;
-        console.log('reserve.debtTokenAddress', reserve.debtTokenAddress);
         vars.totalDebt = IDebtToken(reserve.debtTokenAddress).totalSupply(); // TODO: change to IDebtToken after this is implemented
         vars.totalLiquidity = IFToken(reserve.fTokenAddress).totalSupply();
         
@@ -58,6 +59,7 @@ library ReserveLogic {
         if (vars.totalLiquidity > 0) {
             vars.utilizationRate = vars.totalDebt.wadToRay().rayDiv(vars.totalLiquidity.wadToRay());
         }
+        console.log('=utilizationRate', vars.utilizationRate);
         return vars.utilizationRate;
     }
 
@@ -70,6 +72,7 @@ library ReserveLogic {
     {
         reserveDataLocalVars memory vars;
         vars.utilizationRate = getUtilizationRate(reserve);
+        console.log('=liquidityRate', reserve.borrowRate.rayMul(vars.utilizationRate));
         return reserve.borrowRate.rayMul(vars.utilizationRate);
     }
 
@@ -90,6 +93,10 @@ library ReserveLogic {
             vars.timeDelta = timestamp.sub(reserve.latestUpdateTimestamp);
             // vars.timeDelta = 365 days;
         }
+
+        console.log('=liquidityIndex', reserve.liquidityIndex.add(
+            reserve.liquidityIndex.rayMul(vars.liquidityRate).mul(vars.timeDelta).div(365 days)
+        ));
 
         return (uint40(timestamp), reserve.liquidityIndex.add(
             reserve.liquidityIndex.rayMul(vars.liquidityRate).mul(vars.timeDelta).div(365 days)

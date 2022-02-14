@@ -99,15 +99,11 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         whenNotPaused 
         returns (bool)
     {
-        console.log('-amount', amount);
         uint256 amountScaled = amount.rayDiv(liquidityIndex);
-        console.log('- mint amountScaled', amountScaled);
         require(amountScaled != 0, "MINT_AMOUNT_ZERO");
         _mint(to, amountScaled);
         
         emit Mint(to, amount, amountScaled);
-        console.log('- mint balance: ', balanceOf(to));
-
         return true;
     }
 
@@ -237,8 +233,6 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         // uint256 liquidityIndex = WadRayMath.ray();  
         // return super.balanceOf(account).rayMul(liquidityIndex);
         // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
-        console.log('super.balanceOf(account)', super.balanceOf(account));
-        console.log('_pool.getReserveNormalizedIncome(_underlyingAsset)', _pool.getReserveNormalizedIncome(_underlyingAsset));
         return super.balanceOf(account).rayMul(_pool.getReserveNormalizedIncome(_underlyingAsset));
     }
 

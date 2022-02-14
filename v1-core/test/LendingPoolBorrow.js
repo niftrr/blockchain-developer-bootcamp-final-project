@@ -345,15 +345,17 @@ describe('LendingPool >> Borrow', function() {
         // Calculate Liquidity Index
         prevLiquidityIndex = ethers.utils.parseUnits('1', 27);
         timeDelta = 2;
-        console.log('prevLiquidityIndex', prevLiquidityIndex);
+        
         const utilizationRate = ethers.utils.parseUnits((repaymentAmountWad / depositAmountWad).toString(), 27); // TODO: change when repayment amount is continually accruing
-        console.log('utilizationRate', utilizationRate);
         const borrowRate = interestRate;
-        console.log('borrowRate', borrowRate);
         const liquidityRate = utilizationRate.mul(borrowRate);
-        console.log('liquidityRate', liquidityRate);
         const liquidityIndex = (prevLiquidityIndex.mul(liquidityRate).div(ethers.utils.parseUnits('1', 27)).mul(timeDelta).div(365).div(24).div(60).div(60)).add(prevLiquidityIndex);
-        console.log('liquidityIndex', liquidityIndex);
+
+        console.log('-prevLiquidityIndex', prevLiquidityIndex);
+        console.log('-utilizationRate', utilizationRate);
+        console.log('-borrowRate', borrowRate);
+        console.log('-liquidityRate', liquidityRate);
+        console.log('-liquidityIndex', liquidityIndex);
         
         // Initialize reserve
         await initReserve();

@@ -60,9 +60,6 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, LendingPoolLogic, IL
         bool success;
         DataTypes.Reserve memory reserve = _reserves[asset]; 
         address fToken = reserve.fTokenAddress;
-        
-        console.log('asset', asset);
-        console.log('fToken', fToken);
 
         success  = IERC20(asset).transferFrom(_msgSender(), fToken, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");

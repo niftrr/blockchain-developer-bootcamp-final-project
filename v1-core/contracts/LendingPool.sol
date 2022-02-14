@@ -19,6 +19,7 @@ import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { LendingPoolEvents } from './LendingPoolEvents.sol';
 import { TokenPriceOracle } from './TokenPriceOracle.sol';
 import { DataTypes } from "./libraries/DataTypes.sol";
+import { ReserveLogic } from "./libraries/ReserveLogic.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
@@ -32,6 +33,7 @@ import "hardhat/console.sol";
 contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoolCore, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;  
     using WadRayMath for uint256;
+    using ReserveLogic for DataTypes.Reserve;
 
     bytes32 internal constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
 
@@ -198,6 +200,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         whenNotPaused 
         whenReserveActive(asset)
     {
+        DataTypes.Reserve storage reserve = _reserves[asset];
         (bool success, bytes memory data) = _lendingPoolDepositAddress.delegatecall(
             abi.encodeWithSignature("deposit(address,uint256)", asset,amount)
         );
@@ -207,10 +210,12 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         // Do this by testing:
         // liquidity index and (this might be required! some type of update event at least)
         // user scaled balance in tests
-        _updateLiquidityIndex(asset);
-        uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, true);
+        // _updateLiquidityIndex(asset);
+        // uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, true);
 
-        emit Deposit(asset, amount, _msgSender(), userScaledBalance);
+        reserve.updateState();
+
+        emit Deposit(asset, amount, _msgSender(), reserve.liquidityIndex);
     }
 
     /// @notice Withdraw assets from the lending pool.

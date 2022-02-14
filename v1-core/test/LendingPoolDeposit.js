@@ -13,8 +13,8 @@ let hhTokenPriceOracleAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
-let NToken;
-let hhNToken;
+let FToken;
+let hhFToken;
 let DebtToken;
 let hhDebtToken;
 let admin;
@@ -148,14 +148,16 @@ beforeEach(async function() {
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
     
-    // Get and deploy nToken
-    NToken = await ethers.getContractFactory('NToken');
-    hhNToken = await NToken.deploy(
+    // Get and deploy fToken
+    FToken = await ethers.getContractFactory('FToken');
+    hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
-        'Dai nToken', 
-        'nDAI');
-    await hhNToken.deployed();
+        treasury.address,
+        hhAssetToken.address,
+        'Dai fToken', 
+        'fDAI');
+    await hhFToken.deployed();
 
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
@@ -224,7 +226,7 @@ async function initReserve() {
     .connect(admin)
     .initLendingPoolReserve(
         hhAssetToken.address, 
-        hhNToken.address,
+        hhFToken.address,
         hhDebtToken.address
     )
 }
@@ -232,14 +234,14 @@ async function initReserve() {
 async function deposit(signer, assetToken, tokenAmount) {
     // Approve transferFrom lendingPool 
     await assetToken.connect(signer).approve(hhLendingPoolAddress, tokenAmount);
-    // Deposit in hhNToken contract reserve
+    // Deposit in hhFToken contract reserve
     return hhLendingPool.connect(signer).deposit(assetToken.address, tokenAmount)
 }
 
-async function withdraw(signer, assetToken, nToken, _tokenAmount) {
-    // Approve nToken burnFrom lendingPool 
-    await nToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
-    // Withdraw assetTokens by depositing/buring nTokens
+async function withdraw(signer, assetToken, fToken, _tokenAmount) {
+    // Approve fToken burnFrom lendingPool 
+    await fToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
+    // Withdraw assetTokens by depositing/buring fTokens
     return hhLendingPool.connect(signer).withdraw(assetToken.address, _tokenAmount);
 }
 
@@ -254,9 +256,9 @@ async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, numWee
         numWeeks);
 }
 
-async function repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
-    // Approve transfer of repaymentAmount asset tokens to nToken address (asset reserve)
-    await assetToken.connect(signer).approve(nToken.address, repaymentAmount);
+async function repay(signer, assetToken, fToken, repaymentAmount, borrowId) {
+    // Approve transfer of repaymentAmount asset tokens to fToken address (asset reserve)
+    await assetToken.connect(signer).approve(fToken.address, repaymentAmount);
     return hhLendingPool.connect(signer).repay(
         assetToken.address,
         repaymentAmount,
@@ -274,14 +276,13 @@ async function liquidate(signer, assetToken, liquidationAmount, borrowId) {
     
 describe('LendingPool >> Deposit', function() {
 
-    it('should deposit tokens to NToken reserve', async function () {
+    it('should deposit tokens to FToken reserve', async function () {
         const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
-
+        const initialLiquidityIndex = ethers.utils.parseUnits('1', 27);
         const borrowAmount = 1;
         const numWeeks = 1;
         const borrowAmountWad = ethers.utils.parseUnits(borrowAmount.toString(), 18); //1*10**numDecimals;
       
-
         // Initialize reserve
         await initReserve();
 
@@ -298,25 +299,69 @@ describe('LendingPool >> Deposit', function() {
                 hhAssetToken.address,
                 tokenAmount,
                 alice.address,
-                tokenAmount);
+                initialLiquidityIndex);
 
-        // Expect: assetTokens transferred from alice to hhNToken contract
+    });
+
+    it('should transfer assetTokens from alice to hhFToken contract', async function () {
+        const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
+        const initialLiquidityIndex = ethers.utils.parseUnits('1', 27);
+        const borrowAmount = 1;
+        const numWeeks = 1;
+        const borrowAmountWad = ethers.utils.parseUnits(borrowAmount.toString(), 18); //1*10**numDecimals;
+      
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens
+        await deposit(alice, hhAssetToken, tokenAmount)
+
+        // Expect: assetTokens transferred from alice to hhFToken contract
         await expect(
             (await hhAssetToken.balanceOf(alice.address)))
             .to.equal((hhAssetTokenInitialBalance.sub(tokenAmount)));
         await expect(
-            (await hhAssetToken.balanceOf(hhNToken.address)))
+            (await hhAssetToken.balanceOf(hhFToken.address)))
             .to.equal(tokenAmount);
 
-        // Expect: nTokens minted to alice 
+    });
+
+    it('should mint fTokens to alice', async function () {            
+        const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
+        const initialLiquidityIndex = ethers.utils.parseUnits('1', 27);
+        const borrowAmount = 1;
+        const numWeeks = 1;
+        const borrowAmountWad = ethers.utils.parseUnits(borrowAmount.toString(), 18); //1*10**numDecimals;
+        
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens
+        await deposit(alice, hhAssetToken, tokenAmount)
+
+        // Expect: fTokens minted to alice 
         await expect(
-            (await hhNToken.balanceOf(hhNToken.address)))
+            (await hhFToken.balanceOf(hhFToken.address)))
             .to.equal(0);
         await expect(
-            (await hhNToken.balanceOf(alice.address)))
+            (await hhFToken.balanceOf(alice.address)))
             .to.equal(tokenAmount);
+    });
 
-        
+    it('should update liquidity index', async function () {            
+        const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
+        const initialLiquidityIndex = ethers.utils.parseUnits('1', 27);
+        const borrowAmount = 1;
+        const numWeeks = 1;
+        const borrowAmountWad = ethers.utils.parseUnits(borrowAmount.toString(), 18); //1*10**numDecimals;
+        const updatedLiquidityIndex = "1000000031709792385968951854";
+
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens
+        await deposit(alice, hhAssetToken, tokenAmount)
+
         // Borrow Asset tokens
         async function _borrow(signer, nftToken, bob_tokenId, assetToken, tokenAmount, numWeeks) {
             return borrow(signer, nftToken, bob_tokenId, assetToken, tokenAmount, numWeeks);
@@ -324,55 +369,38 @@ describe('LendingPool >> Deposit', function() {
 
         _borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmountWad, numWeeks)
 
-        // Expect: Deposit Emit response with different tokenAmount
+        // Expect updated liquidity Index
         await expect(
-            _deposit(alice, hhAssetToken, tokenAmount))
+            deposit(alice, hhAssetToken, tokenAmount))
             .to.emit(hhLendingPool, 'Deposit')
             .withArgs(
                 hhAssetToken.address,
                 tokenAmount,
                 alice.address,
-                tokenAmount);
+                updatedLiquidityIndex);
     });
 
-    // it('should update liquidity index', async function () {
-    //     const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
-        
-    //     const liquidityRate = 0;
-    //     const timeDelta = 2;
-    //     const borrowRate = 0;
-    //     const utilizationRate = 0;
-    //     const liquidityIndex = ethers.utils.parseUnits('1',27);
-    //     const updatedLiquidityIndex = liquidityIndex.mul((liquidityRate * timeDelta)/(365 * 24 * 60 * 60) + 1);
+    it('should update scaledUserBalance and fToken Balance', async function() {
+        const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
+        const borrowAmount = 1;
+        const numWeeks = 1;
+        const borrowAmountWad = ethers.utils.parseUnits(borrowAmount.toString(), 18); //1*10**numDecimals;
+        const updatedScaledBalance = "1999999987316083367";
+        const updatedBalance = "2000000038051750863";
 
-    //     // Initialize reserve
-    //     await initReserve();
+        // Initialize reserve
+        await initReserve();
 
-    //     // Deposit >> Expect liquidityIndex
-    //     await expect(
-    //         deposit(alice, hhAssetToken, tokenAmount))
-    //         .to.emit(hhLendingPool, 'UpdateReserve')
-    //         .withArgs(
-    //             hhAssetToken.address,
-    //             borrowRate,
-    //             utilizationRate,
-    //             liquidityIndex);
+        // Deposit Asset tokens
+        await deposit(alice, hhAssetToken, tokenAmount)
 
-    //     // Deposit (w/ system timeDelta == 2) >> Expect updatedLiquidityIndex
-    //     await expect(
-    //         deposit(alice, hhAssetToken, tokenAmount))
-    //         .to.emit(hhLendingPool, 'UpdateReserve')
-    //         .withArgs(
-    //             hhAssetToken.address,
-    //             borrowRate,
-    //             utilizationRate,
-    //             updatedLiquidityIndex);
-    // });
+        // Borrow Asset tokens
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmountWad, numWeeks)
 
-    // it('should update scaled user balance', async function() {
-        
-    // });
+        // Deposit more asset tokens
+        await deposit(alice, hhAssetToken, tokenAmount);
 
-    // it('should update user nToken balance', async function() {
-    // });
+        await expect(await hhFToken.scaledBalanceOf(alice.address)).to.equal(updatedScaledBalance);
+        await expect(await hhFToken.balanceOf(alice.address)).to.equal(updatedBalance);
+    });
 });

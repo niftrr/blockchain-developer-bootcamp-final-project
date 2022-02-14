@@ -88,8 +88,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         returns (bool)
     {
         (, uint256 currentBalance, uint256 balanceIncrease) = _calculateBalanceIncrease(to);
-        console.log('currentBalance', currentBalance);
-        console.log('balanceIncrease', balanceIncrease);
         mintDataLocalVars memory vars;
         
         vars.previousSupply = totalSupply();
@@ -111,8 +109,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
             .rayMul(vars.previousSupply.wadToRay())
             .add(rate.rayMul(amount.wadToRay()))
             .rayDiv(vars.nextSupply.wadToRay());
-
-        console.log('_averageRate', _averageRate);
 
         _mint(to, amount.add(balanceIncrease));
 
@@ -276,14 +272,13 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         )
     {
         uint256 previousPrincipalBalance = super.balanceOf(user);
-        console.log('previousPrincipalBalance', previousPrincipalBalance);
 
         if (previousPrincipalBalance == 0) {
             return (0, 0, 0);
         }
 
         uint256 balanceIncrease = balanceOf(user).sub(previousPrincipalBalance);
-        console.log('balanceIncrease1', balanceIncrease);
+        
         return (
             previousPrincipalBalance,
             previousPrincipalBalance.add(balanceIncrease),
