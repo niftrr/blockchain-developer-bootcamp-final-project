@@ -231,15 +231,18 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         whenNotPaused 
         whenReserveNotPaused(asset)
     {
+        DataTypes.Reserve storage reserve = _reserves[asset];
         (bool success, bytes memory data) = _lendingPoolWithdrawAddress.delegatecall(
             abi.encodeWithSignature("withdraw(address,uint256)", asset,amount)
         );
         require(success, string(data));
 
-        _updateLiquidityIndex(asset);
-        _updateUserScaledBalance(_msgSender(), asset, amount, false);
+        // _updateLiquidityIndex(asset);
+        // _updateUserScaledBalance(_msgSender(), asset, amount, false);
+        reserve.updateState();
 
-        emit Withdraw(asset, amount, _msgSender());
+
+        emit Withdraw(asset, amount, _msgSender(), reserve.liquidityIndex);
     }
 
     /// @notice External function to create a borrow position.

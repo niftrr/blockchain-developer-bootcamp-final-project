@@ -28,7 +28,13 @@ contract LendingPoolEvents {
     /// @param asset The ERC20, reserve asset address.
     /// @param amount The amount of ERC20 tokens.
     /// @param lender The lender account.
-    event Withdraw(address asset, uint256 amount, address lender);
+    /// @param liquidityIndex The reserve liquidity index.
+    event Withdraw(
+        address asset, 
+        uint256 amount, 
+        address lender, 
+        uint256 liquidityIndex
+        );
 
     /// @notice Emitted when a borrow is activated.
     /// @param asset The ERC20 address of the borrowed asset.
