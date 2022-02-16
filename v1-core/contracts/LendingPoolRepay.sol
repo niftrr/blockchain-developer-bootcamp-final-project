@@ -72,15 +72,11 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
         success = IFToken(reserve.fTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
         require(success, "UNSUCCESSFUL_TRANSFER");
 
-        console.log('REPAY before ICol withdraw');
-
         (success, borrowAmount, interestRate) = ICollateralManager(_collateralManagerAddress).withdraw(
             borrowId, 
             asset, 
             repaymentAmount
         );
-
-        console.log('REPAY after ICol withdraw', success);
 
         require(success, "UNSUCCESSFUL_WITHDRAW");
 

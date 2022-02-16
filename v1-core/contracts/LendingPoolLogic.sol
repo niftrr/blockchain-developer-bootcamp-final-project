@@ -39,40 +39,24 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
 
     /// @notice Private function to calculate borrow variables.
     /// @param asset The ERC20 token to be borrowed.
-    /// @param amount The amount of ERC20 tokens to be borrowed.
     /// @param collateral The ERC721 token to be used as collateral.
-    /// @param numWeeks The number of weeks until the borrow maturity.
     /// @dev Returns items in a fixed array and split from _borrow to save on space.
-    /// @return Array of the repaymentAmount, collateralFloorPrice and maturity.
+    /// @return InterestRate and collateralFloorPrice.
     function getBorrowVariables(
         address asset,
-        uint256 amount, 
-        address collateral,
-        uint256 numWeeks
+        address collateral
     )
         internal
-        returns (uint256[4] memory)
+        returns (uint256, uint256)
     {
-        uint256[4] memory variables;
         uint256 interestRate = ICollateralManager(
             _collateralManagerAddress
         ).getInterestRate(
             collateral
         );
-        //repaymentAmount
-        variables[0] = amount.add(
-            WadRayMath.rayToWad(
-                WadRayMath.rayMul(WadRayMath.wadToRay(amount), interestRate).mul(numWeeks).div(52)
-            )
-        );
 
-        //interestRate
-        variables[1] = interestRate;
-        //collateralFloorPrice
-        variables[2] = getMockFloorPrice(collateral, asset); 
-        //maturity
-        variables[3] = block.timestamp.add(numWeeks.mul(1 weeks)); 
-        return variables;
+        uint256 collateralFloorPrice = getMockFloorPrice(collateral, asset); 
+        return (interestRate, collateralFloorPrice);
     }
 
     function getLiquidityIndex(

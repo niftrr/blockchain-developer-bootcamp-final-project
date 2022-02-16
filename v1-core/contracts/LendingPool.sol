@@ -205,13 +205,6 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
             abi.encodeWithSignature("deposit(address,uint256)", asset,amount)
         );
         require(success, string(data));
-        
-        // TODO: Confirm that below two lines are redundant and can be removed
-        // Do this by testing:
-        // liquidity index and (this might be required! some type of update event at least)
-        // user scaled balance in tests
-        // _updateLiquidityIndex(asset);
-        // uint256 userScaledBalance = _updateUserScaledBalance(_msgSender(), asset, amount, true);
 
         reserve.updateState();
 
@@ -237,10 +230,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         );
         require(success, string(data));
 
-        // _updateLiquidityIndex(asset);
-        // _updateUserScaledBalance(_msgSender(), asset, amount, false);
         reserve.updateState();
-
 
         emit Withdraw(asset, amount, _msgSender(), reserve.liquidityIndex);
     }
@@ -250,30 +240,30 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
     /// @param amount The amount of ERC20 tokens to be borrowed.
     /// @param collateral The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited. 
-    /// @param numWeeks The number of weeks until the borrow maturity.
     /// @dev Calls internal `_borrow` function if modifiers are succeeded. 
     function borrow(
         address asset, 
         uint256 amount, 
         address collateral, 
-        uint256 tokenId,
-        uint256 numWeeks
+        uint256 tokenId
     ) 
         external 
         nonReentrant
         whenNotPaused
         whenReserveActive(asset)
     {
-        uint256 repaymentAmount;
+        DataTypes.Reserve storage reserve = _reserves[asset];
         (bool success, bytes memory data) = _lendingPoolBorrowAddress.delegatecall(
-            abi.encodeWithSignature("borrow(address,uint256,address,uint256,uint256)", asset,amount,collateral,tokenId,numWeeks)
+            abi.encodeWithSignature("borrow(address,uint256,address,uint256)", asset,amount,collateral,tokenId)
         );
         require(success, string(data));
         
-        (success, repaymentAmount) = abi.decode(data, (bool,uint256));
+        success = abi.decode(data, (bool));
         require(success, "BORROW_UNSUCCESSFUL");
-        uint256 liquidityIndex = _updateLiquidityIndex(asset);
-        emit Borrow(asset, amount, repaymentAmount, collateral, tokenId, _msgSender(), liquidityIndex);
+
+        reserve.updateState();
+
+        emit Borrow(asset, amount, collateral, tokenId, _msgSender(), reserve.liquidityIndex);
     }
 
     /// @notice To repay a borrow position.
@@ -291,41 +281,43 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         whenNotPaused
         whenReserveNotPaused(asset)
     {
+        DataTypes.Reserve storage reserve = _reserves[asset];
         (bool success, bytes memory data ) = _lendingPoolRepayAddress.delegatecall(
             abi.encodeWithSignature("repay(address,uint256,uint256)", asset,repaymentAmount,borrowId)
         );
         require(success, string(data));
 
-        _updateLiquidityIndex(asset);
+        reserve.updateState();
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
     }
 
-    // /// @notice To liquidate a borrow position.
-    // /// @param asset The ERC20 token to be borrowed.
-    // /// @param liquidationAmount The amount of ERC20 tokens to be paid.
-    // /// @param borrowId The unique identifier of the borrow.
-    // /// @dev Calls internal `_liquidate` function if modifiers are succeeded.   
-    // function liquidate(
-    //     address asset,
-    //     uint256 liquidationAmount,
-    //     uint256 borrowId
-    // )
-    //     external 
-    //     nonReentrant
-    //     whenNotPaused
-    //     whenReserveNotPaused(asset)
-    //     whenReserveNotProtected(asset)
-    // {
-    //     (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
-    //         abi.encodeWithSignature("liquidate(address,uint256,uint256)", asset,liquidationAmount,borrowId)
-    //     );
-    //     require(success, string(data));
+    /// @notice To liquidate a borrow position.
+    /// @param asset The ERC20 token to be borrowed.
+    /// @param liquidationAmount The amount of ERC20 tokens to be paid.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @dev Calls internal `_liquidate` function if modifiers are succeeded.   
+    function liquidate(
+        address asset,
+        uint256 liquidationAmount,
+        uint256 borrowId
+    )
+        external 
+        nonReentrant
+        whenNotPaused
+        whenReserveNotPaused(asset)
+        whenReserveNotProtected(asset)
+    {
+        DataTypes.Reserve storage reserve = _reserves[asset];
+        (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
+            abi.encodeWithSignature("liquidate(address,uint256,uint256)", asset,liquidationAmount,borrowId)
+        );
+        require(success, string(data));
 
-    //     uint256 liquidityIndex = _updateLiquidityIndex(asset);
+        reserve.updateState();
 
-    //     emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
-    // }
+        emit Liquidate(borrowId, asset, liquidationAmount, _msgSender());
+    }
 
     /// @notice Pauses the contract `deposit`, `withdraw`, `borrow` and `repay` functions.
     /// @dev Functions paused via modifiers using Pausable contract.

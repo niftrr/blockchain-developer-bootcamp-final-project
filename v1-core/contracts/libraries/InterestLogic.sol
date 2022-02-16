@@ -25,7 +25,6 @@ library InterestLogic {
     {
         //solium-disable-next-line
         uint256 timeDifference = block.timestamp.sub(uint256(lastUpdateTimestamp));
-
         return (rate.mul(timeDifference) / SECONDS_PER_YEAR).add(WadRayMath.ray());
     }
 

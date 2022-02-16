@@ -7,8 +7,7 @@ interface ILendingPoolBorrow {
         address asset, 
         uint256 amount,
         address collateral,
-        uint256 tokenId,
-        uint256 numWeeks
-    ) external returns (bool, uint256);
+        uint256 tokenId
+    ) external returns (bool);
 
 }

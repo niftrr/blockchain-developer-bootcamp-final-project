@@ -56,29 +56,22 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
     /// @param amount The amount of ERC20 tokens to be borrowed.
     /// @param collateral The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited. 
-    /// @param numWeeks The number of weeks until the borrow maturity.
     /// @dev Deposits collateral in CM before minting debtTokens and finally loaning assets. 
     function borrow(
         address asset, 
         uint256 amount, 
         address collateral, 
-        uint256 tokenId,
-        uint256 numWeeks
+        uint256 tokenId
     ) 
         external
-        returns (bool, uint256)
+        returns (bool)
     {
         bool success;
         DataTypes.Reserve storage reserve = _reserves[asset]; 
-        uint256[4] memory variables = getBorrowVariables(
-            asset,
-            amount, 
-            collateral,
-            numWeeks
+        (uint256 interestRate, uint256 collateralFloorPrice) = getBorrowVariables(
+            asset, 
+            collateral
         );
-
-        // TODO: remove, used for calculating user scaled balance
-        variables[0] = amount; // setting repayment amount equal to borrow amount
 
         success = ICollateralManager(_collateralManagerAddress).deposit(
             _msgSender(), 
@@ -86,33 +79,25 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
             collateral, 
             tokenId, 
             amount,
-            variables[0], //repaymentAmount
-            variables[1], //interestRate
-            variables[2], //collateralFloorPrice
-            variables[3]); //maturity
+            interestRate,
+            collateralFloorPrice,
+            uint40(block.timestamp)); 
         require(success, "UNSUCCESSFUL_DEPOSIT");
 
-        uint256 dummyRate = WadRayMath.ray().div(10); // TODO: include logic for actual rate
-
-        success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), variables[0], dummyRate);
+        success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), amount, interestRate);
         require(success, "UNSUCCESSFUL_MINT");
 
         success = IFToken(reserve.fTokenAddress).reserveTransfer(_msgSender(), asset, amount);
         require(success, "UNSUCCESSFUL_TRANSFER");
 
-        // Update reserve borrow numbers - for use in APR calculation
-        reserve.borrowRate = WadRayMath.rayDiv(
-            WadRayMath.rayMul(
-                WadRayMath.wadToRay(reserve.borrowAmount), reserve.borrowRate
-            ).add(
-                WadRayMath.rayMul(
-                    WadRayMath.wadToRay(amount), variables[1] // interestRate
-                )    
-            ), (WadRayMath.wadToRay(reserve.borrowAmount).add(WadRayMath.wadToRay(amount)))
+        reserve.borrowRate = (
+            (reserve.borrowAmount.rayMul(reserve.borrowRate).add(amount.rayMul(interestRate))).wadToRay()
+        ).rayDiv(
+            (reserve.borrowAmount.add(amount)).wadToRay()
         );
 
         reserve.borrowAmount = reserve.borrowAmount.add(amount);
 
-        return (success, variables[0]);
+        return success;
     }
 }

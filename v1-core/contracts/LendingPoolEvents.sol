@@ -39,7 +39,6 @@ contract LendingPoolEvents {
     /// @notice Emitted when a borrow is activated.
     /// @param asset The ERC20 address of the borrowed asset.
     /// @param amount The amount of ERC20 tokens borrowed.
-    /// @param repaymentAmount The amount of ERC20 tokens to be repaid.
     /// @param collateral The ERC721 token used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited in escrow.
     /// @param borrower The borrower account.
@@ -47,7 +46,6 @@ contract LendingPoolEvents {
     event Borrow(
         address asset, 
         uint256 amount, 
-        uint256 repaymentAmount, 
         address collateral, 
         uint256 tokenId, 
         address borrower,

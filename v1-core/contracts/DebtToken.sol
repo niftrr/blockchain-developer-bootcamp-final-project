@@ -94,10 +94,11 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         vars.currentAverageRate = _averageRate;
         vars.nextSupply = vars.previousSupply.add(amount);
 
-        vars.newUserAverageRate = _userAverageRate[to]
+        vars.newUserAverageRate = (
+            _userAverageRate[to]
             .rayMul(currentBalance.wadToRay())
-            .add(amount.wadToRay())
-            .rayDiv(currentBalance.add(amount).wadToRay());
+            .add(amount.wadToRay().rayMul(rate))
+        ).rayDiv(currentBalance.add(amount).wadToRay());
 
         _userAverageRate[to] = vars.newUserAverageRate;
         
@@ -133,8 +134,51 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         whenNotPaused 
         returns (bool)
     {
-        _burn(account, amount);
-        emit Burn(account, amount);
+        (, uint256 currentBalance, uint256 balanceIncrease) = _calculateBalanceIncrease(account);
+        
+        uint256 previousSupply = totalSupply();
+        uint256 nextSupply = 0;
+        uint256 userAverageRate = _userAverageRate[account];
+        uint256 newAverageRate = 0;
+
+        // User debts and total supply accrue separately with potential accumulation errors
+        // In the case that the last borrower tries to repay more than the available debt supply
+        // set the amount to equal the remaining supply
+        if (previousSupply <= amount) {
+            _averageRate = 0;
+        } else {
+            nextSupply = previousSupply.sub(amount);
+            uint256 firstTerm = _averageRate.rayMul(previousSupply.wadToRay());
+            uint256 secondTerm = userAverageRate.rayMul(amount.wadToRay());
+
+            // Similar to the above, when the last user is repaying it might happen that
+            // user rate * user balance > average rate * total supply. 
+            // In this case we set the average rate to zero.
+            if (secondTerm > firstTerm) {
+                newAverageRate = _averageRate = 0;
+            } else {
+                newAverageRate = _averageRate = firstTerm.sub(secondTerm).rayDiv(nextSupply.wadToRay());
+            }
+        }
+        
+        if (amount == currentBalance) {
+            _userAverageRate[account] = 0;
+            _timestamps[account] = 0;
+        } else{
+            _timestamps[account] = uint40(block.timestamp);
+        }
+
+        if (balanceIncrease > amount) {
+            uint256 mintAmount = balanceIncrease.sub(amount);
+            _mint(account, mintAmount);
+            emit Mint(account, mintAmount, currentBalance.add(mintAmount));
+
+        } else {
+            uint256 burnAmount = amount.sub(balanceIncrease);
+            _burn(account, burnAmount);
+            emit Burn(account, burnAmount); //, currentBalance, balanceIncrease, newAverageRate, nextSupply
+        }
+
         return true;
     }
 
@@ -160,7 +204,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
     ) 
         public 
         virtual 
-        override 
+        override (ERC20, IERC20)
         returns (bool) 
     {
         spender;
@@ -195,7 +239,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
     ) 
         public 
         virtual 
-        override 
+        override (ERC20, IERC20)
         returns (bool) 
     {
         from;
@@ -229,7 +273,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         public
         view
         virtual
-        override
+        override (ERC20, IERC20)
         returns (uint256) 
     {
         uint256 accountBalance = super.balanceOf(account);
@@ -238,10 +282,8 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
             return 0;
         }
         uint256 accumulatedInterest = 
-            InterestLogic.calculateCompoundedInterest(averageRate, _timestamps[account]);
+            InterestLogic.calculateLinearInterest(averageRate, _timestamps[account]);
      
-        console.log('accumulatedInterest', accumulatedInterest);
-
         return accountBalance.rayMul(accumulatedInterest);
     }
 
@@ -257,7 +299,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         }
         
         uint256 accumulatedInterest = 
-            InterestLogic.calculateCompoundedInterest(_averageRate, _totalSupplyTimestamp);
+            InterestLogic.calculateLinearInterest(_averageRate, _totalSupplyTimestamp);
      
         return principalSupply.rayMul(accumulatedInterest);
     }

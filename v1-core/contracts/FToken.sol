@@ -124,7 +124,6 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         returns (bool)
     {
         uint256 amountScaled = amount.rayDiv(liquidityIndex);
-        console.log('burn amountScaled', amountScaled);
         require(amountScaled != 0, "BURN_AMOUNT_ZERO");
 
         _burn(_msgSender(), amountScaled);

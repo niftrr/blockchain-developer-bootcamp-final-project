@@ -39,9 +39,8 @@ library DataTypes {
         address borrower;
         address erc20Token;
         uint256 borrowAmount;
-        uint256 repaymentAmount;
         uint256 interestRate;
         uint256 liquidationPrice;
-        uint256 maturity;
+        uint40 timestamp;
     }
 }

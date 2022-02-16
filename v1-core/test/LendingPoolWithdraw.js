@@ -234,15 +234,14 @@ async function withdraw(signer, assetToken, fToken, _tokenAmount) {
     return hhLendingPool.connect(signer).withdraw(assetToken.address, _tokenAmount);
 }
 
-async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, numWeeks) {
+async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount) {
     // Approve NFT transfer
     await nftToken.connect(signer).approve(hhCollateralManagerAddress, tokenId);
     return hhLendingPool.connect(signer).borrow(
         assetToken.address,
         tokenAmount,
         nftToken.address,
-        tokenId, 
-        numWeeks);
+        tokenId);
 }
 
 async function repay(signer, assetToken, fToken, repaymentAmount, borrowId) {
@@ -341,8 +340,7 @@ describe('LendingPool >> Withdraw', function() {
         const tokenAmount = ethers.utils.parseUnits('3', 18);//1*10**numDecimals;
         const borrowAmount = ethers.utils.parseUnits('2', 18);
         const withdrawAmount = ethers.utils.parseUnits('1', 18);
-        const numWeeks = 1;
-        const updatedLiquidityIndex = "1000000038051750621840123170";
+        const updatedLiquidityIndex = "1000000021139861537018719379";
 
         // Initialize reserve
         await initReserve();
@@ -351,11 +349,7 @@ describe('LendingPool >> Withdraw', function() {
         await deposit(alice, hhAssetToken, tokenAmount)
 
         // Borrow Asset tokens
-        async function _borrow(signer, nftToken, bob_tokenId, assetToken, tokenAmount, numWeeks) {
-            return borrow(signer, nftToken, bob_tokenId, assetToken, tokenAmount, numWeeks);
-        }
-
-        _borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount, numWeeks)
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
 
         // Expect updated liquidity Index
         await expect(
@@ -371,10 +365,9 @@ describe('LendingPool >> Withdraw', function() {
     it('should update scaledUserBalance and fToken Balance', async function() {
         const depositAmount = ethers.utils.parseUnits('3', 18);
         const withdrawAmount = ethers.utils.parseUnits('2', 18);
-        const numWeeks = 1;
-        const borrowAmountWad = ethers.utils.parseUnits('1', 18); 
+        const borrowAmount = ethers.utils.parseUnits('1', 18); 
         const updatedScaledBalance = "1000000008455944493";
-        const updatedBalance = "1000000038051750648"; // updatedBalance > updatedScaledBalance
+        const updatedBalance = "1000000025367833801"; // updatedBalance > updatedScaledBalance
 
         // Initialize reserve
         await initReserve();
@@ -383,7 +376,7 @@ describe('LendingPool >> Withdraw', function() {
         await deposit(alice, hhAssetToken, depositAmount)
 
         // Borrow Asset tokens
-        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmountWad, numWeeks)
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount)
 
         // Withdraw asset tokens
         await withdraw(alice, hhAssetToken, hhFToken, withdrawAmount);

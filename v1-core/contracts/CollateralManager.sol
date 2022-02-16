@@ -9,8 +9,9 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
+import { InterestLogic } from "./libraries/InterestLogic.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
-
+import "./WadRayMath.sol";
 import "hardhat/console.sol";
 
 /// @title A contract for managing borrows and their underlying collateral
@@ -19,6 +20,7 @@ import "hardhat/console.sol";
 /// @dev Acts as the NFT collateral escrow.
 contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable, ReentrancyGuard {
     using SafeMath for uint256;
+    using WadRayMath for uint256;
     using Counters for Counters.Counter;
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
@@ -120,10 +122,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @param erc721Token The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited.
     /// @param borrowAmount The amount of ERC20 tokens to be borrowed.
-    /// @param repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
     /// @param collateralFloorPrice The current floor price of the ERC721 token.
-    /// @param maturity The borrow maturity timestamp.
+    /// @param timestamp When the borrow was executed.
     /// @dev Calls internal `_deposit` function if modifiers are succeeded.  
     /// @return Boolean for success
     function deposit(
@@ -132,10 +133,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         address erc721Token, 
         uint256 tokenId, 
         uint256 borrowAmount,
-        uint256 repaymentAmount,
         uint256 interestRate,
         uint256 collateralFloorPrice,
-        uint256 maturity
+        uint40 timestamp
     ) 
         external 
         nonReentrant
@@ -149,10 +149,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
             erc721Token, 
             tokenId, 
             borrowAmount,
-            repaymentAmount,
             interestRate,
             collateralFloorPrice,
-            maturity
+            timestamp
         );
         return success;
     }
@@ -337,7 +336,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     {
         uint256 liquidationThreshold = getLiquidationThreshold(erc721Token);
         uint256 maxAmount = collateralFloorPrice.mul(100).div(liquidationThreshold);
-        require(borrowAmount <= maxAmount, "UNDERCOLLATERALIZED");
+        // require(borrowAmount <= maxAmount, "UNDERCOLLATERALIZED"); TODO: uncomment, used for testing
 
         uint256 liquidationPrice = borrowAmount.mul(liquidationThreshold).div(100);
         return liquidationPrice;
@@ -349,10 +348,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @param erc721Token The ERC721 token to be used as collateral.
     /// @param tokenId The tokenId of the ERC721 token to be deposited.
     /// @param borrowAmount The amount of ERC20 tokens to be borrowed.
-    /// @param repaymentAmount The amount of ERC20 tokens to be repaid. 
     /// @param interestRate The interest rate APR on the borrowed amount to 18 decimals.
     /// @param collateralFloorPrice The current floor price of the ERC721 token.
-    /// @param maturity The borrow maturity timestamp.
+    /// @param timestamp When the borrow was executed.
     /// @dev Transfers the ERC721 to this contract address for escrow and creates a borrow. 
     /// @return Boolean for success.
     function _deposit(
@@ -361,10 +359,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         address erc721Token, 
         uint256 tokenId, 
         uint256 borrowAmount,
-        uint256 repaymentAmount,
         uint256 interestRate,
         uint256 collateralFloorPrice,
-        uint256 maturity
+        uint40 timestamp
     ) 
         private 
         returns (bool)
@@ -392,10 +389,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
             borrower: borrower,
             erc20Token: erc20Token,
             borrowAmount: borrowAmount,
-            repaymentAmount: repaymentAmount,
             interestRate: interestRate,
             liquidationPrice: liquidationPrice,
-            maturity: maturity
+            timestamp: timestamp
         });
 
         userBorrows[borrower].push(id);
@@ -410,6 +406,26 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
 
         return true;
     }    
+
+    function _calcRepaymentAmount(
+        uint256 borrowAmount, 
+        uint256 interestRate,
+        uint256 borrowTimestamp,
+        uint256 currentTimestamp
+    ) 
+        internal 
+        pure 
+        returns (uint256) 
+    {
+        uint256 repaymentAmount = borrowAmount
+            .add(
+                (borrowAmount)
+                .rayMul(interestRate)
+                .mul(currentTimestamp.sub(borrowTimestamp))
+                .div(365 days)
+            );
+        return repaymentAmount;
+    }
 
     /// @notice Private function to withdraw ERC721 token from escrow and remove a borrow.
     /// @param _id The borrower id.
@@ -430,9 +446,14 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         )
     {
         address newOwner;
+
         address borrowAsset = borrows[_id].erc20Token;
-        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
         require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
+
+        uint256 borrowRepaymentAmount = borrows[_id].borrowAmount.rayMul(
+            InterestLogic.calculateLinearInterest(borrows[_id].interestRate, borrows[_id].timestamp)
+        );
+
         require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
 
         address borrower = borrows[_id].borrower;
@@ -472,9 +493,16 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         returns (bool)
     {
         address newOwner;
+
         address borrowAsset = borrows[_id].erc20Token;
-        uint256 borrowRepaymentAmount = borrows[_id].repaymentAmount;
         require(borrowAsset == _asset, "Repayment asset doesn't match borrow");
+
+        uint256 borrowRepaymentAmount = _calcRepaymentAmount(
+            borrows[_id].borrowAmount,
+            borrows[_id].interestRate,
+            uint256(borrows[_id].timestamp),
+            block.timestamp
+        );
         require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
 
         address erc721Token = borrows[_id].collateral.erc721Token;

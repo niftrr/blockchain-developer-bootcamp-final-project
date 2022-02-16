@@ -27,6 +27,7 @@ library ReserveLogic {
         uint256 totalLiquidity;
         uint256 utilizationRate;
         uint256 liquidityRate;
+        uint256 borrowRate;
         uint256 timeDelta;
     }
 
@@ -38,9 +39,7 @@ library ReserveLogic {
         internal
         returns (uint256)
     {
-        console.log('=before=reserve.liquidityIndex', reserve.liquidityIndex);
         (reserve.latestUpdateTimestamp, reserve.liquidityIndex) = getNormalizedIncome(reserve);
-        console.log('=after=reserve.liquidityIndex', reserve.liquidityIndex);
         return reserve.liquidityIndex;
     }
 
@@ -72,7 +71,6 @@ library ReserveLogic {
     {
         reserveDataLocalVars memory vars;
         vars.utilizationRate = getUtilizationRate(reserve);
-        console.log('=liquidityRate', reserve.borrowRate.rayMul(vars.utilizationRate));
         return reserve.borrowRate.rayMul(vars.utilizationRate);
     }
 
@@ -91,12 +89,7 @@ library ReserveLogic {
             vars.timeDelta = 0;
         } else {
             vars.timeDelta = timestamp.sub(reserve.latestUpdateTimestamp);
-            // vars.timeDelta = 365 days;
         }
-
-        console.log('=liquidityIndex', reserve.liquidityIndex.add(
-            reserve.liquidityIndex.rayMul(vars.liquidityRate).mul(vars.timeDelta).div(365 days)
-        ));
 
         return (uint40(timestamp), reserve.liquidityIndex.add(
             reserve.liquidityIndex.rayMul(vars.liquidityRate).mul(vars.timeDelta).div(365 days)

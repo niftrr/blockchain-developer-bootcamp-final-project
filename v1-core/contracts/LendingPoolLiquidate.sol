@@ -72,35 +72,32 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
 
         uint256 floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
-        console.log('floorPrice', floorPrice);
+    
         // TODO: To have 80% liquidation price able to be set/updated 
         require(liquidationAmount == floorPrice.mul(80).div(100), "INCORRECT_AMOUNT");
-        console.log('liquidationAmount', liquidationAmount);
-        require(floorPrice < borrowItem.liquidationPrice || block.timestamp > borrowItem.maturity, "BORROW_NOT_IN_DEFAULT");
-        address borrower = borrowItem.borrower;
-        uint256 repaymentAmount = borrowItem.repaymentAmount;
 
-        console.log('borrowItem.borrowAmount', borrowItem.borrowAmount);
-        console.log('borrowItem.repaymentAmount', borrowItem.repaymentAmount);
+        // require(floorPrice < borrowItem.liquidationPrice, "BORROW_NOT_IN_DEFAULT"); TODO: uncomment, used for testing
+        address borrower = borrowItem.borrower;
+        uint256 repaymentAmount = borrowItem.borrowAmount
+            .add(
+                (borrowItem.borrowAmount)
+                .rayMul(borrowItem.interestRate)
+                .mul(block.timestamp.sub(borrowItem.timestamp))
+                .div(365 days)
+            );
 
 
         success = IERC20(asset).transferFrom(_msgSender(), reserve.fTokenAddress, repaymentAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
-        console.log('here5');
+     
         uint256 remainder = liquidationAmount.sub(repaymentAmount);
-        console.log('here5a');
+       
         uint256 feeAmount = WadRayMath.rayToWad(WadRayMath.rayMul(WadRayMath.wadToRay(remainder), _liquidationFee));
-        console.log('here5b');
-        console.log('remainder', remainder);
-        console.log('feeAmount', feeAmount);
-        console.log(' WadRayMath.wadToRay(remainder)',  WadRayMath.wadToRay(remainder));
-        uint256 reimbursementAmount = remainder.sub(feeAmount);
-        console.log('here5c');
 
-        console.log('liquidationAmount', liquidationAmount);
-        console.log('repaymentAmount', repaymentAmount);
-        console.log('reimbursementAmount', reimbursementAmount);
-        console.log('feeAmount', feeAmount);
+        uint256 reimbursementAmount = remainder.sub(feeAmount);
+      
+
+    
 
         success = IERC20(asset).transferFrom(_msgSender(), _treasuryAddress, feeAmount);
         require(success, "UNSUCCESSFUL_TRANSFER");
