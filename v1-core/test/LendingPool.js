@@ -13,8 +13,8 @@ let hhTokenPriceOracleAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
-let NToken;
-let hhNToken;
+let FToken;
+let hhFToken;
 let DebtToken;
 let hhDebtToken;
 let admin;
@@ -148,14 +148,16 @@ beforeEach(async function() {
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
     
-    // Get and deploy nToken
-    NToken = await ethers.getContractFactory('NToken');
-    hhNToken = await NToken.deploy(
+    // Get and deploy nfToken
+    FToken = await ethers.getContractFactory('FToken');
+    hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
-        'Dai nToken', 
+        treasury.address,
+        hhAssetToken.address,
+        'Dai fToken', 
         'nDAI');
-    await hhNToken.deployed();
+    await hhFToken.deployed();
 
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
@@ -224,7 +226,7 @@ async function initReserve() {
     .connect(admin)
     .initLendingPoolReserve(
         hhAssetToken.address, 
-        hhNToken.address,
+        hhFToken.address,
         hhDebtToken.address
     )
 }
@@ -232,14 +234,14 @@ async function initReserve() {
 async function deposit(signer, assetToken, tokenAmount) {
     // Approve transferFrom lendingPool 
     await assetToken.connect(signer).approve(hhLendingPoolAddress, tokenAmount);
-    // Deposit in hhNToken contract reserve
+    // Deposit in hhFToken contract reserve
     return hhLendingPool.connect(signer).deposit(assetToken.address, tokenAmount)
 }
 
-async function withdraw(signer, assetToken, nToken, _tokenAmount) {
-    // Approve nToken burnFrom lendingPool 
-    await nToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
-    // Withdraw assetTokens by depositing/buring nTokens
+async function withdraw(signer, assetToken, fToken, _tokenAmount) {
+    // Approve fToken burnFrom lendingPool 
+    await fToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
+    // Withdraw assetTokens by depositing/buring fTokens
     return hhLendingPool.connect(signer).withdraw(assetToken.address, _tokenAmount);
 }
 
@@ -254,9 +256,9 @@ async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, numWee
         numWeeks);
 }
 
-async function repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
-    // Approve transfer of repaymentAmount asset tokens to nToken address (asset reserve)
-    await assetToken.connect(signer).approve(nToken.address, repaymentAmount);
+async function repay(signer, assetToken, fToken, repaymentAmount, borrowId) {
+    // Approve transfer of repaymentAmount asset tokens to fToken address (asset reserve)
+    await assetToken.connect(signer).approve(fToken.address, repaymentAmount);
     return hhLendingPool.connect(signer).repay(
         assetToken.address,
         repaymentAmount,
@@ -310,14 +312,14 @@ describe('LendingPool >> Init', function() {
             .to.emit(hhLendingPool, 'InitReserve')
             .withArgs(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address);
     });
 });
     
 describe('LendingPool >> Deposit', function() {
 
-    it('should deposit tokens to NToken reserve', async function () {
+    it('should deposit tokens to FToken reserve', async function () {
         const tokenAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
 
         // Initialize reserve
@@ -337,20 +339,20 @@ describe('LendingPool >> Deposit', function() {
                 tokenAmount,
                 alice.address);
 
-        // Expect: assetTokens transferred from alice to hhNToken contract
+        // Expect: assetTokens transferred from alice to hhFToken contract
         await expect(
             (await hhAssetToken.balanceOf(alice.address)))
             .to.equal((hhAssetTokenInitialBalance.sub(tokenAmount)));
         await expect(
-            (await hhAssetToken.balanceOf(hhNToken.address)))
+            (await hhAssetToken.balanceOf(hhFToken.address)))
             .to.equal(tokenAmount);
 
-        // Expect: nTokens minted to alice 
+        // Expect: fTokens minted to alice 
         await expect(
-            (await hhNToken.balanceOf(hhNToken.address)))
+            (await hhFToken.balanceOf(hhFToken.address)))
             .to.equal(0);
         await expect(
-            (await hhNToken.balanceOf(alice.address)))
+            (await hhFToken.balanceOf(alice.address)))
             .to.equal(tokenAmount);
     });
 
@@ -392,13 +394,13 @@ describe('LendingPool >> Deposit', function() {
         
     });
 
-    it('should update user nToken balance', async function() {
+    it('should update user fToken balance', async function() {
     });
 });
 
 describe('LendingPool >> Withdraw', function() {
 
-    it('should withdraw tokens from NToken reserve', async function () {
+    it('should withdraw tokens from FToken reserve', async function () {
         const tokenAmount = ethers.utils.parseUnits('3', 18); //1*10**numDecimals;
         const withdrawAmount = ethers.utils.parseUnits('1', 18);
 
@@ -409,31 +411,31 @@ describe('LendingPool >> Withdraw', function() {
         await deposit(alice, hhAssetToken, tokenAmount);
 
         // Withdraw Asset tokens
-        async function _withdraw(signer, assetToken, nToken, _tokenAmount) {
-            return withdraw(signer, assetToken, nToken, _tokenAmount);
+        async function _withdraw(signer, assetToken, fToken, _tokenAmount) {
+            return withdraw(signer, assetToken, fToken, _tokenAmount);
         }
 
         // Expect: Withdraw Emit response
         await expect(
-            _withdraw(alice, hhAssetToken, hhNToken, withdrawAmount))
+            _withdraw(alice, hhAssetToken, hhFToken, withdrawAmount))
             .to.emit(hhLendingPool, 'Withdraw')
             .withArgs(
                 hhAssetToken.address,
                 withdrawAmount,
                 alice.address);
 
-        // Expect: assetTokens transfered from hhNToken contract to alice
+        // Expect: assetTokens transfered from hhFToken contract to alice
         await expect(
             (await hhAssetToken.balanceOf(alice.address)))
             .to.equal(hhAssetTokenInitialBalance.sub(tokenAmount.sub(withdrawAmount)));
 
         await expect(
-            (await hhAssetToken.balanceOf(hhNToken.address)))
+            (await hhAssetToken.balanceOf(hhFToken.address)))
             .to.equal(tokenAmount.sub(withdrawAmount));
 
-        // Expect: nTokens burnedFrom alice
+        // Expect: fTokens burnedFrom alice
         await expect(
-            (await hhNToken.balanceOf(alice.address)))
+            (await hhFToken.balanceOf(alice.address)))
             .to.equal(tokenAmount.sub(withdrawAmount));
     });
 
@@ -464,7 +466,7 @@ describe('LendingPool >> Withdraw', function() {
 
         // Withdraw (w/ system timeDelta == 2) >> Expect updatedLiquidityIndex
         await expect(
-            withdraw(alice, hhAssetToken, hhNToken, withdrawAmount))
+            withdraw(alice, hhAssetToken, hhFToken, withdrawAmount))
             .to.emit(hhLendingPool, 'UpdateReserve')
             .withArgs(
                 hhAssetToken.address,
@@ -555,13 +557,13 @@ describe('LendingPool >> Repay', function() {
         borrowId = borrowIds[0];
 
         // Repay Asset tokens
-        async function _repay(signer, assetToken, nToken, repaymentAmount, borrowId) {
-            return repay(signer, assetToken, nToken, repaymentAmount, borrowId);
+        async function _repay(signer, assetToken, fToken, repaymentAmount, borrowId) {
+            return repay(signer, assetToken, fToken, repaymentAmount, borrowId);
         }
 
         // Expect: Repay Emit response
         await expect(
-            _repay(bob, hhAssetToken, hhNToken, repaymentAmount, borrowId))
+            _repay(bob, hhAssetToken, hhFToken, repaymentAmount, borrowId))
             .to.emit(hhLendingPool, 'Repay')
             .withArgs(
                 borrowId,
@@ -569,12 +571,12 @@ describe('LendingPool >> Repay', function() {
                 repaymentAmount,
                 bob.address);  
 
-        // Expect: assetTokens transferred from user to nToken reserve
+        // Expect: assetTokens transferred from user to fToken reserve
         await expect(
             (await hhAssetToken.balanceOf(bob.address)))
             .to.equal(hhAssetTokenInitialBalance.add(tokenAmount).sub(repaymentAmount));
         await expect(
-            (await hhAssetToken.balanceOf(hhNToken.address)))
+            (await hhAssetToken.balanceOf(hhFToken.address)))
             .to.equal(repaymentAmount); // Alice's deposit - Bob's borrow + Bob's repayment  
 
         // Expect: corresponding debtTokens to have been burned
@@ -642,7 +644,7 @@ describe('LendingPool >> Liquidate', function() {
 
         // Expect: borrow.repaymentAmount assetTokens transferred from liquidator (alice) to nToken reserve
         await expect(
-            (await hhAssetToken.balanceOf(hhNToken.address)))
+            (await hhAssetToken.balanceOf(hhFToken.address)))
             .to.equal(borrowItem.repaymentAmount); 
 
         // Expect: 5% of the remaining to be paid to LP as a liquidation fee

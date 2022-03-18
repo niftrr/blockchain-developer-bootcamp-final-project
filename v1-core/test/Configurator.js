@@ -16,8 +16,8 @@ let hhTokenPriceOracleAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
-let NToken;
-let hhNToken;
+let FToken;
+let hhFToken;
 let DebtToken;
 let hhDebtToken;
 let admin;
@@ -73,14 +73,16 @@ beforeEach(async function() {
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
 
-    // Get and deploy nToken
-    NToken = await ethers.getContractFactory('NToken');
-    hhNToken = await NToken.deploy(
+    // Get and deploy fToken
+    FToken = await ethers.getContractFactory('FToken');
+    hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
-        'Dai nToken', 
+        treasury.address,
+        hhAssetToken.address,
+        'Dai fToken', 
         'nDAI');
-    await hhNToken.deployed();
+    await hhFToken.deployed();
 
     // Get and deploy debtToken
     DebtToken = await ethers.getContractFactory('DebtToken');
@@ -146,12 +148,12 @@ describe('Configurator >> LendingPool >> initReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address))
             .to.emit(hhLendingPool, "InitReserve")
             .withArgs(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
     });
@@ -162,7 +164,7 @@ describe('Configurator >> LendingPool >> initReserve()', function() {
             .connect(alice)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address))
             .to.be.revertedWith("Caller is not admin.");
     });
@@ -176,7 +178,7 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         
@@ -193,7 +195,7 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
@@ -212,7 +214,7 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         
@@ -229,7 +231,7 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
@@ -248,7 +250,7 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         
@@ -265,7 +267,7 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
@@ -284,7 +286,7 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         
@@ -301,7 +303,7 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
             .connect(admin)
             .initLendingPoolReserve(
                 hhAssetToken.address, 
-                hhNToken.address,
+                hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
@@ -595,7 +597,7 @@ describe('Configurator >> CollateralManager >> unpause()', function() {
     });
 })
 
-describe('Configurator >> NToken >> pause()', function() {
+describe('Configurator >> FToken >> pause()', function() {
 
     it('should pause when caller is emergency admin', async function () {
         // Connect CollateralManager in Configurator
@@ -605,10 +607,10 @@ describe('Configurator >> NToken >> pause()', function() {
             hhCollateralManagerAddress
         )
         await expect(
-            hhConfigurator.connect(emergencyAdmin).pauseNToken(
-                hhNToken.address
+            hhConfigurator.connect(emergencyAdmin).pauseFToken(
+                hhFToken.address
             )
-        ).to.emit(hhNToken, "Paused")
+        ).to.emit(hhFToken, "Paused")
     });
 
     it('should revert when caller is not emergency admin', async function () {
@@ -619,14 +621,14 @@ describe('Configurator >> NToken >> pause()', function() {
             hhCollateralManagerAddress
         )
         await expect(
-            hhConfigurator.connect(admin).pauseNToken(
-                hhNToken.address
+            hhConfigurator.connect(admin).pauseFToken(
+                hhFToken.address
             )
         ).to.be.revertedWith("Caller is not emergency admin.");
     });
 })
 
-describe('Configurator >> NToken >> unpause()', function() {
+describe('Configurator >> FToken >> unpause()', function() {
 
     it('should unpause when caller is emergency admin', async function () {
         // Connect CollateralManager in Configurator
@@ -635,14 +637,14 @@ describe('Configurator >> NToken >> unpause()', function() {
         .connectCollateralManager(
             hhCollateralManagerAddress
         )
-        hhConfigurator.connect(emergencyAdmin).pauseNToken(
-            hhNToken.address
+        hhConfigurator.connect(emergencyAdmin).pauseFToken(
+            hhFToken.address
         )
         await expect(
-            hhConfigurator.connect(emergencyAdmin).unpauseNToken(
-                hhNToken.address
+            hhConfigurator.connect(emergencyAdmin).unpauseFToken(
+                hhFToken.address
             )
-        ).to.emit(hhNToken, "Unpaused")
+        ).to.emit(hhFToken, "Unpaused")
     });
 
     it('should revert when caller is not emergency admin', async function () {
@@ -653,8 +655,8 @@ describe('Configurator >> NToken >> unpause()', function() {
             hhCollateralManagerAddress
         )
         await expect(
-            hhConfigurator.connect(admin).unpauseNToken(
-                hhNToken.address
+            hhConfigurator.connect(admin).unpauseFToken(
+                hhFToken.address
             )
         ).to.be.revertedWith("Caller is not emergency admin.");
     });
