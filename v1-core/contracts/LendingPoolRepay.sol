@@ -52,11 +52,13 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
     }
 
     /// @notice Private function to repay a borrow position.
+    /// @param collateral The lending pool collateral contract address.
     /// @param asset The ERC20 token to be borrowed.
     /// @param repaymentAmount The amount of ERC20 tokens to be repaid.
     /// @param borrowId The unique identifier of the borrow.
     /// @dev Transfers assets back to the reserve before burning debtTokens and returning collateral. 
     function repay(
+        address collateral,
         address asset,
         uint256 repaymentAmount,
         uint256 borrowId
@@ -67,7 +69,7 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
         bool success;
         uint256 borrowAmount;
         uint256 interestRate;
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         
         success = IFToken(reserve.fTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
         require(success, "UNSUCCESSFUL_TRANSFER");

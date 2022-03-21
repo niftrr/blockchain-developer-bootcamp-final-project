@@ -147,27 +147,6 @@ beforeEach(async function() {
     AssetToken = await ethers.getContractFactory('AssetToken');
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
-    
-    // Get and deploy fToken
-    FToken = await ethers.getContractFactory('FToken');
-    hhFToken = await FToken.deploy(
-        hhConfiguratorAddress,
-        hhLendingPoolAddress,
-        treasury.address,
-        hhAssetToken.address,
-        'Dai fToken', 
-        'fDAI');
-    await hhFToken.deployed();
-
-    // Get and deploy debtToken
-    DebtToken = await ethers.getContractFactory('DebtToken');
-    hhDebtToken = await DebtToken.deploy(
-        hhConfiguratorAddress,
-        hhLendingPoolAddress,
-        'Dai debtToken', 
-        'debtDAI'
-    );
-    await hhDebtToken.deployed();   
 
     // Get and deploy NFT
     NFT = await ethers.getContractFactory('NFT');
@@ -188,7 +167,28 @@ beforeEach(async function() {
     hhConfigurator
     .connect(admin)
     .setCollateralManagerInterestRate(hhNFT.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // RAD 1e27 / 100 to turn into percent
+    
+    // Get and deploy fToken
+    FToken = await ethers.getContractFactory('FToken');
+    hhFToken = await FToken.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+        treasury.address,
+        hhNFT.address,
+        hhAssetToken.address,
+        'Dai fToken', 
+        'fDAI');
+    await hhFToken.deployed();
 
+    // Get and deploy debtToken
+    DebtToken = await ethers.getContractFactory('DebtToken');
+    hhDebtToken = await DebtToken.deploy(
+        hhConfiguratorAddress,
+        hhLendingPoolAddress,
+        'Dai debtToken', 
+        'debtDAI'
+    );
+    await hhDebtToken.deployed();   
 
     // Transfer funds to alice and bob
     await hhAssetToken.transfer(alice.address, hhAssetTokenInitialBalance.toString());
@@ -214,24 +214,25 @@ async function initReserve() {
     return hhConfigurator
     .connect(admin)
     .initLendingPoolReserve(
+        hhNFT.address,
         hhAssetToken.address, 
         hhFToken.address,
         hhDebtToken.address
     )
 }
 
-async function deposit(signer, assetToken, tokenAmount) {
+async function deposit(signer, poolCollateralAddress, assetToken, tokenAmount) {
     // Approve transferFrom lendingPool 
     await assetToken.connect(signer).approve(hhLendingPoolAddress, tokenAmount);
     // Deposit in hhFToken contract reserve
-    return hhLendingPool.connect(signer).deposit(assetToken.address, tokenAmount)
+    return hhLendingPool.connect(signer).deposit(poolCollateralAddress, assetToken.address, tokenAmount)
 }
 
-async function withdraw(signer, assetToken, fToken, _tokenAmount) {
+async function withdraw(signer, poolCollateralAddress, assetToken, fToken, _tokenAmount) {
     // Approve fToken burnFrom lendingPool 
     await fToken.connect(signer).approve(hhLendingPoolAddress, _tokenAmount);
     // Withdraw assetTokens by depositing/buring fTokens
-    return hhLendingPool.connect(signer).withdraw(assetToken.address, _tokenAmount);
+    return hhLendingPool.connect(signer).withdraw(poolCollateralAddress, assetToken.address, _tokenAmount);
 }
 
 async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount) {
@@ -273,18 +274,19 @@ describe('LendingPool >> Withdraw', function() {
         await initReserve();
 
         // Deposit asset tokens
-        deposit(alice, hhAssetToken, tokenAmount);
+        deposit(alice, hhNFT.address, hhAssetToken, tokenAmount);
 
         // Withdraw Asset tokens
-        async function _withdraw(signer, assetToken, fToken, _tokenAmount) {
-            return withdraw(signer, assetToken, fToken, _tokenAmount);
+        async function _withdraw(signer, collateralAddress, assetToken, fToken, _tokenAmount) {
+            return withdraw(signer, collateralAddress, assetToken, fToken, _tokenAmount);
         }
 
         // Expect: Withdraw Emit response
         await expect(
-            _withdraw(alice, hhAssetToken, hhFToken, withdrawAmount))
+            _withdraw(alice, hhNFT.address, hhAssetToken, hhFToken, withdrawAmount))
             .to.emit(hhLendingPool, 'Withdraw')
             .withArgs(
+                hhNFT.address,
                 hhAssetToken.address,
                 withdrawAmount,
                 alice.address,
@@ -301,10 +303,10 @@ describe('LendingPool >> Withdraw', function() {
         await initReserve();
 
         // Deposit Asset tokens
-        await deposit(alice, hhAssetToken, tokenAmount)
+        await deposit(alice, hhNFT.address, hhAssetToken, tokenAmount)
 
         // Withdraw asset tokens
-        await withdraw(alice, hhAssetToken, hhFToken, withdrawAmount)
+        await withdraw(alice, hhNFT.address, hhAssetToken, hhFToken, withdrawAmount)
 
         // Expect: assetTokens transfered from hhNToken contract to alice
         await expect(
@@ -325,10 +327,10 @@ describe('LendingPool >> Withdraw', function() {
         await initReserve();
 
         // Deposit Asset tokens
-        await deposit(alice, hhAssetToken, tokenAmount)
+        await deposit(alice, hhNFT.address, hhAssetToken, tokenAmount)
 
         // Withdraw asset tokens
-        await withdraw(alice, hhAssetToken, hhFToken, withdrawAmount)
+        await withdraw(alice, hhNFT.address, hhAssetToken, hhFToken, withdrawAmount)
 
         // Expect: fTokens burnedFrom alice
         await expect(
@@ -340,22 +342,23 @@ describe('LendingPool >> Withdraw', function() {
         const tokenAmount = ethers.utils.parseUnits('3', 18);//1*10**numDecimals;
         const borrowAmount = ethers.utils.parseUnits('2', 18);
         const withdrawAmount = ethers.utils.parseUnits('1', 18);
-        const updatedLiquidityIndex = "1000000021139861537018719379";
+        const updatedLiquidityIndex = "1000000021139861537018718872";
 
         // Initialize reserve
         await initReserve();
 
         // Deposit Asset tokens
-        await deposit(alice, hhAssetToken, tokenAmount)
+        await deposit(alice, hhNFT.address, hhAssetToken, tokenAmount)
 
         // Borrow Asset tokens
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
 
         // Expect updated liquidity Index
         await expect(
-            withdraw(alice, hhAssetToken, hhFToken, withdrawAmount))
+            withdraw(alice, hhNFT.address, hhAssetToken, hhFToken, withdrawAmount))
             .to.emit(hhLendingPool, 'Withdraw')
             .withArgs(
+                hhNFT.address,
                 hhAssetToken.address,
                 withdrawAmount,
                 alice.address,
@@ -373,13 +376,13 @@ describe('LendingPool >> Withdraw', function() {
         await initReserve();
 
         // Deposit Asset tokens
-        await deposit(alice, hhAssetToken, depositAmount)
+        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount)
 
         // Borrow Asset tokens
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount)
 
         // Withdraw asset tokens
-        await withdraw(alice, hhAssetToken, hhFToken, withdrawAmount);
+        await withdraw(alice, hhNFT.address, hhAssetToken, hhFToken, withdrawAmount);
 
         await expect(await hhFToken.scaledBalanceOf(alice.address)).to.equal(updatedScaledBalance);
         await expect(await hhFToken.balanceOf(alice.address)).to.equal(updatedBalance);

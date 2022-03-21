@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 interface ILendingPoolLiquidate {
 
     function liquidate(
+        address collateral,
         address asset, 
         uint256 liquidationAmount,
         uint256 borrowId

@@ -145,11 +145,13 @@ contract Configurator is Context, AccessControl {
     }
 
     /// @notice Initializes a Lending Pool reserve.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
     /// @dev External `initReserve` function calls `_initReserve` if modifiers are succeeded.    
     function initLendingPoolReserve(
+        address collateral,
         address asset, 
         address fTokenAddress,
         address debtTokenAddress
@@ -159,6 +161,7 @@ contract Configurator is Context, AccessControl {
         whenLendingPoolConnected 
     {
         ILendingPool(lendingPoolAddress).initReserve(
+            collateral,
             asset, 
             fTokenAddress, 
             debtTokenAddress

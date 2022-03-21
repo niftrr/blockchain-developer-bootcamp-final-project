@@ -60,13 +60,14 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     }
 
     function getLiquidityIndex(
+        address collateral,
         address asset
     ) 
         public
         view
         returns (uint256)
     {
-        DataTypes.Reserve memory reserve = _reserves[asset]; 
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         return reserve.liquidityIndex;
     }
 
@@ -81,52 +82,55 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     }
 
     function getReserveNormalizedIncome(
+        address collateral,
         address asset
     )
         public
         view
         returns (uint256)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (,uint256 normalizedIncome) = ReserveLogic.getNormalizedIncome(reserve);
         return normalizedIncome;
     }
     function _updateLiquidityIndex(
+        address collateral,
         address asset
     )
         public // internal TODO: revert to internal
         returns (uint256)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (,reserve.liquidityIndex) = reserve.getNormalizedIncome();
         return reserve.liquidityIndex;
     }
 
-    function _updateUserScaledBalance(
-        address user,
-        address asset,
-        uint256 amount,
-        bool isDeposit
-    )
-        internal
-        returns (uint256)
-    {
-        uint256 reserveNormalizedIncome = getReserveNormalizedIncome(asset);
+    // function _updateUserScaledBalance(
+    //     address collateral, 
+    //     address user,
+    //     address asset,
+    //     uint256 amount,
+    //     bool isDeposit
+    // )
+    //     internal
+    //     returns (uint256)
+    // {
+    //     uint256 reserveNormalizedIncome = getReserveNormalizedIncome(collateral, asset);
         
-        if (isDeposit) {
-            userScaledBalances[user][asset] = userScaledBalances[user][asset].add(
-                WadRayMath.rayToWad(
-                    WadRayMath.wadToRay(amount).rayDiv(reserveNormalizedIncome)
-                )
-            );
-        } else {
-            userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(
-                WadRayMath.rayToWad(
-                    WadRayMath.wadToRay(amount).div(reserveNormalizedIncome)
-                )
-            );
-        }
+    //     if (isDeposit) {
+    //         userScaledBalances[user][asset] = userScaledBalances[user][asset].add(
+    //             WadRayMath.rayToWad(
+    //                 WadRayMath.wadToRay(amount).rayDiv(reserveNormalizedIncome)
+    //             )
+    //         );
+    //     } else {
+    //         userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(
+    //             WadRayMath.rayToWad(
+    //                 WadRayMath.wadToRay(amount).div(reserveNormalizedIncome)
+    //             )
+    //         );
+    //     }
 
-        return userScaledBalances[user][asset];
-    }
+    //     return userScaledBalances[user][asset];
+    // }
 }

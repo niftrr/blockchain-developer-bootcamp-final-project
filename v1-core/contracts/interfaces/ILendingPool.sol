@@ -3,13 +3,14 @@ pragma solidity ^0.8.0;
 
 interface ILendingPool {
     function initReserve(
+        address collateral,
         address asset, 
         address fTokenAddress, 
         address debtTokenAddress
     ) 
         external;
 
-    function deposit(address asset, uint256 amount) external;
+    function deposit(address collateral, address asset, uint256 amount) external;
 
     function withdraw(address asset, uint256 amount) external;
 
@@ -49,6 +50,7 @@ interface ILendingPool {
         returns (address);
 
     function getReserveNormalizedIncome(
+        address collateral,
         address asset
     )
         external 

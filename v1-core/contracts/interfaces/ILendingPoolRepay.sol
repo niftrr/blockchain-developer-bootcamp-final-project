@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 interface ILendingPoolRepay {
 
     function repay(
+        address collateral,
         address asset, 
         uint256 repaymentAmount,
         uint256 borrowId

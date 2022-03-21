@@ -46,10 +46,12 @@ contract LendingPoolWithdraw is Context, LendingPoolStorage, LendingPoolLogic, I
     }
 
     /// @notice Private function to withdraw assets from the lending pool.
+    /// @param collateral The lending pool collateral contract address.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Withdraws assets from the LP by exchanging fTokens at a 1:1 ratio. 
     function withdraw(
+        address collateral,
         address asset, 
         uint256 amount
     ) 
@@ -57,13 +59,13 @@ contract LendingPoolWithdraw is Context, LendingPoolStorage, LendingPoolLogic, I
         returns (bool) 
     {
         bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset];        
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))];        
         address fToken = reserve.fTokenAddress;
 
         uint256 fTokenBalance = IFToken(fToken).balanceOf(_msgSender());
         require(fTokenBalance >= amount, "INSUFFICIENT_BALANCE");
 
-        uint256 liquidityIndex = getLiquidityIndex(asset);
+        uint256 liquidityIndex = getLiquidityIndex(collateral, asset);
 
         success = IFToken(fToken).burnFrom(_msgSender(), amount, liquidityIndex);
         require(success, "UNSUCCESSFUL_BURN");

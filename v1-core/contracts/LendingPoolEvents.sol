@@ -7,17 +7,20 @@ pragma solidity 0.8.9;
 /// @dev To help organize and limit size of Lending Pool contract.
 contract LendingPoolEvents {    
     /// @notice Emitted when a new reserve is initialized.
+    /// @param asset The reserve's underlying collateral contract address.
     /// @param asset The ERC20, reserve asset address.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
-    event InitReserve(address asset, address fTokenAddress, address debtTokenAddress);
+    event InitReserve(address collateral, address asset, address fTokenAddress, address debtTokenAddress);
     
     /// @notice Emitted when an asset deposit is made.
+    /// @param collateral The Lending Pool underlying reserve collateral.
     /// @param asset The ERC20, reserve asset address.
     /// @param amount The amount of ERC20 tokens.
     /// @param lender The lender account.
     /// @param liquidityIndex The reserve liquidity index.
     event Deposit(
+        address collateral,
         address asset, 
         uint256 amount, 
         address lender, 
@@ -25,11 +28,13 @@ contract LendingPoolEvents {
     );
 
     /// @notice Emitted when an asset withdraw is made.
+    /// @param collateral The Lending Pool underlying reserve collateral.
     /// @param asset The ERC20, reserve asset address.
     /// @param amount The amount of ERC20 tokens.
     /// @param lender The lender account.
     /// @param liquidityIndex The reserve liquidity index.
     event Withdraw(
+        address collateral,
         address asset, 
         uint256 amount, 
         address lender, 
@@ -76,7 +81,14 @@ contract LendingPoolEvents {
         address liquidator
     );
 
+    /// @notice Emitted when the asset reserve is updated.
+    /// @param collateral The reserve collateral.
+    /// @param asset The reserve asset.
+    /// @param asset The reserve borrowRate.
+    /// @param asset The reserve utilizationRate.
+    /// @param asset The reserve liquidityIndex.
     event UpdateReserve(
+        address collateral,
         address asset,
         uint256 borrowRate,
         uint256 utilizationRate,
@@ -84,26 +96,34 @@ contract LendingPoolEvents {
     );
 
     /// @notice Emitted when the asset reserve is frozen.
+    /// @param collateral The reserve collateral.
     /// @param asset The reserve asset.
     event ReserveFrozen(
+        address collateral,
         address asset
     );
 
     /// @notice Emitted when the asset reserve is paused.
+    /// @param collateral The reserve collateral.
     /// @param asset The reserve asset.
     event ReservePaused(
+        address collateral,
         address asset
     );
 
     /// @notice Emitted when the asset reserve is protected.
+    /// @param collateral The reserve collateral.
     /// @param asset The reserve asset.
     event ReserveProtected(
+        address collateral,
         address asset
     );
 
     /// @notice Emitted when the asset reserve is activated.
+    /// @param collateral The reserve collateral.
     /// @param asset The reserve asset.
     event ReserveActivated(
+        address collateral,
         address asset
     );
 

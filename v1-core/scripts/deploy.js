@@ -34,6 +34,7 @@ async function main() {
   
   */
 
+  // Get Signers
   [acc0, acc1, acc2, emergencyAdmin, admin, treasuryAccount] = await hre.ethers.getSigners();
  
   // Get network
@@ -61,8 +62,59 @@ async function main() {
   fileData += `REACT_APP_${dataItem}`;
   docsFileData += dataItem;
 
-  // Connect LendingPool in Configurator
+  // Connect Configurator to LendingPool by setting the address
   await configurator.connect(admin).connectLendingPool(lendingPool.address);
+
+  // Get, deploy and connect LendingPoolBorrow to LendingPool
+  LendingPoolBorrow = await ethers.getContractFactory("LendingPoolBorrow")
+  lendingPoolBorrow = await LendingPoolBorrow.deploy(
+    configurator.address,
+    lendingPool.address
+  );
+  await lendingPoolBorrow.deployed();
+  await configurator.connect(admin).connectLendingPoolBorrow(lendingPoolBorrow.address);
+  await configurator.connect(admin).connectLendingPoolLendingPoolBorrow();
+
+  // Get, deploy and connect LendingPoolDeposit to LendingPool
+  LendingPoolDeposit = await ethers.getContractFactory('LendingPoolDeposit');
+  lendingPoolDeposit = await LendingPoolDeposit.deploy(
+      configurator.address,
+      lendingPool.address,
+  );
+  await lendingPoolDeposit.deployed();
+  await configurator.connect(admin).connectLendingPoolDeposit(lendingPoolDeposit.address);
+  await configurator.connect(admin).connectLendingPoolLendingPoolDeposit();
+
+  // Get, deploy and connect LendingPoolLiquidate to LendingPool
+  LendingPoolLiquidate = await ethers.getContractFactory('LendingPoolLiquidate');
+  lendingPoolLiquidate = await LendingPoolLiquidate.deploy(
+      configurator.address,
+      lendingPool.address,
+  );
+  await lendingPoolLiquidate.deployed();
+  await configurator.connect(admin).connectLendingPoolLiquidate(lendingPoolLiquidate.address);
+  await configurator.connect(admin).connectLendingPoolLendingPoolLiquidate();
+
+  // Get, deploy and connect LendingPoolRepay to LendingPool
+  LendingPoolRepay = await ethers.getContractFactory('LendingPoolRepay');
+  lendingPoolRepay = await LendingPoolRepay.deploy(
+      configurator.address,
+      lendingPool.address,
+  );
+  await lendingPoolRepay.deployed();
+  await configurator.connect(admin).connectLendingPoolRepay(lendingPoolRepay.address);
+  await configurator.connect(admin).connectLendingPoolLendingPoolRepay();
+
+  // Get, deploy and connect LendingPoolWithdraw to LendingPool
+  LendingPoolWithdraw = await ethers.getContractFactory('LendingPoolWithdraw');
+  lendingPoolWithdraw = await LendingPoolWithdraw.deploy(
+      configurator.address,
+      lendingPool.address,
+  );
+  await lendingPoolWithdraw.deployed();
+  lendingPoolWithdrawAddress = await lendingPoolWithdraw.resolvedAddress;
+  await configurator.connect(admin).connectLendingPoolWithdraw(lendingPoolWithdraw.address);
+  await configurator.connect(admin).connectLendingPoolLendingPoolWithdraw();
 
   // Get and deploy CollateralManager contract
   const CollateralManager = await hre.ethers.getContractFactory('CollateralManager');
@@ -117,44 +169,50 @@ async function main() {
   fileData += `REACT_APP_${dataItem}`;
   docsFileData += dataItem;
   
-  // Get and deploy nToken contracts
-  NToken = await hre.ethers.getContractFactory('NToken');
+  // Get and deploy fToken contracts
+  FToken = await hre.ethers.getContractFactory('FToken');
   // DAI:
-  nTokenDAI = await NToken.connect(admin).deploy(
+  fTokenDAI = await FToken.connect(admin).deploy(
     configurator.address,
     lendingPool.address,
-    'DAI nToken', 
-    'nDAI'
+    treasuryAccount.address,
+    assetTokenDAI.address,
+    'DAI FToken', 
+    'fDAI'
   );
-  await nTokenDAI.deployed();
-  console.log("nTokenDAI deployed to:", nTokenDAI.address);
-  dataItem = `N_TOKEN_DAI_CONTRACT_ADDRESS=${nTokenDAI.address}\n`;
+  await fTokenDAI.deployed();
+  console.log("fTokenDAI deployed to:", fTokenDAI.address);
+  dataItem = `N_TOKEN_DAI_CONTRACT_ADDRESS=${fTokenDAI.address}\n`;
   fileData += `REACT_APP_${dataItem}`;
   docsFileData += dataItem;
 
   // USDC:
-  nTokenUSDC = await NToken.connect(admin).deploy(
+  fTokenUSDC = await FToken.connect(admin).deploy(
     configurator.address,
     lendingPool.address,
-    'USDC nToken', 
-    'nUSDC'
+    treasuryAccount.address,
+    assetTokenUSDC.address,
+    'USDC fToken', 
+    'fUSDC'
   );
-  await nTokenUSDC.deployed();
-  console.log("nTokenUSDC deployed to:", nTokenUSDC.address);
-  dataItem = `N_TOKEN_USDC_CONTRACT_ADDRESS=${nTokenUSDC.address}\n`;
+  await fTokenUSDC.deployed();
+  console.log("fTokenUSDC deployed to:", fTokenUSDC.address);
+  dataItem = `N_TOKEN_USDC_CONTRACT_ADDRESS=${fTokenUSDC.address}\n`;
   fileData += `REACT_APP_${dataItem}`;
   docsFileData += dataItem;
 
   // WETH:
-  nTokenWETH = await NToken.connect(admin).deploy(
+  fTokenWETH = await FToken.connect(admin).deploy(
     configurator.address,
     lendingPool.address,
-    'WETH nToken', 
-    'nWETH'
+    treasuryAccount.address,
+    assetTokenWETH.address,
+    'WETH fToken', 
+    'fWETH'
   );
-  await nTokenWETH.deployed();
-  console.log("nTokenWETH deployed to:", nTokenWETH.address);
-  dataItem = `N_TOKEN_WETH_CONTRACT_ADDRESS=${nTokenWETH.address}\n`;
+  await fTokenWETH.deployed();
+  console.log("fTokenWETH deployed to:", fTokenWETH.address);
+  dataItem = `N_TOKEN_WETH_CONTRACT_ADDRESS=${fTokenWETH.address}\n`;
   fileData += `REACT_APP_${dataItem}`;
   docsFileData += dataItem;
 
@@ -201,11 +259,11 @@ async function main() {
 
   // Initialize Reserves
   // DAI:
-  await configurator.connect(admin).initLendingPoolReserve(assetTokenDAI.address, nTokenDAI.address, debtTokenDAI.address);
+  await configurator.connect(admin).initLendingPoolReserve(assetTokenDAI.address, fTokenDAI.address, debtTokenDAI.address);
   // USDC:
-  await configurator.connect(admin).initLendingPoolReserve(assetTokenUSDC.address, nTokenUSDC.address, debtTokenUSDC.address);
+  await configurator.connect(admin).initLendingPoolReserve(assetTokenUSDC.address, fTokenUSDC.address, debtTokenUSDC.address);
   // WETH:
-  await configurator.connect(admin).initLendingPoolReserve(assetTokenWETH.address, nTokenWETH.address, debtTokenWETH.address);
+  await configurator.connect(admin).initLendingPoolReserve(assetTokenWETH.address, fTokenWETH.address, debtTokenWETH.address);
   console.log('Initialized Reserves');
 
   // Get and deploy NFT contracts
@@ -359,20 +417,17 @@ async function main() {
   // Prepopulate borrows
   let borrowAmount;
   let tokenId;
-  let numWeeks;
 
   // Borrows from Account 0
   borrowAmount = "50";
   tokenId = 1;
-  numWeeks = 0;
   borrowAmount = hre.ethers.utils.parseEther(borrowAmount);
   await nftPUNK.connect(acc0).approve(collateralManager.address, tokenId);
   await lendingPool.connect(acc0).borrow(
     assetTokenWETH.address,
     borrowAmount,
     nftPUNK.address,
-    tokenId,
-    numWeeks
+    tokenId
   );
   console.log(`acc0 deposits PUNK #${tokenId} to borrow ${hre.ethers.utils.formatEther(borrowAmount)} WETH`);
 
@@ -386,8 +441,7 @@ async function main() {
     assetTokenWETH.address,
     borrowAmount,
     nftPUNK.address,
-    tokenId,
-    numWeeks
+    tokenId
   );
   console.log(`acc1 deposits PUNK #${tokenId} to borrow ${hre.ethers.utils.formatEther(borrowAmount)} WETH`);
 

@@ -18,7 +18,7 @@ contract LendingPoolStorage {
     address internal _lendingPoolRepayAddress;
     address internal _lendingPoolWithdrawAddress;
 
-    mapping(address => DataTypes.Reserve) internal _reserves;
+    mapping(bytes32 => DataTypes.Reserve) internal _reserves;
     mapping(address => address) internal _underlyingAssets;
     mapping(address => string) internal _pricePairs;
     mapping(address => mapping(address => uint256)) userScaledBalances;

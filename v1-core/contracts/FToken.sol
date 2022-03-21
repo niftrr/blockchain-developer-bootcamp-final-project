@@ -26,6 +26,7 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
 
     // uint256 currentAPY; 
     ILendingPool internal _pool;
+    address internal _underlyingCollateral;
     address internal _underlyingAsset;
     address internal _treasury;
 
@@ -58,6 +59,7 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         address configurator, 
         address lendingPool,
         address treasury,
+        address underlyingCollateral,
         address underlyingAsset,
         string memory name, 
         string memory symbol
@@ -68,6 +70,7 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         _setupRole(LENDING_POOL_ROLE, lendingPool);
         _pool = ILendingPool(lendingPool);
         _treasury = treasury;
+        _underlyingCollateral = underlyingCollateral;
         _underlyingAsset = underlyingAsset;
     }
 
@@ -232,7 +235,7 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         // uint256 liquidityIndex = WadRayMath.ray();  
         // return super.balanceOf(account).rayMul(liquidityIndex);
         // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
-        return super.balanceOf(account).rayMul(_pool.getReserveNormalizedIncome(_underlyingAsset));
+        return super.balanceOf(account).rayMul(_pool.getReserveNormalizedIncome(_underlyingCollateral, _underlyingAsset));
     }
 
     function scaledBalanceOf(

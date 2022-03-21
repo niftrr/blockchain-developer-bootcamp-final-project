@@ -53,20 +53,20 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         _;
     }
 
-    modifier whenReserveActive(address asset) {
-        DataTypes.Reserve memory reserve = _reserves[asset];  
+    modifier whenReserveActive(address collateral, address asset) {
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))];  
         require(reserve.status == DataTypes.ReserveStatus.Active, "Reserve is not active.");  
         _;
     }
 
-    modifier whenReserveNotPaused(address asset) {
-        DataTypes.Reserve memory reserve = _reserves[asset];  
+    modifier whenReserveNotPaused(address collateral, address asset) {
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))];  
         require(reserve.status != DataTypes.ReserveStatus.Paused, "Reserve is paused.");  
         _;
     }
 
-    modifier whenReserveNotProtected(address asset) {
-        DataTypes.Reserve memory reserve = _reserves[asset];  
+    modifier whenReserveNotProtected(address collateral, address asset) {
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))];  
         require(reserve.status != DataTypes.ReserveStatus.Protected, "Reserve is protected.");  
         _;
     }
@@ -172,11 +172,13 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
     }
 
     /// @notice Initializes a reserve.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
     /// @dev Calls internal `_initReserve` function if modifiers are succeeded.    
     function initReserve(
+        address collateral,
         address asset,
         address fTokenAddress,
         address debtTokenAddress
@@ -184,55 +186,59 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         external 
         onlyConfigurator 
     {
-        _initReserve(asset, fTokenAddress, debtTokenAddress);
+        _initReserve(collateral, asset, fTokenAddress, debtTokenAddress);
     }
 
     /// @notice Deposit assets into the lending pool.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Calls internal `_deposit` function if modifiers are succeeded.  
     function deposit(
+        address collateral,
         address asset, 
         uint256 amount
     ) 
         external 
         nonReentrant
         whenNotPaused 
-        whenReserveActive(asset)
+        whenReserveActive(collateral, asset)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (bool success, bytes memory data) = _lendingPoolDepositAddress.delegatecall(
-            abi.encodeWithSignature("deposit(address,uint256)", asset,amount)
+            abi.encodeWithSignature("deposit(address,address,uint256)", collateral,asset,amount)
         );
         require(success, string(data));
 
         reserve.updateState();
 
-        emit Deposit(asset, amount, _msgSender(), reserve.liquidityIndex);
+        emit Deposit(collateral, asset, amount, _msgSender(), reserve.liquidityIndex);
     }
 
     /// @notice Withdraw assets from the lending pool.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Calls internal `_withdraw` function if modifiers are succeeded. 
     function withdraw(
+        address collateral,
         address asset, 
         uint256 amount
     ) 
         external 
         nonReentrant
         whenNotPaused 
-        whenReserveNotPaused(asset)
+        whenReserveNotPaused(collateral, asset)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (bool success, bytes memory data) = _lendingPoolWithdrawAddress.delegatecall(
-            abi.encodeWithSignature("withdraw(address,uint256)", asset,amount)
+            abi.encodeWithSignature("withdraw(address,address,uint256)", collateral,asset,amount)
         );
         require(success, string(data));
 
         reserve.updateState();
 
-        emit Withdraw(asset, amount, _msgSender(), reserve.liquidityIndex);
+        emit Withdraw(collateral, asset, amount, _msgSender(), reserve.liquidityIndex);
     }
 
     /// @notice External function to create a borrow position.
@@ -250,9 +256,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         external 
         nonReentrant
         whenNotPaused
-        whenReserveActive(asset)
+        whenReserveActive(collateral, asset)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (bool success, bytes memory data) = _lendingPoolBorrowAddress.delegatecall(
             abi.encodeWithSignature("borrow(address,uint256,address,uint256)", asset,amount,collateral,tokenId)
         );
@@ -267,11 +273,13 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
     }
 
     /// @notice To repay a borrow position.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20 token to be borrowed.
     /// @param repaymentAmount The amount of ERC20 tokens to be repaid.
     /// @param borrowId The unique identifier of the borrow.
     /// @dev Calls internal `_repay` function if modifiers are succeeded.  
     function repay(
+        address collateral,
         address asset,
         uint256 repaymentAmount,
         uint256 borrowId
@@ -279,11 +287,11 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         external 
         nonReentrant
         whenNotPaused
-        whenReserveNotPaused(asset)
+        whenReserveNotPaused(collateral, asset)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (bool success, bytes memory data ) = _lendingPoolRepayAddress.delegatecall(
-            abi.encodeWithSignature("repay(address,uint256,uint256)", asset,repaymentAmount,borrowId)
+            abi.encodeWithSignature("repay(address,address,uint256,uint256)", collateral,asset,repaymentAmount,borrowId)
         );
         require(success, string(data));
 
@@ -293,11 +301,13 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
     }
 
     /// @notice To liquidate a borrow position.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20 token to be borrowed.
     /// @param liquidationAmount The amount of ERC20 tokens to be paid.
     /// @param borrowId The unique identifier of the borrow.
     /// @dev Calls internal `_liquidate` function if modifiers are succeeded.   
     function liquidate(
+        address collateral,
         address asset,
         uint256 liquidationAmount,
         uint256 borrowId
@@ -305,10 +315,10 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         external 
         nonReentrant
         whenNotPaused
-        whenReserveNotPaused(asset)
-        whenReserveNotProtected(asset)
+        whenReserveNotPaused(collateral, asset)
+        whenReserveNotProtected(collateral, asset)
     {
-        DataTypes.Reserve storage reserve = _reserves[asset];
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
             abi.encodeWithSignature("liquidate(address,uint256,uint256)", asset,liquidationAmount,borrowId)
         );
@@ -332,51 +342,57 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
     }
 
     /// @notice Freezes the specified asset reserve
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @dev To freeze deposit and borrow functions for a single reserve.
-    function freezeReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
+    function freezeReserve(address collateral, address asset) external onlyConfigurator {
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         reserve.status = DataTypes.ReserveStatus.Frozen;
 
-        emit ReserveFrozen(asset);
+        emit ReserveFrozen(collateral, asset);
     }
 
     /// @notice Pauses the specified asset reserve
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @dev To pause functions for a single reserve instead of the whole contract.
-    function pauseReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
+    function pauseReserve(address collateral, address asset) external onlyConfigurator {
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         reserve.status = DataTypes.ReserveStatus.Paused;
 
-        emit ReservePaused(asset);
+        emit ReservePaused(collateral, asset);
     }
 
     /// @notice Protects the specified asset reserve
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @dev Desactivates functions `liquidate`, `deposit` and `borrow`.
-    function protectReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
+    function protectReserve(address collateral, address asset) external onlyConfigurator {
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         reserve.status = DataTypes.ReserveStatus.Protected;
 
-        emit ReserveProtected(asset);
+        emit ReserveProtected(collateral, asset);
     }
 
     /// @notice Activate the specified asset reserve
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @dev To activate all functions for a single reserve.
-    function activateReserve(address asset) external onlyConfigurator {
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
+    function activateReserve(address collateral, address asset) external onlyConfigurator {
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         reserve.status = DataTypes.ReserveStatus.Active;  
 
-        emit ReserveActivated(asset);
+        emit ReserveActivated(collateral, asset);
     }
 
     /// @notice Private function to initialize a reserve.
+    /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20, reserve asset token.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
     /// @dev ERC20 asset address used as reserve key.    
     function _initReserve(
+        address collateral,
         address asset,
         address fTokenAddress,
         address debtTokenAddress
@@ -388,9 +404,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, LendingPoo
         reserve.fTokenAddress = fTokenAddress;
         reserve.debtTokenAddress = debtTokenAddress;
         reserve.liquidityIndex = 10**27;
-        _reserves[asset] = reserve;
+        _reserves[keccak256(abi.encode(collateral, asset))] = reserve;
         _underlyingAssets[fTokenAddress] = asset;
 
-        emit InitReserve(asset, _reserves[asset].fTokenAddress, _reserves[asset].debtTokenAddress);
+        emit InitReserve(collateral, asset, _reserves[keccak256(abi.encode(collateral, asset))].fTokenAddress, _reserves[keccak256(abi.encode(collateral, asset))].debtTokenAddress);
     }
 }

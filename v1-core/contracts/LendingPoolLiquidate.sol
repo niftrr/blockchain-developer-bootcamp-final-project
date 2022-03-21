@@ -52,11 +52,13 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
     }
 
     /// @notice Private function to liquidate a borrow position.
+    /// @param collateral The lending pool collataral contract address.
     /// @param asset The ERC20 token to be borrowed.
     /// @param liquidationAmount The amount of ERC20 tokens to be paid.
     /// @param borrowId The unique identifier of the borrow.
     /// @dev Transfers assets back to the reserve before burning debtTokens and retreiving collateral for the liquidator. 
     function liquidate(
+        address collateral,
         address asset,
         uint256 liquidationAmount,
         uint256 borrowId
@@ -65,7 +67,7 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         returns (bool)
     {
         bool success;
-        DataTypes.Reserve storage reserve = _reserves[asset];  
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];  
         DataTypes.Borrow memory borrowItem = ICollateralManager(
             _collateralManagerAddress
         ).getBorrow(borrowId);

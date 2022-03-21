@@ -47,10 +47,12 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, LendingPoolLogic, IL
     }
 
     /// @notice Private function to deposit assets into the lending pool.
+    /// @param collateral The lending pool collataral contract address.
     /// @param asset The ERC20 address of the asset.
     /// @param amount The amount of ERC20 tokens.
     /// @dev Deposits assets into the LP in exchange for fTokens at a 1:1 ratio.  
     function deposit(
+        address collateral,
         address asset, 
         uint256 amount
     ) 
@@ -58,7 +60,7 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, LendingPoolLogic, IL
         returns (bool)
     {
         bool success;
-        DataTypes.Reserve memory reserve = _reserves[asset]; 
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         address fToken = reserve.fTokenAddress;
 
         success  = IERC20(asset).transferFrom(_msgSender(), fToken, amount);

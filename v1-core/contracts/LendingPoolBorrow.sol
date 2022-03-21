@@ -67,7 +67,7 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
         returns (bool)
     {
         bool success;
-        DataTypes.Reserve storage reserve = _reserves[asset]; 
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
         (uint256 interestRate, uint256 collateralFloorPrice) = getBorrowVariables(
             asset, 
             collateral
