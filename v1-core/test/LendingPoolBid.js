@@ -1,4 +1,4 @@
-const { expect } = require('chai');
+const { expect, util } = require('chai');
 const { ethers } = require('hardhat');
 
 let LendingPool;
@@ -168,7 +168,7 @@ beforeEach(async function() {
     AssetToken = await ethers.getContractFactory('AssetToken');
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
-
+    
     // Get and deploy NFT
     NFT = await ethers.getContractFactory('NFT');
     hhNFT = await NFT.deploy('Punk NFT', 'PUNK');
@@ -187,8 +187,8 @@ beforeEach(async function() {
     // Set NFT interestRate threshold
     hhConfigurator
     .connect(admin)
-    .setCollateralManagerInterestRate(hhNFT.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // RAD 1e27 / 100 to turn into percent
-    
+    .setCollateralManagerInterestRate(hhNFT.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // in RAY 1e27/100 for percentage
+
     // Get and deploy fToken
     FToken = await ethers.getContractFactory('FToken');
     hhFToken = await FToken.deploy(
@@ -237,7 +237,7 @@ beforeEach(async function() {
 
     // Logging 
     // console.log('CollateralManager deployed:', hhCollateralManagerAddress);
-    // console.log('LendingPzoolAddress deployed:', hhLendingPoolAddress);
+    // console.log('LendingPoolAddress deployed:', hhLendingPoolAddress);
     // console.log('alice:', alice.address);
     // console.log('bob:', bob.address);
 });
@@ -277,129 +277,201 @@ async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount) {
         tokenId);
 }
 
-async function repay(signer, poolCollateralAddress, assetToken, fToken, repaymentAmount, borrowId) {
+async function repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId) {
     // Approve transfer of repaymentAmount asset tokens to fToken address (asset reserve)
     await assetToken.connect(signer).approve(fToken.address, repaymentAmount);
     return hhLendingPool.connect(signer).repay(
-        poolCollateralAddress,
+        collateralAddress,
         assetToken.address,
         repaymentAmount,
         borrowId);
 }
 
-async function liquidate(signer, poolCollateralAddress, assetToken, liquidationAmount, borrowId) {
-    // Approve transfer of liquidationAmount asset tokens to lendingPool address)
-    await assetToken.connect(signer).approve(hhLendingPoolAddress, liquidationAmount);
-    return hhLendingPool.connect(signer).liquidate(
-        poolCollateralAddress,
+async function bid(signer, assetToken, bidAmount, borrowId) {
+    // Approve transfer of bidAmount asset tokens to lendingPool address)
+    await assetToken.connect(signer).approve(hhLendingPoolAddress, bidAmount);
+    return hhLendingPool.connect(signer).bid(
+        assetToken.address,
+        bidAmount,
+        borrowId);
+}
+
+async function redeem(signer, assetToken, redeemAmount, borrowId) {
+    // Approve transfer of redeemAmount asset tokens to lendingPool address)
+    await assetToken.connect(signer).approve(hhLendingPoolAddress, redeemAmount);
+    return hhLendingPool.connect(signer).redeem(
         assetToken.address,
         liquidationAmount,
         borrowId);
 }
+
+async function liquidate(signer, collateral, asset, borrowId) {
+    return hhLendingPool.connect(signer).liquidate(collateral, asset, borrowId);
+}
+
+describe('LendingPool >> Bid', function() {
+
+    it('should fail if borrow is not in default', async function () {
+        const depositAmount = ethers.utils.parseUnits('200', 18); 
+        const borrowAmount = ethers.utils.parseUnits('60', 18);  
+        const bidAmount = ethers.utils.parseUnits('60', 18);
+        let borrowIds;
+        let borrowId;
+
+        // Initialize reserve
+        await initReserve();
+
+        // Admin: Deposits Asset tokens [required for liquidity]
+        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
+
+        // Bob: Creates a Borrow
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
     
-describe('LendingPool >> Deposit', function() {
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
+        borrowId = borrowIds[0];
 
-    it('should deposit tokens to FToken reserve', async function () {
-        const depositAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
-        const initialLiquidityIndex = ethers.utils.parseUnits('1', 27);
-
-        // Initialize reserve
-        await initReserve();
-
-        // Expect: Deposit Emit response
         await expect(
-            deposit(alice, hhNFT.address, hhAssetToken, depositAmount))
-            .to.emit(hhLendingPool, 'Deposit')
-            .withArgs(
-                hhNFT.address,
-                hhAssetToken.address,
-                depositAmount,
-                alice.address,
-                initialLiquidityIndex);
-
+            bid(alice, hhAssetToken, bidAmount, borrowId)
+            ).to.be.revertedWith("BORROW_NOT_IN_DEFAULT");
     });
 
-    it('should transfer assetTokens from alice to hhFToken contract', async function () {
-        const depositAmount = ethers.utils.parseUnits('1', 18);
+    it('should start a liquidity auciton with an initial bid', async function () {
+        const depositAmount = ethers.utils.parseUnits('200', 18); 
+        const borrowAmount = ethers.utils.parseUnits('60', 18);  
+        const bidAmount = ethers.utils.parseUnits('70', 18);
+        let borrowIds;
+        let borrowId;
+        let newPrice;
+        let borrowItem;
 
         // Initialize reserve
         await initReserve();
 
-        // Deposit Asset tokens
-        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount)
+        // Admin: Deposits Asset tokens [required for liquidity]
+        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
 
-        // Expect: assetTokens transferred from alice to hhFToken contract
-        await expect(
-            (await hhAssetToken.balanceOf(alice.address)))
-            .to.equal((hhAssetTokenInitialBalance.sub(depositAmount)));
-        await expect(
-            (await hhAssetToken.balanceOf(hhFToken.address)))
-            .to.equal(depositAmount);
-    });
-
-    it('should mint fTokens to alice', async function () {            
-        const depositAmount = ethers.utils.parseUnits('1', 18);
-
-        // Initialize reserve
-        await initReserve();
-
-        // Deposit Asset tokens
-        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount)
-
-        // Expect: fTokens minted to alice 
-        await expect(
-            (await hhFToken.balanceOf(hhFToken.address)))
-            .to.equal(0);
-        await expect(
-            (await hhFToken.balanceOf(alice.address)))
-            .to.equal(depositAmount);
-    });
-
-    it('should update liquidity index', async function () {            
-        const depositAmount = ethers.utils.parseUnits('1', 18);//1*10**numDecimals;
-        const borrowAmount = ethers.utils.parseUnits('1', 18);
-        const updatedLiquidityIndex = "1000000019025875391360935222";
-
-        // Initialize reserve
-        await initReserve();
-
-        // Deposit Asset tokens
-        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount);
-
-        // Borrow Asset tokens
+        // Bob: Creates a Borrow
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
+    
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
+        borrowId = borrowIds[0];
 
-        // Expect updated liquidity Index
+        newPrice = ethers.utils.parseUnits('80', 18);
+        await hhLendingPool.setMockFloorPrice(hhNFT.address, newPrice);
+
         await expect(
-            deposit(alice, hhNFT.address, hhAssetToken, depositAmount))
-            .to.emit(hhLendingPool, 'Deposit')
+            bid(alice, hhAssetToken, bidAmount, borrowId)
+            ).to.emit(hhLendingPool, 'Bid')
             .withArgs(
-                hhNFT.address,
                 hhAssetToken.address,
-                depositAmount,
-                alice.address,
-                updatedLiquidityIndex);
+                bidAmount,
+                borrowId,
+                alice.address
+            );
+
+        borrowItem = await hhCollateralManager.getBorrow(borrowId);
+
+        expect(borrowItem.status).to.equal(1); //ActiveAuction
+        expect(borrowItem.auction.caller).to.equal(alice.address);
+        expect(borrowItem.auction.bidder).to.equal(alice.address);
+        expect(borrowItem.auction.bid).to.equal(bidAmount);
+        expect(borrowItem.auction.timestamp).to.be.greaterThan(borrowItem.timestamp);
     });
 
-    it('should update scaledUserBalance and fToken Balance', async function() {
-        const depositAmount = ethers.utils.parseUnits('1', 18);
-        const borrowAmount = ethers.utils.parseUnits('1', 18); 
-        const updatedScaledBalance = "1999999987316083367";
-        const updatedBalance = "2000000025367833908";
+    it('should update from the initial bid and fail if <= existing bid', async function () {
+        const depositAmount = ethers.utils.parseUnits('200', 18); 
+        const borrowAmount = ethers.utils.parseUnits('60', 18);  
+        const bidAmount1 = ethers.utils.parseUnits('60', 18);
+        const bidAmount2 = ethers.utils.parseUnits('70', 18);
+        const bidAmount3 = ethers.utils.parseUnits('70.1', 18);
+        let borrowIds;
+        let borrowId;
+        let newPrice;
+        let borrowItem;
 
         // Initialize reserve
         await initReserve();
 
-        // Deposit Asset tokens
-        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount);
+        // Admin: Deposits Asset tokens [required for liquidity]
+        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
 
-        // Borrow Asset tokens
+        // Bob: Creates a Borrow
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
+    
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
+        borrowId = borrowIds[0];
 
-        // Deposit more asset tokens
-        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount);
+        newPrice = ethers.utils.parseUnits('80', 18);
+        await hhLendingPool.setMockFloorPrice(hhNFT.address, newPrice);
 
-        await expect(await hhFToken.scaledBalanceOf(alice.address)).to.equal(updatedScaledBalance);
-        await expect(await hhFToken.balanceOf(alice.address)).to.equal(updatedBalance);
+        // Admin as caller
+        await bid(admin, hhAssetToken, bidAmount2, borrowId);
+
+        // Alice has initial balance
+        await expect(
+             await hhAssetToken.balanceOf(alice.address))
+            .to.equal(hhAssetTokenInitialBalance);
+
+        // Makes unsuccessful bid
+        await expect(
+            bid(alice, hhAssetToken, bidAmount1, borrowId)
+            ).to.be.revertedWith("INSUFFICIENT_BID");
+
+        // Same balance..
+        await expect(
+            await hhAssetToken.balanceOf(alice.address))
+            .to.equal(hhAssetTokenInitialBalance);
+
+        await expect(
+            bid(alice, hhAssetToken, bidAmount3, borrowId)
+            ).to.emit(hhLendingPool, 'Bid')
+            .withArgs(
+                hhAssetToken.address,
+                bidAmount3,
+                borrowId,
+                alice.address
+            );
+        
+        // Updated balance
+        await expect(
+            await hhAssetToken.balanceOf(alice.address))
+            .to.equal(hhAssetTokenInitialBalance.sub(bidAmount3));
+
+        borrowItem = await hhCollateralManager.getBorrow(borrowId);
+
+        expect(borrowItem.status).to.equal(1); //ActiveAuction
+        expect(borrowItem.auction.caller).to.equal(admin.address);
+        expect(borrowItem.auction.bidder).to.equal(alice.address);
+        expect(borrowItem.auction.bid).to.equal(bidAmount3);
     });
+
+    it('should revert with INSUFFICIENT_BID', async function () {
+        const depositAmount = ethers.utils.parseUnits('200', 18); 
+        const borrowAmount = ethers.utils.parseUnits('60', 18);  
+        const bidAmount = ethers.utils.parseUnits('60', 18);
+        let newPrice;
+        // Initialize reserve
+        await initReserve();
+
+        // Admin: Deposits Asset tokens [required for liquidity]
+        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
+
+        // Bob: Creates a Borrow
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
+    
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
+        borrowId = borrowIds[0];
+
+        newPrice = ethers.utils.parseUnits('80', 18);
+        await hhLendingPool.setMockFloorPrice(hhNFT.address, newPrice);
+
+        await expect(
+            bid(alice, hhAssetToken, bidAmount, borrowId)
+            ).to.be.revertedWith("INSUFFICIENT_BID");
+    });
+
 });

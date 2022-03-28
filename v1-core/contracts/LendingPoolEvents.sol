@@ -41,6 +41,18 @@ contract LendingPoolEvents {
         uint256 liquidityIndex
         );
 
+    /// @notice Emitted when a bid is made against a defaulted borrow.
+    /// @param asset The ERC20 address of the bid asset.
+    /// @param amount The amount of ERC20 tokens bid.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @param bidder The bidder account.
+    event Bid(
+        address asset, 
+        uint256 amount, 
+        uint256 borrowId, 
+        address bidder
+    );
+
     /// @notice Emitted when a borrow is activated.
     /// @param asset The ERC20 address of the borrowed asset.
     /// @param amount The amount of ERC20 tokens borrowed.
@@ -57,6 +69,18 @@ contract LendingPoolEvents {
         uint256 liquidityIndex
     );
 
+    /// @notice Emitted when a borrow position is redeemed.
+    /// @param borrowId The unique identifier of the borrow.
+    /// @param asset The ERC20 address of the borrowed asset.
+    /// @param redeemAmount The amount of ERC20 tokens to be repaid.
+    /// @param borrower The borrower account.
+    event Redeem(
+        uint256 borrowId, 
+        address asset, 
+        uint256 redeemAmount, 
+        address borrower
+    );
+
     /// @notice Emitted when a borrow is repaid.
     /// @param borrowId The unique identifier of the borrow.
     /// @param asset The ERC20 address of the borrowed asset.
@@ -71,14 +95,10 @@ contract LendingPoolEvents {
 
     /// @notice Emitted when a borrow is liquidated.
     /// @param borrowId The unique identifier of the borrow.
-    /// @param asset The ERC20 address of the borrowed asset.
-    /// @param liquidationAmount The amount of ERC20 tokens to be spent for liquidation.
-    /// @param liquidator The liquidator account.
+    /// @param msgSender The msgSender account.
     event Liquidate(
         uint256 borrowId, 
-        address asset, 
-        uint256 liquidationAmount, 
-        address liquidator
+        address msgSender
     );
 
     /// @notice Emitted when the asset reserve is updated.
@@ -95,77 +115,21 @@ contract LendingPoolEvents {
         uint256 liquidityIndex
     );
 
-    /// @notice Emitted when the asset reserve is frozen.
+    /// @notice Emitted when the reserve state is updated.
     /// @param collateral The reserve collateral.
     /// @param asset The reserve asset.
-    event ReserveFrozen(
+    /// @param status Status of the reserve.
+    event ReserveStatus(
         address collateral,
-        address asset
-    );
+        address asset,
+        bytes32 status
+    ); 
 
-    /// @notice Emitted when the asset reserve is paused.
-    /// @param collateral The reserve collateral.
-    /// @param asset The reserve asset.
-    event ReservePaused(
-        address collateral,
-        address asset
-    );
-
-    /// @notice Emitted when the asset reserve is protected.
-    /// @param collateral The reserve collateral.
-    /// @param asset The reserve asset.
-    event ReserveProtected(
-        address collateral,
-        address asset
-    );
-
-    /// @notice Emitted when the asset reserve is activated.
-    /// @param collateral The reserve collateral.
-    /// @param asset The reserve asset.
-    event ReserveActivated(
-        address collateral,
-        address asset
-    );
-
-    /// @notice Emitted when the collateral manager is connected.
-    /// @param collateralManagerAddress The collateral manager address.
-    event CollateralManagerConnected(
-        address collateralManagerAddress
-    );
-
-    /// @notice Emitted when the lendingPoolBorrow contract is connected.
-    /// @param lendingPoolBorrowAddress The lendingPoolBorrow contract address.
-    event LendingPoolBorrowConnected(
-        address lendingPoolBorrowAddress
-    );
-
-    /// @notice Emitted when the lendingPoolDeposit contract is connected.
-    /// @param lendingPoolDepositAddress The lendingPoolDeposit contract address.
-    event LendingPoolDepositConnected(
-        address lendingPoolDepositAddress
-    );
-
-    /// @notice Emitted when the lendingPoolLiquidate contract is connected.
-    /// @param lendingPoolLiquidateAddress The lendingPoolLiquidate contract address.
-    event LendingPoolLiquidateConnected(
-        address lendingPoolLiquidateAddress
-    );
-    
-    /// @notice Emitted when the lendingPoolRepay contract is connected.
-    /// @param lendingPoolRepayAddress The lendingPoolLiquidate contract address.
-    event LendingPoolRepayConnected(
-        address lendingPoolRepayAddress
-    );
-    
-    /// @notice Emitted when the lendingPoolWithdraw contract is connected.
-    /// @param lendingPoolWithdrawAddress The lendingPoolWithdraw contract address.
-    event LendingPoolWithdrawConnected(
-        address lendingPoolWithdrawAddress
-    );
-    
-    /// @notice Emitted when the token price oracle is connected.
-    /// @param tokenPriceOracleAddress The token price oracle address.
-    event TokenPriceOracleConnected(
-        address tokenPriceOracleAddress
+    /// @notice Emitted when LendingPool connects with a given contract.
+    /// @param contractName The name of the contract to connect.
+    /// @param contractAddress The address of the contract to connect.
+    event LendingPoolConnected(
+        bytes32 contractName,
+        address contractAddress
     );
 }

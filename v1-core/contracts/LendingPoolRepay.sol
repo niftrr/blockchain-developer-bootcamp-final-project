@@ -79,7 +79,6 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
             asset, 
             repaymentAmount
         );
-
         require(success, "UNSUCCESSFUL_WITHDRAW");
 
         success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);

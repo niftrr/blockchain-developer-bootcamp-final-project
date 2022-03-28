@@ -73,12 +73,18 @@ beforeEach(async function() {
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
 
+    // Get and deploy NFT
+    NFT = await ethers.getContractFactory('NFT');
+    hhNFT = await NFT.deploy('Punk NFT', 'PUNK');
+    await hhNFT.deployed();
+
     // Get and deploy fToken
     FToken = await ethers.getContractFactory('FToken');
     hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
         treasury.address,
+        hhNFT.address,
         hhAssetToken.address,
         'Dai fToken', 
         'nDAI');
@@ -118,7 +124,7 @@ describe('Configurator >> LendingPool >> pause()', function() {
     it('should revert when caller is not emergency admin', async function () {
         await expect(
             hhConfigurator.connect(admin).pauseLendingPool()
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -134,7 +140,7 @@ describe('Configurator >> LendingPool >> unpause()', function() {
     it('should revert when caller is not emergency admin', async function () {
         await expect(
             hhConfigurator.connect(admin).unpauseLendingPool()
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -147,11 +153,13 @@ describe('Configurator >> LendingPool >> initReserve()', function() {
             hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address))
             .to.emit(hhLendingPool, "InitReserve")
             .withArgs(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
@@ -163,10 +171,11 @@ describe('Configurator >> LendingPool >> initReserve()', function() {
             hhConfigurator
             .connect(alice)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address))
-            .to.be.revertedWith("Caller is not admin.");
+            .to.be.revertedWith("CA1");
     });
 })
 
@@ -177,6 +186,7 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
@@ -185,8 +195,8 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
-            .freezeLendingPoolReserve(hhAssetToken.address))
-            .to.emit(hhLendingPool, "ReserveFrozen")
+            .freezeLendingPoolReserve(hhNFT.address, hhAssetToken.address))
+            .to.emit(hhLendingPool, "ReserveStatus")
     });
 
     it('should revert when caller is not emergency admin', async function () {
@@ -194,15 +204,17 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
             hhConfigurator.connect(admin).freezeLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address
             ))
-            .to.be.revertedWith("Caller is not emergency admin.");
+            .to.be.revertedWith("EA1");
     });
 })
 
@@ -213,6 +225,7 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
@@ -221,8 +234,8 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
-            .pauseLendingPoolReserve(hhAssetToken.address))
-            .to.emit(hhLendingPool, "ReservePaused")
+            .pauseLendingPoolReserve(hhNFT.address, hhAssetToken.address))
+            .to.emit(hhLendingPool, "ReserveStatus")
     });
 
     it('should revert when caller is not emergency admin', async function () {
@@ -230,15 +243,17 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
             hhConfigurator.connect(admin).pauseLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address
             ))
-            .to.be.revertedWith("Caller is not emergency admin.");
+            .to.be.revertedWith("EA1");
     });
 })
 
@@ -249,6 +264,7 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
@@ -257,8 +273,13 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
-            .protectLendingPoolReserve(hhAssetToken.address))
-            .to.emit(hhLendingPool, "ReserveProtected")
+            .protectLendingPoolReserve(hhNFT.address, hhAssetToken.address))
+            .to.emit(hhLendingPool, "ReserveStatus")
+            // .withArgs(
+            //     hhNFT.address,
+            //     hhAssetToken.address,
+            //     "PROTECTED"
+            // );
     });
 
     it('should revert when caller is not emergency admin', async function () {
@@ -266,15 +287,17 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
             hhConfigurator.connect(admin).protectLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address
             ))
-            .to.be.revertedWith("Caller is not emergency admin.");
+            .to.be.revertedWith("EA1");
     });
 })
 
@@ -285,6 +308,7 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
@@ -293,8 +317,8 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
         await expect(
             hhConfigurator
             .connect(emergencyAdmin)
-            .activateLendingPoolReserve(hhAssetToken.address))
-            .to.emit(hhLendingPool, "ReserveActivated")
+            .activateLendingPoolReserve(hhNFT.address, hhAssetToken.address))
+            .to.emit(hhLendingPool, "ReserveStatus")
     });
 
     it('should revert when caller is not emergency admin', async function () {
@@ -302,15 +326,17 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
         await hhConfigurator
             .connect(admin)
             .initLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address
             )
         await expect(
             hhConfigurator.connect(admin).activateLendingPoolReserve(
+                hhNFT.address,
                 hhAssetToken.address
             ))
-            .to.be.revertedWith("Caller is not emergency admin.");
+            .to.be.revertedWith("EA1");
     });
 })
 
@@ -327,9 +353,9 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
         await expect(
             hhConfigurator
             .connect(admin)
-            .connectLendingPoolCollateralManager(
-            ))
-            .to.emit(hhLendingPool, "CollateralManagerConnected")
+            .connectLendingPoolContract("CM")
+            )
+            .to.emit(hhLendingPool, "LendingPoolConnected")
     });
 
     it('should revert when called for a second time', async function () {
@@ -342,15 +368,14 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
 
         hhConfigurator
             .connect(admin)
-            .connectLendingPoolCollateralManager(
-            )
+            .connectLendingPoolContract("CM");
         
         await expect(
             hhConfigurator
             .connect(admin)
-            .connectLendingPoolCollateralManager(
-            ))
-            .to.be.revertedWith("Collateral Manager already connected");
+            .connectLendingPoolContract("CM")
+            )
+            .to.be.revertedWith("CM1");
     });
 
     it('should revert when caller is not admin', async function () {
@@ -363,9 +388,9 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
 
         await expect(
             hhConfigurator.connect(alice)
-            .connectLendingPoolCollateralManager(
-            ))
-            .to.be.revertedWith("Caller is not admin.");
+            .connectLendingPoolContract("CM")
+            )
+            .to.be.revertedWith("CA1");
     });
 })
 
@@ -379,13 +404,18 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
             hhCollateralManagerAddress
         )
 
+        hhConfigurator
+        .connect(admin)
+        .connectTokenPriceOracleAddress(
+            hhTokenPriceOracleAddress
+        )
+
         await expect(
             hhConfigurator
             .connect(admin)
-            .connectLendingPoolTokenPriceOracle(
-                hhCollateralManager.address
-            ))
-            .to.emit(hhLendingPool, "TokenPriceOracleConnected")
+            .connectLendingPoolContract("PRICE_ORACLE")
+            )
+            .to.emit(hhLendingPool, "LendingPoolConnected")
     });
 
     it('should revert when caller is not admin', async function () {
@@ -399,10 +429,9 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
         await expect(
             hhConfigurator
             .connect(alice)
-            .connectLendingPoolTokenPriceOracle(
-                hhCollateralManager.address
-            ))
-            .to.be.revertedWith("Caller is not admin.");
+            .connectLendingPoolContract("PRICE_ORACLE")
+            )
+            .to.be.revertedWith("CA1");
     });
 })
 /* 
@@ -450,7 +479,7 @@ describe('Configurator >> CollateralManager >> setInterestRate()', function() {
                 hhNFT.address,
                 interestRate
             ))
-            .to.be.revertedWith("Caller is not admin.");
+            .to.be.revertedWith("CA1");
     });
 })
 
@@ -493,7 +522,7 @@ describe('Configurator >> CollateralManager >> setLiquidationThreshold()', funct
                 hhNFT.address,
                 liquidationThreshold
             ))
-            .to.be.revertedWith("Caller is not admin.");
+            .to.be.revertedWith("CA1");
     });
 })
 
@@ -538,7 +567,7 @@ describe('Configurator >> CollateralManager >> updateWhitelist()', function() {
                 hhNFT.address,
                 isWhitelisted
             ))
-            .to.be.revertedWith("Caller is not admin.");
+            .to.be.revertedWith("CA1");
     });
 })
 
@@ -565,7 +594,7 @@ describe('Configurator >> CollateralManager >> pause()', function() {
         )
         await expect(
             hhConfigurator.connect(admin).pauseCollateralManager()
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -593,7 +622,7 @@ describe('Configurator >> CollateralManager >> unpause()', function() {
         )
         await expect(
             hhConfigurator.connect(admin).unpauseCollateralManager()
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -624,7 +653,7 @@ describe('Configurator >> FToken >> pause()', function() {
             hhConfigurator.connect(admin).pauseFToken(
                 hhFToken.address
             )
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -658,7 +687,7 @@ describe('Configurator >> FToken >> unpause()', function() {
             hhConfigurator.connect(admin).unpauseFToken(
                 hhFToken.address
             )
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -689,7 +718,7 @@ describe('Configurator >> DebtToken >> pause()', function() {
             hhConfigurator.connect(admin).pauseDebtToken(
                 hhDebtToken.address
             )
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1");
     });
 })
 
@@ -723,6 +752,6 @@ describe('Configurator >> DebtToken >> unpause()', function() {
             hhConfigurator.connect(admin).unpauseDebtToken(
                 hhDebtToken.address
             )
-        ).to.be.revertedWith("Caller is not emergency admin.");
+        ).to.be.revertedWith("EA1"); //
     });
 })

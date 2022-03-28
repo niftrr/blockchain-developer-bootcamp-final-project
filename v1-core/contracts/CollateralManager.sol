@@ -112,7 +112,15 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     }
 
     modifier whenBorrowActive(uint256 _id) {
-        require(borrows[_id].status == DataTypes.BorrowStatus.Active, "Borrow is not active");
+        require(
+            borrows[_id].status == DataTypes.BorrowStatus.Active ||
+            borrows[_id].status == DataTypes.BorrowStatus.ActiveAuction, 
+            "Borrow / auction is not active");
+        _;
+    }
+
+    modifier whenBorrowActiveAuction(uint256 _id) {
+        require(borrows[_id].status == DataTypes.BorrowStatus.ActiveAuction, "Borrow auction is not active");
         _;
     }
 
@@ -207,7 +215,7 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         nonReentrant
         onlyLendingPool
         whenNotPaused 
-        whenBorrowActive(_id)
+        whenBorrowActiveAuction(_id)
         returns (bool)
     {
         bool success = _retrieve(
@@ -298,6 +306,74 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         return borrows[borrowId];
     }
 
+    function setBorrowAuctionBid(
+        uint256 borrowId, 
+        uint256 auctionBid, 
+        address auctionBidder
+    ) 
+        public 
+        onlyLendingPool
+        returns (bool) 
+    {
+        borrows[borrowId].auction.bid = auctionBid;
+        borrows[borrowId].auction.bidder = auctionBidder;
+        return true;
+    }
+
+    function setBorrowAuctionCall(
+        uint256 borrowId, 
+        uint256 auctionBid, 
+        uint256 auctionLiquidationFee,
+        uint40 auctionTimestamp,
+        address auctionCaller
+    ) 
+        public 
+        onlyLendingPool
+        returns (bool) 
+    {
+        borrows[borrowId].auction.bid = auctionBid;
+        borrows[borrowId].auction.liquidationFee = auctionLiquidationFee;
+        borrows[borrowId].auction.timestamp = auctionTimestamp;
+        borrows[borrowId].auction.caller = auctionCaller;
+        borrows[borrowId].auction.bidder = auctionCaller;
+        borrows[borrowId].status = DataTypes.BorrowStatus.ActiveAuction;
+        return true;
+    }
+
+
+    function updateBorrow(
+        uint256 borrowId,
+        uint256 borrowAmount, 
+        uint256 collateralFloorPrice,
+        DataTypes.BorrowStatus status
+    ) 
+        public 
+        onlyLendingPool
+        returns (bool) 
+    {
+        borrows[borrowId].status = status;
+        borrows[borrowId].borrowAmount = borrowAmount;
+        borrows[borrowId].liquidationPrice = _getLiquidationPrice(
+            borrows[borrowId].collateral.erc721Token,
+            borrowAmount,
+            collateralFloorPrice
+        );
+        borrows[borrowId].timestamp = uint40(block.timestamp);
+        return true;
+    }
+
+    function setBorrowStatus(
+        uint256 borrowId, 
+        DataTypes.BorrowStatus status
+    ) 
+        public 
+        onlyLendingPool
+        returns (bool) 
+    {
+        borrows[borrowId].status = status;
+        return true;
+    }
+
     /// @notice Gets the interest rate APY for a given ERC721 token.
     /// @param erc721Token The ERC721 token for which to get the interest rate.
     /// @dev Retrieves the NFT project interest rate back from the mapping.
@@ -335,8 +411,8 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         returns (uint256)
     {
         uint256 liquidationThreshold = getLiquidationThreshold(erc721Token);
-        uint256 maxAmount = collateralFloorPrice.mul(100).div(liquidationThreshold);
-        // require(borrowAmount <= maxAmount, "UNDERCOLLATERALIZED"); TODO: uncomment, used for testing
+        uint256 maxAmount = collateralFloorPrice.mul(100).div(liquidationThreshold); // TODO: use global var for liquidationThreshold
+        require(borrowAmount <= maxAmount, "UNDERCOLLATERALIZED"); 
 
         uint256 liquidationPrice = borrowAmount.mul(liquidationThreshold).div(100);
         return liquidationPrice;
@@ -391,7 +467,14 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
             borrowAmount: borrowAmount,
             interestRate: interestRate,
             liquidationPrice: liquidationPrice,
-            timestamp: timestamp
+            timestamp: timestamp,
+            auction: DataTypes.Auction({
+                caller: address(0),
+                bidder: address(0),
+                bid: 0,
+                liquidationFee: 0,
+                timestamp: 0
+            })
         });
 
         userBorrows[borrower].push(id);
@@ -453,7 +536,6 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         uint256 borrowRepaymentAmount = borrows[_id].borrowAmount.rayMul(
             InterestLogic.calculateLinearInterest(borrows[_id].interestRate, borrows[_id].timestamp)
         );
-
         require(borrowRepaymentAmount == _repaymentAmount, "Repayment amount doesn't match borrow");
 
         address borrower = borrows[_id].borrower;

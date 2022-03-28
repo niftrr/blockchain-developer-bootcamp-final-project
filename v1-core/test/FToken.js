@@ -45,7 +45,7 @@ beforeEach(async function() {
     await hhLendingPoolBorrow.deployed();
     hhLendingPoolBorrowAddress = await hhLendingPoolBorrow.resolvedAddress;
     await hhConfigurator.connectLendingPoolBorrow(hhLendingPoolBorrowAddress);
-    await hhConfigurator.connectLendingPoolLendingPoolBorrow();
+    await hhConfigurator.connectLendingPoolContract("BORROW");
 
     // Get, deploy and connect LendingPoolDeposit to LendingPool
     LendingPoolDeposit = await ethers.getContractFactory('LendingPoolDeposit');
@@ -56,7 +56,7 @@ beforeEach(async function() {
     await hhLendingPoolDeposit.deployed();
     hhLendingPoolDepositAddress = await hhLendingPoolDeposit.resolvedAddress;
     await hhConfigurator.connectLendingPoolDeposit(hhLendingPoolDepositAddress);
-    await hhConfigurator.connectLendingPoolLendingPoolDeposit();
+    await hhConfigurator.connectLendingPoolContract("DEPOSIT");
 
     // Get, deploy and connect LendingPoolLiquidate to LendingPool
     LendingPoolLiquidate = await ethers.getContractFactory('LendingPoolLiquidate');
@@ -67,7 +67,7 @@ beforeEach(async function() {
     await hhLendingPoolLiquidate.deployed();
     hhLendingPoolLiquidateAddress = await hhLendingPoolLiquidate.resolvedAddress;
     await hhConfigurator.connectLendingPoolLiquidate(hhLendingPoolLiquidateAddress);
-    await hhConfigurator.connectLendingPoolLendingPoolLiquidate();
+    await hhConfigurator.connectLendingPoolContract("LIQUIDATE");
 
     // Get, deploy and connect LendingPoolRepay to LendingPool
     LendingPoolRepay = await ethers.getContractFactory('LendingPoolRepay');
@@ -78,7 +78,7 @@ beforeEach(async function() {
     await hhLendingPoolRepay.deployed();
     hhLendingPoolRepayAddress = await hhLendingPoolRepay.resolvedAddress;
     await hhConfigurator.connectLendingPoolRepay(hhLendingPoolRepayAddress);
-    await hhConfigurator.connectLendingPoolLendingPoolRepay();
+    await hhConfigurator.connectLendingPoolContract("REPAY");
 
     // Get, deploy and connect LendingPoolWithdraw to LendingPool
     LendingPoolWithdraw = await ethers.getContractFactory('LendingPoolWithdraw');
@@ -89,7 +89,7 @@ beforeEach(async function() {
     await hhLendingPoolWithdraw.deployed();
     hhLendingPoolWithdrawAddress = await hhLendingPoolWithdraw.resolvedAddress;
     await hhConfigurator.connectLendingPoolWithdraw(hhLendingPoolWithdrawAddress);
-    await hhConfigurator.connectLendingPoolLendingPoolWithdraw();
+    await hhConfigurator.connectLendingPoolContract("WITHDRAW");
 
 
     // Get and deploy CollateralManager
@@ -111,7 +111,7 @@ beforeEach(async function() {
     // Link CollateralManager to LendingPool
     await hhConfigurator
     .connect(admin)
-    .connectLendingPoolCollateralManager();
+    .connectLendingPoolContract("CM");
 
     // Get and deploy Asset Token
     AssetToken = await ethers.getContractFactory('AssetToken');
@@ -119,12 +119,18 @@ beforeEach(async function() {
     await hhAssetToken.deployed();
     hhAssetTokenAddress = await hhAssetToken.resolvedAddress;
     
+    // Get and deploy NFT
+    NFT = await ethers.getContractFactory('NFT');
+    hhNFT = await NFT.deploy('Punk NFT', 'PUNK');
+    await hhNFT.deployed();
+
     // Get and deploy fToken
     FToken = await ethers.getContractFactory('FToken');
     hhFToken = await FToken.deploy(
         hhConfiguratorAddress,
         hhLendingPoolAddress,
         treasury.address,
+        hhNFT.address,
         hhAssetTokenAddress,
         'Dai fToken', 
         'fDAI');
@@ -157,6 +163,7 @@ async function initReserve() {
     return hhConfigurator
     .connect(admin)
     .initLendingPoolReserve(
+        hhNFT.address,
         hhAssetToken.address, 
         hhFToken.address,
         hhDebtToken.address
@@ -177,6 +184,7 @@ describe('FToken >> LendingPool >> Init', function() {
             _initReserve())
             .to.emit(hhLendingPool, 'InitReserve')
             .withArgs(
+                hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
                 hhDebtToken.address);

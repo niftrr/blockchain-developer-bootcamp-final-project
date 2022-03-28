@@ -12,6 +12,7 @@ library DataTypes {
 
     enum BorrowStatus { 
         Active, // Open
+        ActiveAuction, // Open with open auction
         Repaid, // Closed, paid by borrower
         Liquidated // Closed, paid by liquidator
     }
@@ -33,9 +34,18 @@ library DataTypes {
         uint256 tokenId;
     }
 
+    struct Auction {
+        address caller;
+        address bidder;
+        uint256 bid;
+        uint256 liquidationFee;
+        uint40 timestamp;
+    }
+
     struct Borrow {
         BorrowStatus status;
         Collateral collateral;
+        Auction auction;
         address borrower;
         address erc20Token;
         uint256 borrowAmount;

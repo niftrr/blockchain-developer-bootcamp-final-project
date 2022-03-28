@@ -39,7 +39,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
     /// @param amount The amount of debtTokens to be minted.
     event Burn(address account, uint256 amount);
 
-
     constructor(
         address configurator, 
         address lendingPool,

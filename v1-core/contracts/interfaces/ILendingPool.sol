@@ -38,6 +38,7 @@ interface ILendingPool {
         external;
 
     function getLiquidityIndex(
+        address collateral,
         address asset
     )
         external 
@@ -61,31 +62,17 @@ interface ILendingPool {
 
     function unpause() external;
 
-    function freezeReserve(address asset) external;
+    function updateInterestFee(uint256 interestFee) external;
 
-    function pauseReserve(address asset) external;
+    function updateLiquidationFee(uint256 liquidationFee) external;
 
-    function protectReserve(address asset) external;
+    function updateLiquidationFeeProtocolPercentage(uint256 protocolPercentage) external;
 
-    function activateReserve(address asset) external;
+    function updateReserve(address collateral, address asset, bytes32 status) external;
 
-    function connectCollateralManager(address _collateralManagerAddress) external;
-
-    function connectLendingPoolBorrow(address _lendingPoolBorrowAddress) external;
-
-    function connectLendingPoolDeposit(address _lendingPoolDepositAddress) external;
-
-    function connectLendingPoolLiquidate(address _lendingPoolLiquidateAddress) external;
-
-    function connectLendingPoolRepay(address _lendingPoolRepayAddress) external;
-
-    function connectLendingPoolWithdraw(address _lendingPoolWithdrawAddress) external;
-
-    function connectTokenPriceOracle(address _oracleTokenPriceAddress) external;
+    function connectContract(bytes32 contractName, address contractAddress) external;
 
     function getFloorPrice(address collateral, address asset) external returns (uint256);
-
-    function getLiquidationThreshold(address collateral) external returns (bool, uint256);
 
     function getTokenPriceOracleAddress() external view returns (address);
 
@@ -93,6 +80,8 @@ interface ILendingPool {
 
     function getCollateralManagerAddress() external view returns (address);
 
+    function setAuctionDuration(uint40 duration) external;
 
+    function getAuctionDuration() external returns (uint40);
 
 }

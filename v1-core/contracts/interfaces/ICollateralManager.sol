@@ -56,4 +56,38 @@ interface ICollateralManager {
     function getUserBorrowIds(address user) external view;
 
     function getBorrow(uint256 borrowId) external returns (DataTypes.Borrow memory);
+
+    function setBorrowAuctionBid(
+        uint256 borrowId,
+        uint256 auctionBid,
+        address auctionBidder
+    ) 
+        external
+        returns (bool);
+
+    function setBorrowAuctionCall(
+        uint256 borrowId,
+        uint256 auctionBid,
+        uint256 auctionLiquidationFee,
+        uint40 auctionTimestamp,
+        address auctionCaller
+    ) 
+        external
+        returns (bool);    
+
+    function setBorrowStatus(
+        uint256 borrowId,
+        DataTypes.BorrowStatus status
+    ) 
+        external
+        returns (bool);
+
+    function updateBorrow(
+        uint256 borrowId,
+        uint256 borrowAmount,
+        uint256 collateralFloorPrice,
+        DataTypes.BorrowStatus status
+    )
+        external
+        returns (bool);
 }

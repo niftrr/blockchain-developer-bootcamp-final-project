@@ -104,33 +104,4 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
         (,reserve.liquidityIndex) = reserve.getNormalizedIncome();
         return reserve.liquidityIndex;
     }
-
-    // function _updateUserScaledBalance(
-    //     address collateral, 
-    //     address user,
-    //     address asset,
-    //     uint256 amount,
-    //     bool isDeposit
-    // )
-    //     internal
-    //     returns (uint256)
-    // {
-    //     uint256 reserveNormalizedIncome = getReserveNormalizedIncome(collateral, asset);
-        
-    //     if (isDeposit) {
-    //         userScaledBalances[user][asset] = userScaledBalances[user][asset].add(
-    //             WadRayMath.rayToWad(
-    //                 WadRayMath.wadToRay(amount).rayDiv(reserveNormalizedIncome)
-    //             )
-    //         );
-    //     } else {
-    //         userScaledBalances[user][asset] = userScaledBalances[user][asset].sub(
-    //             WadRayMath.rayToWad(
-    //                 WadRayMath.wadToRay(amount).div(reserveNormalizedIncome)
-    //             )
-    //         );
-    //     }
-
-    //     return userScaledBalances[user][asset];
-    // }
 }

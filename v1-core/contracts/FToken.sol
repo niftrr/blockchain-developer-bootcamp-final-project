@@ -284,7 +284,7 @@ contract FToken is Context, ERC20Pausable, IFToken, AccessControl, ReentrancyGua
         override(ERC20)
     {
         // address asset = ILendingPool(_lendingPool).getUnderlyingAsset(address(this));
-        uint256 liquidityIndex = _pool.getLiquidityIndex(_underlyingAsset);
+        uint256 liquidityIndex = _pool.getLiquidityIndex(_underlyingCollateral, _underlyingAsset);
         // uint256 liquidityIndex = WadRayMath.ray().mul(8); // as per test input
 
         super._transfer(from, to, amount.rayDiv(liquidityIndex));

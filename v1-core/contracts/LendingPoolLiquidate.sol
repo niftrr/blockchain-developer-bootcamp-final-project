@@ -20,10 +20,16 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
     using SafeMath for uint256; 
     using WadRayMath for uint256;
 
-
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
     
+    struct LiquidateVars {
+        bool success;
+        uint256 repaymentAmount;
+        uint256 remainderAmount;
+        uint256 reimbursementAmount;
+    }
+
     constructor(address configurator, address lendingPool) {
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _setupRole(LENDING_POOL_ROLE, lendingPool);
@@ -52,87 +58,69 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
     }
 
     /// @notice Private function to liquidate a borrow position.
-    /// @param collateral The lending pool collataral contract address.
-    /// @param asset The ERC20 token to be borrowed.
-    /// @param liquidationAmount The amount of ERC20 tokens to be paid.
+    /// @param collateral The NFT collateral contract address.
+    /// @param asset The ERC20 address of the asset.
     /// @param borrowId The unique identifier of the borrow.
+    /// @param auctionDuration The duration of the auction in seconds.
+    /// @dev To be called after a liquidity auction has ended to distribute NFT + assets to the appropriate parties.
     /// @dev Transfers assets back to the reserve before burning debtTokens and retreiving collateral for the liquidator. 
     function liquidate(
         address collateral,
         address asset,
-        uint256 liquidationAmount,
-        uint256 borrowId
+        uint256 borrowId,
+        uint40 auctionDuration
     ) 
         external
         returns (bool)
     {
-        bool success;
-        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];  
         DataTypes.Borrow memory borrowItem = ICollateralManager(
             _collateralManagerAddress
         ).getBorrow(borrowId);
-        require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(borrowItem.collateral.erc721Token, borrowItem.erc20Token))]; 
+        LiquidateVars memory vars;
 
-        uint256 floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
-    
-        // TODO: To have 80% liquidation price able to be set/updated 
-        require(liquidationAmount == floorPrice.mul(80).div(100), "INCORRECT_AMOUNT");
+        require(borrowItem.status == DataTypes.BorrowStatus.ActiveAuction, "AUCTION_NOT_TRIGGERED");
+        require(uint40(block.timestamp) - borrowItem.auction.timestamp > auctionDuration, "AUCTION_STILL_ACTIVE"); // TODO: use configuratble global variable for auction time, currently 24 hours
+        require(borrowItem.erc20Token == asset, "INCORRECT_ASSET");
+        require(borrowItem.collateral.erc721Token == collateral, "INCORRECT_COLLATERAL");
 
-        // require(floorPrice < borrowItem.liquidationPrice, "BORROW_NOT_IN_DEFAULT"); TODO: uncomment, used for testing
-        address borrower = borrowItem.borrower;
-        uint256 repaymentAmount = borrowItem.borrowAmount
+        vars.success = IFToken(reserve.fTokenAddress).reserveTransfer(borrowItem.auction.caller, borrowItem.erc20Token, borrowItem.auction.liquidationFee);
+        require(vars.success, "UNSUCCESSFUL_TRANSFER_TO_AUCTION_CALLER");
+
+        vars.repaymentAmount = borrowItem.borrowAmount
             .add(
                 (borrowItem.borrowAmount)
                 .rayMul(borrowItem.interestRate)
                 .mul(block.timestamp.sub(borrowItem.timestamp))
                 .div(365 days)
             );
+        vars.remainderAmount = borrowItem.auction.bid.sub(vars.repaymentAmount);
+        vars.reimbursementAmount = vars.remainderAmount.sub(borrowItem.auction.liquidationFee);
 
+        uint256 liquidationFeeToCaller = borrowItem.auction.liquidationFee.mul(90).div(100); // TODO: make this updatable. E.g. this split is 4.5% to Caller and 0.5% to Protocol to cover dust
+        uint256 liquidationFeeToProtocol = borrowItem.auction.liquidationFee - liquidationFeeToCaller;
 
-        success = IERC20(asset).transferFrom(_msgSender(), reserve.fTokenAddress, repaymentAmount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-     
-        uint256 remainder = liquidationAmount.sub(repaymentAmount);
-       
-        uint256 feeAmount = WadRayMath.rayToWad(WadRayMath.rayMul(WadRayMath.wadToRay(remainder), _liquidationFee));
+        vars.success = IFToken(reserve.fTokenAddress).reserveTransfer(borrowItem.auction.caller, borrowItem.erc20Token, liquidationFeeToCaller);
+        require(vars.success, "UNSUCCESSFUL_TRANSFER_TO_AUCTION_CALLER");
 
-        uint256 reimbursementAmount = remainder.sub(feeAmount);
-      
+        vars.success = IFToken(reserve.fTokenAddress).reserveTransfer(_treasuryAddress, borrowItem.erc20Token, liquidationFeeToProtocol);
+        require(vars.success, "UNSUCCESSFUL_TRANSFER_TO_AUCTION_CALLER");
 
-    
+        vars.success = IFToken(reserve.fTokenAddress).reserveTransfer(borrowItem.borrower, borrowItem.erc20Token, vars.reimbursementAmount);
+        require(vars.success, "UNSUCCESSFUL_TRANSFER_TO_BORROWER");
 
-        success = IERC20(asset).transferFrom(_msgSender(), _treasuryAddress, feeAmount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-        console.log('here6');
-        success = IERC20(asset).transferFrom(_msgSender(), borrower, reimbursementAmount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
-        console.log('here7');
-        success = IDebtToken(reserve.debtTokenAddress).burnFrom(borrower, repaymentAmount);
-        require(success, "UNSUCCESSFUL_BURN");
-        console.log('here8');
-        success = ICollateralManager(_collateralManagerAddress).retrieve(
+        vars.success = IDebtToken(reserve.debtTokenAddress).burnFrom(borrowItem.borrower, vars.repaymentAmount);
+        require(vars.success, "UNSUCCESSFUL_BURN");
+
+        vars.success = ICollateralManager(_collateralManagerAddress).retrieve(
             borrowId, 
-            asset, 
-            repaymentAmount,
-            _msgSender()
+            borrowItem.erc20Token, 
+            vars.repaymentAmount,
+            borrowItem.auction.bidder
         );
-        require(success, "UNSUCCESSFUL_RETRIEVE");
-        console.log('here9');
+        require(vars.success, "UNSUCCESSFUL_RETRIEVE");
+   
         // Update reserve borrow numbers - for use in APR calculation
-        console.log('reserve.borrowAmount', reserve.borrowAmount);
-        console.log('borrowItem.borrowAmount', borrowItem.borrowAmount);
-
-
-        // if (reserve.borrowAmount.sub(borrowItem.borrowAmount) > 0) {
-        //     reserve.borrowRate = (
-        //         (reserve.borrowAmount.mul(reserve.borrowRate)).sub(borrowItem.borrowAmount.mul(borrowItem.interestRate))
-        //     ).div(reserve.borrowAmount.sub(borrowItem.borrowAmount));
-        // } else {
-        //     reserve.borrowRate  = 0;
-        // }
-
-        // reserve.borrowAmount = reserve.borrowAmount.sub(borrowItem.borrowAmount);
-
         if (reserve.borrowAmount.sub(borrowItem.borrowAmount) > 0) {
             reserve.borrowRate = WadRayMath.rayDiv(
                 WadRayMath.rayMul(
@@ -149,7 +137,7 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
 
         reserve.borrowAmount = reserve.borrowAmount.sub(borrowItem.borrowAmount);
 
-        return success;
+        return vars.success;
     }
 
 }

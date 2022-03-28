@@ -58,7 +58,6 @@ library ReserveLogic {
         if (vars.totalLiquidity > 0) {
             vars.utilizationRate = vars.totalDebt.wadToRay().rayDiv(vars.totalLiquidity.wadToRay());
         }
-        console.log('=utilizationRate', vars.utilizationRate);
         return vars.utilizationRate;
     }
 

@@ -12,9 +12,11 @@ contract LendingPoolStorage {
     using ReserveLogic for DataTypes.Reserve;
 
     address internal _treasuryAddress;
+    address internal _lendingPoolBidAddress;
     address internal _lendingPoolBorrowAddress;
     address internal _lendingPoolDepositAddress;
     address internal _lendingPoolLiquidateAddress;
+    address internal _lendingPoolRedeemAddress;
     address internal _lendingPoolRepayAddress;
     address internal _lendingPoolWithdrawAddress;
 
@@ -31,4 +33,7 @@ contract LendingPoolStorage {
 
     uint256 internal _interestFee;
     uint256 internal _liquidationFee;
+    uint256 internal _liquidationFeeProtocolPercentage;
+
+    uint40 internal _auctionDuration = 24 hours;
 }
