@@ -7,9 +7,9 @@ let hhLendingPoolAddress;
 let CollateralManager;
 let hhCollateralManager;
 let hhCollateralManagerAddress;
-let TokenPriceOracle;
-let hhTokenPriceOracle;
-let hhTokenPriceOracleAddress;
+let TokenPriceConsumer;
+let hhTokenPriceConsumer;
+let hhTokenPriceConsumerAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
@@ -50,9 +50,9 @@ beforeEach(async function() {
     hhConfiguratorAddress = await hhConfigurator.resolvedAddress;
 
     // Get and deploy OraceTokenPrice
-    TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
-    hhTokenPriceOracle = await TokenPriceOracle.deploy();
-    hhTokenPriceOracleAddress = await hhTokenPriceOracle.resolvedAddress;
+    TokenPriceConsumer = await ethers.getContractFactory('TokenPriceConsumer');
+    hhTokenPriceConsumer = await TokenPriceConsumer.deploy("0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0");
+    hhTokenPriceConsumerAddress = await hhTokenPriceConsumer.resolvedAddress;
 
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
@@ -143,7 +143,6 @@ beforeEach(async function() {
     await hhConfigurator.connectLendingPoolWithdraw(hhLendingPoolWithdrawAddress);
     await hhConfigurator.connectLendingPoolContract("WITHDRAW");
 
-
     // Get and deploy CollateralManager
     CollateralManager = await ethers.getContractFactory('CollateralManager');
     hhCollateralManager = await CollateralManager.deploy(
@@ -169,10 +168,10 @@ beforeEach(async function() {
     AssetToken = await ethers.getContractFactory('AssetToken');
     hhAssetToken = await AssetToken.deploy('Dai Token', 'DAI', hhAssetTokenSupply.toString());
     await hhAssetToken.deployed();
-    
+
     hhAssetToken2 = await AssetToken.deploy('Dai Token2', 'DAI2', hhAssetTokenSupply.toString());
     await hhAssetToken2.deployed();
-
+    
     // Get and deploy NFT
     NFT = await ethers.getContractFactory('NFT');
     hhNFT = await NFT.deploy('Punk NFT', 'PUNK');
@@ -218,6 +217,14 @@ beforeEach(async function() {
     );
     await hhDebtToken.deployed();   
 
+    // Get and deploy NFT Price Oracle
+    NFTPriceConsumer = await ethers.getContractFactory('NFTPriceConsumer');
+    hhNFTPriceConsumer = await NFTPriceConsumer.deploy(hhConfiguratorAddress, 5);
+    await hhNFTPriceConsumer.deployed();
+    hhNFTPriceConsumerAddress = await hhNFTPriceConsumer.resolvedAddress;
+    await hhConfigurator.connectNFTPriceConsumer(hhNFTPriceConsumer.address);
+    await hhConfigurator.connectLendingPoolContract("NFT_PRICE_ORACLE");
+
     // -- Assign minter role to LendingPool
     // await hhDebtToken.setMinter(hhLendingPoolAddress);
 
@@ -232,21 +239,11 @@ beforeEach(async function() {
     await hhNFT.mint(alice.address, alice_tokenId);
     await hhNFT.mint(bob.address, bob_tokenId);
 
-    // Set Mocked Oracle NFT price
+    // Set/Mock NFT Price Oracle NFT price
     const mockFloorPrice = ethers.utils.parseUnits('100', 18);
-    hhLendingPool.setMockFloorPrice(hhNFT.address, mockFloorPrice);
-
-    // Set Mock Oracle Asset Token prices
-    const mockETHDAI = ethers.utils.parseUnits('4325', 18);
-    // const mockETHUSDC = ethers.utils.parseUnits('4332.14.', 18);
-    // const mockETHWETH = ethers.utils.parseUnits('1', 18);
-    hhLendingPool.setMockEthTokenPrice(hhAssetToken.address, mockETHDAI);    
-
-    // Logging 
-    // console.log('CollateralManager deployed:', hhCollateralManagerAddress);
-    // console.log('LendingPoolAddress deployed:', hhLendingPoolAddress);
-    // console.log('alice:', alice.address);
-    // console.log('bob:', bob.address);
+    await hhConfigurator
+        .connect(admin)
+        .setNFTPriceConsumerFloorPrice(hhNFT.address, mockFloorPrice); 
 });
 
 async function initReserve() {
@@ -256,7 +253,8 @@ async function initReserve() {
         hhNFT.address,
         hhAssetToken.address, 
         hhFToken.address,
-        hhDebtToken.address
+        hhDebtToken.address,
+        "WETH"
     )
 }
 
@@ -346,7 +344,9 @@ describe('LendingPool >> Liquidate', function() {
             ).to.be.revertedWith("AUCTION_NOT_TRIGGERED");
 
         newPrice = ethers.utils.parseUnits('80', 18);
-        await hhLendingPool.setMockFloorPrice(hhNFT.address, newPrice);
+        await hhConfigurator
+            .connect(admin)
+            .setNFTPriceConsumerFloorPrice(hhNFT.address, newPrice); 
 
         await bid(alice, hhAssetToken, bidAmount, borrowId);
 
@@ -392,7 +392,9 @@ describe('LendingPool >> Liquidate', function() {
         borrowId = borrowIds[0];
 
         newPrice = ethers.utils.parseUnits('80', 18);
-        await hhLendingPool.setMockFloorPrice(hhNFT.address, newPrice);
+        await hhConfigurator
+            .connect(admin)
+            .setNFTPriceConsumerFloorPrice(hhNFT.address, newPrice); 
 
         await bid(alice, hhAssetToken, bidAmount, borrowId);
 

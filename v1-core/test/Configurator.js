@@ -10,9 +10,9 @@ let hhLendingPoolAddress;
 let CollateralManager;
 let hhCollateralManager;
 let hhCollateralManagerAddress;
-let TokenPriceOracle;
-let hhTokenPriceOracle;
-let hhTokenPriceOracleAddress;
+let TokenPriceConsumer;
+let hhTokenPriceConsumer;
+let hhTokenPriceConsumerAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
@@ -64,9 +64,14 @@ beforeEach(async function() {
     hhCollateralManagerAddress = await hhCollateralManager.resolvedAddress;
 
     // Get and deploy OraceTokenPrice
-    TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
-    hhTokenPriceOracle = await TokenPriceOracle.deploy();
-    hhTokenPriceOracleAddress = await hhTokenPriceOracle.resolvedAddress;
+    TokenPriceConsumer = await ethers.getContractFactory('TokenPriceConsumer');
+    hhTokenPriceConsumer = await TokenPriceConsumer.deploy("0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0");
+    hhTokenPriceConsumerAddress = await hhTokenPriceConsumer.resolvedAddress;
+
+    // Get and deploy OraceTokenPrice
+    NFTPriceConsumer = await ethers.getContractFactory('NFTPriceConsumer');
+    hhNFTPriceConsumer = await NFTPriceConsumer.deploy(hhConfiguratorAddress, 5);
+    hhNFTPriceConsumerAddress = await hhNFTPriceConsumer.resolvedAddress;
 
     // Get and deploy Asset Token
     AssetToken = await ethers.getContractFactory('AssetToken');
@@ -156,7 +161,8 @@ describe('Configurator >> LendingPool >> initReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address))
+                hhDebtToken.address,
+                "WETH"))
             .to.emit(hhLendingPool, "InitReserve")
             .withArgs(
                 hhNFT.address,
@@ -174,7 +180,8 @@ describe('Configurator >> LendingPool >> initReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address))
+                hhDebtToken.address,
+                "WETH"))
             .to.be.revertedWith("CA1");
     });
 })
@@ -189,7 +196,8 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         
         await expect(
@@ -207,7 +215,8 @@ describe('Configurator >> LendingPool >> freezeReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         await expect(
             hhConfigurator.connect(admin).freezeLendingPoolReserve(
@@ -228,7 +237,8 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         
         await expect(
@@ -246,7 +256,8 @@ describe('Configurator >> LendingPool >> pauseReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         await expect(
             hhConfigurator.connect(admin).pauseLendingPoolReserve(
@@ -267,7 +278,8 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         
         await expect(
@@ -290,7 +302,8 @@ describe('Configurator >> LendingPool >> protectReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         await expect(
             hhConfigurator.connect(admin).protectLendingPoolReserve(
@@ -311,7 +324,8 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         
         await expect(
@@ -329,7 +343,8 @@ describe('Configurator >> LendingPool >> activateReserve()', function() {
                 hhNFT.address,
                 hhAssetToken.address, 
                 hhFToken.address,
-                hhDebtToken.address
+                hhDebtToken.address,
+                "WETH"
             )
         await expect(
             hhConfigurator.connect(admin).activateLendingPoolReserve(
@@ -394,7 +409,7 @@ describe('Configurator >> LendingPool >> connectCollateralManager()', function()
     });
 })
 
-describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() {
+describe('Configurator >> LendingPool >> connectTokenPriceConsumer()', function() {
 
     it('should set the Token Price Oracle address when caller is admin', async function () {
         // Connect CollateralManager in Configurator
@@ -406,14 +421,14 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
 
         hhConfigurator
         .connect(admin)
-        .connectTokenPriceOracleAddress(
-            hhTokenPriceOracleAddress
+        .connectTokenPriceConsumer(
+            hhTokenPriceConsumerAddress
         )
 
         await expect(
             hhConfigurator
             .connect(admin)
-            .connectLendingPoolContract("PRICE_ORACLE")
+            .connectLendingPoolContract("TOKEN_PRICE_ORACLE")
             )
             .to.emit(hhLendingPool, "LendingPoolConnected")
     });
@@ -434,6 +449,47 @@ describe('Configurator >> LendingPool >> connectTokenPriceOracle()', function() 
             .to.be.revertedWith("CA1");
     });
 })
+
+describe('Configurator >> LendingPool >> connectNFTPriceConsumer()', function() {
+
+    it('should set the NFT Price Oracle address when caller is admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+        .connect(admin)
+        .connectCollateralManager(
+            hhCollateralManagerAddress
+        )
+        console.log('here1');
+        hhConfigurator
+        .connect(admin)
+        .connectNFTPriceConsumer(
+            hhNFTPriceConsumerAddress
+        )
+        console.log('here2');
+        await expect(
+            hhConfigurator
+            .connect(admin)
+            .connectLendingPoolContract("NFT_PRICE_ORACLE")
+            )
+            .to.emit(hhLendingPool, "LendingPoolConnected")
+    });
+
+    it('should revert when caller is not admin', async function () {
+        // Connect CollateralManager in Configurator
+        hhConfigurator
+            .connect(admin)
+            .connectCollateralManager(
+                hhCollateralManagerAddress
+            )
+        await expect(
+            hhConfigurator
+            .connect(alice)
+            .connectLendingPoolContract("NFT_PRICE_ORACLE")
+            )
+            .to.be.revertedWith("CA1");
+    });
+})
+
 /* 
     -------------------------------------------------------------------------------------------
     COLLATERAL MANAGER 

@@ -23,11 +23,14 @@ contract LendingPoolStorage {
     mapping(bytes32 => DataTypes.Reserve) internal _reserves;
     mapping(address => address) internal _underlyingAssets;
     mapping(address => string) internal _pricePairs;
-    mapping(address => mapping(address => uint256)) userScaledBalances;
-    mapping(address => mapping(address => uint256)) userFTokenBalances;
+    mapping(address => string) internal _assetNames;
+
+    // mapping(address => mapping(address => uint256)) userScaledBalances;
+    // mapping(address => mapping(address => uint256)) userFTokenBalances;
 
     address internal _collateralManagerAddress;
-    address internal _tokenPriceOracleAddress;
+    address internal _tokenPriceConsumerAddress;
+    address internal _nftPriceConsumerAddress;
 
     bool internal _isCollateralManagerConnected = false;
 

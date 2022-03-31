@@ -12,6 +12,8 @@ import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolRedeem } from "./interfaces/ILendingPoolRedeem.sol";
+import { INFTPriceConsumer } from "./interfaces/INFTPriceConsumer.sol";
+import { ITokenPriceConsumer } from "./interfaces/ITokenPriceConsumer.sol";
 import { InterestLogic } from "./libraries/InterestLogic.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "./WadRayMath.sol";
@@ -90,10 +92,14 @@ contract LendingPoolRedeem is Context, LendingPoolStorage, LendingPoolLogic, ILe
         vars.borrowBalanceAmount = borrowItem.borrowAmount.rayMul(
             InterestLogic.calculateLinearInterest(borrowItem.interestRate, borrowItem.timestamp)
         );
+        require(redeemAmount > borrowItem.auction.liquidationFee, "INSUFFICIENT_AMOUNT"); 
         vars.repaymentAmount = redeemAmount - borrowItem.auction.liquidationFee;
         require(vars.repaymentAmount <= vars.borrowBalanceAmount , "OVERPAYMENT"); 
 
-        vars.floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
+        vars.floorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(borrowItem.collateral.erc721Token);
+        if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
+            vars.floorPrice = vars.floorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));
+        }
         vars.liquidationThreshold = borrowItem.liquidationPrice.mul(100).div(borrowItem.borrowAmount);
         require(vars.borrowBalanceAmount - vars.repaymentAmount < vars.floorPrice.mul(100).div(vars.liquidationThreshold), "INSUFFICIENT_AMOUNT");
         

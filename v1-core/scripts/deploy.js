@@ -137,8 +137,8 @@ async function main() {
   await configurator.connect(admin).connectLendingPoolCollateralManager();
 
   // Get and deploy OraceTokenPrice
-  TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
-  tokenPriceOracle = await TokenPriceOracle.deploy();
+  TokenPriceConsumer = await ethers.getContractFactory('TokenPriceConsumer');
+  tokenPriceConsumer = await TokenPriceConsumer.deploy();
 
   // Get and deploy AssetToken contracts
   const assetTokenSupply = hre.ethers.utils.parseEther("5000000.0");

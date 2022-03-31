@@ -20,9 +20,9 @@ beforeEach(async function() {
     hhConfiguratorAddress = await hhConfigurator.resolvedAddress;
 
     // Get and deploy OraceTokenPrice
-    TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
-    hhTokenPriceOracle = await TokenPriceOracle.deploy();
-    hhTokenPriceOracleAddress = await hhTokenPriceOracle.resolvedAddress;
+    TokenPriceConsumer = await ethers.getContractFactory('TokenPriceConsumer');
+    hhTokenPriceConsumer = await TokenPriceConsumer.deploy("0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0");
+    hhTokenPriceConsumerAddress = await hhTokenPriceConsumer.resolvedAddress;
 
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
@@ -166,7 +166,8 @@ async function initReserve() {
         hhNFT.address,
         hhAssetToken.address, 
         hhFToken.address,
-        hhDebtToken.address
+        hhDebtToken.address,
+        "WETH"
     )
 }
 

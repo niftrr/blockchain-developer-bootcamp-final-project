@@ -5,20 +5,21 @@ import { LendingPoolStorage } from './LendingPoolStorage.sol';
 import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
+import { INFTPriceConsumer } from "./interfaces/INFTPriceConsumer.sol";
+import { ITokenPriceConsumer } from "./interfaces/ITokenPriceConsumer.sol";
 import { MockOracle } from "./mocks/Oracle.sol";
+import { NFTPriceConsumer } from "./NFTPriceConsumer.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
-import "./WadRayMath.sol";
-
 import { DataTypes } from "./libraries/DataTypes.sol";
 import { ReserveLogic } from "./libraries/ReserveLogic.sol";
-
+import "./WadRayMath.sol";
 import "hardhat/console.sol";
 
 /// @title Lending Pool Logic contract.
 /// @author Niftrr
 /// @notice Contains unprotected public view and internal Lending Pool functions.
 /// @dev To help organize and limit size of Lending Pool contract.
-contract LendingPoolLogic is LendingPoolStorage, MockOracle {
+contract LendingPoolLogic is LendingPoolStorage {
     using SafeMath for uint256;  
     using WadRayMath for uint256;
     using ReserveLogic for DataTypes.Reserve;
@@ -26,8 +27,15 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
     /// @notice Get the Token Price Oracle contract address.
     /// @dev Uses a state variable.
     /// @return Returns the Token price oracle contract address.
-    function getTokenPriceOracleAddress() public view returns (address) {
-        return _tokenPriceOracleAddress;
+    function getTokenPriceConsumerAddress() public view returns (address) {
+        return _tokenPriceConsumerAddress;
+    }
+
+    /// @notice Get the NFT Price Oracle contract address.
+    /// @dev Uses a state variable.
+    /// @return Returns the Token price oracle contract address.
+    function getNFTPriceConsumerAddress() public view returns (address) {
+        return _nftPriceConsumerAddress;
     }
 
     /// @notice Get the Collateral Manager contract address.
@@ -55,7 +63,10 @@ contract LendingPoolLogic is LendingPoolStorage, MockOracle {
             collateral
         );
 
-        uint256 collateralFloorPrice = getMockFloorPrice(collateral, asset); 
+        uint256 collateralFloorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(collateral);
+        if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
+            collateralFloorPrice = collateralFloorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));
+        }
         return (interestRate, collateralFloorPrice);
     }
 

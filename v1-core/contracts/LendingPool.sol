@@ -18,7 +18,7 @@ import { ILendingPoolWithdraw } from "./interfaces/ILendingPoolWithdraw.sol";
 import { DataTypes } from './libraries/DataTypes.sol';
 import { LendingPoolLogic } from './LendingPoolLogic.sol';
 import { LendingPoolEvents } from './LendingPoolEvents.sol';
-import { TokenPriceOracle } from './TokenPriceOracle.sol';
+import { TokenPriceConsumer } from './TokenPriceConsumer.sol';
 import { DataTypes } from "./libraries/DataTypes.sol";
 import { ReserveLogic } from "./libraries/ReserveLogic.sol";
 
@@ -46,7 +46,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     bytes32 private constant REPAY = keccak256("REPAY");
     bytes32 private constant WITHDRAW = keccak256("WITHDRAW");
     bytes32 private constant CM = keccak256("CM");
-    bytes32 private constant PRICE_ORACLE = keccak256("PRICE_ORACLE");
+    bytes32 private constant NFT_PRICE_ORACLE = keccak256("NFT_PRICE_ORACLE");
+    bytes32 private constant TOKEN_PRICE_ORACLE = keccak256("TOKEN_PRICE_ORACLE");
 
     bytes32 private constant ACTIVE = keccak256("ACTIVE");
     bytes32 private constant FROZEN = keccak256("FROZEN");
@@ -134,8 +135,10 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
             require(!_isCollateralManagerConnected, "CM1");
             _isCollateralManagerConnected = true;
             _collateralManagerAddress = contractAddress;
-        } else if (contractName==PRICE_ORACLE) { 
-            _tokenPriceOracleAddress = contractAddress;
+        } else if (contractName==NFT_PRICE_ORACLE) { 
+            _nftPriceConsumerAddress = contractAddress;
+        } else if (contractName==TOKEN_PRICE_ORACLE) { 
+            _tokenPriceConsumerAddress = contractAddress;
         } 
 
         emit LendingPoolConnected(contractName, contractAddress);
@@ -146,17 +149,19 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
+    /// @param assetName The name of the asset. E.g. WETH.
     /// @dev Calls internal `_initReserve` function if modifiers are succeeded.    
     function initReserve(
         address collateral,
         address asset,
         address fTokenAddress,
-        address debtTokenAddress
+        address debtTokenAddress,
+        string calldata assetName
     ) 
         external 
         onlyConfigurator 
     {
-        _initReserve(collateral, asset, fTokenAddress, debtTokenAddress);
+        _initReserve(collateral, asset, fTokenAddress, debtTokenAddress, assetName);
     }
 
     /// @notice Deposit assets into the lending pool.
@@ -396,12 +401,14 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @param asset The ERC20, reserve asset token.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
+    /// @param assetName The name of the asset. E.g. WETH.
     /// @dev ERC20 asset address used as reserve key.    
     function _initReserve(
         address collateral,
         address asset,
         address fTokenAddress,
-        address debtTokenAddress
+        address debtTokenAddress,
+        string calldata assetName
     ) 
         private
     {
@@ -412,6 +419,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         reserve.liquidityIndex = 10**27;
         _reserves[keccak256(abi.encode(collateral, asset))] = reserve;
         _underlyingAssets[fTokenAddress] = asset;
+        _assetNames[asset] = assetName;
 
         emit InitReserve(collateral, asset, _reserves[keccak256(abi.encode(collateral, asset))].fTokenAddress, _reserves[keccak256(abi.encode(collateral, asset))].debtTokenAddress);
     }

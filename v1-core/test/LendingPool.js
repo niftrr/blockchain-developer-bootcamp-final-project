@@ -8,9 +8,9 @@ let hhLendingPoolAddress;
 let CollateralManager;
 let hhCollateralManager;
 let hhCollateralManagerAddress;
-let TokenPriceOracle;
-let hhTokenPriceOracle;
-let hhTokenPriceOracleAddress;
+let TokenPriceConsumer;
+let hhTokenPriceConsumer;
+let hhTokenPriceConsumerAddress;
 let AssetToken;
 let hhAssetToken;
 let hhAssetTokenSupply;
@@ -51,9 +51,9 @@ beforeEach(async function() {
     hhConfiguratorAddress = await hhConfigurator.resolvedAddress;
 
     // Get and deploy OraceTokenPrice
-    TokenPriceOracle = await ethers.getContractFactory('TokenPriceOracle');
-    hhTokenPriceOracle = await TokenPriceOracle.deploy();
-    hhTokenPriceOracleAddress = await hhTokenPriceOracle.resolvedAddress;
+    TokenPriceConsumer = await ethers.getContractFactory('TokenPriceConsumer');
+    hhTokenPriceConsumer = await TokenPriceConsumer.deploy("0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0");
+    hhTokenPriceConsumerAddress = await hhTokenPriceConsumer.resolvedAddress;
 
     // Get and deploy LendingPool
     LendingPool = await ethers.getContractFactory('LendingPool');
@@ -212,6 +212,14 @@ beforeEach(async function() {
     );
     await hhDebtToken.deployed();   
 
+    // Get and deploy NFT Price Oracle
+    NFTPriceConsumer = await ethers.getContractFactory('NFTPriceConsumer');
+    hhNFTPriceConsumer = await NFTPriceConsumer.deploy(hhConfiguratorAddress, 5);
+    await hhNFTPriceConsumer.deployed();
+
+    // Connect Configurator to NFT Price Oracle by setting the address
+    await hhConfigurator.connectNFTPriceConsumer(hhNFTPriceConsumer);
+
     // -- Assign minter role to LendingPool
     // await hhDebtToken.setMinter(hhLendingPoolAddress);
 
@@ -226,15 +234,17 @@ beforeEach(async function() {
     await hhNFT.mint(alice.address, alice_tokenId);
     await hhNFT.mint(bob.address, bob_tokenId);
 
-    // Set Mocked Oracle NFT price
+    // Set/Mock NFT Price Oracle NFT price
     const mockFloorPrice = ethers.utils.parseUnits('100', 18);
-    hhLendingPool.setMockFloorPrice(hhNFT.address, mockFloorPrice);
+    hhConfigurator
+    .connect(admin)
+    .setNFTPriceConsumerFloorPrice(hhNFT.address, mockFloorPrice); 
 
     // Set Mock Oracle Asset Token prices
     const mockETHDAI = ethers.utils.parseUnits('4325', 18);
     // const mockETHUSDC = ethers.utils.parseUnits('4332.14.', 18);
     // const mockETHWETH = ethers.utils.parseUnits('1', 18);
-    hhLendingPool.setMockEthTokenPrice(hhAssetToken.address, mockETHDAI);    
+    hhNFTPriceConsumer.setMockEthTokenPrice(hhAssetToken.address, mockETHDAI);    
 
     // Logging 
     // console.log('CollateralManager deployed:', hhCollateralManagerAddress);
@@ -250,7 +260,8 @@ async function initReserve() {
         hhNFT.address,
         hhAssetToken.address, 
         hhFToken.address,
-        hhDebtToken.address
+        hhDebtToken.address,
+        "WETH"
     )
 }
 

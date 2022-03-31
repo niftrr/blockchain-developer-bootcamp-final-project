@@ -7,7 +7,7 @@ pragma solidity 0.8.9;
 /// @dev To help organize and limit size of Lending Pool contract.
 contract LendingPoolEvents {    
     /// @notice Emitted when a new reserve is initialized.
-    /// @param asset The reserve's underlying collateral contract address.
+    /// @param collateral The reserve's underlying collateral contract address.
     /// @param asset The ERC20, reserve asset address.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.

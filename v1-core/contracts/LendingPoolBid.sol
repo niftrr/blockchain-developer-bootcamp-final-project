@@ -12,6 +12,8 @@ import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolBid } from "./interfaces/ILendingPoolBid.sol";
+import { INFTPriceConsumer } from "./interfaces/INFTPriceConsumer.sol";
+import { ITokenPriceConsumer } from "./interfaces/ITokenPriceConsumer.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "./WadRayMath.sol";
 import "hardhat/console.sol";
@@ -79,7 +81,10 @@ contract LendingPoolBid is Context, LendingPoolStorage, LendingPoolLogic, ILendi
         require(asset == borrowItem.erc20Token, "INCORRECT_ASSET");
         require(reserve.status == DataTypes.ReserveStatus.Active, "Reserve is not active."); 
 
-        vars.floorPrice = getMockFloorPrice(borrowItem.collateral.erc721Token, asset);
+        vars.floorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(borrowItem.collateral.erc721Token);
+        if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
+            vars.floorPrice = vars.floorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));
+        }
         require(vars.floorPrice <= borrowItem.liquidationPrice, "BORROW_NOT_IN_DEFAULT");
 
         vars.liquidationFee = borrowItem.borrowAmount.rayMul(_liquidationFee);

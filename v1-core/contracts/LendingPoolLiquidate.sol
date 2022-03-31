@@ -80,7 +80,7 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         LiquidateVars memory vars;
 
         require(borrowItem.status == DataTypes.BorrowStatus.ActiveAuction, "AUCTION_NOT_TRIGGERED");
-        require(uint40(block.timestamp) - borrowItem.auction.timestamp > auctionDuration, "AUCTION_STILL_ACTIVE"); // TODO: use configuratble global variable for auction time, currently 24 hours
+        require(uint40(block.timestamp) - borrowItem.auction.timestamp > auctionDuration, "AUCTION_STILL_ACTIVE"); 
         require(borrowItem.erc20Token == asset, "INCORRECT_ASSET");
         require(borrowItem.collateral.erc721Token == collateral, "INCORRECT_COLLATERAL");
 

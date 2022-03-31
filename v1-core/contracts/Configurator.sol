@@ -8,6 +8,7 @@ import { ILendingPoolBid } from "./interfaces/ILendingPoolBid.sol";
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
+import { INFTPriceConsumer } from "./interfaces/INFTPriceConsumer.sol";
 
 import "hardhat/console.sol";
 
@@ -28,7 +29,8 @@ contract Configurator is Context, AccessControl {
     address public lendingPoolRedeemAddress;
     address public lendingPoolRepayAddress;
     address public lendingPoolWithdrawAddress;
-    address public tokenPriceOracleAddress;
+    address public nftPriceConsumerAddress;
+    address public tokenPriceConsumerAddress;
 
     bytes32 private constant BID = keccak256("BID");
     bytes32 private constant BORROW = keccak256("BORROW");
@@ -38,7 +40,8 @@ contract Configurator is Context, AccessControl {
     bytes32 private constant REPAY = keccak256("REPAY");
     bytes32 private constant WITHDRAW = keccak256("WITHDRAW");
     bytes32 private constant CM = keccak256("CM");
-    bytes32 private constant PRICE_ORACLE = keccak256("PRICE_ORACLE");
+    bytes32 private constant NFT_PRICE_ORACLE = keccak256("NFT_PRICE_ORACLE");
+    bytes32 private constant TOKEN_PRICE_ORACLE = keccak256("TOKEN_PRICE_ORACLE");
 
     bytes32 private constant ACTIVE = keccak256("ACTIVE");
     bytes32 private constant FROZEN = keccak256("FROZEN");
@@ -161,11 +164,18 @@ contract Configurator is Context, AccessControl {
         lendingPoolWithdrawAddress = _lendingPoolWithdrawAddress;
     }
 
-    /// @notice Connects the TokenPriceOracle contract by setting the address.
-    /// @param _tokenPriceOracleAddress The tokenPriceOracleAddress contract address.
-    /// @dev Sets the TokenPriceOracleAddress variable.
-    function connectTokenPriceOracleAddress(address _tokenPriceOracleAddress) public onlyAdmin {
-        tokenPriceOracleAddress = _tokenPriceOracleAddress;
+    /// @notice Connects the NftPriceConsumer contract by setting the address.
+    /// @param _nftPriceConsumerAddress The tokenPriceConsumerAddress contract address.
+    /// @dev Sets the TokenPriceConsumerAddress variable.
+    function connectNFTPriceConsumer(address _nftPriceConsumerAddress) public onlyAdmin {
+        nftPriceConsumerAddress = _nftPriceConsumerAddress;
+    }
+
+    /// @notice Connects the TokenPriceConsumer contract by setting the address.
+    /// @param _tokenPriceConsumerAddress The tokenPriceConsumerAddress contract address.
+    /// @dev Sets the TokenPriceConsumerAddress variable.
+    function connectTokenPriceConsumer(address _tokenPriceConsumerAddress) public onlyAdmin {
+        tokenPriceConsumerAddress = _tokenPriceConsumerAddress;
     }
 
     /// @notice Gets the Lending Pool contract address.
@@ -199,12 +209,14 @@ contract Configurator is Context, AccessControl {
     /// @param asset The ERC20, reserve asset token.
     /// @param fTokenAddress The derivative fToken address.
     /// @param debtTokenAddress The derivative debtToken address.
+    /// @param assetName The name of the asset. E.g. WETH.
     /// @dev External `initReserve` function calls `_initReserve` if modifiers are succeeded.    
     function initLendingPoolReserve(
         address collateral,
         address asset, 
         address fTokenAddress,
-        address debtTokenAddress
+        address debtTokenAddress,
+        string calldata assetName
     )
         public
         onlyAdmin
@@ -214,7 +226,8 @@ contract Configurator is Context, AccessControl {
             collateral,
             asset, 
             fTokenAddress, 
-            debtTokenAddress
+            debtTokenAddress,
+            assetName
         );
     }
 
@@ -336,11 +349,17 @@ contract Configurator is Context, AccessControl {
                 CONTRACT,
                 collateralManagerAddress
             );
-        } else if (CONTRACT==PRICE_ORACLE) {
-            require(tokenPriceOracleAddress != address(0), "CLP9");
+        } else if (CONTRACT==NFT_PRICE_ORACLE) {
+            require(nftPriceConsumerAddress != address(0), "CLP9");
             ILendingPool(lendingPoolAddress).connectContract(
                 CONTRACT,
-                tokenPriceOracleAddress
+                nftPriceConsumerAddress
+            );
+        } else if (CONTRACT==TOKEN_PRICE_ORACLE) {
+            require(tokenPriceConsumerAddress != address(0), "CLP10");
+            ILendingPool(lendingPoolAddress).connectContract(
+                CONTRACT,
+                tokenPriceConsumerAddress
             );
         } 
     }
@@ -384,11 +403,11 @@ contract Configurator is Context, AccessControl {
         collateralManagerAddress = _collateralManagerAddress;
     }
 
-    /// @notice Connects the Token Price Oracle contract by setting the address.
-    /// @param _tokenPriceOracleAddress The collateral manager contract address.
-    /// @dev Sets the collateralManager variable.
-    function connectTokenPriceOracle(address _tokenPriceOracleAddress) public onlyAdmin {
-        tokenPriceOracleAddress = _tokenPriceOracleAddress;
+    function setNFTPriceConsumerFloorPrice(address nftProject, uint256 floorPrice) public onlyAdmin {
+        INFTPriceConsumer(nftPriceConsumerAddress).setFloorPrice(
+            nftProject,
+            floorPrice
+        );
     }
 
     function setCollateralManagerInterestRate(

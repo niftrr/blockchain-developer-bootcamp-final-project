@@ -6,7 +6,8 @@ interface ILendingPool {
         address collateral,
         address asset, 
         address fTokenAddress, 
-        address debtTokenAddress
+        address debtTokenAddress,
+        string calldata assetName
     ) 
         external;
 
@@ -74,7 +75,7 @@ interface ILendingPool {
 
     function getFloorPrice(address collateral, address asset) external returns (uint256);
 
-    function getTokenPriceOracleAddress() external view returns (address);
+    function getTokenPriceConsumerAddress() external view returns (address);
 
     function getFloorPriceMock(address collateral) external view returns (uint256);
 
