@@ -499,4 +499,87 @@ describe('LendingPool >> Repay', function() {
             (await hhNFT.ownerOf(bob_tokenId)))
             .to.equal(bob.address);      
     });
+
+    it('should create a new borrow after first partially repaying and then fully repaying a borrow', async function () {
+        const depositAmount = ethers.utils.parseUnits('2', 18); 
+        const borrowAmount = ethers.utils.parseUnits('1', 18);
+        const repaymentAmount = ethers.utils.parseUnits('0.5', 18);   
+        const repaymentAmount2 = ethers.utils.parseUnits('0.6', 18);       
+        const paidAmount = ethers.utils.parseUnits('0.500000019025875352', 18);
+        const interestRate = 20;
+
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens [required for liquidity]
+        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
+
+        // Borrow Asset tokens
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
+
+        // Expect: debtTokens to have been minted
+        await expect(
+            (await hhDebtToken.balanceOf(bob.address)))
+            .to.equal(ethers.utils.parseUnits('1', 18)); 
+        
+        // Retrieve borrowId 
+        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
+        borrowId = borrowIds[0];
+
+        // Repay Asset tokens
+        async function _repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId) {
+            return repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId);
+        }
+
+        // Expect: Repay Emit response
+        await expect(
+            _repay(bob, hhNFT.address, hhAssetToken, hhFToken, repaymentAmount, borrowId))
+            .to.emit(hhLendingPool, 'Repay')
+            .withArgs(
+                borrowId,
+                hhAssetToken.address,
+                repaymentAmount,
+                bob.address);  
+
+        // Commented out as interest accrual throws numbers off
+        // Expect: assetTokens transferred from user to fToken reserve
+        // await expect(
+        //     (await hhAssetToken.balanceOf(bob.address)))
+        //     .to.equal(hhAssetTokenInitialBalance.add(borrowAmount).sub(repaymentAmount));
+        // await expect(
+        //     (await hhAssetToken.balanceOf(hhFToken.address)))
+        //     .to.equal(depositAmount.sub(borrowAmount).add(repaymentAmount)); // Alice's deposit - Bob's borrow + Bob's repayment  
+
+        // Expect: remaining debtTokens to persist and have accrued
+        await expect(
+            (await hhDebtToken.balanceOf(bob.address)))
+            .to.equal(ethers.utils.parseUnits('0.500000012683916794', 18)); 
+
+        // Expect: NFT not transferred from Escrow
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(hhCollateralManagerAddress);           
+
+        await expect(
+            _repay(bob, hhNFT.address, hhAssetToken, hhFToken, repaymentAmount2, borrowId))
+            .to.emit(hhLendingPool, 'Repay')
+            .withArgs(
+                borrowId,
+                hhAssetToken.address,
+                paidAmount, // The amount of repaid debt vs the amount sent
+                bob.address);  
+
+        // Expect: NFT transferred from Escrow
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(bob.address);     
+            
+        // Borrow Asset tokens
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
+
+        // NFT should be in collateral manager contract
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(hhCollateralManagerAddress); 
+    });
 });

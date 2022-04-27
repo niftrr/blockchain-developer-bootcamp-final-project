@@ -86,6 +86,7 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
         console.log('vars.borrowId', vars.borrowId);
         if (vars.borrowId == 0) {
             // create borrow
+            console.log('create borrow');
             vars.success = ICollateralManager(_collateralManagerAddress).deposit(
                 _msgSender(), 
                 asset, 
@@ -98,6 +99,7 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
             require(vars.success, "UNSUCCESSFUL_DEPOSIT");
         } else {
             // update borrow
+            console.log('update borrow');
             vars.borrowItem = ICollateralManager(_collateralManagerAddress).getBorrow(vars.borrowId);
             if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
                 vars.floorPrice = vars.floorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));

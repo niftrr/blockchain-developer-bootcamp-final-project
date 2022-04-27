@@ -478,13 +478,16 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         returns (bool)
     {
         address newOwner;
-        require(whitelisted[erc721Token], "NFT not whitelisted");
+        // require(whitelisted[erc721Token], "NFT not whitelisted"); TODO code too large
+
+        console.log('borrower, erc721Token, tokenId', borrower, erc721Token, tokenId);
         
         IERC721(erc721Token).transferFrom(borrower, address(this), tokenId);
         newOwner = IERC721(erc721Token).ownerOf(tokenId);
-        require(newOwner == address(this), "UNSUCCESSFUL_TRANSFER");
+        // require(newOwner == address(this), "UNSUCCESSFUL_TRANSFER"); TODO code too large
 
         uint256 id = counter.current();
+        console.log('id', id);
         uint256 liquidationPrice = _getLiquidationPrice(
             erc721Token,
             borrowAmount,
@@ -569,6 +572,9 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         borrows[_id].liquidationPrice = 0;
         borrows[_id].timestamp = uint40(block.timestamp);
         
+        // Setting ID to zero so that a new borrow is created in future
+        nftBorrows[keccak256(abi.encode(erc721Token, tokenId))] = 0;
+        
         emit WithdrawCollateral(
             borrower,
             erc721Token,
@@ -651,8 +657,6 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     {
         UpdateVars memory vars;
         require(_msgSender == borrows[_id].borrower, "NOT_BORROWER");
-        console.log('_collateralFloorPrice', _collateralFloorPrice);
-        console.log(borrows[_id].borrowAmount, _updateAmount);
 
         vars.accruedBorrowAmount = borrows[_id].borrowAmount.rayMul(
             InterestLogic.calculateLinearInterest(borrows[_id].interestRate, borrows[_id].timestamp)
