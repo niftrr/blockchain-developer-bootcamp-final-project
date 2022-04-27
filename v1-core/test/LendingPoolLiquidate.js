@@ -193,7 +193,7 @@ beforeEach(async function() {
     // Set NFT interestRate threshold
     hhConfigurator
     .connect(admin)
-    .setCollateralManagerInterestRate(hhNFT.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // in RAY 1e27/100 for percentage
+    .setCollateralManagerInterestRate(hhNFT.address, hhAssetToken.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // in RAY 1e27/100 for percentage
 
     // Get and deploy fToken
     FToken = await ethers.getContractFactory('FToken');

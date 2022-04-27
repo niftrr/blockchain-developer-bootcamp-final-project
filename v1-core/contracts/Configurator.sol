@@ -411,7 +411,8 @@ contract Configurator is Context, AccessControl {
     }
 
     function setCollateralManagerInterestRate(
-        address erc721token,
+        address collateral,
+        address asset,
         uint256 interestRate
     )
         public
@@ -419,7 +420,8 @@ contract Configurator is Context, AccessControl {
         whenCollateralManagerConnected
     {
         ICollateralManager(collateralManagerAddress).setInterestRate(
-            erc721token,
+            collateral,
+            asset,
             interestRate  
         );
     }

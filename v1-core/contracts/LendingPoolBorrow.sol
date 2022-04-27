@@ -11,6 +11,7 @@ import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { ILendingPoolBorrow } from "./interfaces/ILendingPoolBorrow.sol";
 import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
+import { ITokenPriceConsumer } from "./interfaces/ITokenPriceConsumer.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "./WadRayMath.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -23,6 +24,15 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
 
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
+
+    struct BorrowVars {
+        bool success;
+        uint256 borrowId;
+        uint256 borrowAmount;
+        uint256 interestRate;
+        uint256 floorPrice;
+        DataTypes.Borrow borrowItem;
+    }
     
     constructor(address configurator, address lendingPool) {
         _setupRole(CONFIGURATOR_ROLE, configurator);
@@ -66,38 +76,58 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
         external
         returns (bool)
     {
-        bool success;
+        BorrowVars memory vars;
+        console.log('here1');
         DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
-        (uint256 interestRate, uint256 collateralFloorPrice) = getBorrowVariables(
-            asset, 
-            collateral
-        );
+        console.log('here2');
+        (vars.interestRate, vars.floorPrice) = getBorrowVariables(asset, collateral);
+        console.log('here3');
+        vars.borrowId = ICollateralManager(_collateralManagerAddress).getBorrowId(collateral, tokenId);
+        console.log('vars.borrowId', vars.borrowId);
+        if (vars.borrowId == 0) {
+            // create borrow
+            vars.success = ICollateralManager(_collateralManagerAddress).deposit(
+                _msgSender(), 
+                asset, 
+                collateral, 
+                tokenId, 
+                amount,
+                vars.interestRate,
+                vars.floorPrice,
+                uint40(block.timestamp)); 
+            require(vars.success, "UNSUCCESSFUL_DEPOSIT");
+        } else {
+            // update borrow
+            vars.borrowItem = ICollateralManager(_collateralManagerAddress).getBorrow(vars.borrowId);
+            if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
+                vars.floorPrice = vars.floorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));
+            }
+            (vars.success, vars.borrowAmount, vars.interestRate) = ICollateralManager(_collateralManagerAddress).updateBorrow(
+                vars.borrowId,
+                asset,
+                amount,
+                vars.floorPrice,
+                vars.borrowItem.status,
+                false, // isRepayment
+                _msgSender()
+            );
+            require(vars.success, "UNSUCCESSFUL_BORROW");
+        }
 
-        success = ICollateralManager(_collateralManagerAddress).deposit(
-            _msgSender(), 
-            asset, 
-            collateral, 
-            tokenId, 
-            amount,
-            interestRate,
-            collateralFloorPrice,
-            uint40(block.timestamp)); 
-        require(success, "UNSUCCESSFUL_DEPOSIT");
+        vars.success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), amount, vars.interestRate);
+        require(vars.success, "UNSUCCESSFUL_MINT");
 
-        success = IDebtToken(reserve.debtTokenAddress).mint(_msgSender(), amount, interestRate);
-        require(success, "UNSUCCESSFUL_MINT");
-
-        success = IFToken(reserve.fTokenAddress).reserveTransfer(_msgSender(), asset, amount);
-        require(success, "UNSUCCESSFUL_TRANSFER");
+        vars.success = IFToken(reserve.fTokenAddress).reserveTransfer(_msgSender(), asset, amount);
+        require(vars.success, "UNSUCCESSFUL_TRANSFER");
 
         reserve.borrowRate = (
-            (reserve.borrowAmount.rayMul(reserve.borrowRate).add(amount.rayMul(interestRate))).wadToRay()
+            (reserve.borrowAmount.rayMul(reserve.borrowRate).add(amount.rayMul(vars.interestRate))).wadToRay()
         ).rayDiv(
             (reserve.borrowAmount.add(amount)).wadToRay()
         );
 
         reserve.borrowAmount = reserve.borrowAmount.add(amount);
 
-        return success;
+        return vars.success;
     }
 }

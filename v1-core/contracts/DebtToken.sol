@@ -88,7 +88,7 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
     {
         (, uint256 currentBalance, uint256 balanceIncrease) = _calculateBalanceIncrease(to);
         mintDataLocalVars memory vars;
-        
+
         vars.previousSupply = totalSupply();
         vars.currentAverageRate = _averageRate;
         vars.nextSupply = vars.previousSupply.add(amount);
@@ -113,7 +113,8 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         _mint(to, amount.add(balanceIncrease));
 
         emit Mint(to, amount, currentBalance.add(amount));
-        return currentBalance == 0;
+
+        return true;
     }
 
     /// @notice Burns an amount of debt tokens from a given account.
@@ -134,7 +135,6 @@ contract DebtToken is Context, ERC20Pausable, IDebtToken, AccessControl, Reentra
         returns (bool)
     {
         (, uint256 currentBalance, uint256 balanceIncrease) = _calculateBalanceIncrease(account);
-        
         uint256 previousSupply = totalSupply();
         uint256 nextSupply = 0;
         uint256 userAverageRate = _userAverageRate[account];

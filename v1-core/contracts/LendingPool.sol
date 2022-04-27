@@ -21,7 +21,6 @@ import { LendingPoolEvents } from './LendingPoolEvents.sol';
 import { TokenPriceConsumer } from './TokenPriceConsumer.sol';
 import { DataTypes } from "./libraries/DataTypes.sol";
 import { ReserveLogic } from "./libraries/ReserveLogic.sol";
-
 import "@openzeppelin/contracts/utils/Context.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import "./WadRayMath.sol";
@@ -321,7 +320,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         (bool success, bytes memory data ) = _lendingPoolRedeemAddress.delegatecall(
             abi.encodeWithSignature("redeem(address,address,uint256,uint256)", collateral,asset,redeemAmount,borrowId)
         );
-        require(success, string(data));
+        require(success, string(data)); 
 
         reserve.updateState();
 
@@ -349,8 +348,10 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         (bool success, bytes memory data ) = _lendingPoolRepayAddress.delegatecall(
             abi.encodeWithSignature("repay(address,address,uint256,uint256)", collateral,asset,repaymentAmount,borrowId)
         );
-        require(success, string(data));
+        require(success, string(data)); 
 
+        (success, repaymentAmount) = abi.decode(data, (bool, uint256));
+        console.log('LP repaymentAmount', repaymentAmount);
         reserve.updateState();
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());
@@ -366,6 +367,22 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
     /// @dev Functions unpaused via modifiers using Pausable contract.
     function unpause() external onlyConfigurator {
         _unpause();
+    }
+
+    function getReserveData(
+        address collateral,
+        address asset
+    ) 
+        public
+        view
+        returns (uint256, uint256, uint256)
+    {
+        DataTypes.Reserve memory reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
+        
+        uint256 userBalance = IFToken(reserve.fTokenAddress).balanceOf(_msgSender());
+        uint256 depositBalance = IERC20(asset).balanceOf(reserve.fTokenAddress);
+        uint256 borrowBalance = IDebtToken(reserve.debtTokenAddress).totalSupply();
+        return (userBalance, depositBalance, borrowBalance);
     }
 
     /// @notice Update status of a reserve.

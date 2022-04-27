@@ -60,7 +60,8 @@ contract LendingPoolLogic is LendingPoolStorage {
         uint256 interestRate = ICollateralManager(
             _collateralManagerAddress
         ).getInterestRate(
-            collateral
+            collateral,
+            asset
         );
 
         uint256 collateralFloorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(collateral);

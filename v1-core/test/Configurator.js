@@ -511,11 +511,13 @@ describe('Configurator >> CollateralManager >> setInterestRate()', function() {
             .connect(admin)
             .setCollateralManagerInterestRate(
                 hhNFT.address,
+                hhAssetToken.address,
                 interestRate
             ))
             .to.emit(hhCollateralManager, "SetInterestRate")
             .withArgs(
                 hhNFT.address,
+                hhAssetToken.address,
                 interestRate        
             )
     });
@@ -533,6 +535,7 @@ describe('Configurator >> CollateralManager >> setInterestRate()', function() {
             .connect(alice)
             .setCollateralManagerInterestRate(
                 hhNFT.address,
+                hhAssetToken.address,
                 interestRate
             ))
             .to.be.revertedWith("CA1");

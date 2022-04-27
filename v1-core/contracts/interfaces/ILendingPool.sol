@@ -25,6 +25,7 @@ interface ILendingPool {
         external;
 
     function repay(
+        address collateral, 
         address asset,
         uint256 repaymentAmount,
         uint256 borrowId

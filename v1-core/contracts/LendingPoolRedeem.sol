@@ -35,6 +35,7 @@ contract LendingPoolRedeem is Context, LendingPoolStorage, LendingPoolLogic, ILe
         uint256 repaymentAmount;
         uint256 overpaymentAmount;
         uint256 liquidationThreshold;
+        DataTypes.Borrow borrowItem;
     }
 
     constructor(address configurator, address lendingPool) {
@@ -78,29 +79,30 @@ contract LendingPoolRedeem is Context, LendingPoolStorage, LendingPoolLogic, ILe
         external
         returns (bool)
     { 
-        DataTypes.Borrow memory borrowItem = ICollateralManager(
+        RedeemVars memory vars;
+        vars.borrowItem = ICollateralManager(
             _collateralManagerAddress
         ).getBorrow(borrowId);
-        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(borrowItem.collateral.erc721Token, asset))];  
-        RedeemVars memory vars;
+        DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(vars.borrowItem.collateral.erc721Token, asset))];  
+        
 
-        require(borrowItem.borrower == _msgSender(), "NOT_BORROWER");
-        require(borrowItem.erc20Token == asset, "INCORRECT_ASSET");
-        require(borrowItem.collateral.erc721Token == collateral, "INCORRECT_COLLATERAL");
-        require(borrowItem.status == DataTypes.BorrowStatus.ActiveAuction, "INACTIVE_AUCTION");
+        require(vars.borrowItem.borrower == _msgSender(), "NOT_BORROWER");
+        require(vars.borrowItem.erc20Token == asset, "INCORRECT_ASSET");
+        require(vars.borrowItem.collateral.erc721Token == collateral, "INCORRECT_COLLATERAL");
+        require(vars.borrowItem.status == DataTypes.BorrowStatus.ActiveAuction, "INACTIVE_AUCTION");
 
-        vars.borrowBalanceAmount = borrowItem.borrowAmount.rayMul(
-            InterestLogic.calculateLinearInterest(borrowItem.interestRate, borrowItem.timestamp)
+        vars.borrowBalanceAmount = vars.borrowItem.borrowAmount.rayMul(
+            InterestLogic.calculateLinearInterest(vars.borrowItem.interestRate, vars.borrowItem.timestamp)
         );
-        require(redeemAmount > borrowItem.auction.liquidationFee, "INSUFFICIENT_AMOUNT"); 
-        vars.repaymentAmount = redeemAmount - borrowItem.auction.liquidationFee;
+        require(redeemAmount > vars.borrowItem.auction.liquidationFee, "INSUFFICIENT_AMOUNT"); 
+        vars.repaymentAmount = redeemAmount - vars.borrowItem.auction.liquidationFee;
         require(vars.repaymentAmount <= vars.borrowBalanceAmount , "OVERPAYMENT"); 
 
-        vars.floorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(borrowItem.collateral.erc721Token);
+        vars.floorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(vars.borrowItem.collateral.erc721Token);
         if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
             vars.floorPrice = vars.floorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));
         }
-        vars.liquidationThreshold = borrowItem.liquidationPrice.mul(100).div(borrowItem.borrowAmount);
+        vars.liquidationThreshold = vars.borrowItem.liquidationPrice.mul(100).div(vars.borrowItem.borrowAmount);
         require(vars.borrowBalanceAmount - vars.repaymentAmount < vars.floorPrice.mul(100).div(vars.liquidationThreshold), "INSUFFICIENT_AMOUNT");
         
         vars.success = IERC20(asset).transferFrom(_msgSender(), reserve.fTokenAddress, vars.repaymentAmount);
@@ -109,18 +111,20 @@ contract LendingPoolRedeem is Context, LendingPoolStorage, LendingPoolLogic, ILe
         vars.success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), vars.repaymentAmount);
         require(vars.success, "UNSUCCESSFUL_BURN");
        
-        vars.success = IERC20(asset).transferFrom(_msgSender(), borrowItem.auction.caller, borrowItem.auction.liquidationFee);
+        vars.success = IERC20(asset).transferFrom(_msgSender(), vars.borrowItem.auction.caller, vars.borrowItem.auction.liquidationFee);
         require(vars.success, "UNSUCCESSFUL_TRANSFER_TO_AUCTION_CALLER");
 
-        if (redeemAmount < vars.borrowBalanceAmount + borrowItem.auction.liquidationFee) {
-            ICollateralManager(_collateralManagerAddress).updateBorrow(
+        if (redeemAmount < vars.borrowBalanceAmount + vars.borrowItem.auction.liquidationFee) {
+            (vars.success, vars.borrowAmount, vars.interestRate) = ICollateralManager(_collateralManagerAddress).updateBorrow(
                 borrowId, 
-                vars.borrowBalanceAmount - vars.repaymentAmount,
+                asset,
+                vars.repaymentAmount,
                 vars.floorPrice,
-                DataTypes.BorrowStatus.Active
+                DataTypes.BorrowStatus.Active,
+                true, // isRepayment
+                _msgSender()
             );
-            vars.borrowAmount = borrowItem.borrowAmount;
-            vars.interestRate = borrowItem.interestRate;
+            require(vars.success, "UNSUCCESSFUL_PARTIAL_REDEEM");
         } else {
             (vars.success,,) = ICollateralManager(_collateralManagerAddress).withdraw(
                 borrowId, 
@@ -128,14 +132,16 @@ contract LendingPoolRedeem is Context, LendingPoolStorage, LendingPoolLogic, ILe
                 vars.borrowBalanceAmount
             );
             require(vars.success, "UNSUCCESSFUL_WITHDRAW");
-            ICollateralManager(_collateralManagerAddress).updateBorrow(
+            (vars.success, vars.borrowAmount, vars.interestRate) = ICollateralManager(_collateralManagerAddress).updateBorrow(
                 borrowId, 
-                vars.borrowBalanceAmount - vars.repaymentAmount,
+                asset,
+                vars.repaymentAmount,
                 vars.floorPrice,
-                DataTypes.BorrowStatus.Repaid
+                DataTypes.BorrowStatus.Repaid,
+                true, // isRepayment
+                _msgSender()
             );
-            vars.borrowAmount = borrowItem.borrowAmount;
-            vars.interestRate = borrowItem.interestRate;
+            require(vars.success, "UNSUCCESSFUL_FULL_REDEEM");
         } 
 
         // Update reserve borrow numbers - for use in APR calculation

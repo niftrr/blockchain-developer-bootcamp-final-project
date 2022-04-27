@@ -187,7 +187,7 @@ beforeEach(async function() {
     // Set NFT interestRate threshold
     hhConfigurator
     .connect(admin)
-    .setCollateralManagerInterestRate(hhNFT.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // in RAY 1e27/100 for percentage
+    .setCollateralManagerInterestRate(hhNFT.address, hhAssetToken.address, ethers.utils.parseUnits(interestRate.toString(), 25)); // in RAY 1e27/100 for percentage
 
     // Get and deploy fToken
     FToken = await ethers.getContractFactory('FToken');
@@ -266,9 +266,11 @@ async function withdraw(signer, poolCollateralAddress, assetToken, fToken, _toke
     return hhLendingPool.connect(signer).withdraw(poolCollateralAddress, assetToken.address, _tokenAmount);
 }
 
-async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount) {
+async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount, isCreate=True) {
     // Approve NFT transfer
-    await nftToken.connect(signer).approve(hhCollateralManagerAddress, tokenId);
+    if (isCreate) {
+        await nftToken.connect(signer).approve(hhCollateralManagerAddress, tokenId);
+    }
     return hhLendingPool.connect(signer).borrow(
         assetToken.address,
         tokenAmount,
@@ -400,5 +402,55 @@ describe('LendingPool >> Borrow', function() {
                 bob_tokenId,
                 bob.address,
                 liquidityIndex);
+    });
+
+    it('should create borrow, and then allow for more to be borrowed against it', async function() {
+        const depositAmount = ethers.utils.parseUnits('100', 18); 
+        const borrowAmount = ethers.utils.parseUnits('2', 18); 
+        const liquidityIndex = ethers.utils.parseUnits('1.000000050735669587249523954', 27);
+        const borrowAmount2 = ethers.utils.parseUnits('4.000000012683916794', 18);
+        const borrowAmount3 = ethers.utils.parseUnits('70', 18); 
+
+        // Initialize reserve
+        await initReserve();
+
+        // Deposit Asset tokens [required for liquidity]
+        await deposit(alice, hhNFT.address, hhAssetToken, depositAmount);
+        
+        console.log('borrow1');
+        // Expect: Borrow Emit response
+        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount, true)
+
+        // Expect: NFT to be held in Escrow
+        await expect(
+            (await hhNFT.ownerOf(bob_tokenId)))
+            .to.equal(hhCollateralManagerAddress);
+
+        // Expect: assetTokens transferred to bob
+        await expect(
+            (await hhAssetToken.balanceOf(bob.address)))
+            .to.equal(hhAssetTokenInitialBalance.add(borrowAmount));
+
+        // Expect: assetTokens transferred to bob
+        await expect(
+            (await hhDebtToken.balanceOf(bob.address)))
+            .to.equal(borrowAmount);
+
+        console.log('borrow2');
+        console.log('bob.address', bob.address);
+        // Expect: Borrow Emit response
+        await expect(
+            borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount, false))
+            .to.emit(hhLendingPool, 'Borrow')
+
+        // Expect: assetTokens transferred to bob
+        await expect(
+            (await hhDebtToken.balanceOf(bob.address)))
+            .to.equal(borrowAmount2);
+
+        await expect(
+            borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount3, false))
+            .to.be.revertedWith('UNDERCOLLATERALIZED');
+            
     });
 });

@@ -8,6 +8,6 @@ interface ILendingPoolRepay {
         address asset, 
         uint256 repaymentAmount,
         uint256 borrowId
-    ) external returns (bool);
+    ) external returns (bool, uint256);
 
 }

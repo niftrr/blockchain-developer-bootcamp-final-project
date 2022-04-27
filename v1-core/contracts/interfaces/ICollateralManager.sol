@@ -43,9 +43,9 @@ interface ICollateralManager {
         external
         returns (bool success);
     
-    function setInterestRate(address _erc721Token, uint256 interestRate) external;
+    function setInterestRate(address collateral, address asset, uint256 interestRate) external;
 
-    function getInterestRate(address _erc721Token) external returns (uint256);
+    function getInterestRate(address collateral, address asset) external returns (uint256);
     
     function setLiquidationThreshold(address _erc721Token, uint256 _threshold) external;
 
@@ -56,6 +56,10 @@ interface ICollateralManager {
     function getUserBorrowIds(address user) external view;
 
     function getBorrow(uint256 borrowId) external returns (DataTypes.Borrow memory);
+
+    function getBorrowId(address collateral, uint256 tokenId) external returns (uint256);
+
+    function getBorrowBalance(address collateral, uint256 tokenId) external returns (uint256);
 
     function setBorrowAuctionBid(
         uint256 borrowId,
@@ -84,10 +88,13 @@ interface ICollateralManager {
 
     function updateBorrow(
         uint256 borrowId,
-        uint256 borrowAmount,
+        address asset,
+        uint256 updateAmount,
         uint256 collateralFloorPrice,
-        DataTypes.BorrowStatus status
+        DataTypes.BorrowStatus status,
+        bool isRepayment,
+        address msgSender
     )
         external
-        returns (bool);
+        returns (bool, uint256, uint256);
 }

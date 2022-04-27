@@ -9,12 +9,13 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ICollateralManager } from "./interfaces/ICollateralManager.sol";
 import { IFToken } from "./interfaces/IFToken.sol";
 import { IDebtToken } from "./interfaces/IDebtToken.sol";
-
+import { INFTPriceConsumer } from "./interfaces/INFTPriceConsumer.sol";
+import { ITokenPriceConsumer } from "./interfaces/ITokenPriceConsumer.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import { ILendingPoolRepay } from "./interfaces/ILendingPoolRepay.sol";
 import { SafeMath } from '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import { InterestLogic } from "./libraries/InterestLogic.sol";
 import "./WadRayMath.sol";
-
 import "hardhat/console.sol";
 
 contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pausable, AccessControl {
@@ -24,6 +25,17 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
     bytes32 public constant CONFIGURATOR_ROLE = keccak256("CONFIGURATOR_ROLE");
     bytes32 public constant LENDING_POOL_ROLE = keccak256("LENDING_POOL_ROLE");
     
+    struct RepayVars {
+        bool success;
+        bool partialRepayment;
+        uint256 borrowAmount;
+        uint256 repaymentAmount;
+        uint256 accruedBorrowAmount;
+        uint256 interestRate;
+        uint256 floorPrice;
+        DataTypes.Borrow borrowItem;
+    }
+
     constructor(address configurator, address lendingPool) {
         _setupRole(CONFIGURATOR_ROLE, configurator);
         _setupRole(LENDING_POOL_ROLE, lendingPool);
@@ -64,43 +76,63 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
         uint256 borrowId
     ) 
         external
-        returns (bool) 
+        returns (bool, uint256) 
     {
-        bool success;
-        uint256 borrowAmount;
-        uint256 interestRate;
+        RepayVars memory vars;
+        vars.borrowItem = ICollateralManager(_collateralManagerAddress).getBorrow(borrowId);
         DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))]; 
-        
-        success = IFToken(reserve.fTokenAddress).reserveTransferFrom(_msgSender(), asset, repaymentAmount);  
-        require(success, "UNSUCCESSFUL_TRANSFER");
 
-        (success, borrowAmount, interestRate) = ICollateralManager(_collateralManagerAddress).withdraw(
-            borrowId, 
-            asset, 
-            repaymentAmount
+        vars.accruedBorrowAmount = vars.borrowItem.borrowAmount.rayMul(
+            InterestLogic.calculateLinearInterest(vars.borrowItem.interestRate, vars.borrowItem.timestamp)
         );
-        require(success, "UNSUCCESSFUL_WITHDRAW");
+        vars.partialRepayment = repaymentAmount < vars.accruedBorrowAmount;
+        vars.repaymentAmount = vars.partialRepayment ? repaymentAmount : vars.accruedBorrowAmount;
 
-        success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), repaymentAmount);
-        require(success, "UNSUCCESSFUL_BURN");
+        vars.success = IFToken(reserve.fTokenAddress).reserveTransferFrom(_msgSender(), asset, vars.repaymentAmount);  
+        require(vars.success, "UNSUCCESSFUL_TRANSFER");
+
+        if (vars.partialRepayment) {
+            vars.floorPrice = INFTPriceConsumer(_nftPriceConsumerAddress).getFloorPrice(vars.borrowItem.collateral.erc721Token);
+            if (keccak256(abi.encodePacked(_assetNames[asset])) != keccak256(abi.encodePacked("WETH"))) {
+                vars.floorPrice = vars.floorPrice.mul(ITokenPriceConsumer(_tokenPriceConsumerAddress).getEthPrice(asset));
+            }
+            (vars.success, vars.borrowAmount, vars.interestRate) = ICollateralManager(_collateralManagerAddress).updateBorrow(
+                borrowId,
+                asset,
+                vars.repaymentAmount, 
+                vars.floorPrice,
+                DataTypes.BorrowStatus.Active,
+                true, // isRepayment
+                _msgSender()
+            );
+            require(vars.success, "UNSUCCESSFUL_PARTIAL_REPAY");           
+        } else {
+            (vars.success, vars.borrowAmount, vars.interestRate) = ICollateralManager(_collateralManagerAddress).withdraw(
+                borrowId, 
+                asset, 
+                vars.repaymentAmount //repaymentAmount
+            );
+            require(vars.success, "UNSUCCESSFUL_WITHDRAW");   
+        }
+
+        vars.success = IDebtToken(reserve.debtTokenAddress).burnFrom(_msgSender(), vars.repaymentAmount); 
+        require(vars.success, "UNSUCCESSFUL_BURN");
 
         // Update reserve borrow numbers - for use in APR calculation
-        if (reserve.borrowAmount.sub(borrowAmount) > 0) {
+        if (reserve.borrowAmount.sub(vars.borrowAmount) > 0) {
             reserve.borrowRate = WadRayMath.rayDiv(
                 WadRayMath.rayMul(
                     WadRayMath.wadToRay(reserve.borrowAmount), reserve.borrowRate
                 ).sub(
                     WadRayMath.rayMul(
-                        WadRayMath.wadToRay(borrowAmount), interestRate 
+                        WadRayMath.wadToRay(vars.borrowAmount), vars.interestRate 
                     )    
-                ), (WadRayMath.wadToRay(reserve.borrowAmount).sub(WadRayMath.wadToRay(borrowAmount)))
+                ), (WadRayMath.wadToRay(reserve.borrowAmount).sub(WadRayMath.wadToRay(vars.borrowAmount)))
             );
         } else {
             reserve.borrowRate  = 0;
         }
 
-        reserve.borrowAmount = reserve.borrowAmount.sub(borrowAmount);
-
-        return success;
+        return (vars.success, vars.repaymentAmount);
     }
 }

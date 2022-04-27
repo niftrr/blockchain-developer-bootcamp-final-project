@@ -1,4 +1,4 @@
-const { expect, util } = require('chai');
+const { expect } = require('chai');
 const { ethers } = require('hardhat');
 
 let LendingPool;
@@ -237,7 +237,8 @@ beforeEach(async function() {
     const mockFloorPrice = ethers.utils.parseUnits('100', 18);
     await hhConfigurator
         .connect(admin)
-        .setNFTPriceConsumerFloorPrice(hhNFT.address, mockFloorPrice); 
+        .setNFTPriceConsumerFloorPrice(hhNFT.address, mockFloorPrice);   
+
 });
 
 async function initReserve() {
@@ -276,11 +277,10 @@ async function borrow(signer, nftToken, tokenId, assetToken, tokenAmount) {
         tokenId);
 }
 
-async function repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId) {
+async function repay(signer, assetToken, fToken, repaymentAmount, borrowId) {
     // Approve transfer of repaymentAmount asset tokens to fToken address (asset reserve)
     await assetToken.connect(signer).approve(fToken.address, repaymentAmount);
     return hhLendingPool.connect(signer).repay(
-        collateralAddress,
         assetToken.address,
         repaymentAmount,
         borrowId);
@@ -294,209 +294,37 @@ async function liquidate(signer, assetToken, liquidationAmount, borrowId) {
         liquidationAmount,
         borrowId);
 }
+    
+describe('LendingPool >> Get Reserve Data', function() {
 
-describe('LendingPool >> Repay', function() {
-
-    it('should retrieve an NFT by repaying a borrow', async function () {
-        const depositAmount = ethers.utils.parseUnits('2', 18); 
+    it('should return reserve data', async function () {
+        const tokenAmount = ethers.utils.parseUnits('2', 18);
         const borrowAmount = ethers.utils.parseUnits('1', 18);
-        const repaymentAmount = ethers.utils.parseUnits('1.0001',18); // Overpayment to account for accrued interest         
-        const paidAmount = ethers.utils.parseUnits('1.000000012683916794', 18);
-        const interestRate = 20;
+        const userBalance = ethers.utils.parseUnits('2.000000012683916794', 18);
 
         // Initialize reserve
         await initReserve();
 
-        // Deposit Asset tokens [required for liquidity]
-        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
+        // Deposit asset tokens
+        await deposit(alice, hhNFT.address, hhAssetToken, tokenAmount);
 
-        // Borrow Asset tokens
-        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
-        
-        // Calculate repaymentAmount
-
-        // const timeDelta = 2;
-        // const repaymentAmount = borrowAmount.add(
-        //     borrowAmount
-        //     .mul(ethers.utils.parseUnits(interestRate.toString(), 25))
-        //     .mul(timeDelta).div(365).div(24).div(60).div(60)
-        //     .div(ethers.utils.parseUnits('1', 27))
-        // );
-
-        // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
-        borrowId = borrowIds[0];
-
-        // Repay Asset tokens
-        async function _repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId, fullRepayment) {
-            return repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId, fullRepayment);
-        }
-
-        // Expect: Repay Emit response
-        await expect(
-            _repay(bob, hhNFT.address, hhAssetToken, hhFToken, repaymentAmount, borrowId))
-            .to.emit(hhLendingPool, 'Repay')
-            .withArgs(
-                borrowId,
-                hhAssetToken.address,
-                paidAmount,
-                bob.address);  
-
-        // Expect: assetTokens transferred from user to fToken reserve
-        console.log('await hhAssetToken.balanceOf(bob.address))', await hhAssetToken.balanceOf(bob.address));
-        console.log('hhAssetTokenInitialBalance', hhAssetTokenInitialBalance);
-        console.log('borrowAmount', borrowAmount);
-        console.log('repaymentAmount', repaymentAmount);
-
-        // Commenting out as accrual of interest throws numbers off slightly
-        // await expect(
-        //     (await hhAssetToken.balanceOf(bob.address)))
-        //     .to.equal(hhAssetTokenInitialBalance.add(borrowAmount).sub(repaymentAmount));
-        // await expect(
-        //     (await hhAssetToken.balanceOf(hhFToken.address)))
-        //     .to.equal(depositAmount.sub(borrowAmount).add(repaymentAmount)); // Alice's deposit - Bob's borrow + Bob's repayment  
-
-        // Expect: corresponding debtTokens to have been burned
-        await expect(
-            (await hhDebtToken.balanceOf(bob.address)))
-            .to.equal(0);
-
-        // Expect: NFT transferred from Escrow back to user
-        await expect(
-            (await hhNFT.ownerOf(bob_tokenId)))
-            .to.equal(bob.address);           
-    });
-
-    it('should not retrieve an NFT by partially repaying a borrow', async function () {
-        const depositAmount = ethers.utils.parseUnits('2', 18); 
-        const borrowAmount = ethers.utils.parseUnits('1', 18);
-        const repaymentAmount = ethers.utils.parseUnits('0.5', 18);           
-        const interestRate = 20;
-
-        // Initialize reserve
-        await initReserve();
-
-        // Deposit Asset tokens [required for liquidity]
-        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
-
-        // Borrow Asset tokens
+        // Borrow
         await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
 
-        // Expect: debtTokens to have been minted
-        await expect(
-            (await hhDebtToken.balanceOf(bob.address)))
-            .to.equal(ethers.utils.parseUnits('1', 18)); 
-        
-        // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
-        borrowId = borrowIds[0];
+        // Expect: Withdraw Emit response
+        let reserveData;
 
-        // Repay Asset tokens
-        async function _repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId) {
-            return repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId);
-        }
+        console.log(hhNFT.address, hhAssetToken.address);
 
-        // Expect: Repay Emit response
-        await expect(
-            _repay(bob, hhNFT.address, hhAssetToken, hhFToken, repaymentAmount, borrowId))
-            .to.emit(hhLendingPool, 'Repay')
-            .withArgs(
-                borrowId,
-                hhAssetToken.address,
-                repaymentAmount,
-                bob.address);  
+        reserveData = await hhLendingPool.connect(alice).getReserveData(hhNFT.address, hhAssetToken.address)
 
-        // Expect: assetTokens transferred from user to fToken reserve
-        await expect(
-            (await hhAssetToken.balanceOf(bob.address)))
-            .to.equal(hhAssetTokenInitialBalance.add(borrowAmount).sub(repaymentAmount));
-        await expect(
-            (await hhAssetToken.balanceOf(hhFToken.address)))
-            .to.equal(depositAmount.sub(borrowAmount).add(repaymentAmount)); // Alice's deposit - Bob's borrow + Bob's repayment  
+        console.log('reserveData', reserveData);
 
-        // Expect: remaining debtTokens to persist and have accrued
-        await expect(
-            (await hhDebtToken.balanceOf(bob.address)))
-            .to.equal(ethers.utils.parseUnits('0.500000012683916794', 18)); 
+        expect(reserveData[0]).to.equal(userBalance);
+        expect(reserveData[1]).to.equal(tokenAmount.sub(borrowAmount));
+        expect(reserveData[2]).to.equal(borrowAmount);
 
-        // Expect: NFT not transferred from Escrow
-        await expect(
-            (await hhNFT.ownerOf(bob_tokenId)))
-            .to.equal(hhCollateralManagerAddress);           
-    });
+            
 
-    it('should retrieve an NFT by first partially repaying and then fully repaying a borrow', async function () {
-        const depositAmount = ethers.utils.parseUnits('2', 18); 
-        const borrowAmount = ethers.utils.parseUnits('1', 18);
-        const repaymentAmount = ethers.utils.parseUnits('0.5', 18);   
-        const repaymentAmount2 = ethers.utils.parseUnits('0.6', 18);       
-        const paidAmount = ethers.utils.parseUnits('0.500000019025875352', 18);
-        const interestRate = 20;
-
-        // Initialize reserve
-        await initReserve();
-
-        // Deposit Asset tokens [required for liquidity]
-        await deposit(admin, hhNFT.address, hhAssetToken, depositAmount);
-
-        // Borrow Asset tokens
-        await borrow(bob, hhNFT, bob_tokenId, hhAssetToken, borrowAmount);
-
-        // Expect: debtTokens to have been minted
-        await expect(
-            (await hhDebtToken.balanceOf(bob.address)))
-            .to.equal(ethers.utils.parseUnits('1', 18)); 
-        
-        // Retrieve borrowId 
-        borrowIds = await hhCollateralManager.getUserBorrowIds(bob.address);
-        borrowId = borrowIds[0];
-
-        // Repay Asset tokens
-        async function _repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId) {
-            return repay(signer, collateralAddress, assetToken, fToken, repaymentAmount, borrowId);
-        }
-
-        // Expect: Repay Emit response
-        await expect(
-            _repay(bob, hhNFT.address, hhAssetToken, hhFToken, repaymentAmount, borrowId))
-            .to.emit(hhLendingPool, 'Repay')
-            .withArgs(
-                borrowId,
-                hhAssetToken.address,
-                repaymentAmount,
-                bob.address);  
-
-        // Commented out as interest accrual throws numbers off
-        // Expect: assetTokens transferred from user to fToken reserve
-        // await expect(
-        //     (await hhAssetToken.balanceOf(bob.address)))
-        //     .to.equal(hhAssetTokenInitialBalance.add(borrowAmount).sub(repaymentAmount));
-        // await expect(
-        //     (await hhAssetToken.balanceOf(hhFToken.address)))
-        //     .to.equal(depositAmount.sub(borrowAmount).add(repaymentAmount)); // Alice's deposit - Bob's borrow + Bob's repayment  
-
-        // Expect: remaining debtTokens to persist and have accrued
-        await expect(
-            (await hhDebtToken.balanceOf(bob.address)))
-            .to.equal(ethers.utils.parseUnits('0.500000012683916794', 18)); 
-
-        // Expect: NFT not transferred from Escrow
-        await expect(
-            (await hhNFT.ownerOf(bob_tokenId)))
-            .to.equal(hhCollateralManagerAddress);           
-
-        await expect(
-            _repay(bob, hhNFT.address, hhAssetToken, hhFToken, repaymentAmount2, borrowId))
-            .to.emit(hhLendingPool, 'Repay')
-            .withArgs(
-                borrowId,
-                hhAssetToken.address,
-                paidAmount, // The amount of repaid debt vs the amount sent
-                bob.address);  
-
-        // Expect: NFT transferred from Escrow
-        await expect(
-            (await hhNFT.ownerOf(bob_tokenId)))
-            .to.equal(bob.address);      
     });
 });
