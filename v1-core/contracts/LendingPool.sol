@@ -287,10 +287,9 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         whenReserveNotPaused(collateral, asset)
         whenReserveNotProtected(collateral, asset)
     {
-        uint40 auctionDuration = getAuctionDuration();
         DataTypes.Reserve storage reserve = _reserves[keccak256(abi.encode(collateral, asset))];
         (bool success, bytes memory data) = _lendingPoolLiquidateAddress.delegatecall(
-            abi.encodeWithSignature("liquidate(address,address,uint256,uint40)", collateral,asset,borrowId,auctionDuration)
+            abi.encodeWithSignature("liquidate(address,address,uint256)", collateral,asset,borrowId)
         );
         require(success, string(data));
 

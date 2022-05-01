@@ -95,6 +95,17 @@ async function main() {
   await configurator.connect(admin).connectLendingPoolLiquidate(lendingPoolLiquidate.address);
   await configurator.connect(admin).connectLendingPoolContract("LIQUIDATE");
 
+  // Get, deploy and connect LendingPoolBid to LendingPool
+  LendingPoolBid = await ethers.getContractFactory('LendingPoolBid');
+  lendingPoolBid = await LendingPoolBid.deploy(
+      configurator.address,
+      lendingPool.address,
+  );
+  await lendingPoolBid.deployed();
+  await configurator.connect(admin).connectLendingPoolBid(lendingPoolBid.address);
+  await configurator.connect(admin).connectLendingPoolContract("BID");
+
+
   // Get, deploy and connect LendingPoolRepay to LendingPool
   LendingPoolRepay = await ethers.getContractFactory('LendingPoolRepay');
   lendingPoolRepay = await LendingPoolRepay.deploy(
@@ -304,10 +315,16 @@ async function main() {
   }
   await mint("BAYC", 0, 0);
   await mint("BAYC", 0, 1);
-  await mint("BAYC", 1, 2);
-  await mint("BAYC", 1, 3);
-  await mint("BAYC", 2, 4);
-  await mint("BAYC", 2, 5); 
+  await mint("BAYC", 0, 2);
+  await mint("BAYC", 0, 3);
+  await mint("BAYC", 1, 4);
+  await mint("BAYC", 1, 5); 
+  await mint("BAYC", 1, 6); 
+  await mint("BAYC", 1, 7); 
+  await mint("BAYC", 2, 8); 
+  await mint("BAYC", 2, 9); 
+  await mint("BAYC", 2, 10); 
+  await mint("BAYC", 2, 11); 
 
   /* 
   
@@ -325,6 +342,78 @@ async function main() {
   await assetTokenWETH.connect(acc2).approve(lendingPool.address, depositAmount);
   await lendingPool.connect(acc2).deposit(nftBAYC.address, assetTokenWETH.address, depositAmount);
 
+  // Deposit from admin
+  depositAmount = hre.ethers.utils.parseEther("10000");
+  await assetTokenWETH.connect(admin).approve(lendingPool.address, depositAmount);
+  await lendingPool.connect(admin).deposit(nftBAYC.address, assetTokenWETH.address, depositAmount);
+
+
+  /*
+  4. Create borrows
+  */
+  console.log('Create Borrows');
+  let borrowAmount; 
+  borrowAmount = hre.ethers.utils.parseEther("85");
+  for (let i=0; i< 2; i++) {
+    await nftBAYC.connect(accDict[0]).approve(collateralManager.address, i);
+    await lendingPool.connect(accDict[0]).borrow(
+      assetTokenWETH.address,
+      borrowAmount,
+      nftBAYC.address,
+      i
+    )
+  }
+
+  borrowAmount = hre.ethers.utils.parseEther("85");
+  for (let i=4; i< 6; i++) {
+    await nftBAYC.connect(accDict[1]).approve(collateralManager.address, i);
+    await lendingPool.connect(accDict[1]).borrow(
+      assetTokenWETH.address,
+      borrowAmount,
+      nftBAYC.address,
+      i
+    )
+  }
+
+  borrowAmount = hre.ethers.utils.parseEther("85");
+  for (let i=8; i< 10; i++) {
+    await nftBAYC.connect(accDict[2]).approve(collateralManager.address, i);
+    await lendingPool.connect(accDict[2]).borrow(
+      assetTokenWETH.address,
+      borrowAmount,
+      nftBAYC.address,
+      i
+    )
+  }
+
+  /*
+  5. Liquidations
+    - 2x undercollateralized, not yet liquidiated
+    - 2x liquidated, ready for bids 
+    - 2x liquidated, to be redeemed 
+  */
+  console.log('Trigger Liquidations');
+  mockFloorPrice = ethers.utils.parseUnits('100', 18);
+  await configurator.connect(admin).setNFTPriceConsumerFloorPrice(nftBAYC.address, mockFloorPrice);
+
+  // To be Liquidated
+  let bidAmount; 
+  bidAmount = ethers.utils.parseUnits('88', 18);
+  await assetTokenWETH.connect(admin).approve(lendingPool.address, bidAmount);
+  await lendingPool.connect(admin).bid(assetTokenWETH.address, bidAmount, 1);
+  
+  await assetTokenWETH.connect(admin).approve(lendingPool.address, bidAmount);
+  await lendingPool.connect(admin).bid(assetTokenWETH.address, bidAmount, 2);
+
+  // To be redeemed (assuming we are acc1)
+  bidAmount = ethers.utils.parseUnits('88', 18);
+  await assetTokenWETH.connect(admin).approve(lendingPool.address, bidAmount);
+  await lendingPool.connect(admin).bid(assetTokenWETH.address, bidAmount, 3);
+
+  await assetTokenWETH.connect(admin).approve(lendingPool.address, bidAmount);
+  await lendingPool.connect(admin).bid(assetTokenWETH.address, bidAmount, 4);
+
+  // Leaving Acc2s to be triggered for liquidation
 }
 
 // We recommend this pattern to be able to use async/await everywhere

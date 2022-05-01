@@ -76,6 +76,7 @@ contract LendingPoolRepay is Context, LendingPoolStorage, ILendingPoolRepay, Pau
         uint256 borrowId
     ) 
         external
+        onlyLendingPool
         returns (bool, uint256) 
     {
         RepayVars memory vars;

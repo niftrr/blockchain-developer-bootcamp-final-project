@@ -74,6 +74,7 @@ contract LendingPoolBorrow is Context, LendingPoolStorage, LendingPoolLogic, ILe
         uint256 tokenId
     ) 
         external
+        onlyLendingPool
         returns (bool)
     {
         BorrowVars memory vars;

@@ -77,6 +77,7 @@ contract LendingPoolRedeem is Context, LendingPoolStorage, LendingPoolLogic, ILe
         uint256 borrowId
     ) 
         external
+        onlyLendingPool
         returns (bool)
     { 
         RedeemVars memory vars;

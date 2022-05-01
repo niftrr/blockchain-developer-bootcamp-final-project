@@ -57,22 +57,26 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         _unpause();
     }
 
+    function getAuctionDuration() public view returns (uint40) {
+        return _auctionDuration;
+    }    
+
     /// @notice Private function to liquidate a borrow position.
     /// @param collateral The NFT collateral contract address.
     /// @param asset The ERC20 address of the asset.
     /// @param borrowId The unique identifier of the borrow.
-    /// @param auctionDuration The duration of the auction in seconds.
     /// @dev To be called after a liquidity auction has ended to distribute NFT + assets to the appropriate parties.
     /// @dev Transfers assets back to the reserve before burning debtTokens and retreiving collateral for the liquidator. 
     function liquidate(
         address collateral,
         address asset,
-        uint256 borrowId,
-        uint40 auctionDuration
+        uint256 borrowId
     ) 
         external
+        onlyLendingPool
         returns (bool)
     {
+        uint40 auctionDuration = getAuctionDuration();
         DataTypes.Borrow memory borrowItem = ICollateralManager(
             _collateralManagerAddress
         ).getBorrow(borrowId);
@@ -81,8 +85,8 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
 
         require(borrowItem.status == DataTypes.BorrowStatus.ActiveAuction, "AUCTION_NOT_TRIGGERED");
         require(uint40(block.timestamp) - borrowItem.auction.timestamp > auctionDuration, "AUCTION_STILL_ACTIVE"); 
-        require(borrowItem.erc20Token == asset, "INCORRECT_ASSET");
-        require(borrowItem.collateral.erc721Token == collateral, "INCORRECT_COLLATERAL");
+        // require(borrowItem.erc20Token == asset, "INCORRECT_ASSET");
+        // require(borrowItem.collateral.erc721Token == collateral, "INCORRECT_COLLATERAL");
 
         vars.success = IFToken(reserve.fTokenAddress).reserveTransfer(borrowItem.auction.caller, borrowItem.erc20Token, borrowItem.auction.liquidationFee);
         require(vars.success, "UNSUCCESSFUL_TRANSFER_TO_AUCTION_CALLER");

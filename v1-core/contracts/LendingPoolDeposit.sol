@@ -57,6 +57,7 @@ contract LendingPoolDeposit is Context, LendingPoolStorage, LendingPoolLogic, IL
         uint256 amount
     ) 
         external 
+        onlyLendingPool
         returns (bool)
     {
         bool success;

@@ -6,8 +6,7 @@ interface ILendingPoolLiquidate {
     function liquidate(
         address collateral,
         address asset,
-        uint256 borrowId,
-        uint40 auctionDuration
+        uint256 borrowId
     ) external returns (bool);
 
 }

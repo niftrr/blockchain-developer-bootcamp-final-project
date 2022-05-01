@@ -70,6 +70,7 @@ contract LendingPoolBid is Context, LendingPoolStorage, LendingPoolLogic, ILendi
         uint256 borrowId
     ) 
         external
+        onlyLendingPool
         returns (bool)
     {
         DataTypes.Borrow memory borrowItem = ICollateralManager(
