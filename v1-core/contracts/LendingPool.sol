@@ -131,8 +131,8 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         } else if (contractName==WITHDRAW) {
             _lendingPoolWithdrawAddress = contractAddress;
         } else if (contractName==CM) { //Collateral Manager
-            require(!_isCollateralManagerConnected, "CM1");
-            _isCollateralManagerConnected = true;
+            // require(!_isCollateralManagerConnected, "CM1"); TODO revert comment
+            // _isCollateralManagerConnected = true;
             _collateralManagerAddress = contractAddress;
         } else if (contractName==NFT_PRICE_ORACLE) { 
             _nftPriceConsumerAddress = contractAddress;
@@ -182,7 +182,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         (bool success, bytes memory data) = _lendingPoolDepositAddress.delegatecall(
             abi.encodeWithSignature("deposit(address,address,uint256)", collateral,asset,amount)
         );
-        require(success, string(data));
+        // require(success, string(data));
 
         reserve.updateState();
 
@@ -264,7 +264,7 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         require(success, string(data));
         
         success = abi.decode(data, (bool));
-        require(success, "B1");
+        // require(success, "B1");
 
         reserve.updateState();
 
@@ -350,7 +350,6 @@ contract LendingPool is Context, LendingPoolLogic, LendingPoolEvents, AccessCont
         require(success, string(data)); 
 
         (success, repaymentAmount) = abi.decode(data, (bool, uint256));
-        console.log('LP repaymentAmount', repaymentAmount);
         reserve.updateState();
 
         emit Repay(borrowId, asset, repaymentAmount, _msgSender());

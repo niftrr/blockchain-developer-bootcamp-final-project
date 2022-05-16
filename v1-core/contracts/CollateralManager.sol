@@ -317,7 +317,6 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
     /// @dev Returns 0 if doesn't exists. Borrow Ids starting from 1.
     /// @return Returns the Borrow for a given id.
     function getBorrowId(address collateral, uint256 tokenId) public view returns (uint256) {
-        console.log('getBorrowId', collateral, tokenId, nftBorrows[keccak256(abi.encode(collateral, tokenId))]);
         return nftBorrows[keccak256(abi.encode(collateral, tokenId))];
     }
 
@@ -478,16 +477,13 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
         returns (bool)
     {
         address newOwner;
-        // require(whitelisted[erc721Token], "NFT not whitelisted"); TODO code too large
-
-        console.log('borrower, erc721Token, tokenId', borrower, erc721Token, tokenId);
+        require(whitelisted[erc721Token], "NFT not whitelisted"); 
         
         IERC721(erc721Token).transferFrom(borrower, address(this), tokenId);
         newOwner = IERC721(erc721Token).ownerOf(tokenId);
-        // require(newOwner == address(this), "UNSUCCESSFUL_TRANSFER"); TODO code too large
+        require(newOwner == address(this), "UNSUCCESSFUL_TRANSFER");
 
         uint256 id = counter.current();
-        console.log('id', id);
         uint256 liquidationPrice = _getLiquidationPrice(
             erc721Token,
             borrowAmount,
@@ -515,7 +511,6 @@ contract CollateralManager is Context, IERC721Receiver, AccessControl, Pausable,
             })
         });
 
-        console.log('set nftBorrows', erc721Token, tokenId, id);
         nftBorrows[keccak256(abi.encode(erc721Token, tokenId))] = id;
 
         userBorrows[borrower].push(id);

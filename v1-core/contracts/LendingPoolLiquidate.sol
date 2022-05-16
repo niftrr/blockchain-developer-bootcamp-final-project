@@ -73,7 +73,7 @@ contract LendingPoolLiquidate is Context, LendingPoolStorage, LendingPoolLogic, 
         uint256 borrowId
     ) 
         external
-        onlyLendingPool
+        // onlyLendingPool
         returns (bool)
     {
         uint40 auctionDuration = getAuctionDuration();

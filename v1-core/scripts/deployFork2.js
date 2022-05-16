@@ -154,6 +154,10 @@ async function main() {
   );
   await configurator.connect(admin).connectTokenPriceConsumer(tokenPriceConsumer.address);
   await configurator.connect(admin).connectLendingPoolContract("TOKEN_PRICE_ORACLE");
+  console.log("tokenPriceConsumer deployed to:", tokenPriceConsumer.address);
+  dataItem = `TOKEN_PRICE_CONSUMER_CONTRACT_ADDRESS=${tokenPriceConsumer.address}\n`;
+  fileData += `REACT_APP_${dataItem}`;
+  docsFileData += dataItem;
 
   // Get and deploy NFTPriceConsumer
   NFTPriceConsumer = await ethers.getContractFactory('NFTPriceConsumer');
@@ -325,6 +329,10 @@ async function main() {
   await mint("BAYC", 2, 9); 
   await mint("BAYC", 2, 10); 
   await mint("BAYC", 2, 11); 
+  
+  for(let i=12; i< 100; i++) {
+    await mint("BAYC", 0, i); 
+  }
 
   /* 
   

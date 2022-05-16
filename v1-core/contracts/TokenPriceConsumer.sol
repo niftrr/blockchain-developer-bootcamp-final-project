@@ -8,11 +8,19 @@ contract TokenPriceConsumer {
     FeedRegistryInterface internal registry;
 
     /**
-     * Network: Ethereum Kovan
-     * Feed Registry: 0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0
+     * Network: Ethereum Mainnet / Kovan
+     * Feed Registry: 0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf / 0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0
      */
     constructor(address _registry) {
         registry = FeedRegistryInterface(_registry);
+    }
+
+    /**
+     * Returns the mock ETH / USD price
+     */
+    function getMockEthUsdPrice() public view returns (uint256) {
+        int price = 2826960000000000000000; // 2,826.96 * 10**18
+        return uint256(price);
     }
 
     /**

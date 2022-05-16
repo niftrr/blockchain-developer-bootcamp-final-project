@@ -29,7 +29,7 @@ module.exports = {
       url: process.env.ROPSTEN_URL || "",
       accounts:
         [
-          process.env.PRIVATE_KEY_ACC0,
+          process.env.PRIVATE_KEY_ACC0, //Ropsten deploy 2
           process.env.PRIVATE_KEY_ACC1,
           process.env.PRIVATE_KEY_ACC2,
           process.env.PRIVATE_KEY_EMERGENCY_ADMIN,
@@ -39,6 +39,9 @@ module.exports = {
       gas: 2100000,
       gasPrice: 8000000000,
       saveDeploymentes: true,
+      // timeout: 10000000,
+      // networkCheckTimeout: 1000000,
+      // timeoutBlocks: 30000,
     },
     rinkby: {
       url: process.env.RINKBY_URL || "",
